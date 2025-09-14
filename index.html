@@ -3,694 +3,86 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Auction Listings</title>
+    <title>Auction Report Archive</title>
     <style>
-        body {
-            font-family: sans-serif;
-            margin: 2em;
-            background-color: #f4f4f9;
-            color: #333;
+        :root {
+            --bg-color: #1a1a1a;
+            --container-bg-color: #2c2c2c;
+            --border-color: #444444;
+            --text-color: #e0e0e0;
+            --link-color: #4a90e2;
+            --link-hover-color: #81b5f5;
         }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 2rem;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: var(--container-bg-color);
+            padding: 2rem 3rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+            width: 100%;
+            max-width: 800px;
+        }
+
         h1 {
             text-align: center;
-            color: #444;
+            color: #ffffff;
+            font-weight: 300;
+            margin-top: 0;
+            margin-bottom: 2rem;
+            border-bottom: 1px solid var(--border-color);
+            padding-bottom: 1rem;
         }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 2em 0;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            background-color: #fff;
+
+        ul#report-list {
+            list-style: none;
+            padding: 0;
         }
-        th, td {
-            padding: 12px 15px;
-            text-align: left;
-            border-bottom: 1px solid #ddd;
+
+        ul#report-list li {
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
+            padding: 1rem;
+            background-color: #333333;
+            border-radius: 5px;
+            transition: background-color 0.2s ease-in-out;
         }
-        th {
-            background-color: #007bff;
-            color: white;
-            text-transform: uppercase;
+        
+        ul#report-list li:hover {
+            background-color: #4a4a4a;
         }
-        tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        tr:hover {
-            background-color: #e2eefd;
-        }
-        a {
-            color: #007bff;
+
+        ul#report-list a {
+            color: var(--link-color);
             text-decoration: none;
+            display: block;
         }
-        a:hover {
-            text-decoration: underline;
+
+        ul#report-list a:hover {
+            color: var(--link-hover-color);
         }
     </style>
 </head>
+<body>
 
+    <div class="container">
+        <h1>Auction Report Archive</h1>
+        <ul id="report-list">
+            <!-- REPORT_LINKS_PLACEHOLDER -->
+            <li><a href="dealstoday_Report.html">dealstoday_Report.html</a></li>
+        </ul>
+    </div>
 
-<h1>Auction Deal Finder</h1>
-
-<table>
-    <thead>
-        <tr>
-            <th>Listing Name</th>
-            <th>Estimated Value</th>
-            <th>Auction Link</th>
-        </tr>
-    </thead>
-    <tbody>
-        <tr>
-            <td>2011 Toyota Highlander - Limited</td>
-            <td>$10,750.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55854893/2011-Toyota-Highlander-Limited" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Oriental Design Wool Rug - Shou</td>
-            <td>$350.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56004425/Oriental-Design-Wool-Rug-Shou" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Chippendale-Style Dining Chairs</td>
-            <td>$300.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55960046/ChippendaleStyle-Dining-Chairs" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Queen Anne Style Dining Table/Set</td>
-            <td>$250.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55956704/Queen-Anne-Style-Dining-TableSet" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Cresent Furniture Queen Bed</td>
-            <td>$250.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55966421/Cresent-Furniture-Queen-Bed" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Traditional Wood Executive Desk</td>
-            <td>$250.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56003439/Traditional-Wood-Executive-Desk" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Vintage Wooden Writing Desk</td>
-            <td>$250.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56007741/Vintage-Wooden-Writing-Desk" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Deluxe American of Martinsville Mid Century 44" X 30" 3 Drawer Dresser</td>
-            <td>$250.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55437315/Deluxe-American-of-Martinsville-Mid-Century-44-X-30-3-Drawer-Dresser" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Mid-20th Century Fischer Pool Table</td>
-            <td>$250.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55964336/Mid20th-Century-Fischer-Pool-Table" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Tiffany Style Peacock Glass Lamp</td>
-            <td>$220.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56020282/Tiffany-Style-Peacock-Glass-Lamp" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Traditional Style Corner Cabinet</td>
-            <td>$200.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55965692/Traditional-Style-Corner-Cabinet" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Barrel-back Tub Chair</td>
-            <td>$200.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56008389/Barrelback-Tub-Chair" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Mid Century Modern Sliding Door Credenza</td>
-            <td>$200.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55963923/Mid-Century-Modern-Sliding-Door-Credenza" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Genuine Oriental Weavers Large 10' X 7 1/2' Approx MAHAL Area Rug</td>
-            <td>$200.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55437469/Genuine-Oriental-Weavers-Large-10-X-7-12-Approx-MAHAL-Area-Rug" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>HOUSATONIC RAILROAD CO. Lamp</td>
-            <td>$200.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56027907/HOUSATONIC-RAILROAD-CO-Lamp" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Mid Century Modern Swivel Stools</td>
-            <td>$180.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55958838/Mid-Century-Modern-Swivel-Stools" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Tall Chest of Drawers</td>
-            <td>$175.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55969720/Tall-Chest-of-Drawers" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Rustic Church Bench</td>
-            <td>$150.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55961025/Rustic-Church-Bench" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Ethan Allen Oak Chairs</td>
-            <td>$150.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55966256/Ethan-Allen-Oak-Chairs" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>6 Drawer Dresser</td>
-            <td>$150.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55969525/6-Drawer-Dresser" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Solid Oak Table Top</td>
-            <td>$150.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56006922/Solid-Oak-Table-Top" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Antique Sideboard</td>
-            <td>$150.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55978102/Antique-Sideboard" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Electric Dryer</td>
-            <td>$150.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55968453/Electric-Dryer" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Vintage Rare Men's Heavy Scotland Harris Tweed Long Wool Top Coat XL</td>
-            <td>$150.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55450774/Vintage-Rare-Mens-Heavy-Scotland-Harris-Tweed-Long-Wool-Top-Coat-XL" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Vintage Magnavox Micromatic Stereo</td>
-            <td>$125.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55957633/Vintage-Magnavox-Micromatic-Stereo" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Vintage Laurel & Hardy Long Art Glass 3 Bulb Pool Table hanging Lamp</td>
-            <td>$125.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55437271/Vintage-Laurel-Hardy-Long-Art-Glass-3-Bulb-Pool-Table-hanging-Lamp" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>New Pandora .925 Sterling Silver Bracelet & 6 Beads w. Flower Charm in Box</td>
-            <td>$130.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55437167/New-Pandora-925-Sterling-Silver-Bracelet-6-Beads-w-Flower-Charm-in-Box" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>L Shaped Wooden Desk</td>
-            <td>$120.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55969152/L-Shaped-Wooden-Desk" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>MCM- Office Chair</td>
-            <td>$120.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56008458/MCM-Office-Chair" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Schwinn Bike</td>
-            <td>$120.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56008859/Schwinn-Bike" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>MCM Rust Colored Base Table Lamp</td>
-            <td>$120.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56028329/MCM-Rust-Colored-Base-Table-Lamp" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>4 MCM 1950's Era Wood Folding Parlor Chairs Lot</td>
-            <td>$120.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55990703/4-MCM-1950s-Era-Wood-Folding-Parlor-Chairs-Lot" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Beautiful 5 Frosted Globe Hanging Wrought Iron Chandolier Light</td>
-            <td>$120.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55990992/Beautiful-5-Frosted-Globe-Hanging-Wrought-Iron-Chandolier-Light" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Parabath Wax Bath</td>
-            <td>$120.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56019362/Parabath-Wax-Bath" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Rustic Church Bench</td>
-            <td>$100.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55963897/Rustic-Church-Bench" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Ornate Framed Mirror</td>
-            <td>$100.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55966971/Ornate-Framed-Mirror" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Octagonal Coffee Table</td>
-            <td>$100.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55970155/Octagonal-Coffee-Table" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Double Pedestal Desk</td>
-            <td>$100.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55970316/Double-Pedestal-Desk" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Woodmark Originals Upholstered Club Chair</td>
-            <td>$100.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56005053/Woodmark-Originals-Upholstered-Club-Chair" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Woodmark Originals Upholstered Club Chair</td>
-            <td>$100.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56005928/Woodmark-Originals-Upholstered-Club-Chair" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Metal Filing Cabinet</td>
-            <td>$100.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56027485/Metal-Filing-Cabinet" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Patio Table</td>
-            <td>$100.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56028875/Patio-Table" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Vintage Mid century Sears Roebauck Premium 43" Tall 4 Drawer Dresser Wood Chest</td>
-            <td>$100.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55920253/Vintage-Mid-century-Sears-Roebauck-Premium-43-Tall-4-Drawer-Dresser-Wood-Chest" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Native American Style Rings</td>
-            <td>$100.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56029817/Native-American-Style-Rings" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Premium NEXGRILL Stainless Deluxe 3 Burner Propane Grill & Side Warmer</td>
-            <td>$100.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55437293/Premium-NEXGRILL-Stainless-Deluxe-3-Burner-Propane-Grill-Side-Warmer" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>French Country Style Hall Cabinet</td>
-            <td>$90.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55969996/French-Country-Style-Hall-Cabinet" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Sony AM/FM Stereo Receiver</td>
-            <td>$90.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55962214/Sony-AMFM-Stereo-Receiver" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Fuji China Tea Set</td>
-            <td>$90.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56026266/Fuji-China-Tea-Set" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Large Cocktail Ring</td>
-            <td>$90.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56030237/Large-Cocktail-Ring" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Galanz Deluxe Mid Century Agua Color Retro 3.1 Cu Ft Mini Refrigerator Freezer</td>
-            <td>$130.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55450484/Galanz-Deluxe-Mid-Century-Agua-Color-Retro-31-Cu-Ft-Mini-Refrigerator-Freezer" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>ENTRYWAY/HALLWAY MIRROR</td>
-            <td>$85.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56006063/ENTRYWAYHALLWAY-MIRROR" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Vintage Mid century Hand Crafted Metal Gold Leaf 48" X 16" Wall Art Decor</td>
-            <td>$80.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55437491/Vintage-Mid-century-Hand-Crafted-Metal-Gold-Leaf-48-X-16-Wall-Art-Decor" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>SEI Electric 1500 Watt Fireplace Digital Realistic Insert w/ Blower</td>
-            <td>$80.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55443782/SEI-Electric-1500-Watt-Fireplace-Digital-Realistic-Insert-w-Blower" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Hammock Stand</td>
-            <td>$80.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56008524/Hammock-Stand" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Kenney Bros & Wolkins Schoolhouse Desk & Chair</td>
-            <td>$80.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55960571/Kenney-Bros-Wolkins-Schoolhouse-Desk-Chair" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Art Deco Coacktail Rings</td>
-            <td>$90.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56029295/Art-Deco-Coacktail-Rings" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Roadmaster Maximum Edge Bicycle</td>
-            <td>$80.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56017824/Roadmaster-Maximum-Edge-Bicycle" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Vintage Knights of Columbus Ceremonial Sword</td>
-            <td>$100.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55963123/Vintage-Knights-of-Columbus-Ceremonial-Sword" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Mid Century Modern Drop Leaf Table</td>
-            <td>$75.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55965238/Mid-Century-Modern-Drop-Leaf-Table" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Wooden Pool Cue Rack</td>
-            <td>$75.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55965926/Wooden-Pool-Cue-Rack" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Ethan Allen Old Tavern Rolling Cart Table</td>
-            <td>$75.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56008021/Ethan-Allen-Old-Tavern-Rolling-Cart-Table" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Floodlight and more</td>
-            <td>$75.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56024867/Floodlight-and-more" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Gibson Plate Dinnerware Set</td>
-            <td>$75.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56025523/Gibson-Plate-Dinnerware-Set" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Bissell Deluxe Symphony Light Weight Pet Lifter Upright Vacuum Cleaner</td>
-            <td>$75.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55865569/Bissell-Deluxe-Symphony-Light-Weight-Pet-Lifter-Upright-Vacuum-Cleaner" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Standing Lectern</td>
-            <td>$75.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55958100/Standing-Lectern" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Roadmaster Maximum Edge Bicycle</td>
-            <td>$75.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56018321/Roadmaster-Maximum-Edge-Bicycle" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Vintage kerosene Railroad Lantern</td>
-            <td>$75.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55975713/Vintage-kerosene-Railroad-Lantern" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Pocket Watch with Dogs</td>
-            <td>$80.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56009874/Pocket-Watch-with-Dogs" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Vintage Chinese Inspired Enamel Table Lamp</td>
-            <td>$70.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56020117/Vintage-Chinese-Inspired-Enamel-Table-Lamp" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Silver and Gaspeite Ring</td>
-            <td>$80.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56029469/Silver-and-Gaspeite-Ring" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Native American Style Ring</td>
-            <td>$75.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56030089/Native-American-Style-Ring" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Native American Style Ring</td>
-            <td>$75.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56030824/Native-American-Style-Ring" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Vintage 31 Pieces name Brand Sealed Collector Mini Liquor Bottles</td>
-            <td>$75.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55888920/Vintage-31-Pieces-name-Brand-Sealed-Collector-Mini-Liquor-Bottles" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>HP Laptop</td>
-            <td>$120.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55962695/HP-Laptop" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Silver toned band with emerald cut gemstone</td>
-            <td>$70.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56020748/Silver-toned-band-with-emerald-cut-gemstone" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>MCM Winky Owl Framed Print</td>
-            <td>$90.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55977600/MCM-Winky-Owl-Framed-Print" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Lateral Filing Cabinet</td>
-            <td>$60.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55967366/Lateral-Filing-Cabinet" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Christmas Tree</td>
-            <td>$60.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55967843/Christmas-Tree" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Military Patriotic Plates and more</td>
-            <td>$60.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56025549/Military-Patriotic-Plates-and-more" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Shark Deluxe Anti Allergen ROTARY Professional Up right Vacuum Cleaner</td>
-            <td>$60.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55864852/Shark-Deluxe-Anti-Allergen-ROTARY-Professional-Up-right-Vacuum-Cleaner" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Stihl Weedeater</td>
-            <td>$60.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55972428/Stihl-Weedeater" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Hand-painted Spanish Pottery Pitcher and more</td>
-            <td>$59.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56024892/Handpainted-Spanish-Pottery-Pitcher-and-more" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Vintage KEMIRA German Sodatin 1987 Full Chemical Gas Mask</td>
-            <td>$60.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55890758/Vintage-KEMIRA-German-Sodatin-1987-Full-Chemical-Gas-Mask" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Rectangular Wall Mirror</td>
-            <td>$60.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55978528/Rectangular-Wall-Mirror" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Large Outdoor Fiber Optics Seasonal Light up Snowman Decoration</td>
-            <td>$60.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55917290/Large-Outdoor-Fiber-Optics-Seasonal-Light-up-Snowman-Decoration" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Saint Simons Area Rug</td>
-            <td>$55.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56006257/Saint-Simons-Area-Rug" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Red Market Umbrellas</td>
-            <td>$55.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56008670/Red-Market-Umbrellas" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>United Clock Co. Grandfather-Mantle-Clock</td>
-            <td>$55.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56019114/United-Clock-Co-Grandfather-Mantle-Clock" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Vintage Bombay Company Wine Rack</td>
-            <td>$55.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56027459/Vintage-Bombay-Company-Wine-Rack" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Vintage GUESS Black Quilted Nylon Wet Look Coat w' Lining</td>
-            <td>$55.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55923893/Vintage-GUESS-Black-Quilted-Nylon-Wet-Look-Coat-w-Lining" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Sony CDP-C315 CD Player.</td>
-            <td>$50.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55962017/Sony-CDPC315-CD-Player" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Bookcase</td>
-            <td>$50.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55968867/Bookcase" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Frameless Mirror</td>
-            <td>$50.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56009220/Frameless-Mirror" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Rival Crock Pot Ceramic Insert and more</td>
-            <td>$50.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56026637/Rival-Crock-Pot-Ceramic-Insert-and-more" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Samarai Warrior Sword Armour Faux Shadow Box Oriental Art Display</td>
-            <td>$50.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55437527/Samarai-Warrior-Sword-Armour-Faux-Shadow-Box-Oriental-Art-Display" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Rohs Deluxe Rolling 1875 Watt Hooded Professional Hair Dryer</td>
-            <td>$50.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55444280/Rohs-Deluxe-Rolling-1875-Watt-Hooded-Professional-Hair-Dryer" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Vintage & Modern Assorted Large Collection Halloween Decorations Lot</td>
-            <td>$50.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55990141/Vintage-Modern-Assorted-Large-Collection-Halloween-Decorations-Lot" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Vintage USMC Marine Corps Wool Long Dress Master Sargeant Uniform Coat</td>
-            <td>$50.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55889564/Vintage-USMC-Marine-Corps-Wool-Long-Dress-Master-Sargeant-Uniform-Coat" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Vintage FUBU XL All State Champs Retro 92-05 Football Team Jersey</td>
-            <td>$50.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55922105/Vintage-FUBU-XL-All-State-Champs-Retro-9205-Football-Team-Jersey" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Vintage Final Fantasy VII Official Electronic Gaming Strategy Guide</td>
-            <td>$50.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55929625/Vintage-Final-Fantasy-VII-Official-Electronic-Gaming-Strategy-Guide" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Vintage Hart Sprint Skis</td>
-            <td>$50.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55959666/Vintage-Hart-Sprint-Skis" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Vintage COSCO Mid century Yellow & Chrome 18" Tall 2 Step Household Tool Ladder</td>
-            <td>$50.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55450506/Vintage-COSCO-Mid-century-Yellow-Chrome-18-Tall-2-Step-Household-Tool-Ladder" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Vintage Mid century Ladies Yellow Wool Blend Long Coat Size Sm</td>
-            <td>$50.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55921361/Vintage-Mid-century-Ladies-Yellow-Wool-Blend-Long-Coat-Size-Sm" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Vintage Cleveland Indiant Chief Wahoo Emboidered Lee Sweat Shirt Large</td>
-            <td>$50.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55919777/Vintage-Cleveland-Indiant-Chief-Wahoo-Emboidered-Lee-Sweat-Shirt-Large" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Decorative Lot</td>
-            <td>$45.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55974129/Decorative-Lot" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Vintage Cuff Bracelet</td>
-            <td>$50.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56020441/Vintage-Cuff-Bracelet" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>MCM Green Glassware Pieces</td>
-            <td>$45.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56025001/MCM-Green-Glassware-Pieces" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Turquoise Ring</td>
-            <td>$60.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56030508/Turquoise-Ring" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Rare Mid Century Modern Turquoise Balls Cluster in Bowl NEW w/ Box</td>
-            <td>$45.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55450902/Rare-Mid-Century-Modern-Turquoise-Balls-Cluster-in-Bowl-NEW-w-Box" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Bisserup White Dansk Ribbed Ramekins</td>
-            <td>$45.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56021538/Bisserup-White-Dansk-Ribbed-Ramekins" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Genuine Men's Levi's SILVER TAB Carpenter Denim Blue Jeans w 31 l 32</td>
-            <td>$45.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55918502/Genuine-Mens-Levis-SILVER-TAB-Carpenter-Denim-Blue-Jeans-w-31-l-32" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Colonial Style Coffee Table</td>
-            <td>$40.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55964632/Colonial-Style-Coffee-Table" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Framed Posters</td>
-            <td>$40.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55966723/Framed-Posters" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>End Table/Side Table</td>
-            <td>$40.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55971645/End-TableSide-Table" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>End Table/Side Table</td>
-            <td>$40.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55972249/End-TableSide-Table" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>The Sacrament of the Last Supper Framed Print/Poster</td>
-            <td>$40.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55976479/The-Sacrament-of-the-Last-Supper-Framed-PrintPoster" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Gold Eagle Heavy Duty Nylon Golf Travel Bag</td>
-            <td>$40.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56006333/Gold-Eagle-Heavy-Duty-Nylon-Golf-Travel-Bag" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Mugs with lids, etc.</td>
-            <td>$40.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56024594/Mugs-with-lids-etc" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Office Lot</td>
-            <td>$40.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56026611/Office-Lot" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Corner Clean Out</td>
-            <td>$40.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56027270/Corner-Clean-Out" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Wooden padded accent chair</td>
-            <td>$40.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56027636/Wooden-padded-accent-chair" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Jewelry Box</td>
-            <td>$60.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56032092/Jewelry-Box" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Royal Doulton Diana Figurine</td>
-            <td>$40.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/56031422/Royal-Doulton-Diana-Figurine" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Beautiful Royal Fine Gold Black Deluxe Woven Long Jacket Cover up Wrap</td>
-            <td>$40.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55898366/Beautiful-Royal-Fine-Gold-Black-Deluxe-Woven-Long-Jacket-Cover-up-Wrap" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Vintage Final Fantasy XIII Hardback Official Electronic Gaming Strategy Guide</td>
-            <td>$40.00</td>
-            <td><a href="https://www.greatfindsauction.com/Event/LotDetails/55928998/Vintage-Final-Fantasy-XIII-Hardback-Official-Electronic-Gaming-Strategy-Guide" target="_blank">View Auction</a></td>
-        </tr>
-        <tr>
-            <td>Patriotic Lot</td>
-            <td>$40.00</td>
-            <td><a href="https://greatfindsauction.com/Event/LotDetails/55974842/Patriotic-Lot" target="_blank">View Auction</a></td>
-        </tr>
-    </tbody>
-</table>
 </body>
 </html>
