@@ -1,1 +1,15 @@
+# Python virtual environment
+venv/
+__pycache__/
+
+# Environment variables
 .env
+
+# Temporary data and image files created by the script
+*_listings.json
+*_deals.json
+*_pics/
+dealstoday.json
+
+# Any other specific files you want to ignore
+CURRENT BATCH IS 5.txt
