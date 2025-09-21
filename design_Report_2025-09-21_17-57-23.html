@@ -1,0 +1,2727 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Item Analysis</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a; --table-bg-color: #2c2c2c; --header-bg-color: #3a3a3a;
+            --header-hover-bg-color: #4a4a4a; --row-even-bg-color: #333333; --row-odd-bg-color: #2c2c2c;
+            --border-color: #444444; --text-color: #e0e0e0; --link-color: #4a90e2;
+            --link-hover-color: #81b5f5; --sort-indicator-color: #81b5f5;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 2rem; line-height: 1.6; }
+        h1 { text-align: center; color: #ffffff; font-weight: 300; margin-bottom: 2rem; }
+        .table-container { max-width: 1200px; margin: auto; overflow-x: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        table { width: 100%; border-collapse: collapse; background-color: var(--table-bg-color); border-spacing: 0; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        thead th { background-color: var(--header-bg-color); color: #ffffff; font-weight: 600; position: sticky; top: 0; z-index: 10; }
+        thead th[data-column] { cursor: pointer; transition: background-color 0.2s ease-in-out; user-select: none; }
+        thead th[data-column]:hover { background-color: var(--header-hover-bg-color); }
+        tbody tr:nth-child(even) { background-color: var(--row-even-bg-color); }
+        tbody tr:nth-child(odd) { background-color: var(--row-odd-bg-color); }
+        tbody tr:hover { background-color: var(--header-hover-bg-color); }
+        td { font-size: 0.95em; }
+        td:nth-child(3) { font-family: 'Courier New', Courier, monospace; text-align: right; white-space: nowrap; }
+        td:nth-child(4) { text-align: center; }
+        a { color: var(--link-color); text-decoration: none; transition: color 0.2s ease-in-out; }
+        a:hover { color: var(--link-hover-color); text-decoration: underline; }
+        .sort-indicator { color: var(--sort-indicator-color); font-size: 0.8em; margin-left: 8px; display: inline-block; width: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Auction Item Analysis</h1>
+    <div class="table-container"><table><thead><tr><th data-column="name">Item Name <span class="sort-indicator"></span></th><th data-column="category">Category <span class="sort-indicator"></span></th><th data-column="price">Market Value <span class="sort-indicator"></span></th><th>Google Search</th></tr></thead><tbody id="data-table-body"></tbody></table></div>
+    
+    <script type="application/json" id="auctionData">
+        [
+    {
+        "item_identification": "Craftsman T110 42-inch Riding Mower (2022 Model)",
+        "estimated_market_value": 1400,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88635134/Craftsman-Riding-Mower-42-Cut-Lawn-Tractor-Like-NEW",
+            "title": "Craftsman Riding Mower 42\" Cut Lawn Tractor - Like NEW!",
+            "current_bid": "$625.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88635134/Craftsman-Riding-Mower-42-Cut-Lawn-Tractor-Like-NEW",
+            "pics": [
+                "88635134_1.jpg",
+                "88635134_2.jpg",
+                "88635134_3.jpg",
+                "88635134_4.jpg",
+                "88635134_5.jpg",
+                "88635134_6.jpg",
+                "88635134_7.jpg",
+                "88635134_8.jpg",
+                "88635134_9.jpg",
+                "88635134_10.jpg",
+                "88635134_11.jpg",
+                "88635134_12.jpg",
+                "88635134_13.jpg",
+                "88635134_14.jpg",
+                "88635134_15.jpg",
+                "88635134_16.jpg",
+                "88635134_17.jpg",
+                "88635134_18.jpg",
+                "88635134_19.jpg",
+                "88635134_20.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Mid-Century Modern Stanley Long Dresser with Mirror",
+        "estimated_market_value": 1100,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88596096/MidCentury-Modern-Stanley-Dresser-Mirror-1960s",
+            "title": "Mid-Century Modern Stanley Dresser & Mirror / 1960's",
+            "current_bid": "$165.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88596096/MidCentury-Modern-Stanley-Dresser-Mirror-1960s",
+            "pics": [
+                "88596096_1.jpg",
+                "88596096_2.jpg",
+                "88596096_3.jpg",
+                "88596096_4.jpg",
+                "88596096_5.jpg",
+                "88596096_6.jpg",
+                "88596096_7.jpg",
+                "88596096_8.jpg",
+                "88596096_9.jpg",
+                "88596096_10.jpg",
+                "88596096_11.jpg",
+                "88596096_12.jpg",
+                "88596096_13.jpg",
+                "88596096_14.jpg",
+                "88596096_15.jpg",
+                "88596096_16.jpg",
+                "88596096_17.jpg",
+                "88596096_18.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Mid-Century Modern Stanley China Cabinet Hutch",
+        "estimated_market_value": 850,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88596077/MidCentury-Modern-Stanley-China-Cabinet-1960s",
+            "title": "Mid-Century Modern Stanley China Cabinet / 1960's",
+            "current_bid": "$285.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88596077/MidCentury-Modern-Stanley-China-Cabinet-1960s",
+            "pics": [
+                "88596077_1.jpg",
+                "88596077_2.jpg",
+                "88596077_3.jpg",
+                "88596077_4.jpg",
+                "88596077_5.jpg",
+                "88596077_6.jpg",
+                "88596077_7.jpg",
+                "88596077_8.jpg",
+                "88596077_9.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Craftsman 14.5HP 42-inch Riding Mower with Bagger",
+        "estimated_market_value": 600,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88637308/Craftsman-Riding-Mower-42-Cut-Lawn-Tractor-Rear-GrassLeaf-Catcher-Attachment",
+            "title": "Craftsman Riding Mower 42\" Cut Lawn Tractor & Rear Grass/Leaf Catcher Attachment",
+            "current_bid": "$200.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88637308/Craftsman-Riding-Mower-42-Cut-Lawn-Tractor-Rear-GrassLeaf-Catcher-Attachment",
+            "pics": [
+                "88637308_1.jpg",
+                "88637308_2.jpg",
+                "88637308_3.jpg",
+                "88637308_4.jpg",
+                "88637308_5.jpg",
+                "88637308_6.jpg",
+                "88637308_7.jpg",
+                "88637308_8.jpg",
+                "88637308_9.jpg",
+                "88637308_10.jpg",
+                "88637308_11.jpg",
+                "88637308_12.jpg",
+                "88637308_13.jpg",
+                "88637308_14.jpg",
+                "88637308_15.jpg",
+                "88637308_16.jpg",
+                "88637308_17.jpg",
+                "88637308_18.jpg",
+                "88637308_19.jpg",
+                "88637308_20.jpg",
+                "88637308_21.jpg",
+                "88637308_22.jpg",
+                "88637308_23.jpg",
+                "88637308_24.jpg",
+                "88637308_25.jpg",
+                "88637308_26.jpg",
+                "88637308_27.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Mobile folding cafeteria table with 8 attached seats",
+        "estimated_market_value": 325,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88641238/Mobile-Folding-BanquetLunchroom-Table-Seats-8",
+            "title": "Mobile Folding Banquet/Lunchroom Table - Seats 8",
+            "current_bid": "$140.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88641238/Mobile-Folding-BanquetLunchroom-Table-Seats-8",
+            "pics": [
+                "88641238_1.jpg",
+                "88641238_2.jpg",
+                "88641238_3.jpg",
+                "88641238_4.jpg",
+                "88641238_5.jpg",
+                "88641238_6.jpg",
+                "88641238_7.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Large workshop lot of assorted vintage hand tools",
+        "estimated_market_value": 300,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88601358/Large-Handyman-Mechanic-Tools-Entire-Wall-and-Shelves",
+            "title": "Large Handyman & Mechanic Tools / Entire Wall and Shelves",
+            "current_bid": "$111.01",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88601358/Large-Handyman-Mechanic-Tools-Entire-Wall-and-Shelves",
+            "pics": [
+                "88601358_1.jpg",
+                "88601358_2.jpg",
+                "88601358_3.jpg",
+                "88601358_4.jpg",
+                "88601358_5.jpg",
+                "88601358_6.jpg",
+                "88601358_7.jpg",
+                "88601358_8.jpg",
+                "88601358_9.jpg",
+                "88601358_10.jpg",
+                "88601358_11.jpg",
+                "88601358_12.jpg",
+                "88601358_13.jpg",
+                "88601358_14.jpg",
+                "88601358_15.jpg",
+                "88601358_16.jpg",
+                "88601358_17.jpg",
+                "88601358_18.jpg",
+                "88601358_19.jpg",
+                "88601358_20.jpg",
+                "88601358_21.jpg",
+                "88601358_22.jpg",
+                "88601358_23.jpg",
+                "88601358_24.jpg",
+                "88601358_25.jpg",
+                "88601358_26.jpg",
+                "88601358_27.jpg",
+                "88601358_28.jpg",
+                "88601358_29.jpg",
+                "88601358_30.jpg",
+                "88601358_31.jpg",
+                "88601358_32.jpg",
+                "88601358_33.jpg",
+                "88601358_34.jpg",
+                "88601358_35.jpg",
+                "88601358_36.jpg",
+                "88601358_37.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Craftsman red and grey rolling tool cabinet with assorted tools",
+        "estimated_market_value": 300,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88329722/Craftsman-Rolling-Tool-Cabinet",
+            "title": "Craftsman Rolling Tool Cabinet",
+            "current_bid": "$171.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88329722/Craftsman-Rolling-Tool-Cabinet",
+            "pics": [
+                "88329722_1.jpg",
+                "88329722_2.jpg",
+                "88329722_3.jpg",
+                "88329722_4.jpg",
+                "88329722_5.jpg",
+                "88329722_6.jpg",
+                "88329722_7.jpg",
+                "88329722_8.jpg",
+                "88329722_9.jpg",
+                "88329722_10.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Antique 5-leg oak dining table with four chairs",
+        "estimated_market_value": 250,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88584912/Antique-Oak-5leg-Dining-Table-Chairs-Mexican-County-Style",
+            "title": "Antique Oak 5-leg Dining Table & Chairs / Mexican County Style",
+            "current_bid": "$35.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88584912/Antique-Oak-5leg-Dining-Table-Chairs-Mexican-County-Style",
+            "pics": [
+                "88584912_1.jpg",
+                "88584912_2.jpg",
+                "88584912_3.jpg",
+                "88584912_4.jpg",
+                "88584912_5.jpg",
+                "88584912_6.jpg",
+                "88584912_7.jpg",
+                "88584912_8.jpg",
+                "88584912_9.jpg",
+                "88584912_10.jpg",
+                "88584912_11.jpg",
+                "88584912_12.jpg",
+                "88584912_13.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Large bulk lot of untested vintage vacuum tubes in original boxes",
+        "estimated_market_value": 250,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88664750/Huge-Vintage-Vacuum-Tube-Lot-Dozens-including-GERCASylvania-etc",
+            "title": "Huge Vintage Vacuum Tube Lot - Dozens including GE/RCA/Sylvania etc.",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88664750/Huge-Vintage-Vacuum-Tube-Lot-Dozens-including-GERCASylvania-etc",
+            "pics": [
+                "88664750_1.jpg",
+                "88664750_2.jpg",
+                "88664750_3.jpg",
+                "88664750_4.jpg",
+                "88664750_5.jpg",
+                "88664750_6.jpg",
+                "88664750_7.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Mid-Century Modern style media cabinet with speaker cloth",
+        "estimated_market_value": 225,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88599396/MidCentury-TV-Console-Cabinet",
+            "title": "Mid-Century TV Console Cabinet",
+            "current_bid": "$30.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88599396/MidCentury-TV-Console-Cabinet",
+            "pics": [
+                "88599396_1.jpg",
+                "88599396_2.jpg",
+                "88599396_3.jpg",
+                "88599396_4.jpg",
+                "88599396_5.jpg",
+                "88599396_6.jpg",
+                "88599396_7.jpg",
+                "88599396_8.jpg",
+                "88599396_9.jpg",
+                "88599396_10.jpg",
+                "88599396_11.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Heavy-duty gray metal workbench",
+        "estimated_market_value": 175,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88526684/Large-Commercial-Work-Station-Table-Gray-Metal",
+            "title": "Large Commercial Work Station Table / Gray Metal",
+            "current_bid": "$30.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88526684/Large-Commercial-Work-Station-Table-Gray-Metal",
+            "pics": [
+                "88526684_1.jpg",
+                "88526684_2.jpg",
+                "88526684_3.jpg",
+                "88526684_4.jpg",
+                "88526684_5.jpg",
+                "88526684_6.jpg",
+                "88526684_7.jpg",
+                "88526684_8.jpg",
+                "88526684_9.jpg",
+                "88526684_10.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "SKILSAW SPT79 Medusaw Concrete Saw",
+        "estimated_market_value": 175,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88423159/SKILSAW-Medusaw-Circular-Saw-SPT79",
+            "title": "SKILSAW Medusaw Circular Saw / SPT79",
+            "current_bid": "$56.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88423159/SKILSAW-Medusaw-Circular-Saw-SPT79",
+            "pics": [
+                "88423159_1.jpg",
+                "88423159_2.jpg",
+                "88423159_3.jpg",
+                "88423159_4.jpg",
+                "88423159_5.jpg",
+                "88423159_6.jpg",
+                "88423159_7.jpg",
+                "88423159_8.jpg",
+                "88423159_9.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Antique-style oak swivel office chair with caned seat",
+        "estimated_market_value": 175,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88423411/Company-Style-Desk-Chair",
+            "title": "Company Style Desk Chair",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88423411/Company-Style-Desk-Chair",
+            "pics": [
+                "88423411_1.jpg",
+                "88423411_2.jpg",
+                "88423411_3.jpg",
+                "88423411_4.jpg",
+                "88423411_5.jpg",
+                "88423411_6.jpg",
+                "88423411_7.jpg",
+                "88423411_8.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "1950s mid-century retro drop-leaf dinette table with two chairs",
+        "estimated_market_value": 175,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88596169/1950s-MidCentury-Kitchen-Table-Chairs",
+            "title": "1950's Mid-Century Kitchen Table & Chairs",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88596169/1950s-MidCentury-Kitchen-Table-Chairs",
+            "pics": [
+                "88596169_1.jpg",
+                "88596169_2.jpg",
+                "88596169_3.jpg",
+                "88596169_4.jpg",
+                "88596169_5.jpg",
+                "88596169_6.jpg",
+                "88596169_7.jpg",
+                "88596169_8.jpg",
+                "88596169_9.jpg",
+                "88596169_10.jpg",
+                "88596169_11.jpg",
+                "88596169_12.jpg",
+                "88596169_13.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Oak and glass quilt display cabinet",
+        "estimated_market_value": 150,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88424400/Large-Quilt-Display-Case",
+            "title": "Large Quilt Display Case",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88424400/Large-Quilt-Display-Case",
+            "pics": [
+                "88424400_1.jpg",
+                "88424400_2.jpg",
+                "88424400_3.jpg",
+                "88424400_4.jpg",
+                "88424400_5.jpg",
+                "88424400_6.jpg",
+                "88424400_7.jpg",
+                "88424400_8.jpg",
+                "88424400_9.jpg",
+                "88424400_10.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Vintage 1950s Cosco folding card table and four chairs set",
+        "estimated_market_value": 150,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88596133/1950s-Atomic-Cosco-Hamilton-Metal-Table-Chairs",
+            "title": "1950's Atomic Cosco Hamilton Metal Table & Chairs",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88596133/1950s-Atomic-Cosco-Hamilton-Metal-Table-Chairs",
+            "pics": [
+                "88596133_1.jpg",
+                "88596133_2.jpg",
+                "88596133_3.jpg",
+                "88596133_4.jpg",
+                "88596133_5.jpg",
+                "88596133_6.jpg",
+                "88596133_7.jpg",
+                "88596133_8.jpg",
+                "88596133_9.jpg",
+                "88596133_10.jpg",
+                "88596133_11.jpg",
+                "88596133_12.jpg",
+                "88596133_13.jpg",
+                "88596133_14.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Large Lot of Classic Rock Vinyl Records and a CD Box Set",
+        "estimated_market_value": 150,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88299899/Classic-Rock-Vinyl-Records",
+            "title": "Classic Rock Vinyl Records",
+            "current_bid": "$87.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88299899/Classic-Rock-Vinyl-Records",
+            "pics": [
+                "88299899_1.jpg",
+                "88299899_2.jpg",
+                "88299899_3.jpg",
+                "88299899_4.jpg",
+                "88299899_5.jpg",
+                "88299899_6.jpg",
+                "88299899_7.jpg",
+                "88299899_8.jpg",
+                "88299899_9.jpg",
+                "88299899_10.jpg",
+                "88299899_11.jpg",
+                "88299899_12.jpg",
+                "88299899_13.jpg",
+                "88299899_14.jpg",
+                "88299899_15.jpg",
+                "88299899_16.jpg",
+                "88299899_17.jpg",
+                "88299899_18.jpg",
+                "88299899_19.jpg",
+                "88299899_20.jpg",
+                "88299899_21.jpg",
+                "88299899_22.jpg",
+                "88299899_23.jpg",
+                "88299899_24.jpg",
+                "88299899_25.jpg",
+                "88299899_26.jpg",
+                "88299899_27.jpg",
+                "88299899_28.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Porter-Cable router kit with two bases and a 24-piece Woodstock router bit set",
+        "estimated_market_value": 150,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88423315/PORTERCABLE-Fixed-Base-Router-Kit-Bit-Kit",
+            "title": "PORTER-CABLE Fixed Base Router Kit / Bit Kit",
+            "current_bid": "$81.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88423315/PORTERCABLE-Fixed-Base-Router-Kit-Bit-Kit",
+            "pics": [
+                "88423315_1.jpg",
+                "88423315_2.jpg",
+                "88423315_3.jpg",
+                "88423315_4.jpg",
+                "88423315_5.jpg",
+                "88423315_6.jpg",
+                "88423315_7.jpg",
+                "88423315_8.jpg",
+                "88423315_9.jpg",
+                "88423315_10.jpg",
+                "88423315_11.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Vintage Hy-Glow Inari Japanese-style patio lantern string light set with original box",
+        "estimated_market_value": 125,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88308323/HyGlow-Inari-Patio-Lantern-Set",
+            "title": "\"Hy-Glow Inari Patio Lantern Set\"",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88308323/HyGlow-Inari-Patio-Lantern-Set",
+            "pics": [
+                "88308323_1.jpg",
+                "88308323_2.jpg",
+                "88308323_3.jpg",
+                "88308323_4.jpg",
+                "88308323_5.jpg",
+                "88308323_6.jpg",
+                "88308323_7.jpg",
+                "88308323_8.jpg",
+                "88308323_9.jpg",
+                "88308323_10.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Tiffany-style stained glass torchiere floor lamp",
+        "estimated_market_value": 120,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88423432/Tall-Torchiere-Floor-Lamps",
+            "title": "Tall Torchiere Floor Lamps",
+            "current_bid": "$60.01",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88423432/Tall-Torchiere-Floor-Lamps",
+            "pics": [
+                "88423432_1.jpg",
+                "88423432_2.jpg",
+                "88423432_3.jpg",
+                "88423432_4.jpg",
+                "88423432_5.jpg",
+                "88423432_6.jpg",
+                "88423432_7.jpg",
+                "88423432_8.jpg",
+                "88423432_9.jpg",
+                "88423432_10.jpg",
+                "88423432_11.jpg",
+                "88423432_12.jpg",
+                "88423432_13.jpg",
+                "88423432_14.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 14 Anchor Hocking Boopie Green Goblets",
+        "estimated_market_value": 120,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88493632/1950s-Anchor-Hocking-BOOPIE-Bubble-Foot-Green-Goblets-Lot-of-14",
+            "title": "1950's Anchor Hocking BOOPIE Bubble Foot Green Goblets - Lot of 14",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88493632/1950s-Anchor-Hocking-BOOPIE-Bubble-Foot-Green-Goblets-Lot-of-14",
+            "pics": [
+                "88493632_1.jpg",
+                "88493632_2.jpg",
+                "88493632_3.jpg",
+                "88493632_4.jpg",
+                "88493632_5.jpg",
+                "88493632_6.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 16 vintage glasses: 9 Souvenir, 7 Anchor Hocking Gazelle",
+        "estimated_market_value": 120,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88495226/9-Vintage-Travel-Souvenir-Glasses-and-7-Anchor-Hocking-Gazelle-Tumblers",
+            "title": "9 Vintage Travel Souvenir Glasses and 7 Anchor Hocking Gazelle Tumblers",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88495226/9-Vintage-Travel-Souvenir-Glasses-and-7-Anchor-Hocking-Gazelle-Tumblers",
+            "pics": [
+                "88495226_1.jpg",
+                "88495226_2.jpg",
+                "88495226_3.jpg",
+                "88495226_4.jpg",
+                "88495226_5.jpg",
+                "88495226_6.jpg",
+                "88495226_7.jpg",
+                "88495226_8.jpg",
+                "88495226_9.jpg",
+                "88495226_10.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Vintage 1970s Kenmore 1400 sewing machine in table with notions",
+        "estimated_market_value": 120,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88596187/1970s-Kenmore-Zig-Zag-Sewing-Machine-Working",
+            "title": "1970's Kenmore Zig Zag Sewing Machine / Working",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88596187/1970s-Kenmore-Zig-Zag-Sewing-Machine-Working",
+            "pics": [
+                "88596187_1.jpg",
+                "88596187_2.jpg",
+                "88596187_3.jpg",
+                "88596187_4.jpg",
+                "88596187_5.jpg",
+                "88596187_6.jpg",
+                "88596187_7.jpg",
+                "88596187_8.jpg",
+                "88596187_9.jpg",
+                "88596187_10.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 48 Chef & Sommelier Cabernet Crystal Wine Glasses",
+        "estimated_market_value": 120,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88664171/CS-Chef-Sommelier-Cabernet-Crystal-Tulip-Stemware-Lot-of-48",
+            "title": "C&S Chef Sommelier Cabernet Crystal Tulip Stemware - Lot of 48",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88664171/CS-Chef-Sommelier-Cabernet-Crystal-Tulip-Stemware-Lot-of-48",
+            "pics": [
+                "88664171_1.jpg",
+                "88664171_2.jpg",
+                "88664171_3.jpg",
+                "88664171_4.jpg",
+                "88664171_5.jpg",
+                "88664171_6.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Large lot of 1980s-90s baseball cards with sealed sets",
+        "estimated_market_value": 110,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88293313/Vintage-Baseball-Cards",
+            "title": "Vintage Baseball Cards",
+            "current_bid": "$95.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88293313/Vintage-Baseball-Cards",
+            "pics": [
+                "88293313_1.jpg",
+                "88293313_2.jpg",
+                "88293313_3.jpg",
+                "88293313_4.jpg",
+                "88293313_5.jpg",
+                "88293313_6.jpg",
+                "88293313_7.jpg",
+                "88293313_8.jpg",
+                "88293313_9.jpg",
+                "88293313_10.jpg",
+                "88293313_11.jpg",
+                "88293313_12.jpg",
+                "88293313_13.jpg",
+                "88293313_14.jpg",
+                "88293313_15.jpg",
+                "88293313_16.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Two Asian Landscape Scroll Paintings and a Pueblo Pottery Vase",
+        "estimated_market_value": 110,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88299396/East-Asian-landscape-Scroll-Paintings",
+            "title": "East Asian landscape Scroll Paintings",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88299396/East-Asian-landscape-Scroll-Paintings",
+            "pics": [
+                "88299396_1.jpg",
+                "88299396_2.jpg",
+                "88299396_3.jpg",
+                "88299396_4.jpg",
+                "88299396_5.jpg",
+                "88299396_6.jpg",
+                "88299396_7.jpg",
+                "88299396_8.jpg",
+                "88299396_9.jpg",
+                "88299396_10.jpg",
+                "88299396_11.jpg",
+                "88299396_12.jpg",
+                "88299396_13.jpg",
+                "88299396_14.jpg",
+                "88299396_15.jpg",
+                "88299396_16.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Troy-Bilt 5HP Self-Propelled Push Mower",
+        "estimated_market_value": 100,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88640087/TroyBilt-Mulching-Mower-Model-8655R",
+            "title": "Troy-Bilt Mulching Mower - Model 8655R",
+            "current_bid": "$50.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88640087/TroyBilt-Mulching-Mower-Model-8655R",
+            "pics": [
+                "88640087_1.jpg",
+                "88640087_2.jpg",
+                "88640087_3.jpg",
+                "88640087_4.jpg",
+                "88640087_5.jpg",
+                "88640087_6.jpg",
+                "88640087_7.jpg",
+                "88640087_8.jpg",
+                "88640087_9.jpg",
+                "88640087_10.jpg",
+                "88640087_11.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Vintage bench grinder on stand with extra wheels",
+        "estimated_market_value": 100,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88653564/Grinding-Wheel-with-Stand-and-Supplies",
+            "title": "Grinding Wheel with Stand and Supplies",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88653564/Grinding-Wheel-with-Stand-and-Supplies",
+            "pics": [
+                "88653564_1.jpg",
+                "88653564_2.jpg",
+                "88653564_3.jpg",
+                "88653564_4.jpg",
+                "88653564_5.jpg",
+                "88653564_6.jpg",
+                "88653564_7.jpg",
+                "88653564_8.jpg",
+                "88653564_9.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Kyle Busch M&M's NASCAR Chase Authentics jacket XXL",
+        "estimated_market_value": 100,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88272483/Kyle-Busch-Motorsports-Team-pit-crew-Racing-Jacket-XXL",
+            "title": "Kyle Busch Motorsports Team pit crew Racing Jacket / XXL",
+            "current_bid": "$30.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88272483/Kyle-Busch-Motorsports-Team-pit-crew-Racing-Jacket-XXL",
+            "pics": [
+                "88272483_1.jpg",
+                "88272483_2.jpg",
+                "88272483_3.jpg",
+                "88272483_4.jpg",
+                "88272483_5.jpg",
+                "88272483_6.jpg",
+                "88272483_7.jpg",
+                "88272483_8.jpg",
+                "88272483_9.jpg",
+                "88272483_10.jpg",
+                "88272483_11.jpg",
+                "88272483_12.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Framed print of USAF Thunderbirds over Wrigley Field, signed by the 2010 team",
+        "estimated_market_value": 100,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88329516/Signed-US-Air-Force-Thunderbirds-Print",
+            "title": "Signed U.S. Air Force Thunderbirds Print",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88329516/Signed-US-Air-Force-Thunderbirds-Print",
+            "pics": [
+                "88329516_1.jpg",
+                "88329516_2.jpg",
+                "88329516_3.jpg",
+                "88329516_4.jpg",
+                "88329516_5.jpg",
+                "88329516_6.jpg",
+                "88329516_7.jpg",
+                "88329516_8.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of vintage Hot Wheels and Matchbox die-cast cars, including several Redlines",
+        "estimated_market_value": 100,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88308277/Hot-Wheels-Matchbox-Die-Cast",
+            "title": "Hot Wheels & Matchbox Die Cast",
+            "current_bid": "$35.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88308277/Hot-Wheels-Matchbox-Die-Cast",
+            "pics": [
+                "88308277_1.jpg",
+                "88308277_2.jpg",
+                "88308277_3.jpg",
+                "88308277_4.jpg",
+                "88308277_5.jpg",
+                "88308277_6.jpg",
+                "88308277_7.jpg",
+                "88308277_8.jpg",
+                "88308277_9.jpg",
+                "88308277_10.jpg",
+                "88308277_11.jpg",
+                "88308277_12.jpg",
+                "88308277_13.jpg",
+                "88308277_14.jpg",
+                "88308277_15.jpg",
+                "88308277_16.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "9-piece Fenton Hobnail white milk glass set with 8 goblets and a pitcher",
+        "estimated_market_value": 100,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88629670/9-Piece-Hobnail-White-Milk-Glass-Lot-8-Water-Goblets-an-Ice-Pitcher",
+            "title": "9 Piece Hobnail White Milk Glass Lot - 8 Water Goblets & an Ice Pitcher",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88629670/9-Piece-Hobnail-White-Milk-Glass-Lot-8-Water-Goblets-an-Ice-Pitcher",
+            "pics": [
+                "88629670_1.jpg",
+                "88629670_2.jpg",
+                "88629670_3.jpg",
+                "88629670_4.jpg",
+                "88629670_5.jpg",
+                "88629670_6.jpg",
+                "88629670_7.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 24 Fostoria Contour Clear Stemware",
+        "estimated_market_value": 90,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88455383/Fostoria-Contour-Clear-Stemware-Lot-24-Pieces",
+            "title": "Fostoria Contour Clear Stemware Lot - 24 Pieces",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88455383/Fostoria-Contour-Clear-Stemware-Lot-24-Pieces",
+            "pics": [
+                "88455383_1.jpg",
+                "88455383_2.jpg",
+                "88455383_3.jpg",
+                "88455383_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of Two Vintage Mid-Century Portable Travel Bar Sets",
+        "estimated_market_value": 90,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88308232/MidCentury-Travel-Bars",
+            "title": "Mid-Century Travel Bars",
+            "current_bid": "$47.01",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88308232/MidCentury-Travel-Bars",
+            "pics": [
+                "88308232_1.jpg",
+                "88308232_2.jpg",
+                "88308232_3.jpg",
+                "88308232_4.jpg",
+                "88308232_5.jpg",
+                "88308232_6.jpg",
+                "88308232_7.jpg",
+                "88308232_8.jpg",
+                "88308232_9.jpg",
+                "88308232_10.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Craftsman 3-tool pneumatic nailer and stapler kit",
+        "estimated_market_value": 90,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88423205/Craftsman-Nailers-Brad-Finish-Crown-Stabler",
+            "title": "Craftsman Nailers / Brad, Finish, Crown Stabler",
+            "current_bid": "$55.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88423205/Craftsman-Nailers-Brad-Finish-Crown-Stabler",
+            "pics": [
+                "88423205_1.jpg",
+                "88423205_2.jpg",
+                "88423205_3.jpg",
+                "88423205_4.jpg",
+                "88423205_5.jpg",
+                "88423205_6.jpg",
+                "88423205_7.jpg",
+                "88423205_8.jpg",
+                "88423205_9.jpg",
+                "88423205_10.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "14-piece set of Franciscan Coronado Swirl dinnerware in aqua",
+        "estimated_market_value": 90,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88600541/Franciscan-Coronado-Swirl-Dinnerware-Piece-Aqua",
+            "title": "Franciscan Coronado Swirl Dinnerware Piece / Aqua",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88600541/Franciscan-Coronado-Swirl-Dinnerware-Piece-Aqua",
+            "pics": [
+                "88600541_1.jpg",
+                "88600541_2.jpg",
+                "88600541_3.jpg",
+                "88600541_4.jpg",
+                "88600541_5.jpg",
+                "88600541_6.jpg",
+                "88600541_7.jpg",
+                "88600541_8.jpg",
+                "88600541_9.jpg",
+                "88600541_10.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 13 pieces of vintage glassware, mostly green uranium/Depression glass",
+        "estimated_market_value": 90,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88666196/Vintage-Glassware-Lot-Including-Green-DepressionUranium-Glass-Lot-of-13",
+            "title": "Vintage Glassware Lot - Including Green Depression/Uranium Glass - Lot of 13",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88666196/Vintage-Glassware-Lot-Including-Green-DepressionUranium-Glass-Lot-of-13",
+            "pics": [
+                "88666196_1.jpg",
+                "88666196_2.jpg",
+                "88666196_3.jpg",
+                "88666196_4.jpg",
+                "88666196_5.jpg",
+                "88666196_6.jpg",
+                "88666196_7.jpg",
+                "88666196_8.jpg",
+                "88666196_9.jpg",
+                "88666196_10.jpg",
+                "88666196_11.jpg",
+                "88666196_12.jpg",
+                "88666196_13.jpg",
+                "88666196_14.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 4 assorted Fenton art glass pieces",
+        "estimated_market_value": 85,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88490159/4-Piece-Fenton-Lot",
+            "title": "4 Piece Fenton Lot",
+            "current_bid": "$50.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88490159/4-Piece-Fenton-Lot",
+            "pics": [
+                "88490159_1.jpg",
+                "88490159_2.jpg",
+                "88490159_3.jpg",
+                "88490159_4.jpg",
+                "88490159_5.jpg",
+                "88490159_6.jpg",
+                "88490159_7.jpg",
+                "88490159_8.jpg",
+                "88490159_9.jpg",
+                "88490159_10.jpg",
+                "88490159_11.jpg",
+                "88490159_12.jpg",
+                "88490159_13.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Large metal garden cart trailer for lawn tractor",
+        "estimated_market_value": 80,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88638755/Large-Garden-Cart-for-a-Riding-MowerLawn-Tractor",
+            "title": "Large Garden Cart for a Riding Mower/Lawn Tractor",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88638755/Large-Garden-Cart-for-a-Riding-MowerLawn-Tractor",
+            "pics": [
+                "88638755_1.jpg",
+                "88638755_2.jpg",
+                "88638755_3.jpg",
+                "88638755_4.jpg",
+                "88638755_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 8 Southwest Style Pottery Pieces",
+        "estimated_market_value": 80,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88458698/Southwest-Pottery-Lot-8-Pieces",
+            "title": "Southwest Pottery Lot - 8 Pieces",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88458698/Southwest-Pottery-Lot-8-Pieces",
+            "pics": [
+                "88458698_1.jpg",
+                "88458698_2.jpg",
+                "88458698_3.jpg",
+                "88458698_4.jpg",
+                "88458698_5.jpg",
+                "88458698_6.jpg",
+                "88458698_7.jpg",
+                "88458698_8.jpg",
+                "88458698_9.jpg",
+                "88458698_10.jpg",
+                "88458698_11.jpg",
+                "88458698_12.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Limited Edition Amy Evans 'Homes On The Harbour' Framed Print",
+        "estimated_market_value": 80,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88329536/Homes-On-The-Harbour-Print-Bermudian-artist-Amy-Evans",
+            "title": "\"Homes On The Harbour\" Print / Bermudian artist Amy Evans.",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88329536/Homes-On-The-Harbour-Print-Bermudian-artist-Amy-Evans",
+            "pics": [
+                "88329536_1.jpg",
+                "88329536_2.jpg",
+                "88329536_3.jpg",
+                "88329536_4.jpg",
+                "88329536_5.jpg",
+                "88329536_6.jpg",
+                "88329536_7.jpg",
+                "88329536_8.jpg",
+                "88329536_9.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Signed framed seascape painting with visible damage",
+        "estimated_market_value": 80,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88329498/Original-Signed-Oceanside-Oil-Painting",
+            "title": "Original Signed \"Oceanside\" Oil Painting",
+            "current_bid": "$55.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88329498/Original-Signed-Oceanside-Oil-Painting",
+            "pics": [
+                "88329498_1.jpg",
+                "88329498_2.jpg",
+                "88329498_3.jpg",
+                "88329498_4.jpg",
+                "88329498_5.jpg",
+                "88329498_6.jpg",
+                "88329498_7.jpg",
+                "88329498_8.jpg",
+                "88329498_9.jpg",
+                "88329498_10.jpg",
+                "88329498_11.jpg",
+                "88329498_12.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 9 vintage kitchenware pieces, including multiple Pyrex patterns",
+        "estimated_market_value": 80,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88487876/9-Piece-Kitchenware-Lot-Including-Vintage-Pyrex",
+            "title": "9 Piece Kitchenware Lot - Including Vintage Pyrex",
+            "current_bid": "$30.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88487876/9-Piece-Kitchenware-Lot-Including-Vintage-Pyrex",
+            "pics": [
+                "88487876_1.jpg",
+                "88487876_2.jpg",
+                "88487876_3.jpg",
+                "88487876_4.jpg",
+                "88487876_5.jpg",
+                "88487876_6.jpg",
+                "88487876_7.jpg",
+                "88487876_8.jpg",
+                "88487876_9.jpg",
+                "88487876_10.jpg",
+                "88487876_11.jpg",
+                "88487876_12.jpg",
+                "88487876_13.jpg",
+                "88487876_14.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 3 Diecast Trucks: Ertl Red Cross Bank & Dodge Van, First Gear Mack Tractor",
+        "estimated_market_value": 80,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88670400/3-Diecast-Trucks-with-Boxes-Ertl-and-First-Gear",
+            "title": "3 Diecast Trucks with Boxes - Ertl and First Gear",
+            "current_bid": "$30.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88670400/3-Diecast-Trucks-with-Boxes-Ertl-and-First-Gear",
+            "pics": [
+                "88670400_1.jpg",
+                "88670400_2.jpg",
+                "88670400_3.jpg",
+                "88670400_4.jpg",
+                "88670400_5.jpg",
+                "88670400_6.jpg",
+                "88670400_7.jpg",
+                "88670400_8.jpg",
+                "88670400_9.jpg",
+                "88670400_10.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Crosley CR704 5-in-1 entertainment center",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88491104/Crosley-CR704-Radio-AMFMCD-Cassette-Turntable",
+            "title": "Crosley CR704 Radio - AM/FM/CD Cassette & Turntable",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88491104/Crosley-CR704-Radio-AMFMCD-Cassette-Turntable",
+            "pics": [
+                "88491104_1.jpg",
+                "88491104_2.jpg",
+                "88491104_3.jpg",
+                "88491104_4.jpg",
+                "88491104_5.jpg",
+                "88491104_6.jpg",
+                "88491104_7.jpg",
+                "88491104_8.jpg",
+                "88491104_9.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "12-piece set of MZ Czechoslovakia folk art porcelain plates",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88596115/MZ-Czechoslovakia-Porcelain-1950s",
+            "title": "MZ Czechoslovakia Porcelain / 1950's",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88596115/MZ-Czechoslovakia-Porcelain-1950s",
+            "pics": [
+                "88596115_1.jpg",
+                "88596115_2.jpg",
+                "88596115_3.jpg",
+                "88596115_4.jpg",
+                "88596115_5.jpg",
+                "88596115_6.jpg",
+                "88596115_7.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "1950s Cosco Hamilton atomic-style chrome bar stool",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88604363/1950s-Atomic-Cosco-Hamilton-Metal-Stool",
+            "title": "1950's Atomic Cosco Hamilton Metal Stool",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88604363/1950s-Atomic-Cosco-Hamilton-Metal-Stool",
+            "pics": [
+                "88604363_1.jpg",
+                "88604363_2.jpg",
+                "88604363_3.jpg",
+                "88604363_4.jpg",
+                "88604363_5.jpg",
+                "88604363_6.jpg",
+                "88604363_7.jpg",
+                "88604363_8.jpg",
+                "88604363_9.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Trimline T335 HR Folding Treadmill",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88301434/Trimline-T335-HR-Folding-Treadmill",
+            "title": "Trimline T335 HR Folding Treadmill.",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88301434/Trimline-T335-HR-Folding-Treadmill",
+            "pics": [
+                "88301434_1.jpg",
+                "88301434_2.jpg",
+                "88301434_3.jpg",
+                "88301434_4.jpg",
+                "88301434_5.jpg",
+                "88301434_6.jpg",
+                "88301434_7.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of Vintage 'RockBill' Magazines from 1982-1983",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88307541/RockBill-Magazines-19821983",
+            "title": "''RockBill' Magazines / 1982-1983",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88307541/RockBill-Magazines-19821983",
+            "pics": [
+                "88307541_1.jpg",
+                "88307541_2.jpg",
+                "88307541_3.jpg",
+                "88307541_4.jpg",
+                "88307541_5.jpg",
+                "88307541_6.jpg",
+                "88307541_7.jpg",
+                "88307541_8.jpg",
+                "88307541_9.jpg",
+                "88307541_10.jpg",
+                "88307541_11.jpg",
+                "88307541_12.jpg",
+                "88307541_13.jpg",
+                "88307541_14.jpg",
+                "88307541_15.jpg",
+                "88307541_16.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Large bulk lot of 1980s-1990s 'Junk Wax Era' sports trading cards",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88311727/Large-Sports-Card-Collection",
+            "title": "Large Sports Card Collection",
+            "current_bid": "$30.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88311727/Large-Sports-Card-Collection",
+            "pics": [
+                "88311727_1.jpg",
+                "88311727_2.jpg",
+                "88311727_3.jpg",
+                "88311727_4.jpg",
+                "88311727_5.jpg",
+                "88311727_6.jpg",
+                "88311727_7.jpg",
+                "88311727_8.jpg",
+                "88311727_9.jpg",
+                "88311727_10.jpg",
+                "88311727_11.jpg",
+                "88311727_12.jpg",
+                "88311727_13.jpg",
+                "88311727_14.jpg",
+                "88311727_15.jpg",
+                "88311727_16.jpg",
+                "88311727_17.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 4 Western and Southwestern style decorative items",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88462225/4-Piece-DecorativeWestern-Lot",
+            "title": "4 Piece Decorative/Western Lot",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88462225/4-Piece-DecorativeWestern-Lot",
+            "pics": [
+                "88462225_1.jpg",
+                "88462225_2.jpg",
+                "88462225_3.jpg",
+                "88462225_4.jpg",
+                "88462225_5.jpg",
+                "88462225_6.jpg",
+                "88462225_7.jpg",
+                "88462225_8.jpg",
+                "88462225_9.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Unmarked Green Mottled Glaze Art Pottery Vase",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88496189/Rare-Antique-Moss-Pottery-Vase",
+            "title": "Rare Antique Moss Pottery Vase",
+            "current_bid": "$35.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88496189/Rare-Antique-Moss-Pottery-Vase",
+            "pics": [
+                "88496189_1.jpg",
+                "88496189_2.jpg",
+                "88496189_3.jpg",
+                "88496189_4.jpg",
+                "88496189_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Vintage Pyrex and Fire-King Cookware Lot",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88631158/7-Piece-Kitchenware-Cookware-Lot-including-Vintage-Pyrex",
+            "title": "7 Piece Kitchenware Cookware Lot including Vintage Pyrex",
+            "current_bid": "$35.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88631158/7-Piece-Kitchenware-Cookware-Lot-including-Vintage-Pyrex",
+            "pics": [
+                "88631158_1.jpg",
+                "88631158_2.jpg",
+                "88631158_3.jpg",
+                "88631158_4.jpg",
+                "88631158_5.jpg",
+                "88631158_6.jpg",
+                "88631158_7.jpg",
+                "88631158_8.jpg",
+                "88631158_9.jpg",
+                "88631158_10.jpg",
+                "88631158_11.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Thomasville curved settee with diamond pattern upholstery",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88423473/Thomasville-Sofa-Settee",
+            "title": "Thomasville Sofa Settee",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88423473/Thomasville-Sofa-Settee",
+            "pics": [
+                "88423473_1.jpg",
+                "88423473_2.jpg",
+                "88423473_3.jpg",
+                "88423473_4.jpg",
+                "88423473_5.jpg",
+                "88423473_6.jpg",
+                "88423473_7.jpg",
+                "88423473_8.jpg",
+                "88423473_9.jpg",
+                "88423473_10.jpg",
+                "88423473_11.jpg",
+                "88423473_12.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Set of 12 Fostoria Contour crystal water goblets",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88455742/Fostoria-Contour-Clear-Stemware-Lot-12-Pieces",
+            "title": "Fostoria Contour Clear Stemware Lot - 12 Pieces",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88455742/Fostoria-Contour-Clear-Stemware-Lot-12-Pieces",
+            "pics": [
+                "88455742_1.jpg",
+                "88455742_2.jpg",
+                "88455742_3.jpg",
+                "88455742_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Signed Alexander Takacs 'Aboriginal Elder' Australian sculpture",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88295584/Alexander-Takacs-Takacs-Aboriginal-Elder-with-Coolamon",
+            "title": "Alexander Takacs \"Takacs Aboriginal Elder with Coolamon\".",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88295584/Alexander-Takacs-Takacs-Aboriginal-Elder-with-Coolamon",
+            "pics": [
+                "88295584_1.jpg",
+                "88295584_2.jpg",
+                "88295584_3.jpg",
+                "88295584_4.jpg",
+                "88295584_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Antique cast metal floor ashtray with glass insert",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88272538/Antique-FloorStanding-Ashtray",
+            "title": "Antique Floor-Standing Ashtray",
+            "current_bid": "$35.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88272538/Antique-FloorStanding-Ashtray",
+            "pics": [
+                "88272538_1.jpg",
+                "88272538_2.jpg",
+                "88272538_3.jpg",
+                "88272538_4.jpg",
+                "88272538_5.jpg",
+                "88272538_6.jpg",
+                "88272538_7.jpg",
+                "88272538_8.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 11 Longaberger baskets with liners and accessories",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88663235/Longaberger-Basket-Collection-11-Piece-Lot",
+            "title": "Longaberger Basket Collection - 11 Piece Lot",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88663235/Longaberger-Basket-Collection-11-Piece-Lot",
+            "pics": [
+                "88663235_1.jpg",
+                "88663235_2.jpg",
+                "88663235_3.jpg",
+                "88663235_4.jpg",
+                "88663235_5.jpg",
+                "88663235_6.jpg",
+                "88663235_7.jpg",
+                "88663235_8.jpg",
+                "88663235_9.jpg",
+                "88663235_10.jpg",
+                "88663235_11.jpg",
+                "88663235_12.jpg",
+                "88663235_13.jpg",
+                "88663235_14.jpg",
+                "88663235_15.jpg",
+                "88663235_16.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Mixed lot of 8 vintage Pyrex pieces including chartreuse refrigerator set",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88668029/8-Piece-Vintage-Pyrex-Lot",
+            "title": "8 Piece Vintage Pyrex Lot",
+            "current_bid": "$35.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88668029/8-Piece-Vintage-Pyrex-Lot",
+            "pics": [
+                "88668029_1.jpg",
+                "88668029_2.jpg",
+                "88668029_3.jpg",
+                "88668029_4.jpg",
+                "88668029_5.jpg",
+                "88668029_6.jpg",
+                "88668029_7.jpg",
+                "88668029_8.jpg",
+                "88668029_9.jpg",
+                "88668029_10.jpg",
+                "88668029_11.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Vintage Chicago Electric 12-inch cut-off saw",
+        "estimated_market_value": 70,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88423141/Chicago-Power-Tool-12inch-CutOff-Saw-923",
+            "title": "Chicago Power Tool 12-inch Cut-Off Saw / 923",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88423141/Chicago-Power-Tool-12inch-CutOff-Saw-923",
+            "pics": [
+                "88423141_1.jpg",
+                "88423141_2.jpg",
+                "88423141_3.jpg",
+                "88423141_4.jpg",
+                "88423141_5.jpg",
+                "88423141_6.jpg",
+                "88423141_7.jpg",
+                "88423141_8.jpg",
+                "88423141_9.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Brinly Tow-Behind Spike Aerator",
+        "estimated_market_value": 70,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88641213/Brinly-Lawn-Care-Aerator-for-Riding-Lawn-MowersTractors",
+            "title": "Brinly Lawn Care Aerator for Riding Lawn Mowers/Tractors",
+            "current_bid": "$50.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88641213/Brinly-Lawn-Care-Aerator-for-Riding-Lawn-MowersTractors",
+            "pics": [
+                "88641213_1.jpg",
+                "88641213_2.jpg",
+                "88641213_3.jpg",
+                "88641213_4.jpg",
+                "88641213_5.jpg",
+                "88641213_6.jpg",
+                "88641213_7.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of Longaberger and Temp-tations brand bakeware and basket",
+        "estimated_market_value": 65,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88489052/4-Piece-Lot-Longaberger-and-Temptations",
+            "title": "4 Piece Lot - Longaberger and Temp-tations",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88489052/4-Piece-Lot-Longaberger-and-Temptations",
+            "pics": [
+                "88489052_1.jpg",
+                "88489052_2.jpg",
+                "88489052_3.jpg",
+                "88489052_4.jpg",
+                "88489052_5.jpg",
+                "88489052_6.jpg",
+                "88489052_7.jpg",
+                "88489052_8.jpg",
+                "88489052_9.jpg",
+                "88489052_10.jpg",
+                "88489052_11.jpg",
+                "88489052_12.jpg",
+                "88489052_13.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 16 Anchor Hocking Fire King milk glass handled chili bowls",
+        "estimated_market_value": 65,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88667089/Vintage-Anchor-Hocking-Fire-King-White-Milk-Glass-Individual-Handled-Bowls-16pcs",
+            "title": "Vintage Anchor Hocking Fire King White Milk Glass Individual Handled Bowls 16pcs",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88667089/Vintage-Anchor-Hocking-Fire-King-White-Milk-Glass-Individual-Handled-Bowls-16pcs",
+            "pics": [
+                "88667089_1.jpg",
+                "88667089_2.jpg",
+                "88667089_3.jpg",
+                "88667089_4.jpg",
+                "88667089_5.jpg",
+                "88667089_6.jpg",
+                "88667089_7.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Greenworks 1500psi electric pressure washer",
+        "estimated_market_value": 60,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88491931/Greenworks-1500psi-Electric-Pressure-Washer",
+            "title": "Greenworks 1500psi Electric Pressure Washer",
+            "current_bid": "$35.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88491931/Greenworks-1500psi-Electric-Pressure-Washer",
+            "pics": [
+                "88491931_1.jpg",
+                "88491931_2.jpg",
+                "88491931_3.jpg",
+                "88491931_4.jpg",
+                "88491931_5.jpg",
+                "88491931_6.jpg",
+                "88491931_7.jpg",
+                "88491931_8.jpg",
+                "88491931_9.jpg",
+                "88491931_10.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Queen Anne Style Freestanding Jewelry Armoire",
+        "estimated_market_value": 60,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88329747/Queen-Anne-Style-Jewelry-Cabinet",
+            "title": "Queen Anne Style Jewelry Cabinet",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88329747/Queen-Anne-Style-Jewelry-Cabinet",
+            "pics": [
+                "88329747_1.jpg",
+                "88329747_2.jpg",
+                "88329747_3.jpg",
+                "88329747_4.jpg",
+                "88329747_5.jpg",
+                "88329747_6.jpg",
+                "88329747_7.jpg",
+                "88329747_8.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Framed Japanese hanging scroll print of birds and pine trees",
+        "estimated_market_value": 60,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88329480/Kakejiku-Japanese-Hanging-Scroll",
+            "title": "Kakejiku Japanese Hanging Scroll",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88329480/Kakejiku-Japanese-Hanging-Scroll",
+            "pics": [
+                "88329480_1.jpg",
+                "88329480_2.jpg",
+                "88329480_3.jpg",
+                "88329480_4.jpg",
+                "88329480_5.jpg",
+                "88329480_6.jpg",
+                "88329480_7.jpg",
+                "88329480_8.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Pair of Le Creuset Stoneware Breakfast Jugs (0.7L, Cerise)",
+        "estimated_market_value": 60,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88497405/2-Le-Creuset-Stoneware-Breakfast-Jugs",
+            "title": "2 Le Creuset Stoneware Breakfast Jugs",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88497405/2-Le-Creuset-Stoneware-Breakfast-Jugs",
+            "pics": [
+                "88497405_1.jpg",
+                "88497405_2.jpg",
+                "88497405_3.jpg",
+                "88497405_4.jpg",
+                "88497405_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Peavey Blazer 158 Transtube Guitar Amplifier",
+        "estimated_market_value": 60,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88423229/Peavey-Blazer-158-Guitar-Combo-Amplifier",
+            "title": "Peavey Blazer 158 Guitar Combo Amplifier.",
+            "current_bid": "$35.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88423229/Peavey-Blazer-158-Guitar-Combo-Amplifier",
+            "pics": [
+                "88423229_1.jpg",
+                "88423229_2.jpg",
+                "88423229_3.jpg",
+                "88423229_4.jpg",
+                "88423229_5.jpg",
+                "88423229_6.jpg",
+                "88423229_7.jpg",
+                "88423229_8.jpg",
+                "88423229_9.jpg",
+                "88423229_10.jpg",
+                "88423229_11.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Vintage Yellow Coca-Cola Crate with Bottles",
+        "estimated_market_value": 55,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88423186/CocaCola-Crate-Bottles",
+            "title": "Coca-Cola Crate & Bottles",
+            "current_bid": "$30.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88423186/CocaCola-Crate-Bottles",
+            "pics": [
+                "88423186_1.jpg",
+                "88423186_2.jpg",
+                "88423186_3.jpg",
+                "88423186_4.jpg",
+                "88423186_5.jpg",
+                "88423186_6.jpg",
+                "88423186_7.jpg",
+                "88423186_8.jpg",
+                "88423186_9.jpg",
+                "88423186_10.jpg",
+                "88423186_11.jpg",
+                "88423186_12.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "6-player wooden croquet set in wooden carrying case",
+        "estimated_market_value": 55,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88423297/Croquet-Set-Wooden-Carrying-Case",
+            "title": "Croquet Set / Wooden Carrying Case",
+            "current_bid": "$35.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88423297/Croquet-Set-Wooden-Carrying-Case",
+            "pics": [
+                "88423297_1.jpg",
+                "88423297_2.jpg",
+                "88423297_3.jpg",
+                "88423297_4.jpg",
+                "88423297_5.jpg",
+                "88423297_6.jpg",
+                "88423297_7.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Vintage Anchor Hocking Fire-King 'Dyna-ware' 32-Piece Bakeware Set",
+        "estimated_market_value": 55,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88669032/Dyna-ware-Anchor-Hocking-FireKing-Hostess-Bakeware-Set-32-Pieces",
+            "title": "Dyna ware? Anchor Hocking FireKing Hostess Bakeware Set - 32 Pieces",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88669032/Dyna-ware-Anchor-Hocking-FireKing-Hostess-Bakeware-Set-32-Pieces",
+            "pics": [
+                "88669032_1.jpg",
+                "88669032_2.jpg",
+                "88669032_3.jpg",
+                "88669032_4.jpg",
+                "88669032_5.jpg",
+                "88669032_6.jpg",
+                "88669032_7.jpg",
+                "88669032_8.jpg",
+                "88669032_9.jpg",
+                "88669032_10.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Craftsman 4 cu. ft. steel wheelbarrow",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88640117/Craftsman-4-cu-ft-Wheel-Barrow",
+            "title": "Craftsman 4 cu. ft. Wheel Barrow",
+            "current_bid": "$35.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88640117/Craftsman-4-cu-ft-Wheel-Barrow",
+            "pics": [
+                "88640117_1.jpg",
+                "88640117_2.jpg",
+                "88640117_3.jpg",
+                "88640117_4.jpg",
+                "88640117_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "10-piece lot of vintage Depression and Carnival glass",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88456984/Vintage-Colored-Glass-Lot-10-Pieces-Mostly-Depression-Glass",
+            "title": "Vintage Colored Glass Lot - 10 Pieces - Mostly Depression Glass",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88456984/Vintage-Colored-Glass-Lot-10-Pieces-Mostly-Depression-Glass",
+            "pics": [
+                "88456984_1.jpg",
+                "88456984_2.jpg",
+                "88456984_3.jpg",
+                "88456984_4.jpg",
+                "88456984_5.jpg",
+                "88456984_6.jpg",
+                "88456984_7.jpg",
+                "88456984_8.jpg",
+                "88456984_9.jpg",
+                "88456984_10.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Used black faux leather high-back executive office chair",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88329462/Executive-Faux-Leather-Office-Chair",
+            "title": "Executive Faux Leather Office Chair",
+            "current_bid": "$31.01",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88329462/Executive-Faux-Leather-Office-Chair",
+            "pics": [
+                "88329462_1.jpg",
+                "88329462_2.jpg",
+                "88329462_3.jpg",
+                "88329462_4.jpg",
+                "88329462_5.jpg",
+                "88329462_6.jpg",
+                "88329462_7.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 3 'The Spring Shop' Glass Garden Gazing Balls",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88498895/3-Garden-Gazing-Globes-New-in-open-boxes",
+            "title": "3 Garden Gazing Globes - New in open boxes",
+            "current_bid": "$27.21",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88498895/3-Garden-Gazing-Globes-New-in-open-boxes",
+            "pics": [
+                "88498895_1.jpg",
+                "88498895_2.jpg",
+                "88498895_3.jpg",
+                "88498895_4.jpg",
+                "88498895_5.jpg",
+                "88498895_6.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 4 Vintage Milk Glass Bowls including Pyrex",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88626518/4-Piece-Kitchenware-Lot-Including-Vintage-Pyrex",
+            "title": "4 Piece Kitchenware Lot - Including Vintage Pyrex",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88626518/4-Piece-Kitchenware-Lot-Including-Vintage-Pyrex",
+            "pics": [
+                "88626518_1.jpg",
+                "88626518_2.jpg",
+                "88626518_3.jpg",
+                "88626518_4.jpg",
+                "88626518_5.jpg",
+                "88626518_6.jpg",
+                "88626518_7.jpg",
+                "88626518_8.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Mixed Lot of Vintage Mid-Century Glassware",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88632423/21-Piece-Vintage-Glassware-Lot",
+            "title": "21 Piece Vintage Glassware Lot",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88632423/21-Piece-Vintage-Glassware-Lot",
+            "pics": [
+                "88632423_1.jpg",
+                "88632423_2.jpg",
+                "88632423_3.jpg",
+                "88632423_4.jpg",
+                "88632423_5.jpg",
+                "88632423_6.jpg",
+                "88632423_7.jpg",
+                "88632423_8.jpg",
+                "88632423_9.jpg",
+                "88632423_10.jpg",
+                "88632423_11.jpg",
+                "88632423_12.jpg",
+                "88632423_13.jpg",
+                "88632423_14.jpg",
+                "88632423_15.jpg",
+                "88632423_16.jpg",
+                "88632423_17.jpg",
+                "88632423_18.jpg",
+                "88632423_19.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Set of three matching cherry-finish bookcases",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88423253/Three-Piece-Bookcases",
+            "title": "Three Piece Bookcases",
+            "current_bid": "$35.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88423253/Three-Piece-Bookcases",
+            "pics": [
+                "88423253_1.jpg",
+                "88423253_2.jpg",
+                "88423253_3.jpg",
+                "88423253_4.jpg",
+                "88423253_5.jpg",
+                "88423253_6.jpg",
+                "88423253_7.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of vintage Dr. Seuss and other children's books with wooden book stand",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88600584/Childrens-Books-Sliding-Wood-Book-Stand",
+            "title": "Children's Books & Sliding Wood Book Stand",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88600584/Childrens-Books-Sliding-Wood-Book-Stand",
+            "pics": [
+                "88600584_1.jpg",
+                "88600584_2.jpg",
+                "88600584_3.jpg",
+                "88600584_4.jpg",
+                "88600584_5.jpg",
+                "88600584_6.jpg",
+                "88600584_7.jpg",
+                "88600584_8.jpg",
+                "88600584_9.jpg",
+                "88600584_10.jpg",
+                "88600584_11.jpg",
+                "88600584_12.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Framed decorative landscape oil painting on canvas",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88604935/Original-Landscape-oil-on-Canvas",
+            "title": "Original \"Landscape\" oil on Canvas",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88604935/Original-Landscape-oil-on-Canvas",
+            "pics": [
+                "88604935_1.jpg",
+                "88604935_2.jpg",
+                "88604935_3.jpg",
+                "88604935_4.jpg",
+                "88604935_5.jpg",
+                "88604935_6.jpg",
+                "88604935_7.jpg",
+                "88604935_8.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Pair of framed Charles Wysocki Americana prints",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88604953/Two-Charles-Wysocki-Framed-Prints",
+            "title": "Two Charles Wysocki Framed Prints",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88604953/Two-Charles-Wysocki-Framed-Prints",
+            "pics": [
+                "88604953_1.jpg",
+                "88604953_2.jpg",
+                "88604953_3.jpg",
+                "88604953_4.jpg",
+                "88604953_5.jpg",
+                "88604953_6.jpg",
+                "88604953_7.jpg",
+                "88604953_8.jpg",
+                "88604953_9.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "AR Blue Clean 1600 PSI Electric Pressure Washer",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88652046/Blue-Clean-Electric-Portable-Pressure-Washer",
+            "title": "Blue Clean Electric Portable Pressure Washer",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88652046/Blue-Clean-Electric-Portable-Pressure-Washer",
+            "pics": [
+                "88652046_1.jpg",
+                "88652046_2.jpg",
+                "88652046_3.jpg",
+                "88652046_4.jpg",
+                "88652046_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Ottlite desk lamp with magnifier and a second clamp-on lamp",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88665351/Gooseneck-Ottlite-Desk-Light-with-Magnifying-Lens-and-Clamp-on-Light",
+            "title": "Gooseneck Ottlite Desk Light with Magnifying Lens and Clamp on Light",
+            "current_bid": "$41.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88665351/Gooseneck-Ottlite-Desk-Light-with-Magnifying-Lens-and-Clamp-on-Light",
+            "pics": [
+                "88665351_1.jpg",
+                "88665351_2.jpg",
+                "88665351_3.jpg",
+                "88665351_4.jpg",
+                "88665351_5.jpg",
+                "88665351_6.jpg",
+                "88665351_7.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Large resin sitting Buddha statue",
+        "estimated_market_value": 45,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88462826/Large-Resin-Sitting-Buddha-Figurine",
+            "title": "Large Resin Sitting Buddha Figurine",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88462826/Large-Resin-Sitting-Buddha-Figurine",
+            "pics": [
+                "88462826_1.jpg",
+                "88462826_2.jpg",
+                "88462826_3.jpg",
+                "88462826_4.jpg",
+                "88462826_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "1940s Emerson Bakelite tube radio",
+        "estimated_market_value": 45,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88294955/1940s-Emerson-Tube-Radio",
+            "title": "1940\u2019s Emerson Tube Radio",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88294955/1940s-Emerson-Tube-Radio",
+            "pics": [
+                "88294955_1.jpg",
+                "88294955_2.jpg",
+                "88294955_3.jpg",
+                "88294955_4.jpg",
+                "88294955_5.jpg",
+                "88294955_6.jpg",
+                "88294955_7.jpg",
+                "88294955_8.jpg",
+                "88294955_9.jpg",
+                "88294955_10.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 3 Blue Glass Garden Gazing Globes",
+        "estimated_market_value": 45,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88499659/3-Blue-Garden-Gazing-Globes-New-in-open-boxes",
+            "title": "3 Blue Garden Gazing Globes - New in open boxes",
+            "current_bid": "$27.21",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88499659/3-Blue-Garden-Gazing-Globes-New-in-open-boxes",
+            "pics": [
+                "88499659_1.jpg",
+                "88499659_2.jpg",
+                "88499659_3.jpg",
+                "88499659_4.jpg",
+                "88499659_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 8 Vintage Glassbake Individual Handled Casserole Dishes",
+        "estimated_market_value": 45,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88625533/8-Piece-Kitchen-Bakeware-Lot-Vintage-Glassbake-Ovenbake-Individual-Casseroles",
+            "title": "8 Piece Kitchen Bakeware Lot, Vintage Glassbake & Ovenbake Individual Casseroles",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88625533/8-Piece-Kitchen-Bakeware-Lot-Vintage-Glassbake-Ovenbake-Individual-Casseroles",
+            "pics": [
+                "88625533_1.jpg",
+                "88625533_2.jpg",
+                "88625533_3.jpg",
+                "88625533_4.jpg",
+                "88625533_5.jpg",
+                "88625533_6.jpg",
+                "88625533_7.jpg",
+                "88625533_8.jpg",
+                "88625533_9.jpg",
+                "88625533_10.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "2 Hall for Westinghouse blue refrigerator dishes and a gold-trimmed deviled egg platter",
+        "estimated_market_value": 45,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88627200/2-Hall-for-Westinghouse-Refrigerator-Covered-Dishes-a-Deviled-Egg-Platter",
+            "title": "2 Hall for Westinghouse Refrigerator Covered Dishes & a Deviled Egg Platter",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88627200/2-Hall-for-Westinghouse-Refrigerator-Covered-Dishes-a-Deviled-Egg-Platter",
+            "pics": [
+                "88627200_1.jpg",
+                "88627200_2.jpg",
+                "88627200_3.jpg",
+                "88627200_4.jpg",
+                "88627200_5.jpg",
+                "88627200_6.jpg",
+                "88627200_7.jpg",
+                "88627200_8.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 11 wine glasses including 7 Schott Zwiesel crystal stems",
+        "estimated_market_value": 45,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88456145/Stemware-Lot-11-Pieces-including-7-Schott-Zwiesel",
+            "title": "Stemware Lot - 11 Pieces including 7 Schott Zwiesel",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88456145/Stemware-Lot-11-Pieces-including-7-Schott-Zwiesel",
+            "pics": [
+                "88456145_1.jpg",
+                "88456145_2.jpg",
+                "88456145_3.jpg",
+                "88456145_4.jpg",
+                "88456145_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 1950s-1960s 'This Week' Magazine Inserts",
+        "estimated_market_value": 40,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88272520/1950s-1960s-Plain-Dealer-Magazine-Inserts",
+            "title": "1950's - 1960's Plain Dealer Magazine Inserts",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88272520/1950s-1960s-Plain-Dealer-Magazine-Inserts",
+            "pics": [
+                "88272520_1.jpg",
+                "88272520_2.jpg",
+                "88272520_3.jpg",
+                "88272520_4.jpg",
+                "88272520_5.jpg",
+                "88272520_6.jpg",
+                "88272520_7.jpg",
+                "88272520_8.jpg",
+                "88272520_9.jpg",
+                "88272520_10.jpg",
+                "88272520_11.jpg",
+                "88272520_12.jpg",
+                "88272520_13.jpg",
+                "88272520_14.jpg",
+                "88272520_15.jpg",
+                "88272520_16.jpg",
+                "88272520_17.jpg",
+                "88272520_18.jpg",
+                "88272520_19.jpg",
+                "88272520_20.jpg",
+                "88272520_21.jpg",
+                "88272520_22.jpg",
+                "88272520_23.jpg",
+                "88272520_24.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Framed decorative landscape oil painting signed Armstrong",
+        "estimated_market_value": 40,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88293333/Signed-Oil-Painting-Armstrong-Landscape",
+            "title": "Signed Oil Painting \"Armstrong\" Landscape",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88293333/Signed-Oil-Painting-Armstrong-Landscape",
+            "pics": [
+                "88293333_1.jpg",
+                "88293333_2.jpg",
+                "88293333_3.jpg",
+                "88293333_4.jpg",
+                "88293333_5.jpg",
+                "88293333_6.jpg",
+                "88293333_7.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Mid-century Durham folding card table and four chairs",
+        "estimated_market_value": 40,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88596151/MidCentury-Durham-Folding-Red-Tables-Chairs",
+            "title": "Mid-Century Durham Folding Red Tables & Chairs",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88596151/MidCentury-Durham-Folding-Red-Tables-Chairs",
+            "pics": [
+                "88596151_1.jpg",
+                "88596151_2.jpg",
+                "88596151_3.jpg",
+                "88596151_4.jpg",
+                "88596151_5.jpg",
+                "88596151_6.jpg",
+                "88596151_7.jpg",
+                "88596151_8.jpg",
+                "88596151_9.jpg",
+                "88596151_10.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Framed Harley-Davidson Honolulu t-shirt wall art",
+        "estimated_market_value": 40,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88296980/Harley-Davidson-Honolulu-Hawaii-Wall-Art-TShirt",
+            "title": "Harley Davidson \"Honolulu Hawaii\" Wall Art / T-Shirt",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88296980/Harley-Davidson-Honolulu-Hawaii-Wall-Art-TShirt",
+            "pics": [
+                "88296980_1.jpg",
+                "88296980_2.jpg",
+                "88296980_3.jpg",
+                "88296980_4.jpg",
+                "88296980_5.jpg",
+                "88296980_6.jpg",
+                "88296980_7.jpg",
+                "88296980_8.jpg",
+                "88296980_9.jpg",
+                "88296980_10.jpg",
+                "88296980_11.jpg",
+                "88296980_12.jpg",
+                "88296980_13.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "5-Tier Metal and Particle Board Storage Shelving Unit",
+        "estimated_market_value": 40,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88329554/Storage-Shelves",
+            "title": "Storage Shelves",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88329554/Storage-Shelves",
+            "pics": [
+                "88329554_1.jpg",
+                "88329554_2.jpg",
+                "88329554_3.jpg",
+                "88329554_4.jpg",
+                "88329554_5.jpg",
+                "88329554_6.jpg",
+                "88329554_7.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Modernist drip-glaze vase and signed studio pottery bowl",
+        "estimated_market_value": 40,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88460248/Large-Decorative-Vase-and-Pottery-Bowl-with-Spoon",
+            "title": "Large Decorative Vase and Pottery Bowl with Spoon",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88460248/Large-Decorative-Vase-and-Pottery-Bowl-with-Spoon",
+            "pics": [
+                "88460248_1.jpg",
+                "88460248_2.jpg",
+                "88460248_3.jpg",
+                "88460248_4.jpg",
+                "88460248_5.jpg",
+                "88460248_6.jpg",
+                "88460248_7.jpg",
+                "88460248_8.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 6 rustic stone and pottery decorative items",
+        "estimated_market_value": 40,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88461245/6-Piece-StonePottery-Lot-Candle-Tealite-Holder-Bowl-and-Vase",
+            "title": "6 Piece Stone/Pottery Lot - Candle & Tealite Holder, Bowl and Vase",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88461245/6-Piece-StonePottery-Lot-Candle-Tealite-Holder-Bowl-and-Vase",
+            "pics": [
+                "88461245_1.jpg",
+                "88461245_2.jpg",
+                "88461245_3.jpg",
+                "88461245_4.jpg",
+                "88461245_5.jpg",
+                "88461245_6.jpg",
+                "88461245_7.jpg",
+                "88461245_8.jpg",
+                "88461245_9.jpg",
+                "88461245_10.jpg",
+                "88461245_11.jpg",
+                "88461245_12.jpg",
+                "88461245_13.jpg",
+                "88461245_14.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Pair of traditional style dark metal table lamps with fabric shades",
+        "estimated_market_value": 40,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88627801/2-Matching-Table-Lamps-with-Fabric-Shades",
+            "title": "2 Matching Table Lamps with Fabric Shades",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88627801/2-Matching-Table-Lamps-with-Fabric-Shades",
+            "pics": [
+                "88627801_1.jpg",
+                "88627801_2.jpg",
+                "88627801_3.jpg",
+                "88627801_4.jpg",
+                "88627801_5.jpg",
+                "88627801_6.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Framed decorative landscape print by Carnevale",
+        "estimated_market_value": 35,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88424382/Razz-Berry-Creek-Bridge-Print",
+            "title": "\"Razz Berry Creek\" Bridge Print",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88424382/Razz-Berry-Creek-Bridge-Print",
+            "pics": [
+                "88424382_1.jpg",
+                "88424382_2.jpg",
+                "88424382_3.jpg",
+                "88424382_4.jpg",
+                "88424382_5.jpg",
+                "88424382_6.jpg",
+                "88424382_7.jpg",
+                "88424382_8.jpg",
+                "88424382_9.jpg",
+                "88424382_10.jpg",
+                "88424382_11.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "7-piece etched glass wine decanter and glasses set",
+        "estimated_market_value": 35,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88454336/Etched-Decanter-and-StemwareGlassware-Lot-7-Pieces",
+            "title": "Etched Decanter and Stemware/Glassware Lot - 7 Pieces",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88454336/Etched-Decanter-and-StemwareGlassware-Lot-7-Pieces",
+            "pics": [
+                "88454336_1.jpg",
+                "88454336_2.jpg",
+                "88454336_3.jpg",
+                "88454336_4.jpg",
+                "88454336_5.jpg",
+                "88454336_6.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 6 Hanging Baskets and Planters",
+        "estimated_market_value": 35,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88459558/6-Piece-Garden-Lot-Hanging-Baskets-Planters-and-a-Ceramic-Urn",
+            "title": "6 Piece Garden Lot - Hanging Baskets, Planters and a Ceramic Urn",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88459558/6-Piece-Garden-Lot-Hanging-Baskets-Planters-and-a-Ceramic-Urn",
+            "pics": [
+                "88459558_1.jpg",
+                "88459558_2.jpg",
+                "88459558_3.jpg",
+                "88459558_4.jpg",
+                "88459558_5.jpg",
+                "88459558_6.jpg",
+                "88459558_7.jpg",
+                "88459558_8.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 14 vintage glassware pieces including Hazel Atlas sherbet cups and frosted tumblers",
+        "estimated_market_value": 35,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88628987/14-Piece-Vintage-Glassware-Lot-Including-Hazel-Atlas",
+            "title": "14 Piece Vintage Glassware Lot - Including Hazel Atlas",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88628987/14-Piece-Vintage-Glassware-Lot-Including-Hazel-Atlas",
+            "pics": [
+                "88628987_1.jpg",
+                "88628987_2.jpg",
+                "88628987_3.jpg",
+                "88628987_4.jpg",
+                "88628987_5.jpg",
+                "88628987_6.jpg",
+                "88628987_7.jpg",
+                "88628987_8.jpg",
+                "88628987_9.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Sears Craftsman corded industrial reciprocating saw with case",
+        "estimated_market_value": 35,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88423273/SearsCraftsman-Industrial-Reciprocating-Saw",
+            "title": "Sears/Craftsman Industrial Reciprocating Saw.",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88423273/SearsCraftsman-Industrial-Reciprocating-Saw",
+            "pics": [
+                "88423273_1.jpg",
+                "88423273_2.jpg",
+                "88423273_3.jpg",
+                "88423273_4.jpg",
+                "88423273_5.jpg",
+                "88423273_6.jpg",
+                "88423273_7.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Oval Heineken advertising bar mirror",
+        "estimated_market_value": 35,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88423587/Heineken-Mirror-Beer-Sign",
+            "title": "Heineken Mirror Beer Sign",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88423587/Heineken-Mirror-Beer-Sign",
+            "pics": [
+                "88423587_1.jpg",
+                "88423587_2.jpg",
+                "88423587_3.jpg",
+                "88423587_4.jpg",
+                "88423587_5.jpg",
+                "88423587_6.jpg",
+                "88423587_7.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of four rustic/southwestern style decorative wall art pieces",
+        "estimated_market_value": 35,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88457674/Decorative-Wall-Art-2-Crosses-Sun-and-a-Welcome-Friends-Plaque",
+            "title": "Decorative Wall Art - 2 Crosses, Sun and a \"Welcome Friends\" Plaque",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88457674/Decorative-Wall-Art-2-Crosses-Sun-and-a-Welcome-Friends-Plaque",
+            "pics": [
+                "88457674_1.jpg",
+                "88457674_2.jpg",
+                "88457674_3.jpg",
+                "88457674_4.jpg",
+                "88457674_5.jpg",
+                "88457674_6.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Black and Decker corded electric lawn edger",
+        "estimated_market_value": 35,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88647439/Black-and-Decker-Corded-Electric-Edge-Hog-with-Cord",
+            "title": "Black and Decker Corded Electric Edge Hog with Cord",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88647439/Black-and-Decker-Corded-Electric-Edge-Hog-with-Cord",
+            "pics": [
+                "88647439_1.jpg",
+                "88647439_2.jpg",
+                "88647439_3.jpg",
+                "88647439_4.jpg",
+                "88647439_5.jpg",
+                "88647439_6.jpg",
+                "88647439_7.jpg",
+                "88647439_8.jpg",
+                "88647439_9.jpg",
+                "88647439_10.jpg",
+                "88647439_11.jpg",
+                "88647439_12.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Toro Corded Electric Leaf Blower/Vacuum with extension cord",
+        "estimated_market_value": 35,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88643160/Toro-Corded-Electric-Ultra-BlowerVac-Leaf-Blower-with-Cord",
+            "title": "Toro Corded Electric Ultra Blower/Vac Leaf Blower with Cord",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88643160/Toro-Corded-Electric-Ultra-BlowerVac-Leaf-Blower-with-Cord",
+            "pics": [
+                "88643160_1.jpg",
+                "88643160_2.jpg",
+                "88643160_3.jpg",
+                "88643160_4.jpg",
+                "88643160_5.jpg",
+                "88643160_6.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of Crofton Wok and two new-in-box wine openers",
+        "estimated_market_value": 35,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88671192/15-Crofton-Wok-and-2-Wine-Bottle-Openers",
+            "title": "15\" Crofton Wok and 2 Wine Bottle Openers",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88671192/15-Crofton-Wok-and-2-Wine-Bottle-Openers",
+            "pics": [
+                "88671192_1.jpg",
+                "88671192_2.jpg",
+                "88671192_3.jpg",
+                "88671192_4.jpg",
+                "88671192_5.jpg",
+                "88671192_6.jpg",
+                "88671192_7.jpg",
+                "88671192_8.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "7-piece etched glass cordial decanter and glasses set",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88454893/Etched-Decanter-and-StemwareGlassware-Lot-7-Pieces",
+            "title": "Etched Decanter and Stemware/Glassware Lot - 7 Pieces",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88454893/Etched-Decanter-and-StemwareGlassware-Lot-7-Pieces",
+            "pics": [
+                "88454893_1.jpg",
+                "88454893_2.jpg",
+                "88454893_3.jpg",
+                "88454893_4.jpg",
+                "88454893_5.jpg",
+                "88454893_6.jpg",
+                "88454893_7.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Bulk lot of common vintage vinyl LPs and 78rpm albums",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88293294/Early-Records-and-Vinyl",
+            "title": "Early Records and Vinyl",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88293294/Early-Records-and-Vinyl",
+            "pics": [
+                "88293294_1.jpg",
+                "88293294_2.jpg",
+                "88293294_3.jpg",
+                "88293294_4.jpg",
+                "88293294_5.jpg",
+                "88293294_6.jpg",
+                "88293294_7.jpg",
+                "88293294_8.jpg",
+                "88293294_9.jpg",
+                "88293294_10.jpg",
+                "88293294_11.jpg",
+                "88293294_12.jpg",
+                "88293294_13.jpg",
+                "88293294_14.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Vintage Maxim Electric Food Warming Tray with Box",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88496831/Electric-Food-Warming-Tray-by-Maxim",
+            "title": "Electric Food Warming Tray by Maxim",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88496831/Electric-Food-Warming-Tray-by-Maxim",
+            "pics": [
+                "88496831_1.jpg",
+                "88496831_2.jpg",
+                "88496831_3.jpg",
+                "88496831_4.jpg",
+                "88496831_5.jpg",
+                "88496831_6.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Marksman Repeater .177 Caliber BB Gun Pistol",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88498185/Marksman-Repeater-117cal-BB-Gun",
+            "title": "Marksman Repeater 117cal. BB Gun",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88498185/Marksman-Repeater-117cal-BB-Gun",
+            "pics": [
+                "88498185_1.jpg",
+                "88498185_2.jpg",
+                "88498185_3.jpg",
+                "88498185_4.jpg",
+                "88498185_5.jpg",
+                "88498185_6.jpg",
+                "88498185_7.jpg",
+                "88498185_8.jpg",
+                "88498185_9.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Hull Art Pottery Magnolia Ewer",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88630272/Hull-Art-Pottery-Blue-and-Pink-Magnolia-Ewer",
+            "title": "Hull Art Pottery Blue and Pink Magnolia Ewer",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88630272/Hull-Art-Pottery-Blue-and-Pink-Magnolia-Ewer",
+            "pics": [
+                "88630272_1.jpg",
+                "88630272_2.jpg",
+                "88630272_3.jpg",
+                "88630272_4.jpg",
+                "88630272_5.jpg",
+                "88630272_6.jpg",
+                "88630272_7.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Framed decorative landscape print of 'Razz Berry Creek' by Carnevale",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88423618/Razz-Berry-Creek-Bridge",
+            "title": "\"Razz Berry Creek\" Bridge",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88423618/Razz-Berry-Creek-Bridge",
+            "pics": [
+                "88423618_1.jpg",
+                "88423618_2.jpg",
+                "88423618_3.jpg",
+                "88423618_4.jpg",
+                "88423618_5.jpg",
+                "88423618_6.jpg",
+                "88423618_7.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Bulova quartz regulator-style wall clock",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88600566/Bulova-Regulator-Pendulum-Wall-Clock",
+            "title": "Bulova Regulator Pendulum Wall Clock",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88600566/Bulova-Regulator-Pendulum-Wall-Clock",
+            "pics": [
+                "88600566_1.jpg",
+                "88600566_2.jpg",
+                "88600566_3.jpg",
+                "88600566_4.jpg",
+                "88600566_5.jpg",
+                "88600566_6.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Durabilt Electric Portable Pressure Washer",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88651087/Durabilt-Electric-Portable-Pressure-Washer",
+            "title": "Durabilt Electric Portable Pressure Washer",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88651087/Durabilt-Electric-Portable-Pressure-Washer",
+            "pics": [
+                "88651087_1.jpg",
+                "88651087_2.jpg",
+                "88651087_3.jpg",
+                "88651087_4.jpg",
+                "88651087_5.jpg",
+                "88651087_6.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Vintage Schauer 6 Amp 6/12V Battery Charger",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88654567/Schauer-6amp-Solid-State-6-or-12volt-Battery-Charger",
+            "title": "Schauer 6amp Solid State 6 or 12volt Battery Charger",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88654567/Schauer-6amp-Solid-State-6-or-12volt-Battery-Charger",
+            "pics": [
+                "88654567_1.jpg",
+                "88654567_2.jpg",
+                "88654567_3.jpg",
+                "88654567_4.jpg",
+                "88654567_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Game of Thrones autographed script reprint",
+        "estimated_market_value": 25,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88671536/Autographed-Game-of-Thrones-Winter-is-Coming-Pilot-Script",
+            "title": "Autographed \"Game of Thrones\" Winter is Coming Pilot Script",
+            "current_bid": "$110.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88671536/Autographed-Game-of-Thrones-Winter-is-Coming-Pilot-Script",
+            "pics": [
+                "88671536_1.jpg",
+                "88671536_2.jpg",
+                "88671536_3.jpg",
+                "88671536_4.jpg",
+                "88671536_5.jpg",
+                "88671536_6.jpg",
+                "88671536_7.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Campbell Hausfeld Iron Force 1/2\" pneumatic impact wrench",
+        "estimated_market_value": 25,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88628250/Campbell-Hausfeld-Iron-Force-12-Air-Impact-Wrench",
+            "title": "Campbell Hausfeld Iron Force 1/2\" Air Impact Wrench",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88628250/Campbell-Hausfeld-Iron-Force-12-Air-Impact-Wrench",
+            "pics": [
+                "88628250_1.jpg",
+                "88628250_2.jpg",
+                "88628250_3.jpg",
+                "88628250_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Weed Eater XT20T Gas String Trimmer",
+        "estimated_market_value": 25,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88644748/Gas-WeedEater-with-Extra-Line-Model-XT-20T",
+            "title": "Gas WeedEater with Extra Line - Model XT 20T",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88644748/Gas-WeedEater-with-Extra-Line-Model-XT-20T",
+            "pics": [
+                "88644748_1.jpg",
+                "88644748_2.jpg",
+                "88644748_3.jpg",
+                "88644748_4.jpg",
+                "88644748_5.jpg",
+                "88644748_6.jpg",
+                "88644748_7.jpg",
+                "88644748_8.jpg",
+                "88644748_9.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Black and Decker Corded String Trimmer/Edger with extension cord",
+        "estimated_market_value": 25,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88643776/Black-and-Decker-Weed-WackerEdger-with-Extension-Cord-ST7700",
+            "title": "Black and Decker Weed Wacker/Edger with Extension Cord #ST7700",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88643776/Black-and-Decker-Weed-WackerEdger-with-Extension-Cord-ST7700",
+            "pics": [
+                "88643776_1.jpg",
+                "88643776_2.jpg",
+                "88643776_3.jpg",
+                "88643776_4.jpg",
+                "88643776_5.jpg",
+                "88643776_6.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lenox Boehm Woodland Wildlife collector plate featuring raccoons, in original box",
+        "estimated_market_value": 20,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88308305/Lenox-Boehm-Woodland-Wildlife-Collector-Plate",
+            "title": "Lenox Boehm Woodland Wildlife Collector Plate",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88308305/Lenox-Boehm-Woodland-Wildlife-Collector-Plate",
+            "pics": [
+                "88308305_1.jpg",
+                "88308305_2.jpg",
+                "88308305_3.jpg",
+                "88308305_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Sears push broadcast lawn spreader",
+        "estimated_market_value": 20,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88647838/Sears-Broadcast-Lawn-Spreader",
+            "title": "Sears Broadcast Lawn Spreader",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88647838/Sears-Broadcast-Lawn-Spreader",
+            "pics": [
+                "88647838_1.jpg",
+                "88647838_2.jpg",
+                "88647838_3.jpg",
+                "88647838_4.jpg",
+                "88647838_5.jpg"
+            ]
+        }
+    }
+]
+    </script>
+
+    <script>
+        const jsonData = JSON.parse(document.getElementById('auctionData').textContent);
+        const tableBody = document.getElementById('data-table-body');
+        const headers = document.querySelectorAll('thead th[data-column]');
+        let currentSort = { column: 'price', isAscending: false };
+        function getItemName(item) { if (typeof item.item_identification === 'object' && item.item_identification !== null) { return item.item_identification.item_name || 'N/A'; } return item.item_identification; }
+        function getCategory(itemName) { const name = itemName.toLowerCase(); if (name.includes('furniture') || name.includes('table') || name.includes('desk') || name.includes('cabinet') || name.includes('dresser')) return 'Furniture'; if (name.includes('painting') || name.includes('print') || name.includes('art')) return 'Art/Prints'; if (name.includes('dinnerware') || name.includes('china') || name.includes('porcelain')) return 'Pottery/China'; if (name.includes('mirror') || name.includes('lamp')) return 'Decor/Lighting'; if (name.includes('glassware') || name.includes('crystal')) return 'Glassware'; if (name.includes('blower') || name.includes('tool')) return 'Tools/Equipment'; if (name.includes('toy')) return 'Toys/Games'; if (name.includes('cards')) return 'Collectibles'; return 'Miscellaneous'; }
+        function populateTable() { tableBody.innerHTML = ''; jsonData.forEach(item => { const row = document.createElement('tr'); const itemName = getItemName(item); const nameCell = document.createElement('td'); const nameLink = document.createElement('a'); nameLink.href = item.original_listing.url; nameLink.textContent = itemName; nameLink.target = "_blank"; nameCell.appendChild(nameLink); const categoryCell = document.createElement('td'); categoryCell.textContent = getCategory(itemName); const priceCell = document.createElement('td'); priceCell.textContent = (item.estimated_market_value || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }); const linkCell = document.createElement('td'); const searchLink = document.createElement('a'); searchLink.href = `https://www.google.com/search?q=${encodeURIComponent(itemName)}`; searchLink.textContent = 'Search'; searchLink.target = "_blank"; linkCell.appendChild(searchLink); row.appendChild(nameCell); row.appendChild(categoryCell); row.appendChild(priceCell); row.appendChild(linkCell); tableBody.appendChild(row); }); }
+        function sortData(column) { const isNumeric = column === 'price'; if (currentSort.column === column) { currentSort.isAscending = !currentSort.isAscending; } else { currentSort.column = column; currentSort.isAscending = !isNumeric; } jsonData.sort((a, b) => { let valA, valB; if (isNumeric) { valA = a.estimated_market_value || 0; valB = b.estimated_market_value || 0; } else { const nameA = getItemName(a); const nameB = getItemName(b); if (column === 'name') { valA = nameA.toLowerCase(); valB = nameB.toLowerCase(); } else if (column === 'category') { valA = getCategory(nameA); valB = getCategory(nameB); } } let comparison = 0; if (valA > valB) { comparison = 1; } else if (valA < valB) { comparison = -1; } return currentSort.isAscending ? comparison : comparison * -1; }); updateSortIndicators(); populateTable(); }
+        function updateSortIndicators() { headers.forEach(header => { const indicator = header.querySelector('.sort-indicator'); if (header.dataset.column === currentSort.column) { indicator.textContent = currentSort.isAscending ? ' ▲' : ' ▼'; } else { indicator.textContent = ''; } }); }
+        headers.forEach(header => { header.addEventListener('click', () => { sortData(header.dataset.column); }); });
+        sortData('price');
+    </script>
+</body>
+</html>
