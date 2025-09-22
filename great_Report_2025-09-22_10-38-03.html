@@ -1,0 +1,3240 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Item Analysis</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a; --table-bg-color: #2c2c2c; --header-bg-color: #3a3a3a;
+            --header-hover-bg-color: #4a4a4a; --row-even-bg-color: #333333; --row-odd-bg-color: #2c2c2c;
+            --border-color: #444444; --text-color: #e0e0e0; --link-color: #4a90e2;
+            --link-hover-color: #81b5f5; --sort-indicator-color: #81b5f5;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 2rem; line-height: 1.6; }
+        h1 { text-align: center; color: #ffffff; font-weight: 300; margin-bottom: 2rem; }
+        .table-container { max-width: 1200px; margin: auto; overflow-x: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        table { width: 100%; border-collapse: collapse; background-color: var(--table-bg-color); border-spacing: 0; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        thead th { background-color: var(--header-bg-color); color: #ffffff; font-weight: 600; position: sticky; top: 0; z-index: 10; }
+        thead th[data-column] { cursor: pointer; transition: background-color 0.2s ease-in-out; user-select: none; }
+        thead th[data-column]:hover { background-color: var(--header-hover-bg-color); }
+        tbody tr:nth-child(even) { background-color: var(--row-even-bg-color); }
+        tbody tr:nth-child(odd) { background-color: var(--row-odd-bg-color); }
+        tbody tr:hover { background-color: var(--header-hover-bg-color); }
+        td { font-size: 0.95em; }
+        td:nth-child(3) { font-family: 'Courier New', Courier, monospace; text-align: right; white-space: nowrap; }
+        td:nth-child(4) { text-align: center; }
+        a { color: var(--link-color); text-decoration: none; transition: color 0.2s ease-in-out; }
+        a:hover { color: var(--link-hover-color); text-decoration: underline; }
+        .sort-indicator { color: var(--sort-indicator-color); font-size: 0.8em; margin-left: 8px; display: inline-block; width: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Auction Item Analysis</h1>
+    <div class="table-container"><table><thead><tr><th data-column="name">Item Name <span class="sort-indicator"></span></th><th data-column="category">Category <span class="sort-indicator"></span></th><th data-column="price">Market Value <span class="sort-indicator"></span></th><th>Google Search</th></tr></thead><tbody id="data-table-body"></tbody></table></div>
+    
+    <script type="application/json" id="auctionData">
+        [
+    {
+        "item_identification": "Fujifilm X-H1 Mirrorless Camera with Fujinon XF 16-80mm f/4 R OIS WR Lens and Panasonic Lumix H-FS100300 Lens, in Think Tank Bag",
+        "category": "Electronics",
+        "estimated_market_value": 1200,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56971762/Fujifilm-XH1-Mirrorless-Camera-with-2-Lenses",
+            "title": "Fujifilm X-H1 Mirrorless Camera with 2 Lenses",
+            "current_bid": "$124.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56971762/Fujifilm-XH1-Mirrorless-Camera-with-2-Lenses",
+            "pics": [
+                "56971762_1.jpg",
+                "56971762_2.jpg",
+                "56971762_3.jpg",
+                "56971762_4.jpg",
+                "56971762_5.jpg",
+                "56971762_6.jpg",
+                "56971762_7.jpg",
+                "56971762_8.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Sony Alpha a6500 Mirrorless Camera body kit with Samyang AF 12mm f/2 E-mount lens, Rokinon AF 75mm f/1.8 FE lens, and 7Artisans 50mm f/1.4 lens, plus DecoGear camera bag.",
+        "category": "Electronics",
+        "estimated_market_value": 1100,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56971671/Sony-Aplha-7C-Series-Camera-Body-with-Several-Interchangeable-Lenses",
+            "title": "Sony Aplha 7C Series Camera Body with Several Interchangeable Lenses",
+            "current_bid": "$130.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56971671/Sony-Aplha-7C-Series-Camera-Body-with-Several-Interchangeable-Lenses",
+            "pics": [
+                "56971671_1.jpg",
+                "56971671_2.jpg",
+                "56971671_3.jpg",
+                "56971671_4.jpg",
+                "56971671_5.jpg",
+                "56971671_6.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Olympus PEN E-P5 Mirrorless Digital Camera with Olympus M.Zuiko Digital ED 12-40mm f/2.8 PRO Lens, Olympus M.Zuiko Digital 45mm f/1.8 Lens, Sekonic Twinmate L-208 Light Meter, and Tarion Camera Bag",
+        "category": "Electronics",
+        "estimated_market_value": 900,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56370129/Olmpus-PEN-EP5-Mirrorless-Digital-Camera-with-Several-Lens-and-a-Sekonic-Light",
+            "title": "Olmpus PEN E-P5 Mirrorless Digital Camera with Several Lens and a Sekonic Light",
+            "current_bid": "$16.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56370129/Olmpus-PEN-EP5-Mirrorless-Digital-Camera-with-Several-Lens-and-a-Sekonic-Light",
+            "pics": [
+                "56370129_1.jpg",
+                "56370129_2.jpg",
+                "56370129_3.jpg",
+                "56370129_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Ricoh GR1s Compact 35mm Film Camera with GR Lens 28mm f/2.8",
+        "category": "Electronics",
+        "estimated_market_value": 800,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56441052/Ricoh-GR1s-Compact-35mm-Film-Camera",
+            "title": "Ricoh GR1s Compact 35mm Film Camera",
+            "current_bid": "$190.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56441052/Ricoh-GR1s-Compact-35mm-Film-Camera",
+            "pics": [
+                "56441052_1.jpg",
+                "56441052_2.jpg",
+                "56441052_3.jpg",
+                "56441052_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Ricoh GR IIIx Digital Compact Camera with GR Lens 1:2.8 f=26.1mm and GV-3 Viewfinder in Lowepro Bag",
+        "category": "Electronics",
+        "estimated_market_value": 800,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967343/Ricoh-GR-IIIx-Digital-Compact-Camera",
+            "title": "Ricoh GR IIIx Digital Compact Camera",
+            "current_bid": "$114.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967343/Ricoh-GR-IIIx-Digital-Compact-Camera",
+            "pics": [
+                "56967343_1.jpg",
+                "56967343_2.jpg",
+                "56967343_3.jpg",
+                "56967343_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Fujifilm X-T2 Mirrorless Digital Camera with Fujinon XF 18-55mm lens",
+        "category": "Electronics",
+        "estimated_market_value": 750,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56369755/Fujifilm-XT2-Mirrorless-Digital-Camera",
+            "title": "Fujifilm X-T2 Mirrorless Digital Camera",
+            "current_bid": "$200.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56369755/Fujifilm-XT2-Mirrorless-Digital-Camera",
+            "pics": [
+                "56369755_1.jpg",
+                "56369755_2.jpg",
+                "56369755_3.jpg",
+                "56369755_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Fujifilm Fujinon XF 70-300mm f/4-5.6 R LM OIS WR Lens",
+        "category": "Electronics",
+        "estimated_market_value": 700,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56877388/Fuji-FX-70300mm-f456-R-LM-OIS-WR-Lens",
+            "title": "Fuji FX 70-300mm f/4-5.6 R LM OIS WR Lens",
+            "current_bid": "$12.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56877388/Fuji-FX-70300mm-f456-R-LM-OIS-WR-Lens",
+            "pics": [
+                "56877388_1.jpg",
+                "56877388_2.jpg",
+                "56877388_3.jpg",
+                "56877388_4.jpg",
+                "56877388_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Three Panasonic Lumix Lenses and Case: Panasonic Lumix G Vario 45-200mm f/4-5.6 MEGA O.I.S. (H-FS045200), Panasonic Lumix G Vario 35-100mm f/4-5.6 ASPH. MEGA O.I.S. (H-FS35100), and Leica DG Vario-Elmarit 8-18mm f/2.8-4.0 ASPH. (H-E08018).",
+        "category": "Electronics",
+        "estimated_market_value": 700,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967255/Three-Panasonic-Lumix-Lenses-and-Case",
+            "title": "Three Panasonic Lumix Lenses and Case",
+            "current_bid": "$4.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967255/Three-Panasonic-Lumix-Lenses-and-Case",
+            "pics": [
+                "56967255_1.jpg",
+                "56967255_2.jpg",
+                "56967255_3.jpg",
+                "56967255_4.jpg",
+                "56967255_5.jpg",
+                "56967255_6.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Fujifilm X100T digital camera with Fujinon lens system",
+        "category": "Electronics",
+        "estimated_market_value": 650,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440606/Fujifilm-X100F-Digital-Camera",
+            "title": "Fujifilm X100F Digital Camera",
+            "current_bid": "$300.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440606/Fujifilm-X100F-Digital-Camera",
+            "pics": [
+                "56440606_1.jpg",
+                "56440606_2.jpg",
+                "56440606_3.jpg",
+                "56440606_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Olympus OM-D E-M5 Mark II Mirrorless Digital Camera with Olympus M.Zuiko Digital 14-150mm II lens, Neewer tripod, and AmazonBasics camera bag",
+        "category": "Electronics",
+        "estimated_market_value": 650,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56876641/Olympus-OMD-EM5-Mark-II-Mirrorless-Camera-with-Olympus-Lens",
+            "title": "Olympus OM-D E-M5 Mark II Mirrorless Camera with Olympus Lens",
+            "current_bid": "$75.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56876641/Olympus-OMD-EM5-Mark-II-Mirrorless-Camera-with-Olympus-Lens",
+            "pics": [
+                "56876641_1.jpg",
+                "56876641_2.jpg",
+                "56876641_3.jpg",
+                "56876641_4.jpg",
+                "56876641_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Samyang AF 35mm f/1.4 PE Lens, Samyang AF 12mm F2.0 Lens",
+        "category": "Electronics",
+        "estimated_market_value": 650,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967387/Two-Samyang-Camera-Lenses-AF-35mm-f14-PE-Lens-and-AF-12mm-F20-Lens",
+            "title": "Two Samyang Camera Lenses AF 35mm f/1.4 PE Lens and AF 12mm F2.0 Lens",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967387/Two-Samyang-Camera-Lenses-AF-35mm-f14-PE-Lens-and-AF-12mm-F20-Lens",
+            "pics": [
+                "56967387_1.jpg",
+                "56967387_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Nikon FG-20 35mm film camera with Voigtl\u00e4nder Ultron 40mm f/2 lens, Nikon Series E 135mm lens, and Nikon AF Nikkor 28mm f/2.8 D lens",
+        "category": "Electronics",
+        "estimated_market_value": 600,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440510/Nikon-FG20-35mm-SLR-Film-Camera-with-2-Additional-Lens",
+            "title": "Nikon FG-20 35mm SLR Film Camera with 2 Additional Lens",
+            "current_bid": "$11.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440510/Nikon-FG20-35mm-SLR-Film-Camera-with-2-Additional-Lens",
+            "pics": [
+                "56440510_1.jpg",
+                "56440510_2.jpg",
+                "56440510_3.jpg",
+                "56440510_4.jpg",
+                "56440510_5.jpg",
+                "56440510_6.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Pentax K-70 DSLR Camera with Pentax DA 18-50mm F4-5.6, Pentax DA 50-200mm F4-5.6, and Pentax DA 40mm F2.8 XS Lenses",
+        "category": "Electronics",
+        "estimated_market_value": 600,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440916/Pentax-K70-DSLR-Camera-with-Several-DA-Series-Pentax-Lenses",
+            "title": "Pentax K-70 DSLR Camera with Several DA Series Pentax Lenses",
+            "current_bid": "$85.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440916/Pentax-K70-DSLR-Camera-with-Several-DA-Series-Pentax-Lenses",
+            "pics": [
+                "56440916_1.jpg",
+                "56440916_2.jpg",
+                "56440916_3.jpg",
+                "56440916_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Sony FE 24-240mm F3.5-6.3 OSS SEL24240 Lens and Sony VCL-ECF2 21mm Ultra-Wide Conversion Lens",
+        "category": "Electronics",
+        "estimated_market_value": 600,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56977214/Sony-FE-24240mm-F3563-OSS-SEL-24240-Lens-Sony-21mm-UltraWide-Conversion",
+            "title": "Sony FE 24-240mm F3.5-6.3 OSS SEL 24240 Lens & & Sony 21mm Ultra-Wide Conversion",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56977214/Sony-FE-24240mm-F3563-OSS-SEL-24240-Lens-Sony-21mm-UltraWide-Conversion",
+            "pics": [
+                "56977214_1.jpg",
+                "56977214_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Olympus OM-D E-M1 Mirrorless Camera with Olympus Digital 12mm f/2.0 ED Lens",
+        "category": "Electronics",
+        "estimated_market_value": 550,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56441028/Olympus-OMD-EM1-Mirrorless-Camera",
+            "title": "Olympus OM-D E-M1 Mirrorless Camera",
+            "current_bid": "$80.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56441028/Olympus-OMD-EM1-Mirrorless-Camera",
+            "pics": [
+                "56441028_1.jpg",
+                "56441028_2.jpg",
+                "56441028_3.jpg",
+                "56441028_4.jpg",
+                "56441028_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Nikon D700 DSLR Camera with Tamron lens and Nikkor 18-35mm 1:3.5-4.5 D lens",
+        "category": "Electronics",
+        "estimated_market_value": 550,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56918464/Nikon-D200-DSLR-Single-Lens-Reflex-Camera-with-a-Nikkor-1835mm-13545-D-Lens",
+            "title": "Nikon D200 DSLR Single Lens Reflex Camera with a Nikkor 18-35mm 1:3.5-4.5 D Lens",
+            "current_bid": "$21.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56918464/Nikon-D200-DSLR-Single-Lens-Reflex-Camera-with-a-Nikkor-1835mm-13545-D-Lens",
+            "pics": [
+                "56918464_1.jpg",
+                "56918464_2.jpg",
+                "56918464_3.jpg",
+                "56918464_4.jpg",
+                "56918464_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Sigma 50mm f/1.4 DG HSM Lens, Sigma DC DN Lens, K&F Concept Nano-X MRC UV Filter",
+        "category": "Electronics",
+        "estimated_market_value": 550,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967480/Sigma-Lenses-and-K-F-Concept-Filter",
+            "title": "Sigma Lenses and K & F Concept Filter",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967480/Sigma-Lenses-and-K-F-Concept-Filter",
+            "pics": [
+                "56967480_1.jpg",
+                "56967480_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Olympus M.Zuiko 75mm f/1.8 Lens and Olympus Zuiko Digital 14-45mm f/3.5-5.6 Lens",
+        "category": "Electronics",
+        "estimated_market_value": 500,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440540/Olympus-Zuiko-Digital-1445mm-f3556-Lens-and-a-Olympus-75mm-118-Lens",
+            "title": "Olympus Zuiko Digital 14-45mm f3.5-5.6 Lens and a Olympus 75mm 1:1.8 Lens",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440540/Olympus-Zuiko-Digital-1445mm-f3556-Lens-and-a-Olympus-75mm-118-Lens",
+            "pics": [
+                "56440540_1.jpg",
+                "56440540_2.jpg",
+                "56440540_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Three Panasonic Lumix G Lenses: Panasonic Leica DG Summilux 15mm f/1.7 ASPH, Panasonic Lumix G Macro 30mm f/2.8 ASPH. MEGA O.I.S., and Panasonic Lumix G Vario 35-100mm f/4.0-5.6 ASPH. MEGA O.I.S. (H-FS35100).",
+        "category": "Electronics",
+        "estimated_market_value": 500,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967167/Three-Panasonic-Lumix-E-Series-Lenses",
+            "title": "Three Panasonic Lumix E Series Lenses",
+            "current_bid": "$11.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967167/Three-Panasonic-Lumix-E-Series-Lenses",
+            "pics": [
+                "56967167_1.jpg",
+                "56967167_2.jpg",
+                "56967167_3.jpg",
+                "56967167_4.jpg",
+                "56967167_5.jpg",
+                "56967167_6.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Sony E 18-135mm f/3.5-5.6 OSS Lens and Sony E 20mm f/2.8 Pancake Lens",
+        "category": "Electronics",
+        "estimated_market_value": 450,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440459/Sony-FE-24105mm-F4-G-OSS-Standard-Zoom-Lens-and-Sony-E-20mm-f28-Lens",
+            "title": "Sony FE 24-105mm F4 G OSS Standard Zoom Lens and Sony E 20mm f/2.8 Lens",
+            "current_bid": "$35.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440459/Sony-FE-24105mm-F4-G-OSS-Standard-Zoom-Lens-and-Sony-E-20mm-f28-Lens",
+            "pics": [
+                "56440459_1.jpg",
+                "56440459_2.jpg",
+                "56440459_3.jpg",
+                "56440459_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 3 Canon lenses: Canon EFS 55-250mm f/4-5.6 IS STM, Canon EFS 18-135mm f/3.5-5.6 IS STM, Canon EFS 10-18mm f/4.5-5.6 IS STM, and Viltrox Mount Adapter EF-FX1",
+        "category": "Electronics",
+        "estimated_market_value": 450,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440584/Three-Cannon-EFS-Lens-and-Adapter-see-description-for-details",
+            "title": "Three Cannon EFS Lens and Adapter see description for details",
+            "current_bid": "$7.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440584/Three-Cannon-EFS-Lens-and-Adapter-see-description-for-details",
+            "pics": [
+                "56440584_1.jpg",
+                "56440584_2.jpg",
+                "56440584_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Olympus Pen E-P5 Mirrorless Camera kit with Olympus M.Zuiko lens, Meike Speedlite MK320 flash, Olympus VF-2 electronic viewfinder, and ape case camera bag.",
+        "category": "Electronics",
+        "estimated_market_value": 400,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56971595/Olympus-Pen-EP5-Mirrorless-Camera-and-Accessories",
+            "title": "Olympus Pen E-P5 Mirrorless Camera and Accessories",
+            "current_bid": "$70.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56971595/Olympus-Pen-EP5-Mirrorless-Camera-and-Accessories",
+            "pics": [
+                "56971595_1.jpg",
+                "56971595_2.jpg",
+                "56971595_3.jpg",
+                "56971595_4.jpg",
+                "56971595_5.jpg",
+                "56971595_6.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "LOMO LC-A 120 Minigon XL Medium Format Film Camera",
+        "category": "Collectibles",
+        "estimated_market_value": 400,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56976816/Olympus-AZ1-Zoom-35mm-Film-Point-and-Shoot-Camera",
+            "title": "Olympus AZ-1 Zoom 35mm Film Point and Shoot Camera",
+            "current_bid": "$18.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56976816/Olympus-AZ1-Zoom-35mm-Film-Point-and-Shoot-Camera",
+            "pics": [
+                "56976816_1.jpg",
+                "56976816_2.jpg",
+                "56976816_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Sony ZV-1 Digital Camera with Zeiss Vario-Sonnar T* lens",
+        "category": "Electronics",
+        "estimated_market_value": 400,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56991378/Sony-ZV1-Digital-Camera",
+            "title": "Sony ZV-1 Digital Camera",
+            "current_bid": "$69.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56991378/Sony-ZV1-Digital-Camera",
+            "pics": [
+                "56991378_1.jpg",
+                "56991378_2.jpg",
+                "56991378_3.jpg",
+                "56991378_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Sony Alpha 7 (\u03b17) Full Frame Mirrorless Digital Camera with 7Artisans 35mm f/5.6 Lens",
+        "category": "Electronics",
+        "estimated_market_value": 375,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56876504/Sony-Alpha-7-Full-Frame-Mirrorless-Digital-Camera-with-7Artisans-35mm-f56-Lens",
+            "title": "Sony Alpha 7 Full Frame Mirrorless Digital Camera with 7Artisans 35mm f5.6 Lens",
+            "current_bid": "$154.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56876504/Sony-Alpha-7-Full-Frame-Mirrorless-Digital-Camera-with-7Artisans-35mm-f56-Lens",
+            "pics": [
+                "56876504_1.jpg",
+                "56876504_2.jpg",
+                "56876504_3.jpg",
+                "56876504_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Asahi Pentax KM 35mm SLR film camera with SMC Pentax-A 35mm f/2.8 lens and Pentax DA 12-24mm lens",
+        "category": "Electronics",
+        "estimated_market_value": 350,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56369676/Pentax-KM-35mm-SLR-Film-Camera-with-a-PentaxA-35mm-f-28-Lens-and-a-Lens-Hood",
+            "title": "Pentax KM 35mm SLR Film Camera with a Pentax-A 35mm f/ 2.8 Lens and a Lens Hood",
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56369676/Pentax-KM-35mm-SLR-Film-Camera-with-a-PentaxA-35mm-f-28-Lens-and-a-Lens-Hood",
+            "pics": [
+                "56369676_1.jpg",
+                "56369676_2.jpg",
+                "56369676_3.jpg",
+                "56369676_4.jpg",
+                "56369676_5.jpg",
+                "56369676_6.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Sony Cyber-Shot DSC-RX10 Digital Camera with Carl Zeiss Vario-Sonnar T* 24-200mm f/2.8 Lens",
+        "category": "Electronics",
+        "estimated_market_value": 350,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56369958/Sony-CyberShot-DSCRX10-Digital-Camera",
+            "title": "Sony Cyber-Shot DSC-RX10 Digital Camera",
+            "current_bid": "$75.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56369958/Sony-CyberShot-DSCRX10-Digital-Camera",
+            "pics": [
+                "56369958_1.jpg",
+                "56369958_2.jpg",
+                "56369958_3.jpg",
+                "56369958_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Yashica T3 Compact 35mm Point-and-Shoot Film Camera with Carl Zeiss Tessar T* 2.8/35 Lens",
+        "category": "Electronics",
+        "estimated_market_value": 350,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56370002/Yashica-T3-Compact-35mm-PointandShoot-Film-Camera",
+            "title": "Yashica T3 Compact 35mm Point-and-Shoot Film Camera",
+            "current_bid": "$30.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56370002/Yashica-T3-Compact-35mm-PointandShoot-Film-Camera",
+            "pics": [
+                "56370002_1.jpg",
+                "56370002_2.jpg",
+                "56370002_3.jpg",
+                "56370002_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Tamron SP AF 17-50mm F/2.8 XR Di II lens and Tamron 20mm F/2.8 Di III OSD M1:2 lens with Carrywell bag",
+        "category": "Electronics",
+        "estimated_market_value": 300,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56370291/Tamron-SP-AF-1750mm-F28-XR-Di-VC-LD-Aspherical-and20mm-F28-Di-III-OSD-M-1",
+            "title": "Tamron SP AF 17-50mm F/2.8 XR Di VC LD  Aspherical and20mm F/2.8 Di III OSD M 1:",
+            "current_bid": "$13.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56370291/Tamron-SP-AF-1750mm-F28-XR-Di-VC-LD-Aspherical-and20mm-F28-Di-III-OSD-M-1",
+            "pics": [
+                "56370291_1.jpg",
+                "56370291_2.jpg",
+                "56370291_3.jpg",
+                "56370291_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Viltrox AF 56mm F1.4 STM ED IF APS-C Camera Lens (Set of 2)",
+        "category": "Electronics",
+        "estimated_market_value": 300,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440894/Viltrox-AF-56mm-F14-APSC-Lenses",
+            "title": "Viltrox AF 56mm F1.4 APS-C Lenses",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440894/Viltrox-AF-56mm-F14-APSC-Lenses",
+            "pics": [
+                "56440894_1.jpg",
+                "56440894_2.jpg",
+                "56440894_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Fujifilm X30 Digital Camera with Fujinon Lens System",
+        "category": "Electronics",
+        "estimated_market_value": 300,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56876457/Fujifilm-X30-Digital-Camera",
+            "title": "Fujifilm X30 Digital Camera",
+            "current_bid": "$70.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56876457/Fujifilm-X30-Digital-Camera",
+            "pics": [
+                "56876457_1.jpg",
+                "56876457_2.jpg",
+                "56876457_3.jpg",
+                "56876457_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "TTArtisan Tilt Lens, TTArtisan 50mm F1.4 Lens, Tiffen 62mm UV Protector, Tiffen 49mm UV Protector",
+        "category": "Electronics",
+        "estimated_market_value": 300,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967457/TTArtisan-Lenses-Tilt-50mm-F14-and-49mm-UV-Protector",
+            "title": "TTArtisan Lenses Tilt 50mm F1.4 and 49mm UV Protector",
+            "current_bid": "$6.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967457/TTArtisan-Lenses-Tilt-50mm-F14-and-49mm-UV-Protector",
+            "pics": [
+                "56967457_1.jpg",
+                "56967457_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Canon EF-S 24mm f/2.8 STM Pancake Lens and Canon EF 50mm f/2.5 Compact Macro Lens",
+        "category": "Electronics",
+        "estimated_market_value": 300,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56971940/Canon-EF2-24mm-f28STMPancake-Lens-Canon-EF50mm-f25-Compact-Macro-Lens",
+            "title": "Canon EF-2  24mm f/2.8STMPancake Lens Canon EF-50mm f/2.5 Compact Macro Lens",
+            "current_bid": "$35.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56971940/Canon-EF2-24mm-f28STMPancake-Lens-Canon-EF50mm-f25-Compact-Macro-Lens",
+            "pics": [
+                "56971940_1.jpg",
+                "56971940_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Canon PowerShot G5 X Digital Camera",
+        "category": "Electronics",
+        "estimated_market_value": 300,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56976926/Canon-PowerShot-G5-X-Digital-Camera",
+            "title": "Canon PowerShot G5 X Digital Camera",
+            "current_bid": "$56.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56976926/Canon-PowerShot-G5-X-Digital-Camera",
+            "pics": [
+                "56976926_1.jpg",
+                "56976926_2.jpg",
+                "56976926_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Panasonic Lumix DMC-FZ300 Digital Camera with strap and bag",
+        "category": "Electronics",
+        "estimated_market_value": 275,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440672/Panasonic-Lumix-DMCFZ300-Digital-Camera",
+            "title": "Panasonic Lumix DMC-FZ300 Digital Camera",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440672/Panasonic-Lumix-DMCFZ300-Digital-Camera",
+            "pics": [
+                "56440672_1.jpg",
+                "56440672_2.jpg",
+                "56440672_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Nikon AF-S DX Nikkor 16-85mm f/3.5-5.6G ED VR camera lens",
+        "category": "Electronics",
+        "estimated_market_value": 275,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56971984/Nikon-AFS-DK-Nikkor-1685mm-f3556G-ED-VR-Lens",
+            "title": "Nikon AF-S DK Nikkor 16-85mm f/3.5-5.6G ED VR Lens",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56971984/Nikon-AFS-DK-Nikkor-1685mm-f3556G-ED-VR-Lens",
+            "pics": [
+                "56971984_1.jpg",
+                "56971984_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Canon PowerShot G5 X digital camera with Case Logic bag",
+        "category": "Electronics",
+        "estimated_market_value": 275,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56972028/Canon-PowerShot-G5-X-Digital-Camera",
+            "title": "Canon PowerShot G5 X Digital Camera",
+            "current_bid": "$51.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56972028/Canon-PowerShot-G5-X-Digital-Camera",
+            "pics": [
+                "56972028_1.jpg",
+                "56972028_2.jpg",
+                "56972028_3.jpg",
+                "56972028_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Two Sigma 18-300mm 1:3.5-6.3 DC \u00d872 and Sigma 19mm 1:2.8 DN \u00d846 camera lenses with K&F Concept Nano-X UV filter and Huwang camera bag",
+        "category": "Electronics",
+        "estimated_market_value": 250,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440782/Two-Sigma-Lens-see-description",
+            "title": "Two Sigma Lens see description",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440782/Two-Sigma-Lens-see-description",
+            "pics": [
+                "56440782_1.jpg",
+                "56440782_2.jpg",
+                "56440782_3.jpg",
+                "56440782_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Nikon F100 35mm Film SLR Camera with Nikon Nikkor AF 35-80mm 1:4-5.6D Lens and Lowepro Bag",
+        "category": "Electronics",
+        "estimated_market_value": 250,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967277/Nikon-F100-35mm-Film-SLR-Camera-with-Nikon-Nikkor-3580mm-14560-Lens",
+            "title": "Nikon F100 35mm Film SLR Camera with Nikon Nikkor 35-80mm 1:4-5.60 Lens",
+            "current_bid": "$6.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967277/Nikon-F100-35mm-Film-SLR-Camera-with-Nikon-Nikkor-3580mm-14560-Lens",
+            "pics": [
+                "56967277_1.jpg",
+                "56967277_2.jpg",
+                "56967277_3.jpg",
+                "56967277_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Three Sigma Camera Lenses: Sigma 17-50mm 1:2.8 EX HSM DC OS, Sigma 16mm 1:2.8 DN \u00d846, Sigma 30mm 1:2.8 DN \u00d846 with Hoya filters",
+        "category": "Electronics",
+        "estimated_market_value": 250,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967524/Three-Sigma-Lenses",
+            "title": "Three Sigma Lenses",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967524/Three-Sigma-Lenses",
+            "pics": [
+                "56967524_1.jpg",
+                "56967524_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Tamron 80-210mm f3.8-4 CF Tele Marco Adaptall 2 lens and Tamron 35mm f2.8 Di III OSD M1:2 lens",
+        "category": "Electronics",
+        "estimated_market_value": 250,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967612/Tamron-80210mm-f384-CF-Tele-Marco-Adaptall-2Tamron-35mm-f28-Di-III-OSD-M12",
+            "title": "Tamron 80-210mm f3.8-4 CF Tele Marco Adaptall 2/Tamron 35mm f2.8 Di III OSD M1:2",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967612/Tamron-80210mm-f384-CF-Tele-Marco-Adaptall-2Tamron-35mm-f28-Di-III-OSD-M12",
+            "pics": [
+                "56967612_1.jpg",
+                "56967612_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of three TTArtisan camera lenses: TTArtisan APS-C 17mm F1.4, TTArtisan Fisheye 7.5mm f/2, and TTArtisan 23mm F1.4.",
+        "category": "Electronics",
+        "estimated_market_value": 250,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56971631/Three-TTArtisan-Lenses",
+            "title": "Three TTArtisan Lenses",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56971631/Three-TTArtisan-Lenses",
+            "pics": [
+                "56971631_1.jpg",
+                "56971631_2.jpg",
+                "56971631_3.jpg",
+                "56971631_4.jpg",
+                "56971631_5.jpg",
+                "56971631_6.jpg",
+                "56971631_7.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Tamron 14-150mm f/3.5-5.8 Di III and Tamron 28-70mm f/3.5-4.5 CF Macro MC BBAR Adaptall camera lenses",
+        "category": "Electronics",
+        "estimated_market_value": 250,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56971962/Tamron-14150mm-f3558-Di-III-and-2870mm-f3545-CF-Macro-MC-BBAR-Adaptall",
+            "title": "Tamron 14-150mm f/3.5-5.8 Di III and 28-70mm f/3.5-4.5 CF Macro MC BBAR Adaptall",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56971962/Tamron-14150mm-f3558-Di-III-and-2870mm-f3545-CF-Macro-MC-BBAR-Adaptall",
+            "pics": [
+                "56971962_1.jpg",
+                "56971962_2.jpg",
+                "56971962_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Nikon F 35mm SLR Film Camera with Nikkor lens",
+        "category": "Electronics",
+        "estimated_market_value": 225,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56369778/Nikon-F35mm-SLR-Film-Camera-with-Nikkor-Lens",
+            "title": "Nikon F35mm SLR Film Camera with Nikkor Lens",
+            "current_bid": "$5.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56369778/Nikon-F35mm-SLR-Film-Camera-with-Nikkor-Lens",
+            "pics": [
+                "56369778_1.jpg",
+                "56369778_2.jpg",
+                "56369778_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Sony Cyber-Shot DSC-RX100 III Digital Camera",
+        "category": "Electronics",
+        "estimated_market_value": 225,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56370071/Sony-CyberShot-DSCRC100-II-Digital-Camera",
+            "title": "Sony Cyber-Shot DSC-RC100 II Digital Camera",
+            "current_bid": "$65.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56370071/Sony-CyberShot-DSCRC100-II-Digital-Camera",
+            "pics": [
+                "56370071_1.jpg",
+                "56370071_2.jpg",
+                "56370071_3.jpg",
+                "56370071_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Pentax K10D Digital SLR Camera with Pentax DA 18-55mm Lens and Pentax 18-270mm lens",
+        "category": "Electronics",
+        "estimated_market_value": 200,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56369934/Pentax-K10D-Digital-SLR-Camera-with-a-Pentax-DA-1855mm-Lens",
+            "title": "Pentax K10D Digital SLR Camera with a Pentax DA 18-55mm Lens",
+            "current_bid": "$35.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56369934/Pentax-K10D-Digital-SLR-Camera-with-a-Pentax-DA-1855mm-Lens",
+            "pics": [
+                "56369934_1.jpg",
+                "56369934_2.jpg",
+                "56369934_3.jpg",
+                "56369934_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Sony Cyber-Shot DSC-HX400V 20.4 Megapixel Digital Camera with GPS",
+        "category": "Electronics",
+        "estimated_market_value": 200,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440848/Sony-CyberShot-DSC-HX-400Z-Digital-Camera",
+            "title": "Sony Cyber-Shot DSC HX 400Z Digital Camera",
+            "current_bid": "$23.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440848/Sony-CyberShot-DSC-HX-400Z-Digital-Camera",
+            "pics": [
+                "56440848_1.jpg",
+                "56440848_2.jpg",
+                "56440848_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Nikon N6006 35mm SLR Film Camera with Nikon AF Nikkor 20mm f/2.8 lens",
+        "category": "Electronics",
+        "estimated_market_value": 200,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56876596/Nikon-N6006-35mm-SLR-Film-Cameral",
+            "title": "Nikon N6006 35mm SLR Film Cameral",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56876596/Nikon-N6006-35mm-SLR-Film-Cameral",
+            "pics": [
+                "56876596_1.jpg",
+                "56876596_2.jpg",
+                "56876596_3.jpg",
+                "56876596_4.jpg",
+                "56876596_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "HD Pentax-DA 55-300mm f/4.5-6.5 ED WR RE Telephoto Zoom Lens",
+        "category": "Electronics",
+        "estimated_market_value": 200,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967753/HD-PentaxDA-55300-f4565-ED-WR-RE-Telephoto-Zoom-Lens",
+            "title": "HD Pentax-DA 55-300 f/4.5-6.5 ED WR RE Telephoto Zoom Lens",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967753/HD-PentaxDA-55300-f4565-ED-WR-RE-Telephoto-Zoom-Lens",
+            "pics": [
+                "56967753_1.jpg",
+                "56967753_2.jpg",
+                "56967753_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lomography Lens Kit with Ricoh Color Rikenon 40mm f/2.8 lens and Hoya Fusion One filter",
+        "category": "Electronics",
+        "estimated_market_value": 200,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56977236/Lens-Kit-from-Lomography",
+            "title": "Lens Kit from Lomography",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56977236/Lens-Kit-from-Lomography",
+            "pics": [
+                "56977236_1.jpg",
+                "56977236_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Panasonic Lumix ZS99 Point and Shoot Camera",
+        "category": "Electronics",
+        "estimated_market_value": 180,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56876550/Panasonic-Lumix-ZS99-Point-and-Shot-Camera",
+            "title": "Panasonic Lumix ZS99 Point and Shot Camera",
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56876550/Panasonic-Lumix-ZS99-Point-and-Shot-Camera",
+            "pics": [
+                "56876550_1.jpg",
+                "56876550_2.jpg",
+                "56876550_3.jpg",
+                "56876550_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Nikon FA 35mm Manual Focus SLR Film Camera",
+        "category": "Electronics",
+        "estimated_market_value": 180,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56876618/Nikon-FA-35mm-Manual-Focus-SLR-Film-Camera",
+            "title": "Nikon FA 35mm Manual Focus SLR Film Camera",
+            "current_bid": "$16.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56876618/Nikon-FA-35mm-Manual-Focus-SLR-Film-Camera",
+            "pics": [
+                "56876618_1.jpg",
+                "56876618_2.jpg",
+                "56876618_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Minolta X-700 35mm SLR Film Camera with 24mm, Kalimar 50mm, and Vivitar Lenses, in Case Logic Bag",
+        "category": "Electronics",
+        "estimated_market_value": 180,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56971740/Minolta-X700-35mm-SLR-Film-Camera-and-Multiple-Lenses",
+            "title": "Minolta X-700 35mm SLR Film Camera and Multiple Lenses",
+            "current_bid": "$45.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56971740/Minolta-X700-35mm-SLR-Film-Camera-and-Multiple-Lenses",
+            "pics": [
+                "56971740_1.jpg",
+                "56971740_2.jpg",
+                "56971740_3.jpg",
+                "56971740_4.jpg",
+                "56971740_5.jpg",
+                "56971740_6.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Canon PowerShot G1 X digital camera with Lowepro case",
+        "category": "Electronics",
+        "estimated_market_value": 175,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56370241/Canon-PowerShot-G1-X-Digital-Camera",
+            "title": "Canon PowerShot G1 X Digital Camera",
+            "current_bid": "$61.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56370241/Canon-PowerShot-G1-X-Digital-Camera",
+            "pics": [
+                "56370241_1.jpg",
+                "56370241_2.jpg",
+                "56370241_3.jpg",
+                "56370241_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Fujifilm Fujinon XC 15-45mm f/3.5-5.6 OIS PZ Lens and Fujifilm Fujinon XC 16-50mm f/3.5-5.6 OIS II Lens",
+        "category": "Electronics",
+        "estimated_market_value": 175,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440484/Fujifilm-Lens-XC-1545mm-f3556-OIS-PZ-and-Xc-1650mm-f3556-OIS-PZ",
+            "title": "Fujifilm Lens XC 15-45mm f/3.5-5.6 OIS PZ and Xc 16-50mm f/3.5-5.6 OIS PZ",
+            "current_bid": "$13.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440484/Fujifilm-Lens-XC-1545mm-f3556-OIS-PZ-and-Xc-1650mm-f3556-OIS-PZ",
+            "pics": [
+                "56440484_1.jpg",
+                "56440484_2.jpg",
+                "56440484_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Nikon Coolpix P7700 Digital Camera with Fosoto carrying case",
+        "category": "Electronics",
+        "estimated_market_value": 160,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440650/Nikon-Coolpix-P7700-Compact-Digital-Camera",
+            "title": "Nikon Coolpix P7700 Compact Digital Camera",
+            "current_bid": "$32.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440650/Nikon-Coolpix-P7700-Compact-Digital-Camera",
+            "pics": [
+                "56440650_1.jpg",
+                "56440650_2.jpg",
+                "56440650_3.jpg",
+                "56440650_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Konica IIIA 35mm Rangefinder Camera with Konishiroku Hexanon 48mm f/2 Lens and AstrHori light meter",
+        "category": "Collectibles",
+        "estimated_market_value": 160,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440694/Konica-III-Rangefinder-Camera",
+            "title": "Konica III Rangefinder Camera",
+            "current_bid": "$30.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440694/Konica-III-Rangefinder-Camera",
+            "pics": [
+                "56440694_1.jpg",
+                "56440694_2.jpg",
+                "56440694_3.jpg",
+                "56440694_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Meike MK-50mm f/1.7 Lens and Meike 25mm f/1.8 Large Aperture Wide Angle Lens",
+        "category": "Electronics",
+        "estimated_market_value": 160,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56972274/Meike-MK50mm-f17-and-Meike-25mm-f18-Large-Apeture-Wide-Angle-Lens",
+            "title": "Meike MK-50mm f/1.7 and Meike 25mm f/1.8 Large Apeture Wide Angle Lens",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56972274/Meike-MK50mm-f17-and-Meike-25mm-f18-Large-Apeture-Wide-Angle-Lens",
+            "pics": [
+                "56972274_1.jpg",
+                "56972274_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Assorted Camera Lens Lot: Nano-K Series 35-75mm Macro Zoom lens, BrighTIN STAR 35mm 0.95 lens, and Nano-K Series 52mm Macro prime lens",
+        "category": "Electronics",
+        "estimated_market_value": 150,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967568/Assorted-Lens-Lot",
+            "title": "Assorted Lens Lot",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967568/Assorted-Lens-Lot",
+            "pics": [
+                "56967568_1.jpg",
+                "56967568_2.jpg",
+                "56967568_3.jpg",
+                "56967568_4.jpg",
+                "56967568_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Rokinon Reflex 300mm f/6.3 ED UMC CS Mirror Lens with Fotasy M42-FE Lens Adapter",
+        "category": "Electronics",
+        "estimated_market_value": 150,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56972230/Robinson-Reflex-300mm-f63-ED-UMC-CS-Lens-and-Fotasy-M42FE-Lens-Adapter",
+            "title": "Robinson Reflex 300mm f/6.3 ED UMC CS Lens and Fotasy M42-FE Lens Adapter",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56972230/Robinson-Reflex-300mm-f63-ED-UMC-CS-Lens-and-Fotasy-M42FE-Lens-Adapter",
+            "pics": [
+                "56972230_1.jpg",
+                "56972230_2.jpg",
+                "56972230_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Tiffen UV Protector filters (49mm, 52mm, 58mm, 82mm), Tiffen 77mm Circular Polarizer filter, K&F Concept filter cases, Japan Optics filters",
+        "category": "Electronics",
+        "estimated_market_value": 150,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56976860/Camera-Filter-Lot",
+            "title": "Camera Filter Lot",
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56976860/Camera-Filter-Lot",
+            "pics": [
+                "56976860_1.jpg",
+                "56976860_2.jpg",
+                "56976860_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Canon EF 40mm f/2.8 STM lens, Yongnuo YN50mm F1.8 lens, Soligor lens mount adapter, Nikon lens extender",
+        "category": "Electronics",
+        "estimated_market_value": 150,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56991022/Assorted-Lenses-by-Canon-Yongnuo-Soligor-Lens-Mount-Nikon-Extender",
+            "title": "Assorted Lenses by Canon & Yongnuo, Soligor Lens Mount, & Nikon Extender",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56991022/Assorted-Lenses-by-Canon-Yongnuo-Soligor-Lens-Mount-Nikon-Extender",
+            "pics": [
+                "56991022_1.jpg",
+                "56991022_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Pentax Z-50P 35mm SLR Film Camera with Pentax-A F 50mm f/1.7 lens and Tamron AF Aspherical 35-105mm F/4-5.6 lens.",
+        "category": "Electronics",
+        "estimated_market_value": 130,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56971693/Pentax-Z50P-35mm-SLR-Film-Camera-with-Pentax-Lenses",
+            "title": "Pentax Z-50P 35mm SLR Film Camera with Pentax Lenses",
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56971693/Pentax-Z50P-35mm-SLR-Film-Camera-with-Pentax-Lenses",
+            "pics": [
+                "56971693_1.jpg",
+                "56971693_2.jpg",
+                "56971693_3.jpg",
+                "56971693_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Sigma 18-250mm f/3.5-6.3 DC Macro OS HSM Lens Pentax Mount",
+        "category": "Electronics",
+        "estimated_market_value": 120,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56369909/Sigma-18250mm-f3563-DC-Micro-OS-HSM-Lens",
+            "title": "Sigma 18-250mm f/3.5-6.3 DC Micro OS HSM Lens",
+            "current_bid": "$6.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56369909/Sigma-18250mm-f3563-DC-Micro-OS-HSM-Lens",
+            "pics": [
+                "56369909_1.jpg",
+                "56369909_2.jpg",
+                "56369909_3.jpg",
+                "56369909_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Yashica Electro 35 CC Rangefinder Film Camera with 35mm f/1.8 Lens",
+        "category": "Electronics",
+        "estimated_market_value": 120,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56369980/Yashica-Electra-35CC-Rangefinder-Film-Camera-with-a-35mm-f18-Lens",
+            "title": "Yashica Electra 35CC Rangefinder Film Camera with a 35mm f/1.8 Lens",
+            "current_bid": "$30.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56369980/Yashica-Electra-35CC-Rangefinder-Film-Camera-with-a-35mm-f18-Lens",
+            "pics": [
+                "56369980_1.jpg",
+                "56369980_2.jpg",
+                "56369980_3.jpg",
+                "56369980_4.jpg",
+                "56369980_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Nikon Coolpix B500 16.0 Megapixel Digital Camera Red",
+        "category": "Electronics",
+        "estimated_market_value": 120,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440804/Nikon-Coolpix-L840-160-Megapixel-Digital-Camera",
+            "title": "Nikon Coolpix L840 16.0 Megapixel Digital Camera",
+            "current_bid": "$20.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440804/Nikon-Coolpix-L840-160-Megapixel-Digital-Camera",
+            "pics": [
+                "56440804_1.jpg",
+                "56440804_2.jpg",
+                "56440804_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Olympus Stylus Tough TG-860 Digital Camera 2.1m Shockproof 15m Waterproof Ultra Wide",
+        "category": "Electronics",
+        "estimated_market_value": 120,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967089/Olympus-Stylus-Tough-TG860-Digital-Camera",
+            "title": "Olympus Stylus Tough TG-860 Digital Camera",
+            "current_bid": "$11.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967089/Olympus-Stylus-Tough-TG860-Digital-Camera",
+            "pics": [
+                "56967089_1.jpg",
+                "56967089_2.jpg",
+                "56967089_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Olympus PEN E-P2 Mirrorless Camera with Olympus M.Zuiko Digital ED 40-150mm f/4-5.6 Lens and Hoya NXTPLUS UV MRC 58mm Filter.",
+        "category": "Electronics",
+        "estimated_market_value": 120,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967233/Olympus-PEN-EP2-Mirrorless-Camera-with-MZuiko-Digital-ED-40150mm-f456-Lens",
+            "title": "Olympus PEN E-P2 Mirrorless Camera with M.Zuiko Digital ED 40-150mm f4-5.6 Lens",
+            "current_bid": "$18.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967233/Olympus-PEN-EP2-Mirrorless-Camera-with-MZuiko-Digital-ED-40150mm-f456-Lens",
+            "pics": [
+                "56967233_1.jpg",
+                "56967233_2.jpg",
+                "56967233_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Sony Handycam HDR-CX405 Camcorder with ZEISS Vario-Tessar lens",
+        "category": "Electronics",
+        "estimated_market_value": 120,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967827/Sony-Handycam-HDRCX405-Camcorder",
+            "title": "Sony Handycam HDR-CX405 Camcorder",
+            "current_bid": "$41.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967827/Sony-Handycam-HDRCX405-Camcorder",
+            "pics": [
+                "56967827_1.jpg",
+                "56967827_2.jpg",
+                "56967827_3.jpg",
+                "56967827_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lomography Lomo'Instant Automat Instant Film Camera",
+        "category": "Electronics",
+        "estimated_market_value": 100,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56370195/Lomography-LomoInstant-Automat-Camera",
+            "title": "Lomography Lomo'Instant Automat Camera",
+            "current_bid": "$7.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56370195/Lomography-LomoInstant-Automat-Camera",
+            "pics": [
+                "56370195_1.jpg",
+                "56370195_2.jpg",
+                "56370195_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Yashica ML 24mm f/2.8 camera lens",
+        "category": "Electronics",
+        "estimated_market_value": 100,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56972050/Yashica-Lens",
+            "title": "Yashica Lens",
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56972050/Yashica-Lens",
+            "pics": [
+                "56972050_1.jpg",
+                "56972050_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Zorki-4K Soviet Era 35mm Film Rangefinder Camera Jupiter-8 Lens USSR Vintage",
+        "category": "Collectibles",
+        "estimated_market_value": 100,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56972117/Zorki4K-Soviet-Era-35mm-Film-Rangefinder-Camera",
+            "title": "Zorki-4K Soviet Era 35mm Film Rangefinder Camera",
+            "current_bid": "$25.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56972117/Zorki4K-Soviet-Era-35mm-Film-Rangefinder-Camera",
+            "pics": [
+                "56972117_1.jpg",
+                "56972117_2.jpg",
+                "56972117_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "TTArtisan 23mm f/1.4 Manual Focus Lens for Mirrorless Cameras",
+        "category": "Electronics",
+        "estimated_market_value": 90,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56370173/TTArtisan-23mm-f14-Lens",
+            "title": "TTArtisan 23mm f1.4 Lens",
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56370173/TTArtisan-23mm-f14-Lens",
+            "pics": [
+                "56370173_1.jpg",
+                "56370173_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Yashica FX-2 35mm SLR Film Camera with 50mm f/1.9 lens",
+        "category": "Collectibles",
+        "estimated_market_value": 90,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440826/Yashica-FX2-36mm-SLR-Camera",
+            "title": "Yashica FX-2 36mm SLR Camera",
+            "current_bid": "$4.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440826/Yashica-FX2-36mm-SLR-Camera",
+            "pics": [
+                "56440826_1.jpg",
+                "56440826_2.jpg",
+                "56440826_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Nikon Coolpix P7000 Digital Camera with NIKKOR 7.1x Wide Optical Zoom ED VR 6.0-42.6mm 1:2.8-5.6 Lens",
+        "category": "Electronics",
+        "estimated_market_value": 90,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967321/Nikon-Coolpix-P7000-Digital-Camera",
+            "title": "Nikon Coolpix P7000 Digital Camera",
+            "current_bid": "$15.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967321/Nikon-Coolpix-P7000-Digital-Camera",
+            "pics": [
+                "56967321_1.jpg",
+                "56967321_2.jpg",
+                "56967321_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "SLIK Pro 700 DX AMT Professional Camera Tripod with Pan Head",
+        "category": "Electronics",
+        "estimated_market_value": 90,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56972296/Silk-Pro-700-DX-Tripod",
+            "title": "Silk Pro 700 DX Tripod",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56972296/Silk-Pro-700-DX-Tripod",
+            "pics": [
+                "56972296_1.jpg",
+                "56972296_2.jpg",
+                "56972296_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Zenit 11 Soviet Era 35mm SLR Film Camera with Helios 44M-4 lens",
+        "category": "Collectibles",
+        "estimated_market_value": 90,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56991293/Zenit-11-Soviet-Era-35mm-SLR-Film-Camera",
+            "title": "Zenit 11 Soviet Era 35mm SLR Film Camera",
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56991293/Zenit-11-Soviet-Era-35mm-SLR-Film-Camera",
+            "pics": [
+                "56991293_1.jpg",
+                "56991293_2.jpg",
+                "56991293_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Domke F-2 Original Camera Gear Shoulder Bag (Sand)",
+        "category": "Tools/Equipment",
+        "estimated_market_value": 85,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440760/Dockers-F2-Camera-Gear-Shoulder-Bag",
+            "title": "Dockers F-2 Camera Gear Shoulder Bag",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440760/Dockers-F2-Camera-Gear-Shoulder-Bag",
+            "pics": [
+                "56440760_1.jpg",
+                "56440760_2.jpg",
+                "56440760_3.jpg",
+                "56440760_4.jpg",
+                "56440760_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Nikon Coolpix W150 Waterproof Digital Camera with Nikkor 3x Optical Zoom 4.1-12.3mm 1:3.3-5.9 and Lowepro Bag",
+        "category": "Electronics",
+        "estimated_market_value": 85,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967365/Nikon-Coolpix-S33-Waterproof-Digital-Camera",
+            "title": "Nikon Coolpix S33 Waterproof Digital Camera",
+            "current_bid": "$13.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967365/Nikon-Coolpix-S33-Waterproof-Digital-Camera",
+            "pics": [
+                "56967365_1.jpg",
+                "56967365_2.jpg",
+                "56967365_3.jpg",
+                "56967365_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Peak Design Everyday Sling 10L Camera Bag (Ash)",
+        "category": "Tools/Equipment",
+        "estimated_market_value": 80,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440738/Peak-Design-Camera-Sling-Bag",
+            "title": "Peak Design Camera Sling Bag",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440738/Peak-Design-Camera-Sling-Bag",
+            "pics": [
+                "56440738_1.jpg",
+                "56440738_2.jpg",
+                "56440738_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Tokina AT-X Auto Promaster MC Zoom Lens 80-205mm f/3.8",
+        "category": "Electronics",
+        "estimated_market_value": 80,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56917523/Toking-ATX-50250mm-f456-Manual-Zoom-Lens",
+            "title": "Toking AT-X 50-250mm f4-5.6 Manual Zoom Lens",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56917523/Toking-ATX-50250mm-f456-Manual-Zoom-Lens",
+            "pics": [
+                "56917523_1.jpg",
+                "56917523_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Canon Sure Shot 90u Date 35mm Film Camera",
+        "category": "Electronics",
+        "estimated_market_value": 80,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56977015/Canon-Sure-Shot-90u-Date-Camera",
+            "title": "Canon Sure Shot 90u Date Camera",
+            "current_bid": "$21.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56977015/Canon-Sure-Shot-90u-Date-Camera",
+            "pics": [
+                "56977015_1.jpg",
+                "56977015_2.jpg",
+                "56977015_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Vintage Olympus Pen-D Half-Frame 35mm Film Camera",
+        "category": "Electronics",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440628/Olympus-PenD-HalfFrame-Digital-Camera",
+            "title": "Olympus Pen-D Half-Frame Digital Camera",
+            "current_bid": "$13.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440628/Olympus-PenD-HalfFrame-Digital-Camera",
+            "pics": [
+                "56440628_1.jpg",
+                "56440628_2.jpg",
+                "56440628_3.jpg",
+                "56440628_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Kodak Pixpro AZ252 Digital Bridge Camera with 25x Zoom Lens and Lowepro Bag",
+        "category": "Electronics",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440960/Kodak-Pixpro-AZ252-Digital-Camera",
+            "title": "Kodak Pixpro AZ252 Digital Camera",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440960/Kodak-Pixpro-AZ252-Digital-Camera",
+            "pics": [
+                "56440960_1.jpg",
+                "56440960_2.jpg",
+                "56440960_3.jpg",
+                "56440960_4.jpg",
+                "56440960_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Kodak Pixpro AZ252 Digital Camera",
+        "category": "Electronics",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56876573/Kodak-Pixpro-AZ252-Digital-Camera",
+            "title": "Kodak Pixpro AZ252 Digital Camera",
+            "current_bid": "$17.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56876573/Kodak-Pixpro-AZ252-Digital-Camera",
+            "pics": [
+                "56876573_1.jpg",
+                "56876573_2.jpg",
+                "56876573_3.jpg",
+                "56876573_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Assorted 35mm photographic film lot including Reflx Lab 800, Ilford HP5 Plus, Ilford XP2 Super 400, Candido, Kodak ColorPlus expires 2026",
+        "category": "Collectibles",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56876833/Film-Lot-Expires-2026",
+            "title": "Film Lot Expires 2026",
+            "current_bid": "$12.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56876833/Film-Lot-Expires-2026",
+            "pics": [
+                "56876833_1.jpg",
+                "56876833_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Holga 135BC 35mm Film Camera",
+        "category": "Electronics",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56917614/Holga-135BC-35mm-Film-Camera",
+            "title": "Holga 135BC 35mm Film Camera",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56917614/Holga-135BC-35mm-Film-Camera",
+            "pics": [
+                "56917614_1.jpg",
+                "56917614_2.jpg",
+                "56917614_3.jpg",
+                "56917614_4.jpg",
+                "56917614_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Olympus Infinity Mini 35mm Film Camera ESP Quick Flash Focus Lock",
+        "category": "Electronics",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967112/Olympus-Infinity-Mini-35mm-Film-Camera",
+            "title": "Olympus Infinity Mini 35mm Film Camera",
+            "current_bid": "$6.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967112/Olympus-Infinity-Mini-35mm-Film-Camera",
+            "pics": [
+                "56967112_1.jpg",
+                "56967112_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Pentax IQZoom 170SL Date 35mm Point and Shoot Film Camera with SMC Pentax Zoom Lens 38mm-170mm and Case Logic Pouch.",
+        "category": "Electronics",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967189/Pentax-IQZoom-170SL-Date-35mm-Point-and-Shoot-Film-Camera",
+            "title": "Pentax IQZoom 170SL Date 35mm Point and Shoot Film Camera",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967189/Pentax-IQZoom-170SL-Date-35mm-Point-and-Shoot-Film-Camera",
+            "pics": [
+                "56967189_1.jpg",
+                "56967189_2.jpg",
+                "56967189_3.jpg",
+                "56967189_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Olympus Infinity Twin Promaster Weatherproof 35mm Point and Shoot Film Camera",
+        "category": "Electronics",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967546/Olympus-Promaster-Infinity-Twin-35mm-Film-Camera",
+            "title": "Olympus Promaster Infinity Twin 35mm Film Camera",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967546/Olympus-Promaster-Infinity-Twin-35mm-Film-Camera",
+            "pics": [
+                "56967546_1.jpg",
+                "56967546_2.jpg",
+                "56967546_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Kodak PIXPRO FZ55 Blue Digital Camera with Case Logic",
+        "category": "Electronics",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56971872/Kodal-Pixpro-FZ55-Blue-Digital-Camerau",
+            "title": "Kodal Pixpro FZ55 Blue Digital Camerau",
+            "current_bid": "$15.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56971872/Kodal-Pixpro-FZ55-Blue-Digital-Camerau",
+            "pics": [
+                "56971872_1.jpg",
+                "56971872_2.jpg",
+                "56971872_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Canon PowerShot G6 7.1MP Digital Camera with 4x Zoom Lens",
+        "category": "Electronics",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56976794/Canon-Power-Shot-G6-71mp-Digital-Camera-with-4x-Zoom-Lens",
+            "title": "Canon Power Shot G6 7.1mp Digital Camera with 4x Zoom Lens",
+            "current_bid": "$20.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56976794/Canon-Power-Shot-G6-71mp-Digital-Camera-with-4x-Zoom-Lens",
+            "pics": [
+                "56976794_1.jpg",
+                "56976794_2.jpg",
+                "56976794_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Nikon Lens Series E AI-s Zoom 75-150mm f/3.5 Manual Focus Lens",
+        "category": "Electronics",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56977082/Nikom-75100mm-f35-Series-E-Manual-Focus-AIs-Zoom-Lens",
+            "title": "Nikom 75'100mm f/3.5 Series E Manual Focus AI-s Zoom Lens",
+            "current_bid": "$6.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56977082/Nikom-75100mm-f35-Series-E-Manual-Focus-AIs-Zoom-Lens",
+            "pics": [
+                "56977082_1.jpg",
+                "56977082_2.jpg",
+                "56977082_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Vintage Polaroid Automatic 100 Land Camera",
+        "category": "Collectibles",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56991224/Polaroid-Auromatic-100-Land-Camera",
+            "title": "Polaroid Auromatic 100 Land Camera",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56991224/Polaroid-Auromatic-100-Land-Camera",
+            "pics": [
+                "56991224_1.jpg",
+                "56991224_2.jpg",
+                "56991224_3.jpg",
+                "56991224_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Minolta Hi-Matic 7s 35mm Rangefinder Film Camera",
+        "category": "Electronics",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56991400/Minolta-HiMatic-7s-35mm-Rangefinder-Film-Camera",
+            "title": "Minolta Hi-Matic 7s 35mm Rangefinder Film Camera",
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56991400/Minolta-HiMatic-7s-35mm-Rangefinder-Film-Camera",
+            "pics": [
+                "56991400_1.jpg",
+                "56991400_2.jpg",
+                "56991400_3.jpg",
+                "56991400_4.jpg",
+                "56991400_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Fujifilm Instax Square SQ6 Instant Film Camera Metallic Blue",
+        "category": "Electronics",
+        "estimated_market_value": 70,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56369855/Fujifilm-Instax-Square-SQ6-Instant-Film-Camera-in-Metallic-Blue",
+            "title": "Fujifilm Instax Square SQ6 Instant Film Camera in Metallic Blue",
+            "current_bid": "$16.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56369855/Fujifilm-Instax-Square-SQ6-Instant-Film-Camera-in-Metallic-Blue",
+            "pics": [
+                "56369855_1.jpg",
+                "56369855_2.jpg",
+                "56369855_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "FED-50 Automatic Film Camera Soviet",
+        "category": "Collectibles",
+        "estimated_market_value": 70,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56917230/FED50-Automatic-Film-Camera",
+            "title": "FED-50 Automatic Film Camera",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56917230/FED50-Automatic-Film-Camera",
+            "pics": [
+                "56917230_1.jpg",
+                "56917230_2.jpg",
+                "56917230_3.jpg",
+                "56917230_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Sharp Viewcam VL-AH60 Hi8 Analog Camcorder",
+        "category": "Electronics",
+        "estimated_market_value": 70,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967775/Sharp-Viewcam-VLAH60-Hi8-Analog-Camcorder",
+            "title": "Sharp Viewcam VL-AH60 Hi8 Analog Camcorder",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967775/Sharp-Viewcam-VLAH60-Hi8-Analog-Camcorder",
+            "pics": [
+                "56967775_1.jpg",
+                "56967775_2.jpg",
+                "56967775_3.jpg",
+                "56967775_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Canon PowerShot S80 Digital Camera",
+        "category": "Electronics",
+        "estimated_market_value": 70,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56976993/Canon-PowerShot-S80-Digital-Camera",
+            "title": "Canon PowerShot S80 Digital Camera",
+            "current_bid": "$12.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56976993/Canon-PowerShot-S80-Digital-Camera",
+            "pics": [
+                "56976993_1.jpg",
+                "56976993_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Canon Sure Shot 80u 35mm Point and Shoot Film Camera with Case Logic Case",
+        "category": "Electronics",
+        "estimated_market_value": 70,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56977037/Canon-Sure-Shot-80u-35mm-Point-and-Shoot-Film-Camera",
+            "title": "Canon Sure Shot 80u 35mm Point and Shoot Film Camera",
+            "current_bid": "$5.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56977037/Canon-Sure-Shot-80u-35mm-Point-and-Shoot-Film-Camera",
+            "pics": [
+                "56977037_1.jpg",
+                "56977037_2.jpg",
+                "56977037_3.jpg",
+                "56977037_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Minolta Maxxum 650si / Dynax 600si 35mm film SLR camera with Sigma Aspherical 28-105mm lens and Lowepro Topload Zoom 1 bag",
+        "category": "Electronics",
+        "estimated_market_value": 60,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440562/Minolta-Dynax-600si-Classic-SLR-36mm-Camera",
+            "title": "Minolta Dynax 600si Classic SLR 36mm Camera",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440562/Minolta-Dynax-600si-Classic-SLR-36mm-Camera",
+            "pics": [
+                "56440562_1.jpg",
+                "56440562_2.jpg",
+                "56440562_3.jpg",
+                "56440562_4.jpg",
+                "56440562_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Vintage Polaroid OneStep Land Camera SX-70 Instant Film Camera with Rainbow Stripe",
+        "category": "Collectibles",
+        "estimated_market_value": 60,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440984/Polaroid-OneStep-Land-Camera-SX70",
+            "title": "Polaroid OneStep Land Camera SX70",
+            "current_bid": "$4.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440984/Polaroid-OneStep-Land-Camera-SX70",
+            "pics": [
+                "56440984_1.jpg",
+                "56440984_2.jpg",
+                "56440984_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Pentax IQZoom 170SL 35mm Film Camera with SMC Pentax Zoom Lens 38mm-170mm",
+        "category": "Electronics",
+        "estimated_market_value": 60,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967136/Sony-Cybershot-DCSW80-Compact-Digital-Camera",
+            "title": "Sony Cyber-shot DCS-W80 Compact Digital Camera",
+            "current_bid": "$4.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967136/Sony-Cybershot-DCSW80-Compact-Digital-Camera",
+            "pics": [
+                "56967136_1.jpg",
+                "56967136_2.jpg",
+                "56967136_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Nikon N75 35mm SLR Film Camera with Nikon AF Nikkor 28-80mm f/3.3-5.6G Lens and Nikon Carrying Pouch",
+        "category": "Electronics",
+        "estimated_market_value": 60,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56971784/Nikon-N75-35mm-SLR-Film-Camera",
+            "title": "Nikon N75 35mm SLR Film Camera",
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56971784/Nikon-N75-35mm-SLR-Film-Camera",
+            "pics": [
+                "56971784_1.jpg",
+                "56971784_2.jpg",
+                "56971784_3.jpg",
+                "56971784_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Kodak Brownie Movie Camera Model 2 8mm f/2.7 Kodak Cine Ektanon Lens with Original Box",
+        "category": "Collectibles",
+        "estimated_market_value": 60,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56971894/Brownie-Movie-Camera-Model-2",
+            "title": "Brownie Movie Camera Model 2",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56971894/Brownie-Movie-Camera-Model-2",
+            "pics": [
+                "56971894_1.jpg",
+                "56971894_2.jpg",
+                "56971894_3.jpg",
+                "56971894_4.jpg",
+                "56971894_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Canon Sure Shot Zoom-S 35mm Point and Shoot Film Camera",
+        "category": "Electronics",
+        "estimated_market_value": 60,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56972318/Canon-SURE-Shoot-ZoomS-Point-and-Shoot-35mm-Camera",
+            "title": "Canon SURE Shoot Zoom-S Point and Shoot 35mm Camera",
+            "current_bid": "$4.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56972318/Canon-SURE-Shoot-ZoomS-Point-and-Shoot-35mm-Camera",
+            "pics": [
+                "56972318_1.jpg",
+                "56972318_2.jpg",
+                "56972318_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Hoya 55mm UV filter on telephoto zoom lens, Vivitar K Series 55mm UV HMC lens, assorted camera filters, PRO-Albinar camera bag",
+        "category": "Electronics",
+        "estimated_market_value": 60,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56977148/Lenses-Filters-and-Camera-Bag",
+            "title": "Lenses, Filters and Camera Bag",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56977148/Lenses-Filters-and-Camera-Bag",
+            "pics": [
+                "56977148_1.jpg",
+                "56977148_2.jpg",
+                "56977148_3.jpg",
+                "56977148_4.jpg",
+                "56977148_5.jpg",
+                "56977148_6.jpg",
+                "56977148_7.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Kiron 28-105mm f/3.2-4.5 Macro Zoom Lens",
+        "category": "Electronics",
+        "estimated_market_value": 60,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56977258/Kiron-28105mm-f3245-Macro-Zoom-Lens",
+            "title": "Kiron 28-105mm f/3.2-4.5 Macro Zoom Lens",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56977258/Kiron-28105mm-f3245-Macro-Zoom-Lens",
+            "pics": [
+                "56977258_1.jpg",
+                "56977258_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Pentax IQZoom 160 35mm Point and Shoot Film Camera",
+        "category": "Electronics",
+        "estimated_market_value": 55,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56976838/Pentax-IQZoom-160-35mm-Point-and-Shoot-Film-Camera",
+            "title": "Pentax IQZoom 160 35mm Point and Shoot Film Camera",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56976838/Pentax-IQZoom-160-35mm-Point-and-Shoot-Film-Camera",
+            "pics": [
+                "56976838_1.jpg",
+                "56976838_2.jpg",
+                "56976838_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Vivitar 75-205mm f/3.8 MC Macro Focusing Zoom Lens with 52mm WAKA UV Filter",
+        "category": "Electronics",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56370151/Vivatar-75205mm-138-MC-Macro-Focusing-Zoom-Lens",
+            "title": "Vivatar 75-205mm 1.3.8 MC Macro Focusing Zoom Lens",
+            "current_bid": "$4.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56370151/Vivatar-75205mm-138-MC-Macro-Focusing-Zoom-Lens",
+            "pics": [
+                "56370151_1.jpg",
+                "56370151_2.jpg",
+                "56370151_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Samsung Maxima 1450AF 35mm Point and Shoot Film Camera with 38-145mm Zoom Lens",
+        "category": "Electronics",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440938/Samsung-Maxima-1450AF-35mm-Point-and-Shoot-Camera",
+            "title": "Samsung Maxima 1450AF 35mm Point and Shoot Camera",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440938/Samsung-Maxima-1450AF-35mm-Point-and-Shoot-Camera",
+            "pics": [
+                "56440938_1.jpg",
+                "56440938_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Pentax SF10 35mm SLR Film Camera with Pentax-FA 28-90mm Zoom Lens",
+        "category": "Electronics",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56876482/Pentax-SF7-35mm-SLR-Film-Camera-with-a-PentaxFA-2890mm-Zoom-Lens",
+            "title": "Pentax SF7 35mm SLR Film Camera with a Pentax-FA 28-90mm Zoom Lens",
+            "current_bid": "$7.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56876482/Pentax-SF7-35mm-SLR-Film-Camera-with-a-PentaxFA-2890mm-Zoom-Lens",
+            "pics": [
+                "56876482_1.jpg",
+                "56876482_2.jpg",
+                "56876482_3.jpg",
+                "56876482_4.jpg",
+                "56876482_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lomography Sprocket Rocket 35mm Panoramic Film Camera",
+        "category": "Electronics",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56876663/Lomography-Sprocket-Rocket-35mm-Panoramic-Camera",
+            "title": "Lomography Sprocket Rocket 35mm Panoramic Camera",
+            "current_bid": "$18.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56876663/Lomography-Sprocket-Rocket-35mm-Panoramic-Camera",
+            "pics": [
+                "56876663_1.jpg",
+                "56876663_2.jpg",
+                "56876663_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Polaroid 420 Automatic Land Camera vintage instant film camera with manual",
+        "category": "Collectibles",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56877414/Polaroid-420-Automatic-Land-Camera",
+            "title": "Polaroid 420 Automatic Land Camera",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56877414/Polaroid-420-Automatic-Land-Camera",
+            "pics": [
+                "56877414_1.jpg",
+                "56877414_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Nikon Fun Touch 4 Point and Shoot 35mm Film Camera with Nikon Lens 29mm f/4.5 AF",
+        "category": "Electronics",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967065/Nikon-Fun-Touch-4-Point-and-Shoot-Film-Camera",
+            "title": "Nikon Fun Touch 4 Point and Shoot Film Camera",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967065/Nikon-Fun-Touch-4-Point-and-Shoot-Film-Camera",
+            "pics": [
+                "56967065_1.jpg",
+                "56967065_2.jpg",
+                "56967065_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Chinon Auto 200mm f/3.5 Prime Telephoto Camera Lens with leather case.",
+        "category": "Electronics",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967211/Chinon-Auto-200mm-f35-Ptime-Telescope-Lens",
+            "title": "Chinon Auto 200mm f/3.5 Ptime Telescope Lens",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967211/Chinon-Auto-200mm-f35-Ptime-Telescope-Lens",
+            "pics": [
+                "56967211_1.jpg",
+                "56967211_2.jpg",
+                "56967211_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Petri MF-1 SLR 35mm Film Camera with Kalimar Nano-K Series lens",
+        "category": "Electronics",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967502/Petri-MF1-SLR-35mm-Film-Camera",
+            "title": "Petri MF-1 SLR 35mm Film Camera",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967502/Petri-MF1-SLR-35mm-Film-Camera",
+            "pics": [
+                "56967502_1.jpg",
+                "56967502_2.jpg",
+                "56967502_3.jpg",
+                "56967502_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Minolta MD Zoom Rokkor-X 100-200mm 1:5.6 Camera Lens with Skylight(1B) filter and original case",
+        "category": "Electronics",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967590/Minolta-Rokkor-100200mm-F65-MD-Auto-Zoom-Camera-Lens",
+            "title": "Minolta Rokkor 100-200mm F6.5 MD Auto Zoom Camera Lens",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967590/Minolta-Rokkor-100200mm-F65-MD-Auto-Zoom-Camera-Lens",
+            "pics": [
+                "56967590_1.jpg",
+                "56967590_2.jpg",
+                "56967590_3.jpg",
+                "56967590_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Pentax Optio S60 Digital Camera 6.0 Megapixels",
+        "category": "Electronics",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967657/Pentax-Optio-S55-Digital-Camera",
+            "title": "Pentax Optio S55 Digital Camera",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967657/Pentax-Optio-S55-Digital-Camera",
+            "pics": [
+                "56967657_1.jpg",
+                "56967657_2.jpg",
+                "56967657_3.jpg",
+                "56967657_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Ricoh AF-5 35mm Point and Shoot Film Camera",
+        "category": "Electronics",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56971850/Olympus-Trip-AF-35mm-Camera",
+            "title": "Olympus Trip AF 35mm Camera",
+            "current_bid": "$7.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56971850/Olympus-Trip-AF-35mm-Camera",
+            "pics": [
+                "56971850_1.jpg",
+                "56971850_2.jpg",
+                "56971850_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Olympus Trip AF 35mm Film Camera ZUIKO 35mm 1:3.5 lens",
+        "category": "Electronics",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56972183/Olympus-Trip-AF35mm-Film-Camera",
+            "title": "Olympus Trip AF35mm Film Camera",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56972183/Olympus-Trip-AF35mm-Film-Camera",
+            "pics": [
+                "56972183_1.jpg",
+                "56972183_2.jpg",
+                "56972183_3.jpg",
+                "56972183_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Vivitar 35-105mm f/3.2-4 MC Macro Focusing Zoom Lens",
+        "category": "Electronics",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56977280/Vivatar-35205mm-f324-MC-Macro-Focusing-Zoom-Lens",
+            "title": "Vivatar 35-205mm f/3.2-4 MC Macro Focusing Zoom Lens",
+            "current_bid": "$7.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56977280/Vivatar-35205mm-f324-MC-Macro-Focusing-Zoom-Lens",
+            "pics": [
+                "56977280_1.jpg",
+                "56977280_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Polaroid 600 Cool Cam Instant Film Camera",
+        "category": "Collectibles",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56991167/Polaroid-600-Cool-Cam-Instant-Film-Camera",
+            "title": "Polaroid 600 Cool Cam Instant Film Camera",
+            "current_bid": "$4.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56991167/Polaroid-600-Cool-Cam-Instant-Film-Camera",
+            "pics": [
+                "56991167_1.jpg",
+                "56991167_2.jpg",
+                "56991167_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Yashica Minister III 35mm Rangefinder Film Camera",
+        "category": "Electronics",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56991315/Yashica-Minsister-III-35mm-Rangefinder-Film-Camera",
+            "title": "Yashica Minsister III 35mm Rangefinder Film Camera",
+            "current_bid": "$4.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56991315/Yashica-Minsister-III-35mm-Rangefinder-Film-Camera",
+            "pics": [
+                "56991315_1.jpg",
+                "56991315_2.jpg",
+                "56991315_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Olympus-Pen original half-frame 35mm film camera",
+        "category": "Electronics",
+        "estimated_market_value": 45,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56369704/Olympus-Pen-HalfFrame-35mm-Camera",
+            "title": "Olympus Pen Half-Frame 35mm Camera",
+            "current_bid": "$10.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56369704/Olympus-Pen-HalfFrame-35mm-Camera",
+            "pics": [
+                "56369704_1.jpg",
+                "56369704_2.jpg",
+                "56369704_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Assorted 35mm photographic black and white film lot including Lucky SHD400, Ilford FP4 Plus, Kentmere Pan 400 expires 2027",
+        "category": "Collectibles",
+        "estimated_market_value": 45,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56877295/Film-Lot-Expires-2027",
+            "title": "Film Lot Expires 2027",
+            "current_bid": "$6.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56877295/Film-Lot-Expires-2027",
+            "pics": [
+                "56877295_1.jpg",
+                "56877295_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Kodak PIXPRO FZ53 Compact Digital Camera",
+        "category": "Electronics",
+        "estimated_market_value": 45,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56917440/Kodak-PIXPRO-FX53-Friendly-Zoom-Compact-Digital-Camera",
+            "title": "Kodak PIXPRO FX53 Friendly Zoom Compact Digital Camera",
+            "current_bid": "$8.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56917440/Kodak-PIXPRO-FX53-Friendly-Zoom-Compact-Digital-Camera",
+            "pics": [
+                "56917440_1.jpg",
+                "56917440_2.jpg",
+                "56917440_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "SLIK 450G compact aluminum camera tripod with ball head",
+        "category": "Electronics",
+        "estimated_market_value": 45,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56918680/Silk-450G-Tripod",
+            "title": "Silk 450G Tripod",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56918680/Silk-450G-Tripod",
+            "pics": [
+                "56918680_1.jpg",
+                "56918680_2.jpg",
+                "56918680_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "MEIKE Automatic Extension Tubes for Macro Photography",
+        "category": "Electronics",
+        "estimated_market_value": 45,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56971918/Mieke-Extension-Tubes-for-Macro-Photography",
+            "title": "Mieke Extension Tubes for Macro Photography",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56971918/Mieke-Extension-Tubes-for-Macro-Photography",
+            "pics": [
+                "56971918_1.jpg",
+                "56971918_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Assorted Camcorder Batteries Chargers Lot Sony Simo Powermax AC-V25 NP-F Type",
+        "category": "Electronics",
+        "estimated_market_value": 45,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56972139/Assorted-Camcorder-Batteries",
+            "title": "Assorted Camcorder Batteries",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56972139/Assorted-Camcorder-Batteries",
+            "pics": [
+                "56972139_1.jpg",
+                "56972139_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Olympus Quick Shooter Zoom 35mm Compact Film Camera with 35-70mm lens",
+        "category": "Electronics",
+        "estimated_market_value": 45,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56972252/Olympus-Trip-AF-35mm-Compact-Film-Camera",
+            "title": "Olympus Trip AF 35mm Compact Film Camera",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56972252/Olympus-Trip-AF-35mm-Compact-Film-Camera",
+            "pics": [
+                "56972252_1.jpg",
+                "56972252_2.jpg",
+                "56972252_3.jpg",
+                "56972252_4.jpg",
+                "56972252_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Fujifilm FinePix S4500 14MP digital bridge camera",
+        "category": "Electronics",
+        "estimated_market_value": 40,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56370316/Fujifilm-FinePix-S4500-Digital-Camera",
+            "title": "Fujifilm FinePix S4500 Digital Camera",
+            "current_bid": "$11.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56370316/Fujifilm-FinePix-S4500-Digital-Camera",
+            "pics": [
+                "56370316_1.jpg",
+                "56370316_2.jpg",
+                "56370316_3.jpg",
+                "56370316_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Assorted Camera Tripods Lot",
+        "category": "Tools/Equipment",
+        "estimated_market_value": 40,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440872/Tripod-Lot",
+            "title": "Tripod Lot",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440872/Tripod-Lot",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Kodak EasyShare Z950 12 Megapixel Digital Camera with Schneider-Kreuznach Variogon 10x Optical Zoom lens and Tek Digital by Tamrac case",
+        "category": "Electronics",
+        "estimated_market_value": 40,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56876707/Kodak-Easy-Share-Z950-Digital-Camera",
+            "title": "Kodak Easy Share Z950 Digital Camera",
+            "current_bid": "$8.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56876707/Kodak-Easy-Share-Z950-Digital-Camera",
+            "pics": [
+                "56876707_1.jpg",
+                "56876707_2.jpg",
+                "56876707_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Akaso Brave 4 4K Action Camera with Waterproof Case",
+        "category": "Electronics",
+        "estimated_market_value": 40,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56920084/Akaso-Brave-4-Action-Camera",
+            "title": "Akaso Brave 4 Action Camera",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56920084/Akaso-Brave-4-Action-Camera",
+            "pics": [
+                "56920084_1.jpg",
+                "56920084_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Avella A324D Aluminum 3-in-1 Monopod Tripod Walking Stick with Fluid Head",
+        "category": "Tools/Equipment",
+        "estimated_market_value": 40,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56920374/Avella-A324D-Aluminum-3-in-1-MonopodTripodWalking-Stick",
+            "title": "Avella A324D Aluminum 3 in 1 Monopod/Tripod/Walking Stick",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56920374/Avella-A324D-Aluminum-3-in-1-MonopodTripodWalking-Stick",
+            "pics": [
+                "56920374_1.jpg",
+                "56920374_2.jpg",
+                "56920374_3.jpg",
+                "56920374_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Kodak PIXPRO FZ43 Digital Camera 4x Wide Zoom Lens with Case Logic pouch",
+        "category": "Electronics",
+        "estimated_market_value": 40,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967682/Kodak-PicPro-FX43-Digital-Camera",
+            "title": "Kodak PicPro FX43 Digital Camera",
+            "current_bid": "$9.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967682/Kodak-PicPro-FX43-Digital-Camera",
+            "pics": [
+                "56967682_1.jpg",
+                "56967682_2.jpg",
+                "56967682_3.jpg",
+                "56967682_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Samyang lens cases, Kastar battery chargers, RPS Studio bag, YSDIGI lens cloth, Kiwi grip, K&F Concept filter, compact camera accessories lot",
+        "category": "Electronics",
+        "estimated_market_value": 40,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56977104/Camera-Accessories-Lot",
+            "title": "Camera Accessories Lot",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56977104/Camera-Accessories-Lot",
+            "pics": [
+                "56977104_1.jpg",
+                "56977104_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "JVC GR-D370U MiniDV Digital Video Camera with Case Logic carrying case",
+        "category": "Electronics",
+        "estimated_market_value": 40,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56991189/JVC-GRD37OU-Digital-Video-Camera",
+            "title": "JVC GR-D37OU Digital Video Camera",
+            "current_bid": "$10.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56991189/JVC-GRD37OU-Digital-Video-Camera",
+            "pics": [
+                "56991189_1.jpg",
+                "56991189_2.jpg",
+                "56991189_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Zenit TTL Soviet 35mm SLR Film Camera",
+        "category": "Electronics",
+        "estimated_market_value": 40,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56991422/Zenith-TTL-Soviet-35mm-SLR-Camera",
+            "title": "Zenith TTL Soviet 35mm SLR Camera",
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56991422/Zenith-TTL-Soviet-35mm-SLR-Camera",
+            "pics": [
+                "56991422_1.jpg",
+                "56991422_2.jpg",
+                "56991422_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Minolta Maxxum 3xi 35mm SLR Camera with Minolta 35-80mm Power Zoom Lens and case",
+        "category": "Electronics",
+        "estimated_market_value": 35,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440432/Minolta-Maxxum-3xi-35mm-SLR-Camera-with-a-3580mm-Power-Zoom-Lens",
+            "title": "Minolta Maxxum 3xi 35mm SLR Camera with a 35-80mm Power Zoom Lens",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440432/Minolta-Maxxum-3xi-35mm-SLR-Camera-with-a-3580mm-Power-Zoom-Lens",
+            "pics": [
+                "56440432_1.jpg",
+                "56440432_2.jpg",
+                "56440432_3.jpg",
+                "56440432_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Sony Cyber-shot DSC-W120 7.2MP Digital Camera with Carl Zeiss Vario-Tessar lens and USA Gear case",
+        "category": "Electronics",
+        "estimated_market_value": 35,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56876685/Sony-Cyber-Shot-DSCW110-72MP-Digital-Camera",
+            "title": "Sony Cyber Shot DSC-W110 7.2MP Digital Camera",
+            "current_bid": "$18.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56876685/Sony-Cyber-Shot-DSCW110-72MP-Digital-Camera",
+            "pics": [
+                "56876685_1.jpg",
+                "56876685_2.jpg",
+                "56876685_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Hanimex Praktica Super TL 35mm SLR film camera body",
+        "category": "Electronics",
+        "estimated_market_value": 35,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56877343/Hanimex-Praktica-Super-TL-35mm-SLR-Film-Camera",
+            "title": "Hanimex Praktica Super TL 35mm SLR Film Camera",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56877343/Hanimex-Praktica-Super-TL-35mm-SLR-Film-Camera",
+            "pics": [
+                "56877343_1.jpg",
+                "56877343_2.jpg",
+                "56877343_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Think Tank Digital Holster 10 V2.0 Camera Bag",
+        "category": "Tools/Equipment",
+        "estimated_market_value": 35,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56917462/Think-Tank-Digital-Holster-10-V20-Camera-Bag",
+            "title": "Think Tank Digital Holster 10 V2.0 Camera Bag",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56917462/Think-Tank-Digital-Holster-10-V20-Camera-Bag",
+            "pics": [
+                "56917462_1.jpg",
+                "56917462_2.jpg",
+                "56917462_3.jpg",
+                "56917462_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Vanguard VEO AM-234 Monopod",
+        "category": "Tools/Equipment",
+        "estimated_market_value": 35,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56918615/Vanguard-AEO-AM234-Monopod",
+            "title": "Vanguard AEO AM-234 Monopod",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56918615/Vanguard-AEO-AM234-Monopod",
+            "pics": [
+                "56918615_1.jpg",
+                "56918615_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "UltimaX Studio Series UM-BP100 digital camera camcorder professional backpack",
+        "category": "Electronics",
+        "estimated_market_value": 35,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56919804/Digital-CameraCamcorder-Proffesional-Backpack",
+            "title": "Digital Camera/Camcorder Proffesional Backpack",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56919804/Digital-CameraCamcorder-Proffesional-Backpack",
+            "pics": [
+                "56919804_1.jpg",
+                "56919804_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lomography Diana Mini 35mm Film Camera with Flash and Lowepro Bag",
+        "category": "Electronics",
+        "estimated_market_value": 35,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967299/Lomography-Diana-Mini-35mm-Film-Camera-with-Flash",
+            "title": "Lomography Diana Mini 35mm Film Camera with Flash",
+            "current_bid": "$7.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967299/Lomography-Diana-Mini-35mm-Film-Camera-with-Flash",
+            "pics": [
+                "56967299_1.jpg",
+                "56967299_2.jpg",
+                "56967299_3.jpg",
+                "56967299_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Evecase Canvas DSLR Camera Bag Shoulder Messenger Tan Brown Leather Trim",
+        "category": "Electronics",
+        "estimated_market_value": 35,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56972095/Eve-Case-Camera-Bag",
+            "title": "Eve Case Camera Bag",
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56972095/Eve-Case-Camera-Bag",
+            "pics": [
+                "56972095_1.jpg",
+                "56972095_2.jpg",
+                "56972095_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Tenba Skyline Camera Shoulder Bag",
+        "category": "Electronics",
+        "estimated_market_value": 35,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56976970/Tenba-Skyline-Camera-Shoulder-Bag",
+            "title": "Tenba Skyline Camera Shoulder Bag",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56976970/Tenba-Skyline-Camera-Shoulder-Bag",
+            "pics": [
+                "56976970_1.jpg",
+                "56976970_2.jpg",
+                "56976970_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "SLIK U8000 Tripod with carrying bag",
+        "category": "Tools/Equipment",
+        "estimated_market_value": 35,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56977126/Silk-u8000-Tripod",
+            "title": "Silk u8000 Tripod",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56977126/Silk-u8000-Tripod",
+            "pics": [
+                "56977126_1.jpg",
+                "56977126_2.jpg",
+                "56977126_3.jpg",
+                "56977126_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "VANGUARD Camera Bag",
+        "category": "Electronics",
+        "estimated_market_value": 35,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56977170/Camera-Bag",
+            "title": "Camera Bag",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56977170/Camera-Bag",
+            "pics": [
+                "56977170_1.jpg",
+                "56977170_2.jpg",
+                "56977170_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Polaroid OneStep Land Camera Rainbow Stripe Instant Film Camera",
+        "category": "Electronics",
+        "estimated_market_value": 35,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56991459/Polaroid-One-Step-Land-Camera",
+            "title": "Polaroid One Step Land Camera",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56991459/Polaroid-One-Step-Land-Camera",
+            "pics": [
+                "56991459_1.jpg",
+                "56991459_2.jpg",
+                "56991459_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Nikon Coolpix 3200 Digital Camera",
+        "category": "Electronics",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56369881/Nikon-Coolpix-3200-Digital-Camera",
+            "title": "Nikon Coolpix 3200 Digital Camera",
+            "current_bid": "$8.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56369881/Nikon-Coolpix-3200-Digital-Camera",
+            "pics": [
+                "56369881_1.jpg",
+                "56369881_2.jpg",
+                "56369881_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Pentax IQZoom 928 35mm Point and Shoot Film Camera with 28-90mm Lens",
+        "category": "Electronics",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56370024/Pentax-IQZoom-928-35mm-Point-and-Shoot-Film-Camera",
+            "title": "Pentax IQZoom 928 35mm Point and Shoot Film Camera",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56370024/Pentax-IQZoom-928-35mm-Point-and-Shoot-Film-Camera",
+            "pics": [
+                "56370024_1.jpg",
+                "56370024_2.jpg",
+                "56370024_3.jpg",
+                "56370024_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Nikon Coolpix S203 silver digital camera",
+        "category": "Electronics",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56370217/Nikon-Coolpix-S203-Digital-Camera",
+            "title": "Nikon Coolpix S203 Digital Camera",
+            "current_bid": "$20.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56370217/Nikon-Coolpix-S203-Digital-Camera",
+            "pics": [
+                "56370217_1.jpg",
+                "56370217_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Olympus Infinity Tele Quartzdate 35mm film camera",
+        "category": "Electronics",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56370268/Olympus-Infinity-Tele-35mm-Film-Camera",
+            "title": "Olympus Infinity Tele 35mm Film Camera",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56370268/Olympus-Infinity-Tele-35mm-Film-Camera",
+            "pics": [
+                "56370268_1.jpg",
+                "56370268_2.jpg",
+                "56370268_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Kodak EK2 Instant Camera The Handle Instant Film Camera",
+        "category": "Electronics",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56441006/Kodak-EK2-Instant-Camera-The-Handle",
+            "title": "Kodak EK2 Instant Camera The Handle",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56441006/Kodak-EK2-Instant-Camera-The-Handle",
+            "pics": [
+                "56441006_1.jpg",
+                "56441006_2.jpg",
+                "56441006_3.jpg",
+                "56441006_4.jpg",
+                "56441006_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Assorted 35mm photographic film lot expires 2025",
+        "category": "Collectibles",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56876729/Film-Lot-Expires-2025",
+            "title": "Film Lot Expires 2025",
+            "current_bid": "$12.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56876729/Film-Lot-Expires-2025",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Nikon Coolpix S550 10.0MP Digital Camera",
+        "category": "Electronics",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56877365/Nikon-Coolpix-S550-100MP-Digital-Camera",
+            "title": "Nikon Coolpix S550 10.0MP Digital Camera",
+            "current_bid": "$12.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56877365/Nikon-Coolpix-S550-100MP-Digital-Camera",
+            "pics": [
+                "56877365_1.jpg",
+                "56877365_2.jpg",
+                "56877365_3.jpg",
+                "56877365_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Vintage Continental 1050 Super Square Shooter II 35mm Film Camera Made in Japan",
+        "category": "Collectibles",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56917389/Vintage-Continental-1050-Super-Square-Shooter-II-Manual-35mm-Film-Camera",
+            "title": "Vintage Continental 1050 Super Square Shooter II Manual 35mm Film Camera",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56917389/Vintage-Continental-1050-Super-Square-Shooter-II-Manual-35mm-Film-Camera",
+            "pics": [
+                "56917389_1.jpg",
+                "56917389_2.jpg",
+                "56917389_3.jpg",
+                "56917389_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Fujifilm Endeavor 10 Point and Shoot Film Camera",
+        "category": "Electronics",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56918005/Fujifilm-Endeavor-10-Point-and-Shoot-Camera",
+            "title": "Fujifilm Endeavor 10 Point and Shoot Camera",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56918005/Fujifilm-Endeavor-10-Point-and-Shoot-Camera",
+            "pics": [
+                "56918005_1.jpg",
+                "56918005_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Generic black monopod with foam grip and ball head for camera",
+        "category": "Electronics",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56918640/Monopod",
+            "title": "Monopod",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56918640/Monopod",
+            "pics": [
+                "56918640_1.jpg",
+                "56918640_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Generic black monopod with foam grip, ball head, and carabiner for camera",
+        "category": "Electronics",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56918998/Monopod",
+            "title": "Monopod",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56918998/Monopod",
+            "pics": [
+                "56918998_1.jpg",
+                "56918998_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Unknown Camera Accessories Lot",
+        "category": "Electronics",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967411/Camera-Accessories-Lot",
+            "title": "Camera Accessories Lot",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967411/Camera-Accessories-Lot",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Unknown Camera Accessories Lot",
+        "category": "Electronics",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967435/Camera-Accessories-Lot",
+            "title": "Camera Accessories Lot",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967435/Camera-Accessories-Lot",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Camera Accessories Lot",
+        "category": "Electronics",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56977192/Camera-Accessories-Lot",
+            "title": "Camera Accessories Lot",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56977192/Camera-Accessories-Lot",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Nikon Coolpix L24 Red Digital Camera",
+        "category": "Electronics",
+        "estimated_market_value": 25,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56370046/Nikon-Coolpix-L22-Digital-Camera",
+            "title": "Nikon Coolpix L22 Digital Camera",
+            "current_bid": "$21.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56370046/Nikon-Coolpix-L22-Digital-Camera",
+            "pics": [
+                "56370046_1.jpg",
+                "56370046_2.jpg",
+                "56370046_3.jpg",
+                "56370046_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Ulanzi Cute Lite Mini LED Waterproof Video Light with Case and Accessories",
+        "category": "Electronics",
+        "estimated_market_value": 25,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56370095/Ulanzi-Cute-Light",
+            "title": "Ulanzi Cute Light",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56370095/Ulanzi-Cute-Light",
+            "pics": [
+                "56370095_1.jpg",
+                "56370095_2.jpg",
+                "56370095_3.jpg",
+                "56370095_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Minolta Talker Auto Focus 35mm Film Camera",
+        "category": "Electronics",
+        "estimated_market_value": 25,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56876528/Minolta-Talker-Auto-Focus-35mm-Film-Camera",
+            "title": "Minolta Talker Auto Focus 35mm Film Camera",
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56876528/Minolta-Talker-Auto-Focus-35mm-Film-Camera",
+            "pics": [
+                "56876528_1.jpg",
+                "56876528_2.jpg",
+                "56876528_3.jpg",
+                "56876528_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Sigma LCF-72 III 72mm Lens Cap and LH520-03 Lens Hood",
+        "category": "Electronics",
+        "estimated_market_value": 25,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56877528/Sigma-Camera-Lens-LCF72-III-72mm-with-Hood-LH52003",
+            "title": "Sigma Camera Lens LCF-72 III 72mm with Hood LH520-03",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56877528/Sigma-Camera-Lens-LCF72-III-72mm-with-Hood-LH52003",
+            "pics": [
+                "56877528_1.jpg",
+                "56877528_2.jpg",
+                "56877528_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Vintage Keystone EverFlash XR108 Pocket Film Camera",
+        "category": "Electronics",
+        "estimated_market_value": 25,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56918237/Vintage-Keystone-EverFlash-XR108-Pocket-Film-Camera",
+            "title": "Vintage Keystone EverFlash XR108 Pocket Film Camera",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56918237/Vintage-Keystone-EverFlash-XR108-Pocket-Film-Camera",
+            "pics": [
+                "56918237_1.jpg",
+                "56918237_2.jpg",
+                "56918237_3.jpg",
+                "56918237_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Sima STAR 210T lightweight black camera tripod",
+        "category": "Electronics",
+        "estimated_market_value": 25,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56918704/Sima-ST10T-Tripod",
+            "title": "Sima ST-10T Tripod",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56918704/Sima-ST10T-Tripod",
+            "pics": [
+                "56918704_1.jpg",
+                "56918704_2.jpg",
+                "56918704_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "AmazonBasics Black Camera Backpack Sling Bag with Orange Interior",
+        "category": "Miscellaneous",
+        "estimated_market_value": 25,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56971828/Camera-Bag",
+            "title": "Camera Bag",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56971828/Camera-Bag",
+            "pics": [
+                "56971828_1.jpg",
+                "56971828_2.jpg",
+                "56971828_3.jpg",
+                "56971828_4.jpg",
+                "56971828_5.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Camera Accessories Lot",
+        "category": "Electronics",
+        "estimated_market_value": 25,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56972006/Camera-Accessories-Lot",
+            "title": "Camera Accessories Lot",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56972006/Camera-Accessories-Lot",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Amazon Camera Storage Bag with adjustable dividers",
+        "category": "Miscellaneous",
+        "estimated_market_value": 25,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56972207/Amazon-Camera-Storage-Bag",
+            "title": "Amazon Camera Storage Bag",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56972207/Amazon-Camera-Storage-Bag",
+            "pics": [
+                "56972207_1.jpg",
+                "56972207_2.jpg",
+                "56972207_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Assorted Camera Accessories Lot (Unspecified Brands/Models)",
+        "category": "Electronics",
+        "estimated_market_value": 25,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56977060/Camera-Accessories-Lot",
+            "title": "Camera Accessories Lot",
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56977060/Camera-Accessories-Lot",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Konica Minolta DiMAGE Z10 8x optical zoom digital camera",
+        "category": "Electronics",
+        "estimated_market_value": 20,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56369728/Konica-Minolta-DiMAGE-Z10-Digital-Camera",
+            "title": "Konica Minolta DiMAGE Z10 Digital Camera",
+            "current_bid": "$13.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56369728/Konica-Minolta-DiMAGE-Z10-Digital-Camera",
+            "pics": [
+                "56369728_1.jpg",
+                "56369728_2.jpg",
+                "56369728_3.jpg",
+                "56369728_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Camera Accessories Lot generic",
+        "category": "Electronics",
+        "estimated_market_value": 20,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967731/Camera-Accessories-Lot",
+            "title": "Camera Accessories Lot",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967731/Camera-Accessories-Lot",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Camera Accessories Lot generic",
+        "category": "Electronics",
+        "estimated_market_value": 20,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967803/Camera-Accessories-Lot",
+            "title": "Camera Accessories Lot",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967803/Camera-Accessories-Lot",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Assorted Camera Accessories Lot",
+        "category": "Electronics",
+        "estimated_market_value": 20,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56976904/Camera-Accessories-Lot",
+            "title": "Camera Accessories Lot",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56976904/Camera-Accessories-Lot",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Assorted Camera Accessories Lot",
+        "category": "Electronics",
+        "estimated_market_value": 20,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56976948/Camera-Accessories-Lot",
+            "title": "Camera Accessories Lot",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56976948/Camera-Accessories-Lot",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Unspecified Camera Accessories Lot",
+        "category": "Electronics",
+        "estimated_market_value": 15,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56877436/Camera-Accessories-Lot",
+            "title": "Camera Accessories Lot",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56877436/Camera-Accessories-Lot",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Unspecified Camera Accessories Lot",
+        "category": "Electronics",
+        "estimated_market_value": 15,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56877458/Camera-Accessories-Lot",
+            "title": "Camera Accessories Lot",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56877458/Camera-Accessories-Lot",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Generic Camera Accessories Lot",
+        "category": "Electronics",
+        "estimated_market_value": 15,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56917416/Camera-Accessories-Lot",
+            "title": "Camera Accessories Lot",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56917416/Camera-Accessories-Lot",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Generic Camera Accessories Lot",
+        "category": "Electronics",
+        "estimated_market_value": 15,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56917496/Camera-Accessories-Lot",
+            "title": "Camera Accessories Lot",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56917496/Camera-Accessories-Lot",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Generic Camera Accessories Lot",
+        "category": "Electronics",
+        "estimated_market_value": 15,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56920035/Camera-Accessories-Lot",
+            "title": "Camera Accessories Lot",
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56920035/Camera-Accessories-Lot",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Generic Camera Accessories Lot",
+        "category": "Electronics",
+        "estimated_market_value": 15,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56920062/Camera-Accessories-Lot",
+            "title": "Camera Accessories Lot",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56920062/Camera-Accessories-Lot",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Amazon Basics Lightweight Camera Tripod with Bag",
+        "category": "Electronics",
+        "estimated_market_value": 15,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56920346/Amazon-Basics-Lightweight-Tripod",
+            "title": "Amazon Basics Lightweight Tripod",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56920346/Amazon-Basics-Lightweight-Tripod",
+            "pics": [
+                "56920346_1.jpg",
+                "56920346_2.jpg",
+                "56920346_3.jpg",
+                "56920346_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Generic Camera Accessories Lot",
+        "category": "Electronics",
+        "estimated_market_value": 15,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56971573/Camera-Accessories-Lot",
+            "title": "Camera Accessories Lot",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56971573/Camera-Accessories-Lot",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Ultimaxx Medium Black Camera Shoulder Bag",
+        "category": "Miscellaneous",
+        "estimated_market_value": 15,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56971806/Ultimaxx-Medium-Camera-Bag",
+            "title": "Ultimaxx Medium Camera Bag",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56971806/Ultimaxx-Medium-Camera-Bag",
+            "pics": [
+                "56971806_1.jpg",
+                "56971806_2.jpg",
+                "56971806_3.jpg",
+                "56971806_4.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Camera Accessories Lot",
+        "category": "Electronics",
+        "estimated_market_value": 15,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56972073/Camera-Accessories-Lot",
+            "title": "Camera Accessories Lot",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56972073/Camera-Accessories-Lot",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Generic Blue Brown Camera Duffle Bag Padded Adjustable Compartments",
+        "category": "Electronics",
+        "estimated_market_value": 15,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56972161/CameraDuffle-Bag",
+            "title": "Camera/Duffle Bag",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56972161/CameraDuffle-Bag",
+            "pics": [
+                "56972161_1.jpg",
+                "56972161_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Amazon Basics 50-inch Lightweight Portable Camera Tripod with bag",
+        "category": "Tools/Equipment",
+        "estimated_market_value": 10,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56440716/Amazon-Basics-50-inch-Lighteeight-Portable-Camera-Mount-Tripod",
+            "title": "Amazon Basics 50 inch Lighteeight Portable Camera Mount Tripod",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56440716/Amazon-Basics-50-inch-Lighteeight-Portable-Camera-Mount-Tripod",
+            "pics": [
+                "56440716_1.jpg",
+                "56440716_2.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Unknown brand camera accessories lot",
+        "category": "Electronics",
+        "estimated_market_value": 10,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56877318/Camera-Accessories-Lot",
+            "title": "Camera Accessories Lot",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56877318/Camera-Accessories-Lot",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Generic Camera Accessories Lot",
+        "category": "Electronics",
+        "estimated_market_value": 10,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56877481/Camera-Accessories-Lot",
+            "title": "Camera Accessories Lot",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56877481/Camera-Accessories-Lot",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Generic Camera Accessories Lot",
+        "category": "Electronics",
+        "estimated_market_value": 10,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56877506/Camera-Accessories-Lot",
+            "title": "Camera Accessories Lot",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56877506/Camera-Accessories-Lot",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Generic Camera Strap Assortment",
+        "category": "Electronics",
+        "estimated_market_value": 10,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56920239/Camera-Strap-Assortment",
+            "title": "Camera Strap Assortment",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56920239/Camera-Strap-Assortment",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Camera Accessories Lot (No images available for brand/model identification)",
+        "category": "Electronics",
+        "estimated_market_value": 10,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967635/Camera-Accessories-Lot",
+            "title": "Camera Accessories Lot",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967635/Camera-Accessories-Lot",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Camera Accessories Lot (No images available for brand/model identification)",
+        "category": "Electronics",
+        "estimated_market_value": 10,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56967707/Camera-Accessories-Lot",
+            "title": "Camera Accessories Lot",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56967707/Camera-Accessories-Lot",
+            "pics": []
+        }
+    },
+    {
+        "item_identification": "Assorted Camera Lens Cap Lot",
+        "category": "Electronics",
+        "estimated_market_value": 10,
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56976882/Lens-Cap-Lot",
+            "title": "Lens Cap Lot",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56976882/Lens-Cap-Lot",
+            "pics": []
+        }
+    }
+]
+    </script>
+
+    <script>
+        const jsonData = JSON.parse(document.getElementById('auctionData').textContent);
+        const tableBody = document.getElementById('data-table-body');
+        const headers = document.querySelectorAll('thead th[data-column]');
+        let currentSort = { column: 'price', isAscending: false };
+        function getItemName(item) { if (typeof item.item_identification === 'object' && item.item_identification !== null) { return item.item_identification.item_name || 'N/A'; } return item.item_identification; }
+        function populateTable() { tableBody.innerHTML = ''; jsonData.forEach(item => { const row = document.createElement('tr'); const itemName = getItemName(item); const nameCell = document.createElement('td'); const nameLink = document.createElement('a'); nameLink.href = item.original_listing.url; nameLink.textContent = itemName; nameLink.target = "_blank"; nameCell.appendChild(nameLink); const categoryCell = document.createElement('td'); categoryCell.textContent = item.category || 'Miscellaneous'; const priceCell = document.createElement('td'); priceCell.textContent = (item.estimated_market_value || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }); const linkCell = document.createElement('td'); const searchLink = document.createElement('a'); searchLink.href = `https://www.google.com/search?q=${encodeURIComponent(itemName)}`; searchLink.textContent = 'Search'; searchLink.target = "_blank"; linkCell.appendChild(searchLink); row.appendChild(nameCell); row.appendChild(categoryCell); row.appendChild(priceCell); row.appendChild(linkCell); tableBody.appendChild(row); }); }
+        function sortData(column) { const isNumeric = column === 'price'; if (currentSort.column === column) { currentSort.isAscending = !currentSort.isAscending; } else { currentSort.column = column; currentSort.isAscending = !isNumeric; } jsonData.sort((a, b) => { let valA, valB; if (isNumeric) { valA = a.estimated_market_value || 0; valB = b.estimated_market_value || 0; } else { if (column === 'name') { valA = getItemName(a).toLowerCase(); valB = getItemName(b).toLowerCase(); } else if (column === 'category') { valA = (a.category || '').toLowerCase(); valB = (b.category || '').toLowerCase(); } } let comparison = 0; if (valA > valB) { comparison = 1; } else if (valA < valB) { comparison = -1; } return currentSort.isAscending ? comparison : comparison * -1; }); updateSortIndicators(); populateTable(); }        function updateSortIndicators() { headers.forEach(header => { const indicator = header.querySelector('.sort-indicator'); if (header.dataset.column === currentSort.column) { indicator.textContent = currentSort.isAscending ? ' ▲' : ' ▼'; } else { indicator.textContent = ''; } }); }
+        headers.forEach(header => { header.addEventListener('click', () => { sortData(header.dataset.column); }); });
+        sortData('price');
+    </script>
+</body>
+</html>
