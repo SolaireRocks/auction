@@ -1,0 +1,1808 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Item Analysis</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a; --table-bg-color: #2c2c2c; --header-bg-color: #3a3a3a;
+            --header-hover-bg-color: #4a4a4a; --row-even-bg-color: #333333; --row-odd-bg-color: #2c2c2c;
+            --border-color: #444444; --text-color: #e0e0e0; --link-color: #4a90e2;
+            --link-hover-color: #81b5f5; --sort-indicator-color: #81b5f5;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 2rem; line-height: 1.6; }
+        h1 { text-align: center; color: #ffffff; font-weight: 300; margin-bottom: 2rem; }
+        .table-container { max-width: 1200px; margin: auto; overflow-x: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        table { width: 100%; border-collapse: collapse; background-color: var(--table-bg-color); border-spacing: 0; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        thead th { background-color: var(--header-bg-color); color: #ffffff; font-weight: 600; position: sticky; top: 0; z-index: 10; }
+        thead th[data-column] { cursor: pointer; transition: background-color 0.2s ease-in-out; user-select: none; }
+        thead th[data-column]:hover { background-color: var(--header-hover-bg-color); }
+        tbody tr:nth-child(even) { background-color: var(--row-even-bg-color); }
+        tbody tr:nth-child(odd) { background-color: var(--row-odd-bg-color); }
+        tbody tr:hover { background-color: var(--header-hover-bg-color); }
+        td { font-size: 0.95em; }
+        td:nth-child(3) { font-family: 'Courier New', Courier, monospace; text-align: right; white-space: nowrap; }
+        td:nth-child(4) { text-align: center; }
+        a { color: var(--link-color); text-decoration: none; transition: color 0.2s ease-in-out; }
+        a:hover { color: var(--link-hover-color); text-decoration: underline; }
+        .sort-indicator { color: var(--sort-indicator-color); font-size: 0.8em; margin-left: 8px; display: inline-block; width: 10px; }
+    </style>
+</head>
+<body>
+    <h1>Auction Item Analysis</h1>
+    <div class="table-container"><table><thead><tr><th data-column="name">Item Name <span class="sort-indicator"></span></th><th data-column="category">Category <span class="sort-indicator"></span></th><th data-column="price">Market Value <span class="sort-indicator"></span></th><th>Google Search</th></tr></thead><tbody id="data-table-body"></tbody></table></div>
+    
+    <script type="application/json" id="auctionData">
+        [
+    {
+        "item_identification": "Bill Mack \"Imagination\" bonded bronze relief sculpture AP",
+        "estimated_market_value": 3500,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88288731/ImaginationRelief-Sculpture-by-Bill-Mack2002",
+            "title": "\"Imagination\"-Relief Sculpture by Bill Mack-2002",
+            "current_bid": "$1,001.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88288731/ImaginationRelief-Sculpture-by-Bill-Mack2002",
+            "pics": [
+                "88288731_1.jpg",
+                "88288731_2.jpg",
+                "88288731_3.jpg",
+                "88288731_4.jpg",
+                "88288731_5.jpg",
+                "88288731_6.jpg",
+                "88288731_7.jpg",
+                "88288731_8.jpg",
+                "88288731_9.jpg",
+                "88288731_10.jpg",
+                "88288731_11.jpg",
+                "88288731_12.jpg",
+                "88288731_13.jpg",
+                "88288731_14.jpg",
+                "88288731_15.jpg",
+                "88288731_16.jpg",
+                "88288731_17.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Oversized Italian Venetian Murano etched glass wall mirror with applied glass flowers",
+        "estimated_market_value": 3500,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88578221/Venetian-MirrorHandcraftedMilano-ItalyCustom-Made",
+            "title": "Venetian Mirror-Handcrafted-Milano Italy-Custom Made",
+            "current_bid": "$975.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88578221/Venetian-MirrorHandcraftedMilano-ItalyCustom-Made",
+            "pics": [
+                "88578221_1.jpg",
+                "88578221_2.jpg",
+                "88578221_3.jpg",
+                "88578221_4.jpg",
+                "88578221_5.jpg",
+                "88578221_6.jpg",
+                "88578221_7.jpg",
+                "88578221_8.jpg",
+                "88578221_9.jpg",
+                "88578221_10.jpg",
+                "88578221_11.jpg",
+                "88578221_12.jpg",
+                "88578221_13.jpg",
+                "88578221_14.jpg",
+                "88578221_15.jpg",
+                "88578221_16.jpg",
+                "88578221_17.jpg",
+                "88578221_18.jpg",
+                "88578221_19.jpg",
+                "88578221_20.jpg",
+                "88578221_21.jpg",
+                "88578221_22.jpg",
+                "88578221_23.jpg",
+                "88578221_24.jpg",
+                "88578221_25.jpg",
+                "88578221_26.jpg",
+                "88578221_27.jpg",
+                "88578221_28.jpg",
+                "88578221_29.jpg",
+                "88578221_30.jpg",
+                "88578221_31.jpg",
+                "88578221_32.jpg",
+                "88578221_33.jpg",
+                "88578221_34.jpg",
+                "88578221_35.jpg",
+                "88578221_36.jpg",
+                "88578221_37.jpg",
+                "88578221_38.jpg",
+                "88578221_39.jpg",
+                "88578221_40.jpg",
+                "88578221_41.jpg",
+                "88578221_42.jpg",
+                "88578221_43.jpg",
+                "88578221_44.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Postmodern tessellated fossil stone dining table with oval glass top",
+        "estimated_market_value": 850,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88226887/Modern-Fossil-Stone-Accent-Dinette-Table-With-Chairs",
+            "title": "Modern Fossil Stone Accent Dinette Table With Chairs",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88226887/Modern-Fossil-Stone-Accent-Dinette-Table-With-Chairs",
+            "pics": [
+                "88226887_1.jpg",
+                "88226887_2.jpg",
+                "88226887_3.jpg",
+                "88226887_4.jpg",
+                "88226887_5.jpg",
+                "88226887_6.jpg",
+                "88226887_7.jpg",
+                "88226887_8.jpg",
+                "88226887_9.jpg",
+                "88226887_10.jpg",
+                "88226887_11.jpg",
+                "88226887_12.jpg",
+                "88226887_13.jpg",
+                "88226887_14.jpg",
+                "88226887_15.jpg",
+                "88226887_16.jpg",
+                "88226887_17.jpg",
+                "88226887_18.jpg",
+                "88226887_19.jpg",
+                "88226887_20.jpg",
+                "88226887_21.jpg",
+                "88226887_22.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Ethan Allen traditional curved back damask sofa with skirt",
+        "estimated_market_value": 350,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88287897/Ethan-Allen-Sofa2-Cushion",
+            "title": "Ethan Allen Sofa-2 Cushion",
+            "current_bid": "$45.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88287897/Ethan-Allen-Sofa2-Cushion",
+            "pics": [
+                "88287897_1.jpg",
+                "88287897_2.jpg",
+                "88287897_3.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Tiffany style stained glass flowering lotus floor lamp",
+        "estimated_market_value": 300,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88381389/Floor-LampTiffany-Style-Flowering-Lotus",
+            "title": "Floor Lamp-Tiffany Style -Flowering Lotus",
+            "current_bid": "$75.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88381389/Floor-LampTiffany-Style-Flowering-Lotus",
+            "pics": [
+                "88381389_1.jpg",
+                "88381389_2.jpg",
+                "88381389_3.jpg",
+                "88381389_4.jpg",
+                "88381389_5.jpg",
+                "88381389_6.jpg",
+                "88381389_7.jpg",
+                "88381389_8.jpg",
+                "88381389_9.jpg",
+                "88381389_10.jpg",
+                "88381389_11.jpg",
+                "88381389_12.jpg",
+                "88381389_13.jpg",
+                "88381389_14.jpg",
+                "88381389_15.jpg",
+                "88381389_16.jpg",
+                "88381389_17.jpg",
+                "88381389_18.jpg",
+                "88381389_19.jpg",
+                "88381389_20.jpg",
+                "88381389_21.jpg",
+                "88381389_22.jpg",
+                "88381389_23.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Gray marble top desk with black wrought iron trestle base",
+        "estimated_market_value": 250,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88291080/Marble-Top-Black-TableWrought-Iron-LegsDesk",
+            "title": "Marble Top Black Table-Wrought Iron Legs-Desk",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88291080/Marble-Top-Black-TableWrought-Iron-LegsDesk",
+            "pics": [
+                "88291080_1.jpg",
+                "88291080_2.jpg",
+                "88291080_3.jpg",
+                "88291080_4.jpg",
+                "88291080_5.jpg",
+                "88291080_6.jpg",
+                "88291080_7.jpg",
+                "88291080_8.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Vintage Christian Dior Germany gold tone crystal buckle choker necklace",
+        "estimated_market_value": 250,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88291266/Vintage-Christian-Dior-Crystal-Lock-Gold-Tone-Necklace",
+            "title": "Vintage Christian Dior Crystal Lock -Gold Tone Necklace",
+            "current_bid": "$40.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88291266/Vintage-Christian-Dior-Crystal-Lock-Gold-Tone-Necklace",
+            "pics": [
+                "88291266_1.jpg",
+                "88291266_2.jpg",
+                "88291266_3.jpg",
+                "88291266_4.jpg",
+                "88291266_5.jpg",
+                "88291266_6.jpg",
+                "88291266_7.jpg",
+                "88291266_8.jpg",
+                "88291266_9.jpg",
+                "88291266_10.jpg",
+                "88291266_11.jpg",
+                "88291266_12.jpg",
+                "88291266_13.jpg",
+                "88291266_14.jpg",
+                "88291266_15.jpg",
+                "88291266_16.jpg",
+                "88291266_17.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Universal Furniture Nomad Canyon Oval Accent Table Abaco White",
+        "estimated_market_value": 200,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88289733/Universal-Contemporary-Nomad-Canyo-Oval-Abaco-White-Table",
+            "title": "Universal Contemporary Nomad Canyo Oval Abaco White Table",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88289733/Universal-Contemporary-Nomad-Canyo-Oval-Abaco-White-Table",
+            "pics": [
+                "88289733_1.jpg",
+                "88289733_2.jpg",
+                "88289733_3.jpg",
+                "88289733_4.jpg",
+                "88289733_5.jpg",
+                "88289733_6.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Jim Shore A Star Shall Guide Us Nativity Angel 4003273 Lot",
+        "estimated_market_value": 190,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88291173/Jim-Shore-A-Star-Shall-Guide-Us",
+            "title": "Jim Shore \u201cA Star Shall Guide Us\u201c",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88291173/Jim-Shore-A-Star-Shall-Guide-Us",
+            "pics": [
+                "88291173_1.jpg",
+                "88291173_2.jpg",
+                "88291173_3.jpg",
+                "88291173_4.jpg",
+                "88291173_5.jpg",
+                "88291173_6.jpg",
+                "88291173_7.jpg",
+                "88291173_8.jpg",
+                "88291173_9.jpg",
+                "88291173_10.jpg",
+                "88291173_11.jpg",
+                "88291173_12.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Modern cream upholstered chaise lounge with single arm",
+        "estimated_market_value": 175,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88287614/Chaise-Lounge",
+            "title": "Chaise Lounge",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88287614/Chaise-Lounge",
+            "pics": [
+                "88287614_1.jpg",
+                "88287614_2.jpg",
+                "88287614_3.jpg",
+                "88287614_4.jpg",
+                "88287614_5.jpg",
+                "88287614_6.jpg",
+                "88287614_7.jpg",
+                "88287614_8.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Brighton black scroll brown croc leather wheeled carry on luggage",
+        "estimated_market_value": 140,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88576362/BrightonBlack-Cognac-Brown-Croc-LeatherWheeled-Carry-On",
+            "title": "Brighton-Black & Cognac Brown Croc Leather-Wheeled Carry On",
+            "current_bid": "$62.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88576362/BrightonBlack-Cognac-Brown-Croc-LeatherWheeled-Carry-On",
+            "pics": [
+                "88576362_1.jpg",
+                "88576362_2.jpg",
+                "88576362_3.jpg",
+                "88576362_4.jpg",
+                "88576362_5.jpg",
+                "88576362_6.jpg",
+                "88576362_7.jpg",
+                "88576362_8.jpg",
+                "88576362_9.jpg",
+                "88576362_10.jpg",
+                "88576362_11.jpg",
+                "88576362_12.jpg",
+                "88576362_13.jpg",
+                "88576362_14.jpg",
+                "88576362_15.jpg",
+                "88576362_16.jpg",
+                "88576362_17.jpg",
+                "88576362_18.jpg",
+                "88576362_19.jpg",
+                "88576362_20.jpg",
+                "88576362_21.jpg",
+                "88576362_22.jpg",
+                "88576362_23.jpg",
+                "88576362_24.jpg",
+                "88576362_25.jpg",
+                "88576362_26.jpg",
+                "88576362_27.jpg",
+                "88576362_28.jpg",
+                "88576362_29.jpg",
+                "88576362_30.jpg",
+                "88576362_31.jpg",
+                "88576362_32.jpg",
+                "88576362_33.jpg",
+                "88576362_34.jpg",
+                "88576362_35.jpg",
+                "88576362_36.jpg",
+                "88576362_37.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Jim Shore Christmas Lot Toyland Santa 6006630 Lenox Angel",
+        "estimated_market_value": 125,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88291148/Jim-ShoreOrnaments-Figure-Lenox-Angel",
+            "title": "Jim Shore-Ornaments -Figure -Lenox Angel",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88291148/Jim-ShoreOrnaments-Figure-Lenox-Angel",
+            "pics": [
+                "88291148_1.jpg",
+                "88291148_2.jpg",
+                "88291148_3.jpg",
+                "88291148_4.jpg",
+                "88291148_5.jpg",
+                "88291148_6.jpg",
+                "88291148_7.jpg",
+                "88291148_8.jpg",
+                "88291148_9.jpg",
+                "88291148_10.jpg",
+                "88291148_11.jpg",
+                "88291148_12.jpg",
+                "88291148_13.jpg",
+                "88291148_14.jpg",
+                "88291148_15.jpg",
+                "88291148_16.jpg",
+                "88291148_17.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Christian Dior sterling silver 925 crystal heart cutout pendant",
+        "estimated_market_value": 120,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88291229/Vintage-Sterling-Silver-Christian-Dior-Pendant",
+            "title": "Vintage Sterling Silver Christian Dior Pendant",
+            "current_bid": "$30.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88291229/Vintage-Sterling-Silver-Christian-Dior-Pendant",
+            "pics": [
+                "88291229_1.jpg",
+                "88291229_2.jpg",
+                "88291229_3.jpg",
+                "88291229_4.jpg",
+                "88291229_5.jpg",
+                "88291229_6.jpg",
+                "88291229_7.jpg",
+                "88291229_8.jpg",
+                "88291229_9.jpg",
+                "88291229_10.jpg",
+                "88291229_11.jpg",
+                "88291229_12.jpg",
+                "88291229_13.jpg",
+                "88291229_14.jpg",
+                "88291229_15.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "John Huras blown glass Christmas ornament Santa's Christmas Eve Delivery 2016",
+        "estimated_market_value": 120,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88388897/John-Huras-Blown-Glass-Christmas-Ornament2016",
+            "title": "John Huras- Blown Glass Christmas Ornament-2016",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88388897/John-Huras-Blown-Glass-Christmas-Ornament2016",
+            "pics": [
+                "88388897_1.jpg",
+                "88388897_2.jpg",
+                "88388897_3.jpg",
+                "88388897_4.jpg",
+                "88388897_5.jpg",
+                "88388897_6.jpg",
+                "88388897_7.jpg",
+                "88388897_8.jpg",
+                "88388897_9.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Jim Shore Heartwood Creek Christmas Lot All is Merry And Bright Musical 4044666 Santa Hugging Rudolph 4023443",
+        "estimated_market_value": 110,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88291192/Jim-ShoreAll-is-Merry-BrightJim-Shore-OrnamentSanta-Hugging-Rudolph",
+            "title": "Jim Shore-\"All is Merry & Bright\"-Jim Shore Ornament-Santa Hugging Rudolph",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88291192/Jim-ShoreAll-is-Merry-BrightJim-Shore-OrnamentSanta-Hugging-Rudolph",
+            "pics": [
+                "88291192_1.jpg",
+                "88291192_2.jpg",
+                "88291192_3.jpg",
+                "88291192_4.jpg",
+                "88291192_5.jpg",
+                "88291192_6.jpg",
+                "88291192_7.jpg",
+                "88291192_8.jpg",
+                "88291192_9.jpg",
+                "88291192_10.jpg",
+                "88291192_11.jpg",
+                "88291192_12.jpg",
+                "88291192_13.jpg",
+                "88291192_14.jpg",
+                "88291192_15.jpg",
+                "88291192_16.jpg",
+                "88291192_17.jpg",
+                "88291192_18.jpg",
+                "88291192_19.jpg",
+                "88291192_20.jpg",
+                "88291192_21.jpg",
+                "88291192_22.jpg",
+                "88291192_23.jpg",
+                "88291192_24.jpg",
+                "88291192_25.jpg",
+                "88291192_26.jpg",
+                "88291192_27.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Maui Jim Lighthouse MJ-423-26 polarized sunglasses",
+        "estimated_market_value": 110,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88510867/Maui-Jim-Polarized-Sunglasses-Unisex",
+            "title": "Maui Jim Polarized Sunglasses- Unisex",
+            "current_bid": "$85.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88510867/Maui-Jim-Polarized-Sunglasses-Unisex",
+            "pics": [
+                "88510867_1.jpg",
+                "88510867_2.jpg",
+                "88510867_3.jpg",
+                "88510867_4.jpg",
+                "88510867_5.jpg",
+                "88510867_6.jpg",
+                "88510867_7.jpg",
+                "88510867_8.jpg",
+                "88510867_9.jpg",
+                "88510867_10.jpg",
+                "88510867_11.jpg",
+                "88510867_12.jpg",
+                "88510867_13.jpg",
+                "88510867_14.jpg",
+                "88510867_15.jpg",
+                "88510867_16.jpg",
+                "88510867_17.jpg",
+                "88510867_18.jpg",
+                "88510867_19.jpg",
+                "88510867_20.jpg",
+                "88510867_21.jpg",
+                "88510867_22.jpg",
+                "88510867_23.jpg",
+                "88510867_24.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lenox Sparkle and Scroll ornament set Mikasa Holiday Elegance Madonna figurine",
+        "estimated_market_value": 100,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88380281/Lenox-Ornaments-Mikasa-Modana",
+            "title": "Lenox Ornaments -Mikasa Modana",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88380281/Lenox-Ornaments-Mikasa-Modana",
+            "pics": [
+                "88380281_1.jpg",
+                "88380281_2.jpg",
+                "88380281_3.jpg",
+                "88380281_4.jpg",
+                "88380281_5.jpg",
+                "88380281_6.jpg",
+                "88380281_7.jpg",
+                "88380281_8.jpg",
+                "88380281_9.jpg",
+                "88380281_10.jpg",
+                "88380281_11.jpg",
+                "88380281_12.jpg",
+                "88380281_13.jpg",
+                "88380281_14.jpg",
+                "88380281_15.jpg",
+                "88380281_16.jpg",
+                "88380281_17.jpg",
+                "88380281_18.jpg",
+                "88380281_19.jpg",
+                "88380281_20.jpg",
+                "88380281_21.jpg",
+                "88380281_22.jpg",
+                "88380281_23.jpg",
+                "88380281_24.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Jim Shore Heartwood Creek ornaments lot Wedgwood Holiday Garden Poinsettia",
+        "estimated_market_value": 95,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88379130/Jim-ShoreWedgwoodOrnaments",
+            "title": "Jim Shore-Wedgwood-Ornaments",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88379130/Jim-ShoreWedgwoodOrnaments",
+            "pics": [
+                "88379130_1.jpg",
+                "88379130_2.jpg",
+                "88379130_3.jpg",
+                "88379130_4.jpg",
+                "88379130_5.jpg",
+                "88379130_6.jpg",
+                "88379130_7.jpg",
+                "88379130_8.jpg",
+                "88379130_9.jpg",
+                "88379130_10.jpg",
+                "88379130_11.jpg",
+                "88379130_12.jpg",
+                "88379130_13.jpg",
+                "88379130_14.jpg",
+                "88379130_15.jpg",
+                "88379130_16.jpg",
+                "88379130_17.jpg",
+                "88379130_18.jpg",
+                "88379130_19.jpg",
+                "88379130_20.jpg",
+                "88379130_21.jpg",
+                "88379130_22.jpg",
+                "88379130_23.jpg",
+                "88379130_24.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Mr. Christmas nostalgic ceramic light up ornaments red truck Valerie Parr Hill platter lot",
+        "estimated_market_value": 90,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88387262/Christmas-Decor",
+            "title": "Christmas Decor",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88387262/Christmas-Decor",
+            "pics": [
+                "88387262_1.jpg",
+                "88387262_2.jpg",
+                "88387262_3.jpg",
+                "88387262_4.jpg",
+                "88387262_5.jpg",
+                "88387262_6.jpg",
+                "88387262_7.jpg",
+                "88387262_8.jpg",
+                "88387262_9.jpg",
+                "88387262_10.jpg",
+                "88387262_11.jpg",
+                "88387262_12.jpg",
+                "88387262_13.jpg",
+                "88387262_14.jpg",
+                "88387262_15.jpg",
+                "88387262_16.jpg",
+                "88387262_17.jpg",
+                "88387262_18.jpg",
+                "88387262_19.jpg",
+                "88387262_20.jpg",
+                "88387262_21.jpg",
+                "88387262_22.jpg",
+                "88387262_23.jpg",
+                "88387262_24.jpg",
+                "88387262_25.jpg",
+                "88387262_26.jpg",
+                "88387262_27.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Imperial cultured pearl necklace white and black alternating pearls filigree clasp",
+        "estimated_market_value": 85,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88291286/Cultured-PearlsImperialJosh-BazarMulti-Shades",
+            "title": "Cultured Pearls-Imperial-Josh Bazar-Multi Shades",
+            "current_bid": "$42.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88291286/Cultured-PearlsImperialJosh-BazarMulti-Shades",
+            "pics": [
+                "88291286_1.jpg",
+                "88291286_2.jpg",
+                "88291286_3.jpg",
+                "88291286_4.jpg",
+                "88291286_5.jpg",
+                "88291286_6.jpg",
+                "88291286_7.jpg",
+                "88291286_8.jpg",
+                "88291286_9.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Jim Shore Heartwood Creek Santa with Lighted Star Figurine 6005915",
+        "estimated_market_value": 85,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88350120/Jim-Shore-Santa-with-Christmas-Tree",
+            "title": "Jim Shore- \u201cSanta with Christmas Tree\u201c",
+            "current_bid": "$30.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88350120/Jim-Shore-Santa-with-Christmas-Tree",
+            "pics": [
+                "88350120_1.jpg",
+                "88350120_2.jpg",
+                "88350120_3.jpg",
+                "88350120_4.jpg",
+                "88350120_5.jpg",
+                "88350120_6.jpg",
+                "88350120_7.jpg",
+                "88350120_8.jpg",
+                "88350120_9.jpg",
+                "88350120_10.jpg",
+                "88350120_11.jpg",
+                "88350120_12.jpg",
+                "88350120_13.jpg",
+                "88350120_14.jpg",
+                "88350120_15.jpg",
+                "88350120_16.jpg",
+                "88350120_17.jpg",
+                "88350120_18.jpg",
+                "88350120_19.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Christopher Radko blown glass train ornament Holiday Express Engine 2021",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88389297/Christmas-Ornament-Train",
+            "title": "Christmas Ornament Train",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88389297/Christmas-Ornament-Train",
+            "pics": [
+                "88389297_1.jpg",
+                "88389297_2.jpg",
+                "88389297_3.jpg",
+                "88389297_4.jpg",
+                "88389297_5.jpg",
+                "88389297_6.jpg",
+                "88389297_7.jpg",
+                "88389297_8.jpg",
+                "88389297_9.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Portmeirion Botanic Garden serving ware lot canister butter dish",
+        "estimated_market_value": 75,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88512902/The-Botanic-GardenServing-Ware",
+            "title": "The Botanic Garden-Serving Ware",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88512902/The-Botanic-GardenServing-Ware",
+            "pics": [
+                "88512902_1.jpg",
+                "88512902_2.jpg",
+                "88512902_3.jpg",
+                "88512902_4.jpg",
+                "88512902_5.jpg",
+                "88512902_6.jpg",
+                "88512902_7.jpg",
+                "88512902_8.jpg",
+                "88512902_9.jpg",
+                "88512902_10.jpg",
+                "88512902_11.jpg",
+                "88512902_12.jpg",
+                "88512902_13.jpg",
+                "88512902_14.jpg",
+                "88512902_15.jpg",
+                "88512902_16.jpg",
+                "88512902_17.jpg",
+                "88512902_18.jpg",
+                "88512902_19.jpg",
+                "88512902_20.jpg",
+                "88512902_21.jpg",
+                "88512902_22.jpg",
+                "88512902_23.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 8 Lenox Sparkle and Scroll Silverplate Christmas Ornaments with boxes",
+        "estimated_market_value": 70,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88294463/Lenox-American-by-Design-Ornaments8",
+            "title": "Lenox American by Design -Ornaments-8",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88294463/Lenox-American-by-Design-Ornaments8",
+            "pics": [
+                "88294463_1.jpg",
+                "88294463_2.jpg",
+                "88294463_3.jpg",
+                "88294463_4.jpg",
+                "88294463_5.jpg",
+                "88294463_6.jpg",
+                "88294463_7.jpg",
+                "88294463_8.jpg",
+                "88294463_9.jpg",
+                "88294463_10.jpg",
+                "88294463_11.jpg",
+                "88294463_12.jpg",
+                "88294463_13.jpg",
+                "88294463_14.jpg",
+                "88294463_15.jpg",
+                "88294463_16.jpg",
+                "88294463_17.jpg",
+                "88294463_18.jpg",
+                "88294463_19.jpg",
+                "88294463_20.jpg",
+                "88294463_21.jpg",
+                "88294463_22.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 8 Lenox Sparkle and Scroll Silverplate Christmas Ornaments with boxes",
+        "estimated_market_value": 70,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88295549/Lenox-American-by-Design-Ornaments",
+            "title": "Lenox American by Design Ornaments",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88295549/Lenox-American-by-Design-Ornaments",
+            "pics": [
+                "88295549_1.jpg",
+                "88295549_2.jpg",
+                "88295549_3.jpg",
+                "88295549_4.jpg",
+                "88295549_5.jpg",
+                "88295549_6.jpg",
+                "88295549_7.jpg",
+                "88295549_8.jpg",
+                "88295549_9.jpg",
+                "88295549_10.jpg",
+                "88295549_11.jpg",
+                "88295549_12.jpg",
+                "88295549_13.jpg",
+                "88295549_14.jpg",
+                "88295549_15.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 4 Christopher Radko snowman glass ornaments",
+        "estimated_market_value": 70,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88353074/Christopher-Radko-Ornaments-4",
+            "title": "Christopher Radko Ornaments -4",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88353074/Christopher-Radko-Ornaments-4",
+            "pics": [
+                "88353074_1.jpg",
+                "88353074_2.jpg",
+                "88353074_3.jpg",
+                "88353074_4.jpg",
+                "88353074_5.jpg",
+                "88353074_6.jpg",
+                "88353074_7.jpg",
+                "88353074_8.jpg",
+                "88353074_9.jpg",
+                "88353074_10.jpg",
+                "88353074_11.jpg",
+                "88353074_12.jpg",
+                "88353074_13.jpg",
+                "88353074_14.jpg",
+                "88353074_15.jpg",
+                "88353074_16.jpg",
+                "88353074_17.jpg",
+                "88353074_18.jpg",
+                "88353074_19.jpg",
+                "88353074_20.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Christopher Radko Chubby Cheek Delight and 2003 Dated Ornaments",
+        "estimated_market_value": 70,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88359753/Christopher-Radko-Ornaments-Deer",
+            "title": "Christopher Radko Ornaments- Deer",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88359753/Christopher-Radko-Ornaments-Deer",
+            "pics": [
+                "88359753_1.jpg",
+                "88359753_2.jpg",
+                "88359753_3.jpg",
+                "88359753_4.jpg",
+                "88359753_5.jpg",
+                "88359753_6.jpg",
+                "88359753_7.jpg",
+                "88359753_8.jpg",
+                "88359753_9.jpg",
+                "88359753_10.jpg",
+                "88359753_11.jpg",
+                "88359753_12.jpg",
+                "88359753_13.jpg",
+                "88359753_14.jpg",
+                "88359753_15.jpg",
+                "88359753_16.jpg",
+                "88359753_17.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Temptations by Tara Christmas bakeware mugs lot Lenox Jeweled Charm Ornaments",
+        "estimated_market_value": 70,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88377282/TemptationsServing-Pieces-Lenox-Ornaments",
+            "title": "Temptations-Serving Pieces Lenox Ornaments",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88377282/TemptationsServing-Pieces-Lenox-Ornaments",
+            "pics": [
+                "88377282_1.jpg",
+                "88377282_2.jpg",
+                "88377282_3.jpg",
+                "88377282_4.jpg",
+                "88377282_5.jpg",
+                "88377282_6.jpg",
+                "88377282_7.jpg",
+                "88377282_8.jpg",
+                "88377282_9.jpg",
+                "88377282_10.jpg",
+                "88377282_11.jpg",
+                "88377282_12.jpg",
+                "88377282_13.jpg",
+                "88377282_14.jpg",
+                "88377282_15.jpg",
+                "88377282_16.jpg",
+                "88377282_17.jpg",
+                "88377282_18.jpg",
+                "88377282_19.jpg",
+                "88377282_20.jpg",
+                "88377282_21.jpg",
+                "88377282_22.jpg",
+                "88377282_23.jpg",
+                "88377282_24.jpg",
+                "88377282_25.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 10 Lenox porcelain Christmas ornaments",
+        "estimated_market_value": 70,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88389775/Lenox-Ornaments10",
+            "title": "Lenox Ornaments-10",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88389775/Lenox-Ornaments10",
+            "pics": [
+                "88389775_1.jpg",
+                "88389775_2.jpg",
+                "88389775_3.jpg",
+                "88389775_4.jpg",
+                "88389775_5.jpg",
+                "88389775_6.jpg",
+                "88389775_7.jpg",
+                "88389775_8.jpg",
+                "88389775_9.jpg",
+                "88389775_10.jpg",
+                "88389775_11.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 10 Lenox porcelain Christmas ornaments",
+        "estimated_market_value": 70,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88390403/Lenox-Ornaments10",
+            "title": "Lenox Ornaments-10",
+            "current_bid": "$35.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88390403/Lenox-Ornaments10",
+            "pics": [
+                "88390403_1.jpg",
+                "88390403_2.jpg",
+                "88390403_3.jpg",
+                "88390403_4.jpg",
+                "88390403_5.jpg",
+                "88390403_6.jpg",
+                "88390403_7.jpg",
+                "88390403_8.jpg",
+                "88390403_9.jpg",
+                "88390403_10.jpg",
+                "88390403_11.jpg",
+                "88390403_12.jpg",
+                "88390403_13.jpg",
+                "88390403_14.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 9 Lenox Christmas ornaments Snoopy Mistletoe Park",
+        "estimated_market_value": 70,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88520175/LenoxOrnaments9",
+            "title": "Lenox-Ornaments-9",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88520175/LenoxOrnaments9",
+            "pics": [
+                "88520175_1.jpg",
+                "88520175_2.jpg",
+                "88520175_3.jpg",
+                "88520175_4.jpg",
+                "88520175_5.jpg",
+                "88520175_6.jpg",
+                "88520175_7.jpg",
+                "88520175_8.jpg",
+                "88520175_9.jpg",
+                "88520175_10.jpg",
+                "88520175_11.jpg",
+                "88520175_12.jpg",
+                "88520175_13.jpg",
+                "88520175_14.jpg",
+                "88520175_15.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Jim Shore Lot Memories to Warm Your Heart musical snowman & 6 ornaments",
+        "estimated_market_value": 70,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88521561/Jim-Shore-Memories-to-Warm-Your-Heart-Musical-FigurineOrnaments-6",
+            "title": "Jim Shore \u201cMemories to Warm Your Heart\" Musical Figurine-Ornaments -6",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88521561/Jim-Shore-Memories-to-Warm-Your-Heart-Musical-FigurineOrnaments-6",
+            "pics": [
+                "88521561_1.jpg",
+                "88521561_2.jpg",
+                "88521561_3.jpg",
+                "88521561_4.jpg",
+                "88521561_5.jpg",
+                "88521561_6.jpg",
+                "88521561_7.jpg",
+                "88521561_8.jpg",
+                "88521561_9.jpg",
+                "88521561_10.jpg",
+                "88521561_11.jpg",
+                "88521561_12.jpg",
+                "88521561_13.jpg",
+                "88521561_14.jpg",
+                "88521561_15.jpg",
+                "88521561_16.jpg",
+                "88521561_17.jpg",
+                "88521561_18.jpg",
+                "88521561_19.jpg",
+                "88521561_20.jpg",
+                "88521561_21.jpg",
+                "88521561_22.jpg",
+                "88521561_23.jpg",
+                "88521561_24.jpg",
+                "88521561_25.jpg",
+                "88521561_26.jpg",
+                "88521561_27.jpg",
+                "88521561_28.jpg",
+                "88521561_29.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 6 Jim Shore Christmas Ornaments and Temptations Cardinal Spoon Rest",
+        "estimated_market_value": 70,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88523453/Jim-ShoreOrnamets6-Temptations-Spoon-Holder",
+            "title": "Jim Shore-Ornamets-6 -Temptations Spoon Holder",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88523453/Jim-ShoreOrnamets6-Temptations-Spoon-Holder",
+            "pics": [
+                "88523453_1.jpg",
+                "88523453_2.jpg",
+                "88523453_3.jpg",
+                "88523453_4.jpg",
+                "88523453_5.jpg",
+                "88523453_6.jpg",
+                "88523453_7.jpg",
+                "88523453_8.jpg",
+                "88523453_9.jpg",
+                "88523453_10.jpg",
+                "88523453_11.jpg",
+                "88523453_12.jpg",
+                "88523453_13.jpg",
+                "88523453_14.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Jim Shore Angel Music Box Silent Night Nativity 4006648",
+        "estimated_market_value": 65,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88291127/Jim-Shore-Angel-Music-BoxSilent-Night",
+            "title": "Jim Shore Angel Music Box-Silent Night",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88291127/Jim-Shore-Angel-Music-BoxSilent-Night",
+            "pics": [
+                "88291127_1.jpg",
+                "88291127_2.jpg",
+                "88291127_3.jpg",
+                "88291127_4.jpg",
+                "88291127_5.jpg",
+                "88291127_6.jpg",
+                "88291127_7.jpg",
+                "88291127_8.jpg",
+                "88291127_9.jpg",
+                "88291127_10.jpg",
+                "88291127_11.jpg",
+                "88291127_12.jpg",
+                "88291127_13.jpg",
+                "88291127_14.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Christopher Radko glass snowman ornament and resin toy stand",
+        "estimated_market_value": 65,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88352098/Christopher-Radko-Ornaments",
+            "title": "Christopher Radko Ornaments",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88352098/Christopher-Radko-Ornaments",
+            "pics": [
+                "88352098_1.jpg",
+                "88352098_2.jpg",
+                "88352098_3.jpg",
+                "88352098_4.jpg",
+                "88352098_5.jpg",
+                "88352098_6.jpg",
+                "88352098_7.jpg",
+                "88352098_8.jpg",
+                "88352098_9.jpg",
+                "88352098_10.jpg",
+                "88352098_11.jpg",
+                "88352098_12.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 5 Jim Shore Heartwood Creek Christmas Figurines",
+        "estimated_market_value": 65,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88372353/Jim-ShoreFigurines5",
+            "title": "Jim Shore-Figurines-5",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88372353/Jim-ShoreFigurines5",
+            "pics": [
+                "88372353_1.jpg",
+                "88372353_2.jpg",
+                "88372353_3.jpg",
+                "88372353_4.jpg",
+                "88372353_5.jpg",
+                "88372353_6.jpg",
+                "88372353_7.jpg",
+                "88372353_8.jpg",
+                "88372353_9.jpg",
+                "88372353_10.jpg",
+                "88372353_11.jpg",
+                "88372353_12.jpg",
+                "88372353_13.jpg",
+                "88372353_14.jpg",
+                "88372353_15.jpg",
+                "88372353_16.jpg",
+                "88372353_17.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Portmeirion Botanic Garden teapots and mug lot",
+        "estimated_market_value": 65,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88514368/Portmeirion-Botanic-Garden-ChinaServing-Ware",
+            "title": "Portmeirion Botanic Garden China-Serving Ware",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88514368/Portmeirion-Botanic-Garden-ChinaServing-Ware",
+            "pics": [
+                "88514368_1.jpg",
+                "88514368_2.jpg",
+                "88514368_3.jpg",
+                "88514368_4.jpg",
+                "88514368_5.jpg",
+                "88514368_6.jpg",
+                "88514368_7.jpg",
+                "88514368_8.jpg",
+                "88514368_9.jpg",
+                "88514368_10.jpg",
+                "88514368_11.jpg",
+                "88514368_12.jpg",
+                "88514368_13.jpg",
+                "88514368_14.jpg",
+                "88514368_15.jpg",
+                "88514368_16.jpg",
+                "88514368_17.jpg",
+                "88514368_18.jpg",
+                "88514368_19.jpg",
+                "88514368_20.jpg",
+                "88514368_21.jpg",
+                "88514368_22.jpg",
+                "88514368_23.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Vintage Coach black leather legacy crossbody bag 0278-218",
+        "estimated_market_value": 65,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88519528/Vintage-CoachBlack-Glove-Tanned-LeatherLegacy-Cross-Body",
+            "title": "Vintage Coach-Black Glove Tanned Leather-Legacy Cross Body",
+            "current_bid": "$35.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88519528/Vintage-CoachBlack-Glove-Tanned-LeatherLegacy-Cross-Body",
+            "pics": [
+                "88519528_1.jpg",
+                "88519528_2.jpg",
+                "88519528_3.jpg",
+                "88519528_4.jpg",
+                "88519528_5.jpg",
+                "88519528_6.jpg",
+                "88519528_7.jpg",
+                "88519528_8.jpg",
+                "88519528_9.jpg",
+                "88519528_10.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Imperial Pearls by Josh Bazar multi-color cultured pearl necklace",
+        "estimated_market_value": 65,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88569665/Imperial-PearlsCulturedJosh-BazarMulti-Shades",
+            "title": "Imperial Pearls-Cultured-Josh Bazar-Multi Shades",
+            "current_bid": "$40.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88569665/Imperial-PearlsCulturedJosh-BazarMulti-Shades",
+            "pics": [
+                "88569665_1.jpg",
+                "88569665_2.jpg",
+                "88569665_3.jpg",
+                "88569665_4.jpg",
+                "88569665_5.jpg",
+                "88569665_6.jpg",
+                "88569665_7.jpg",
+                "88569665_8.jpg",
+                "88569665_9.jpg",
+                "88569665_10.jpg",
+                "88569665_11.jpg",
+                "88569665_12.jpg",
+                "88569665_13.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Imperial Pearls by Josh Bazar multi-color cultured pearl necklace sterling silver clasp",
+        "estimated_market_value": 65,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88570803/Imperial-PearlsCulturedJosh-BazarMulti-Shades",
+            "title": "Imperial Pearls-Cultured-Josh Bazar-Multi Shades",
+            "current_bid": "$35.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88570803/Imperial-PearlsCulturedJosh-BazarMulti-Shades",
+            "pics": [
+                "88570803_1.jpg",
+                "88570803_2.jpg",
+                "88570803_3.jpg",
+                "88570803_4.jpg",
+                "88570803_5.jpg",
+                "88570803_6.jpg",
+                "88570803_7.jpg",
+                "88570803_8.jpg",
+                "88570803_9.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Jim Shore Heartwood Creek Angel with Nativity Figurine 6005916",
+        "estimated_market_value": 60,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88291108/Jim-Shore-Angel-with-Nativity",
+            "title": "Jim Shore -Angel with Nativity",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88291108/Jim-Shore-Angel-with-Nativity",
+            "pics": [
+                "88291108_1.jpg",
+                "88291108_2.jpg",
+                "88291108_3.jpg",
+                "88291108_4.jpg",
+                "88291108_5.jpg",
+                "88291108_6.jpg",
+                "88291108_7.jpg",
+                "88291108_8.jpg",
+                "88291108_9.jpg",
+                "88291108_10.jpg",
+                "88291108_11.jpg",
+                "88291108_12.jpg",
+                "88291108_13.jpg",
+                "88291108_14.jpg",
+                "88291108_15.jpg",
+                "88291108_16.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 8 Temptations by Tara 12oz mini loaf pans Holiday and Polka Dot patterns",
+        "estimated_market_value": 60,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88298285/TemptationsBakewareStorage",
+            "title": "Temptations-Bakeware-Storage",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88298285/TemptationsBakewareStorage",
+            "pics": [
+                "88298285_1.jpg",
+                "88298285_2.jpg",
+                "88298285_3.jpg",
+                "88298285_4.jpg",
+                "88298285_5.jpg",
+                "88298285_6.jpg",
+                "88298285_7.jpg",
+                "88298285_8.jpg",
+                "88298285_9.jpg",
+                "88298285_10.jpg",
+                "88298285_11.jpg",
+                "88298285_12.jpg",
+                "88298285_13.jpg",
+                "88298285_14.jpg",
+                "88298285_15.jpg",
+                "88298285_16.jpg",
+                "88298285_17.jpg",
+                "88298285_18.jpg",
+                "88298285_19.jpg",
+                "88298285_20.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 5 Vera Bradley quilted cotton handbags",
+        "estimated_market_value": 60,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88509596/HandbagsVera-Bradley5-Various-Styles",
+            "title": "Handbags-Vera Bradley-5 Various Styles",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88509596/HandbagsVera-Bradley5-Various-Styles",
+            "pics": [
+                "88509596_1.jpg",
+                "88509596_2.jpg",
+                "88509596_3.jpg",
+                "88509596_4.jpg",
+                "88509596_5.jpg",
+                "88509596_6.jpg",
+                "88509596_7.jpg",
+                "88509596_8.jpg",
+                "88509596_9.jpg",
+                "88509596_10.jpg",
+                "88509596_11.jpg",
+                "88509596_12.jpg",
+                "88509596_13.jpg",
+                "88509596_14.jpg",
+                "88509596_15.jpg",
+                "88509596_16.jpg",
+                "88509596_17.jpg",
+                "88509596_18.jpg",
+                "88509596_19.jpg",
+                "88509596_20.jpg",
+                "88509596_21.jpg",
+                "88509596_22.jpg",
+                "88509596_23.jpg",
+                "88509596_24.jpg",
+                "88509596_25.jpg",
+                "88509596_26.jpg",
+                "88509596_27.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Portmeirion Botanic Garden Summer Picnic Teapot and Royal Worcester Evesham corn baker dish",
+        "estimated_market_value": 60,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88519052/Botanic-Garden-Tea-Pot-Royal-Worcester-Evesham-Baker-Dish",
+            "title": "Botanic Garden Tea Pot & Royal Worcester Evesham Baker Dish",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88519052/Botanic-Garden-Tea-Pot-Royal-Worcester-Evesham-Baker-Dish",
+            "pics": [
+                "88519052_1.jpg",
+                "88519052_2.jpg",
+                "88519052_3.jpg",
+                "88519052_4.jpg",
+                "88519052_5.jpg",
+                "88519052_6.jpg",
+                "88519052_7.jpg",
+                "88519052_8.jpg",
+                "88519052_9.jpg",
+                "88519052_10.jpg",
+                "88519052_11.jpg",
+                "88519052_12.jpg",
+                "88519052_13.jpg",
+                "88519052_14.jpg",
+                "88519052_15.jpg",
+                "88519052_16.jpg",
+                "88519052_17.jpg",
+                "88519052_18.jpg",
+                "88519052_19.jpg",
+                "88519052_20.jpg",
+                "88519052_21.jpg",
+                "88519052_22.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Vintage Bally brown leather and canvas shoulder bag",
+        "estimated_market_value": 60,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88568858/Vintage-BagBally-Black-LeatherCanvas",
+            "title": "Vintage Bag-Bally Black Leather-Canvas",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88568858/Vintage-BagBally-Black-LeatherCanvas",
+            "pics": [
+                "88568858_1.jpg",
+                "88568858_2.jpg",
+                "88568858_3.jpg",
+                "88568858_4.jpg",
+                "88568858_5.jpg",
+                "88568858_6.jpg",
+                "88568858_7.jpg",
+                "88568858_8.jpg",
+                "88568858_9.jpg",
+                "88568858_10.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Jim Shore Heartwood Creek Dashing Into the Season Figurine 4006650",
+        "estimated_market_value": 55,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88522594/Jim-Shore-Dashing-into-the-Season-Figurine",
+            "title": "Jim Shore \u201cDashing into the Season\u201c Figurine",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88522594/Jim-Shore-Dashing-into-the-Season-Figurine",
+            "pics": [
+                "88522594_1.jpg",
+                "88522594_2.jpg",
+                "88522594_3.jpg",
+                "88522594_4.jpg",
+                "88522594_5.jpg",
+                "88522594_6.jpg",
+                "88522594_7.jpg",
+                "88522594_8.jpg",
+                "88522594_9.jpg",
+                "88522594_10.jpg",
+                "88522594_11.jpg",
+                "88522594_12.jpg",
+                "88522594_13.jpg",
+                "88522594_14.jpg",
+                "88522594_15.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Firefly Jewelry multi-colored mosaic roulet dangled Swarovski crystal necklace",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88291248/NecklaceFirefly-Multi-Colored-Mosaic-Roulet-DangledSwarovski-Crystal",
+            "title": "Necklace-Firefly Multi Colored Mosaic Roulet Dangled-Swarovski Crystal",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88291248/NecklaceFirefly-Multi-Colored-Mosaic-Roulet-DangledSwarovski-Crystal",
+            "pics": [
+                "88291248_1.jpg",
+                "88291248_2.jpg",
+                "88291248_3.jpg",
+                "88291248_4.jpg",
+                "88291248_5.jpg",
+                "88291248_6.jpg",
+                "88291248_7.jpg",
+                "88291248_8.jpg",
+                "88291248_9.jpg",
+                "88291248_10.jpg",
+                "88291248_11.jpg",
+                "88291248_12.jpg",
+                "88291248_13.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Jim Shore Heartwood Creek Our Savior Is Born Angel Figurine 4017633",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88302508/Jim-Shore-Ange-Our-Savior-is-Born-",
+            "title": "Jim Shore Ange- \u201cOur Savior is Born \u201c",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88302508/Jim-Shore-Ange-Our-Savior-is-Born-",
+            "pics": [
+                "88302508_1.jpg",
+                "88302508_2.jpg",
+                "88302508_3.jpg",
+                "88302508_4.jpg",
+                "88302508_5.jpg",
+                "88302508_6.jpg",
+                "88302508_7.jpg",
+                "88302508_8.jpg",
+                "88302508_9.jpg",
+                "88302508_10.jpg",
+                "88302508_11.jpg",
+                "88302508_12.jpg",
+                "88302508_13.jpg",
+                "88302508_14.jpg",
+                "88302508_15.jpg",
+                "88302508_16.jpg",
+                "88302508_17.jpg",
+                "88302508_18.jpg",
+                "88302508_19.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Pfaltzgraff Winterberry dish and Lenox Bless This Home ornaments",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88356478/Lenox-OrnamentsPfaltzgraff-Dish",
+            "title": "Lenox Ornaments-Pfaltzgraff Dish",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88356478/Lenox-OrnamentsPfaltzgraff-Dish",
+            "pics": [
+                "88356478_1.jpg",
+                "88356478_2.jpg",
+                "88356478_3.jpg",
+                "88356478_4.jpg",
+                "88356478_5.jpg",
+                "88356478_6.jpg",
+                "88356478_7.jpg",
+                "88356478_8.jpg",
+                "88356478_9.jpg",
+                "88356478_10.jpg",
+                "88356478_11.jpg",
+                "88356478_12.jpg",
+                "88356478_13.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Jim Shore dated Santa ornaments 2014 2016 2017",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88371503/Jim-ShoreHoliday-OrnamentSanta3",
+            "title": "Jim Shore-Holiday Ornament-Santa-3",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88371503/Jim-ShoreHoliday-OrnamentSanta3",
+            "pics": [
+                "88371503_1.jpg",
+                "88371503_2.jpg",
+                "88371503_3.jpg",
+                "88371503_4.jpg",
+                "88371503_5.jpg",
+                "88371503_6.jpg",
+                "88371503_7.jpg",
+                "88371503_8.jpg",
+                "88371503_9.jpg",
+                "88371503_10.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Jim Shore Heartwood Creek Christmas Joys Are Ever Sweet Tree 4032480",
+        "estimated_market_value": 50,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88372883/Jim-ShoreHoliday-Decor",
+            "title": "Jim Shore-Holiday Decor",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88372883/Jim-ShoreHoliday-Decor",
+            "pics": [
+                "88372883_1.jpg",
+                "88372883_2.jpg",
+                "88372883_3.jpg",
+                "88372883_4.jpg",
+                "88372883_5.jpg",
+                "88372883_6.jpg",
+                "88372883_7.jpg",
+                "88372883_8.jpg",
+                "88372883_9.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lenox Winter Greetings by Catherine McClung serving dishes",
+        "estimated_market_value": 45,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88354234/LenoxHoliday-Serving-Ware",
+            "title": "Lenox-Holiday Serving Ware",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88354234/LenoxHoliday-Serving-Ware",
+            "pics": [
+                "88354234_1.jpg",
+                "88354234_2.jpg",
+                "88354234_3.jpg",
+                "88354234_4.jpg",
+                "88354234_5.jpg",
+                "88354234_6.jpg",
+                "88354234_7.jpg",
+                "88354234_8.jpg",
+                "88354234_9.jpg",
+                "88354234_10.jpg",
+                "88354234_11.jpg",
+                "88354234_12.jpg",
+                "88354234_13.jpg",
+                "88354234_14.jpg",
+                "88354234_15.jpg",
+                "88354234_16.jpg",
+                "88354234_17.jpg",
+                "88354234_18.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Jim Shore dated Santa ornaments 2020 2021 2023",
+        "estimated_market_value": 45,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88371022/Jim-ShoreHoliday-Ornaments3",
+            "title": "Jim Shore-Holiday Ornaments-3",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88371022/Jim-ShoreHoliday-Ornaments3",
+            "pics": [
+                "88371022_1.jpg",
+                "88371022_2.jpg",
+                "88371022_3.jpg",
+                "88371022_4.jpg",
+                "88371022_5.jpg",
+                "88371022_6.jpg",
+                "88371022_7.jpg",
+                "88371022_8.jpg",
+                "88371022_9.jpg",
+                "88371022_10.jpg",
+                "88371022_11.jpg",
+                "88371022_12.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Jim Shore Sleigh Bells Ring Sleigh 4009195 and Christmas Ornaments",
+        "estimated_market_value": 45,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88375927/Jim-Shore-Sleigh-Ornaments",
+            "title": "Jim Shore- Sleigh -Ornaments",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88375927/Jim-Shore-Sleigh-Ornaments",
+            "pics": [
+                "88375927_1.jpg",
+                "88375927_2.jpg",
+                "88375927_3.jpg",
+                "88375927_4.jpg",
+                "88375927_5.jpg",
+                "88375927_6.jpg",
+                "88375927_7.jpg",
+                "88375927_8.jpg",
+                "88375927_9.jpg",
+                "88375927_10.jpg",
+                "88375927_11.jpg",
+                "88375927_12.jpg",
+                "88375927_13.jpg",
+                "88375927_14.jpg",
+                "88375927_15.jpg",
+                "88375927_16.jpg",
+                "88375927_17.jpg",
+                "88375927_18.jpg",
+                "88375927_19.jpg",
+                "88375927_20.jpg",
+                "88375927_21.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lot of 5 Vera Bradley quilted handbags",
+        "estimated_market_value": 45,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88508074/HandbagsVera-Bradley5-Various-Styles",
+            "title": "Handbags-Vera Bradley-5 Various Styles",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88508074/HandbagsVera-Bradley5-Various-Styles",
+            "pics": [
+                "88508074_1.jpg",
+                "88508074_2.jpg",
+                "88508074_3.jpg",
+                "88508074_4.jpg",
+                "88508074_5.jpg",
+                "88508074_6.jpg",
+                "88508074_7.jpg",
+                "88508074_8.jpg",
+                "88508074_9.jpg",
+                "88508074_10.jpg",
+                "88508074_11.jpg",
+                "88508074_12.jpg",
+                "88508074_13.jpg",
+                "88508074_14.jpg",
+                "88508074_15.jpg",
+                "88508074_16.jpg",
+                "88508074_17.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lenox Winter Greetings Friends and Family Gather Here 12 inch platter",
+        "estimated_market_value": 40,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88299238/Lenox-American-by-Design-Winter-Greetings-Platter",
+            "title": "Lenox American by Design \u201cWinter Greetings\u201c -Platter",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88299238/Lenox-American-by-Design-Winter-Greetings-Platter",
+            "pics": [
+                "88299238_1.jpg",
+                "88299238_2.jpg",
+                "88299238_3.jpg",
+                "88299238_4.jpg",
+                "88299238_5.jpg",
+                "88299238_6.jpg",
+                "88299238_7.jpg",
+                "88299238_8.jpg",
+                "88299238_9.jpg",
+                "88299238_10.jpg",
+                "88299238_11.jpg",
+                "88299238_12.jpg",
+                "88299238_13.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Jim Shore Heartwood Creek Jingle All The Way Sleigh with 6 Ornaments 4031689",
+        "estimated_market_value": 40,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88374746/Jim-Shore-Jingle-All-the-Way-SleighOrnaments6",
+            "title": "Jim Shore -\"Jingle All the Way\" Sleigh-Ornaments-6",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88374746/Jim-Shore-Jingle-All-the-Way-SleighOrnaments6",
+            "pics": [
+                "88374746_1.jpg",
+                "88374746_2.jpg",
+                "88374746_3.jpg",
+                "88374746_4.jpg",
+                "88374746_5.jpg",
+                "88374746_6.jpg",
+                "88374746_7.jpg",
+                "88374746_8.jpg",
+                "88374746_9.jpg",
+                "88374746_10.jpg",
+                "88374746_11.jpg",
+                "88374746_12.jpg",
+                "88374746_13.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Vintage Whiting & Davis black metal mesh shoulder bag",
+        "estimated_market_value": 40,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88515703/Vintage-Whiting-Davis-Co-Black-Metal-Mesh-Zippered-Shoulder-Bag",
+            "title": "Vintage Whiting & Davis Co. Black -Metal Mesh- Zippered Shoulder Bag",
+            "current_bid": "$27.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88515703/Vintage-Whiting-Davis-Co-Black-Metal-Mesh-Zippered-Shoulder-Bag",
+            "pics": [
+                "88515703_1.jpg",
+                "88515703_2.jpg",
+                "88515703_3.jpg",
+                "88515703_4.jpg",
+                "88515703_5.jpg",
+                "88515703_6.jpg",
+                "88515703_7.jpg",
+                "88515703_8.jpg",
+                "88515703_9.jpg",
+                "88515703_10.jpg",
+                "88515703_11.jpg",
+                "88515703_12.jpg",
+                "88515703_13.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Lenox Holiday Gatherings Divided Server SKU 6391197",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88299871/Lenox-Holiday-Gathering-Divided-Server",
+            "title": "Lenox \u201cHoliday Gathering\u201c -Divided Server",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88299871/Lenox-Holiday-Gathering-Divided-Server",
+            "pics": [
+                "88299871_1.jpg",
+                "88299871_2.jpg",
+                "88299871_3.jpg",
+                "88299871_4.jpg",
+                "88299871_5.jpg",
+                "88299871_6.jpg",
+                "88299871_7.jpg",
+                "88299871_8.jpg",
+                "88299871_9.jpg",
+                "88299871_10.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Jim Shore Heartwood Creek Welcome The Prince Of Peace Nativity 4025625",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88373529/Jim-Shore-Welcome-The-Prince-of-Peace",
+            "title": "Jim Shore \u201cWelcome The Prince of Peace\u201c",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88373529/Jim-Shore-Welcome-The-Prince-of-Peace",
+            "pics": [
+                "88373529_1.jpg",
+                "88373529_2.jpg",
+                "88373529_3.jpg",
+                "88373529_4.jpg",
+                "88373529_5.jpg",
+                "88373529_6.jpg",
+                "88373529_7.jpg"
+            ]
+        }
+    },
+    {
+        "item_identification": "Vintage Whiting & Davis ivory metal mesh shoulder bag",
+        "estimated_market_value": 30,
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88515133/Vintage-Whiting-Davis-Co-IvoryMetal-Mesh-Zippered-Shoulder-Bag",
+            "title": "Vintage Whiting & Davis Co. Ivory-Metal Mesh- Zippered Shoulder Bag",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88515133/Vintage-Whiting-Davis-Co-IvoryMetal-Mesh-Zippered-Shoulder-Bag",
+            "pics": [
+                "88515133_1.jpg",
+                "88515133_2.jpg",
+                "88515133_3.jpg",
+                "88515133_4.jpg",
+                "88515133_5.jpg",
+                "88515133_6.jpg",
+                "88515133_7.jpg",
+                "88515133_8.jpg",
+                "88515133_9.jpg",
+                "88515133_10.jpg",
+                "88515133_11.jpg",
+                "88515133_12.jpg",
+                "88515133_13.jpg",
+                "88515133_14.jpg",
+                "88515133_15.jpg",
+                "88515133_16.jpg",
+                "88515133_17.jpg"
+            ]
+        }
+    }
+]
+    </script>
+
+    <script>
+        const jsonData = JSON.parse(document.getElementById('auctionData').textContent);
+        const tableBody = document.getElementById('data-table-body');
+        const headers = document.querySelectorAll('thead th[data-column]');
+        let currentSort = { column: 'price', isAscending: true };
+        function getItemName(item) { if (typeof item.item_identification === 'object' && item.item_identification !== null) { return item.item_identification.item_name || 'N/A'; } return item.item_identification; }
+        function getCategory(itemName) { const name = itemName.toLowerCase(); if (name.includes('furniture') || name.includes('table') || name.includes('desk') || name.includes('cabinet') || name.includes('dresser')) return 'Furniture'; if (name.includes('painting') || name.includes('print') || name.includes('art')) return 'Art/Prints'; if (name.includes('dinnerware') || name.includes('china') || name.includes('porcelain')) return 'Pottery/China'; if (name.includes('mirror') || name.includes('lamp')) return 'Decor/Lighting'; if (name.includes('glassware') || name.includes('crystal')) return 'Glassware'; if (name.includes('blower') || name.includes('tool')) return 'Tools/Equipment'; if (name.includes('toy')) return 'Toys/Games'; if (name.includes('cards')) return 'Collectibles'; return 'Miscellaneous'; }
+        function populateTable() { tableBody.innerHTML = ''; jsonData.forEach(item => { const row = document.createElement('tr'); const itemName = getItemName(item); const nameCell = document.createElement('td'); const nameLink = document.createElement('a'); nameLink.href = item.original_listing.url; nameLink.textContent = itemName; nameLink.target = "_blank"; nameCell.appendChild(nameLink); const categoryCell = document.createElement('td'); categoryCell.textContent = getCategory(itemName); const priceCell = document.createElement('td'); priceCell.textContent = (item.estimated_market_value || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 }); const linkCell = document.createElement('td'); const searchLink = document.createElement('a'); searchLink.href = `https://www.google.com/search?q=${encodeURIComponent(itemName)}`; searchLink.textContent = 'Search'; searchLink.target = "_blank"; linkCell.appendChild(searchLink); row.appendChild(nameCell); row.appendChild(categoryCell); row.appendChild(priceCell); row.appendChild(linkCell); tableBody.appendChild(row); }); }
+        function sortData(column) { const isNumeric = column === 'price'; if (currentSort.column === column) { currentSort.isAscending = !currentSort.isAscending; } else { currentSort.column = column; currentSort.isAscending = !isNumeric; } jsonData.sort((a, b) => { let valA, valB; if (isNumeric) { valA = a.estimated_market_value || 0; valB = b.estimated_market_value || 0; } else { const nameA = getItemName(a); const nameB = getItemName(b); if (column === 'name') { valA = nameA.toLowerCase(); valB = nameB.toLowerCase(); } else if (column === 'category') { valA = getCategory(nameA); valB = getCategory(nameB); } } let comparison = 0; if (valA > valB) { comparison = 1; } else if (valA < valB) { comparison = -1; } return currentSort.isAscending ? comparison : comparison * -1; }); updateSortIndicators(); populateTable(); }
+        function updateSortIndicators() { headers.forEach(header => { const indicator = header.querySelector('.sort-indicator'); if (header.dataset.column === currentSort.column) { indicator.textContent = currentSort.isAscending ? ' ▲' : ' ▼'; } else { indicator.textContent = ''; } }); }
+        headers.forEach(header => { header.addEventListener('click', () => { sortData(header.dataset.column); }); });
+        sortData('price');
+    </script>
+</body>
+</html>
