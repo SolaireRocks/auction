@@ -1,0 +1,2952 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Item Analysis</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a; --table-bg-color: #2c2c2c; --header-bg-color: #3a3a3a;
+            --header-hover-bg-color: #4a4a4a; --row-even-bg-color: #333333; --row-odd-bg-color: #2c2c2c;
+            --border-color: #444444; --text-color: #e0e0e0; --link-color: #4a90e2;
+            --link-hover-color: #81b5f5; --sort-indicator-color: #81b5f5;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 2rem; line-height: 1.6; }
+        h1 { text-align: center; color: #ffffff; font-weight: 300; margin-bottom: 2rem; }
+        .table-container { max-width: 1200px; margin: auto; overflow-x: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        table { width: 100%; border-collapse: collapse; background-color: var(--table-bg-color); border-spacing: 0; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        thead th { background-color: var(--header-bg-color); color: #ffffff; font-weight: 600; position: sticky; top: 0; z-index: 10; }
+        thead th[data-column] { cursor: pointer; transition: background-color 0.2s ease-in-out; user-select: none; }
+        thead th[data-column]:hover { background-color: var(--header-hover-bg-color); }
+        tbody tr:hover { background-color: var(--header-hover-bg-color); }
+        td { font-size: 0.95em; }
+        td:nth-child(4) { font-family: 'Courier New', Courier, monospace; text-align: right; white-space: nowrap; }
+        td:nth-child(5) { text-align: center; }
+        a { color: var(--link-color); text-decoration: none; transition: color 0.2s ease-in-out; }
+        a:hover { color: var(--link-hover-color); text-decoration: underline; }
+        .sort-indicator { color: var(--sort-indicator-color); font-size: 0.8em; margin-left: 8px; display: inline-block; width: 10px; }
+        .lot-main td { font-weight: bold; }
+        .lot-main:nth-child(4n+1), .lot-main:nth-child(4n+2) { background-color: var(--row-odd-bg-color); }
+        .lot-main:nth-child(4n+3), .lot-main:nth-child(4n) { background-color: var(--row-even-bg-color); }
+        .lot-sub-item { background-color: rgba(0,0,0,0.15) !important; }
+        .lot-sub-item td { font-size: 0.9em; color: #c0c0c0; border-color: #383838; }
+        .lot-sub-item td:nth-child(2) { padding-left: 35px; }
+    </style>
+</head>
+<body>
+    <h1>Auction Item Analysis</h1>
+    <div class="table-container"><table><thead><tr><th data-column="lot_number">Lot # <span class="sort-indicator"></span></th><th data-column="name">Item Name <span class="sort-indicator"></span></th><th data-column="category">Category <span class="sort-indicator"></span></th><th data-column="price">Market Value <span class="sort-indicator"></span></th><th>Google Search</th></tr></thead><tbody id="data-table-body"></tbody></table></div>
+
+<script type="application/json" id="auctionData">
+    [
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage G-Plan Astro Oval Coffee Table Teak & Glass Mid Century Modern British MCM",
+        "category": "Furniture",
+        "total_market_value": 650,
+        "items": [
+            {
+                "item_name": "Mid-Century G Plan 'Astro' Oval Teak and Glass Coffee Table",
+                "estimated_value": 650
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88775586/MidCentury-G-Plan-Astro-Oval-Teak-and-Glass-Coffee-Table",
+            "title": "Mid-Century G Plan 'Astro' Oval Teak and Glass Coffee Table",
+            "current_bid": "$240.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88775586/MidCentury-G-Plan-Astro-Oval-Teak-and-Glass-Coffee-Table",
+            "pics": [
+                "887755861.jpg",
+                "887755862.jpg",
+                "887755863.jpg",
+                "887755864.jpg",
+                "887755865.jpg",
+                "887755866.jpg",
+                "887755867.jpg",
+                "887755868.jpg",
+                "887755869.jpg",
+                "8877558610.jpg",
+                "8877558611.jpg",
+                "8877558612.jpg",
+                "8877558613.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "NordicTrack Commercial 1750 Treadmill NTL14119.5 Folding w/ iFit Screen",
+        "category": "Tools/Equipment",
+        "total_market_value": 500,
+        "items": [
+            {
+                "item_name": "NordicTrack Commercial 1750 Treadmill (Model NTL14119.5)",
+                "estimated_value": 500
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88791434/NORDICTRACK-Commercial-1750-Treadmill",
+            "title": "NORDICTRACK Commercial 1750 Treadmill",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88791434/NORDICTRACK-Commercial-1750-Treadmill",
+            "pics": [
+                "887914341.jpg",
+                "887914342.jpg",
+                "887914343.jpg",
+                "887914344.jpg",
+                "887914345.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Mid Century White Furniture Co. Walnut Gentleman's Chest Dresser Armoire",
+        "category": "Furniture",
+        "total_market_value": 450,
+        "items": [
+            {
+                "item_name": "White Furniture Co. Mid-Century Gentleman's Chest",
+                "estimated_value": 450
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88725653/WHITE-FURNITURE-CO-MidCentury-FruitwoodWalnut-Chest",
+            "title": "WHITE FURNITURE CO. Mid-Century Fruitwood/Walnut Chest",
+            "current_bid": "$251.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88725653/WHITE-FURNITURE-CO-MidCentury-FruitwoodWalnut-Chest",
+            "pics": [
+                "887256531.jpg",
+                "887256532.jpg",
+                "887256533.jpg",
+                "887256534.jpg",
+                "887256535.jpg",
+                "887256536.jpg",
+                "887256537.jpg",
+                "887256538.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Pair Vintage Mid Century Modern Step End Tables Mahogany 2-Tiered w/ Brass Feet MCM",
+        "category": "Furniture",
+        "total_market_value": 350,
+        "items": [
+            {
+                "item_name": "Pair of Mid-Century Mahogany Step Tiered End Tables",
+                "estimated_value": 350
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88643129/MidCentury-Mahogany-Step-Tiered-End-Tables",
+            "title": "Mid-Century Mahogany Step Tiered End Tables",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88643129/MidCentury-Mahogany-Step-Tiered-End-Tables",
+            "pics": [
+                "886431291.jpg",
+                "886431292.jpg",
+                "886431293.jpg",
+                "886431294.jpg",
+                "886431295.jpg",
+                "886431296.jpg",
+                "886431297.jpg",
+                "886431298.jpg",
+                "886431299.jpg",
+                "8864312910.jpg",
+                "8864312911.jpg",
+                "8864312912.jpg",
+                "8864312913.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Mid Century Modern Lane Acclaim Dovetail Step End Table 900-07",
+        "category": "Furniture",
+        "total_market_value": 350,
+        "items": [
+            {
+                "item_name": "Mid-Century Lane Acclaim Walnut Step Tiered End Table (Style 900-07)",
+                "estimated_value": 350
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88674587/MidCentury-Lane-Acclaim-Walnut-Step-Tiered-End-Table",
+            "title": "Mid-Century Lane Acclaim Walnut Step Tiered End Table",
+            "current_bid": "$60.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88674587/MidCentury-Lane-Acclaim-Walnut-Step-Tiered-End-Table",
+            "pics": [
+                "886745871.jpg",
+                "886745872.jpg",
+                "886745873.jpg",
+                "886745874.jpg",
+                "886745875.jpg",
+                "886745876.jpg",
+                "886745877.jpg",
+                "886745878.jpg",
+                "886745879.jpg",
+                "8867458710.jpg",
+                "8867458711.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Traditional Double Pedestal Dining Table with Starburst Veneer Top & 2 Leaves",
+        "category": "Furniture",
+        "total_market_value": 250,
+        "items": [
+            {
+                "item_name": "Traditional Double Pedestal Dining Table with 2 Leaves",
+                "estimated_value": 250
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88748099/Double-Pedestal-Dining-Table-wLeaves",
+            "title": "Double Pedestal Dining Table w/Leaves",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88748099/Double-Pedestal-Dining-Table-wLeaves",
+            "pics": [
+                "887480991.jpg",
+                "887480992.jpg",
+                "887480993.jpg",
+                "887480994.jpg",
+                "887480995.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Roundhill Furniture Biony 5-Piece Counter Height Dining Set Table 4 Chairs",
+        "category": "Furniture",
+        "total_market_value": 250,
+        "items": [
+            {
+                "item_name": "Roundhill Biony Counter Height Dining Table",
+                "estimated_value": 100
+            },
+            {
+                "item_name": "Roundhill Biony Upholstered Counter Height Chairs (Set of 4)",
+                "estimated_value": 150
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88791205/Roundhill-Furniture-Biony-Espresso-Wood-5piece-High-Top-Dining-Set",
+            "title": "Roundhill Furniture Biony Espresso Wood 5-piece High Top Dining Set",
+            "current_bid": "$55.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88791205/Roundhill-Furniture-Biony-Espresso-Wood-5piece-High-Top-Dining-Set",
+            "pics": [
+                "887912051.jpg",
+                "887912052.jpg",
+                "887912053.jpg",
+                "887912054.jpg",
+                "887912055.jpg",
+                "887912056.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Royal Doulton 'The Beaufort' H4944 China Dinnerware Set Lot",
+        "category": "Pottery/China",
+        "total_market_value": 200,
+        "items": [
+            {
+                "item_name": "Royal Doulton 'The Beaufort' Oval Serving Platter",
+                "estimated_value": 30
+            },
+            {
+                "item_name": "Royal Doulton 'The Beaufort' Dinner Plates (Service for 8+)",
+                "estimated_value": 60
+            },
+            {
+                "item_name": "Royal Doulton 'The Beaufort' Salad Plates (Service for 8+)",
+                "estimated_value": 40
+            },
+            {
+                "item_name": "Royal Doulton 'The Beaufort' Cream Soup Bowls & Saucers (Service for 8+)",
+                "estimated_value": 40
+            },
+            {
+                "item_name": "Royal Doulton 'The Beaufort' Teacups & Saucers (Service for 8+)",
+                "estimated_value": 30
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88720910/ROYAL-DOULTON-The-Beaufort-China-Set",
+            "title": "ROYAL DOULTON 'The Beaufort' China Set",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88720910/ROYAL-DOULTON-The-Beaufort-China-Set",
+            "pics": [
+                "887209101.jpg",
+                "887209102.jpg",
+                "887209103.jpg",
+                "887209104.jpg",
+                "887209105.jpg",
+                "887209106.jpg",
+                "887209107.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Mid-Century White Furniture Co Walnut 9-Drawer Dresser with Mirror",
+        "category": "Furniture",
+        "total_market_value": 200,
+        "items": [
+            {
+                "item_name": "Vintage White Furniture Co. 9-Drawer Dresser",
+                "estimated_value": 150
+            },
+            {
+                "item_name": "Matching Framed Wall Mirror for White Furniture Co. Dresser",
+                "estimated_value": 50
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88744367/WHITE-FURNITURE-CO-MidCentury-FruitwoodWalnut-Dresser",
+            "title": "WHITE FURNITURE CO. Mid-Century Fruitwood/Walnut Dresser",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88744367/WHITE-FURNITURE-CO-MidCentury-FruitwoodWalnut-Dresser",
+            "pics": [
+                "887443671.jpg",
+                "887443672.jpg",
+                "887443673.jpg",
+                "887443674.jpg",
+                "887443675.jpg",
+                "887443676.jpg",
+                "887443677.jpg",
+                "887443678.jpg",
+                "887443679.jpg",
+                "8874436710.jpg",
+                "8874436711.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage 1990 Ned Moulton Framed Triptych Art Print Plexiglass 80s Deco Style",
+        "category": "Art/Prints",
+        "total_market_value": 200,
+        "items": [
+            {
+                "item_name": "Ned Moulton Signed Triptych Plexiglass Art Print (1990)",
+                "estimated_value": 200
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88792937/NED-MOULTON-3Piece-Plexiglass-Art",
+            "title": "NED MOULTON 3-Piece Plexiglass Art",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88792937/NED-MOULTON-3Piece-Plexiglass-Art",
+            "pics": [
+                "887929371.jpg",
+                "887929372.jpg",
+                "887929373.jpg",
+                "887929374.jpg",
+                "887929375.jpg",
+                "887929376.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "LG 50UP7000PUA 50\" Class 4K Smart UHD LED TV (2021 Model) with Remote & Mount",
+        "category": "Electronics",
+        "total_market_value": 180,
+        "items": [
+            {
+                "item_name": "LG 50UP7000PUA 50-inch 4K Smart TV with remote and wall mount",
+                "estimated_value": 180
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88724253/LG-UHD-70-Series-50-inch-Class-4K-Smart-UHD-TV",
+            "title": "LG UHD 70 Series 50 inch Class 4K Smart UHD TV",
+            "current_bid": "$57.32",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88724253/LG-UHD-70-Series-50-inch-Class-4K-Smart-UHD-TV",
+            "pics": [
+                "887242531.jpg",
+                "887242532.jpg",
+                "887242533.jpg",
+                "887242534.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "World Market Sourav Collection 3-Piece Table Set Coffee & 2 End Tables",
+        "category": "Furniture",
+        "total_market_value": 180,
+        "items": [
+            {
+                "item_name": "World Market Sourav Collection Coffee Table",
+                "estimated_value": 80
+            },
+            {
+                "item_name": "World Market Sourav Collection Matching End Tables (Pair)",
+                "estimated_value": 100
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88749289/WORLD-MARKET-Sourav-Collection-Table-Set",
+            "title": "WORLD MARKET Sourav Collection Table Set",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88749289/WORLD-MARKET-Sourav-Collection-Table-Set",
+            "pics": [
+                "887492891.jpg",
+                "887492892.jpg",
+                "887492893.jpg",
+                "887492894.jpg",
+                "887492895.jpg",
+                "887492896.jpg",
+                "887492897.jpg",
+                "887492898.jpg",
+                "887492899.jpg",
+                "8874928910.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Pier 1 Imports Pyramid Lingerie Chest Tall 9-Drawer Dresser Wood Apothecary Style",
+        "category": "Furniture",
+        "total_market_value": 175,
+        "items": [
+            {
+                "item_name": "Pier 1 Imports Pyramid Chest of Drawers",
+                "estimated_value": 175
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88723808/PIER-1-IMPORTS-Pyramid-Chest-of-Drawers",
+            "title": "PIER 1 IMPORTS Pyramid Chest of Drawers",
+            "current_bid": "$81.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88723808/PIER-1-IMPORTS-Pyramid-Chest-of-Drawers",
+            "pics": [
+                "887238081.jpg",
+                "887238082.jpg",
+                "887238083.jpg",
+                "887238084.jpg",
+                "887238085.jpg",
+                "887238086.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "LG XBOOM CM8350 1000W Hi-Fi Shelf System Bluetooth DJ Party Speaker Karaoke",
+        "category": "Electronics",
+        "total_market_value": 175,
+        "items": [
+            {
+                "item_name": "LG XBOOM CM8350 1000W Hi-Fi Entertainment System",
+                "estimated_value": 175
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88726353/LG-1000W-HiFi-Entertainment-System-with-Karaoke-Functionality",
+            "title": "LG 1000W Hi-Fi Entertainment System with Karaoke Functionality",
+            "current_bid": "$80.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88726353/LG-1000W-HiFi-Entertainment-System-with-Karaoke-Functionality",
+            "pics": [
+                "887263531.jpg",
+                "887263532.jpg",
+                "887263533.jpg",
+                "887263534.jpg",
+                "887263535.jpg",
+                "887263536.jpg",
+                "887263537.jpg",
+                "887263538.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Contemporary Modern 7-Drawer Dresser Dark Wood Finish with Metal Trim",
+        "category": "Furniture",
+        "total_market_value": 175,
+        "items": [
+            {
+                "item_name": "Contemporary 7-Drawer Dresser with Metal Trim",
+                "estimated_value": 175
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88781876/Contemporary-7Drawer-Dresser",
+            "title": "Contemporary 7-Drawer Dresser",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88781876/Contemporary-7Drawer-Dresser",
+            "pics": [
+                "887818761.jpg",
+                "887818762.jpg",
+                "887818763.jpg",
+                "887818764.jpg",
+                "887818765.jpg",
+                "887818766.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Lot of 10+ Modern Square Matte Black Interior Door Handle Lever Sets",
+        "category": "Tools/Equipment",
+        "total_market_value": 165,
+        "items": [
+            {
+                "item_name": "Lot of 11 Modern Matte Black Door Lever Sets",
+                "estimated_value": 165
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88727542/Door-Handle-Lever-Lot",
+            "title": "Door Handle Lever Lot",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88727542/Door-Handle-Lever-Lot",
+            "pics": [
+                "887275421.jpg",
+                "887275422.jpg",
+                "887275423.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Lot of 3 Vintage Aluminum Webbed Folding Lawn Chairs Patio Wood Armrests",
+        "category": "Furniture",
+        "total_market_value": 150,
+        "items": [
+            {
+                "item_name": "Vintage Aluminum Webbed Folding Lawn Chair (All White)",
+                "estimated_value": 50
+            },
+            {
+                "item_name": "Vintage Aluminum Webbed Folding Lawn Chair (White/Green)",
+                "estimated_value": 50
+            },
+            {
+                "item_name": "Vintage Aluminum Webbed Folding Lawn Chair (White/Gold)",
+                "estimated_value": 50
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88746332/Folding-Lawn-Chairs",
+            "title": "Folding Lawn Chairs",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88746332/Folding-Lawn-Chairs",
+            "pics": [
+                "887463321.jpg",
+                "887463322.jpg",
+                "887463323.jpg",
+                "887463324.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "La-Z-Boy 3-Seater Dual Reclining Sofa Couch Tan Microfiber",
+        "category": "Furniture",
+        "total_market_value": 150,
+        "items": [
+            {
+                "item_name": "La-Z-Boy 3-Seater Reclining Sofa in Tan Microfiber",
+                "estimated_value": 150
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88782866/LAZBOY-Reclining-Sofa",
+            "title": "LA-Z-BOY Reclining Sofa",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88782866/LAZBOY-Reclining-Sofa",
+            "pics": [
+                "887828661.jpg",
+                "887828662.jpg",
+                "887828663.jpg",
+                "887828664.jpg",
+                "887828665.jpg",
+                "887828666.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Lot of 5 Vintage German White Bisque Porcelain Vases Hutschenreuther Rosenthal Kaiser",
+        "category": "Pottery/China",
+        "total_market_value": 140,
+        "items": [
+            {
+                "item_name": "Hutschenreuther Tirschenreuth Bisque Porcelain Vase (Wood Grain)",
+                "estimated_value": 25
+            },
+            {
+                "item_name": "Kaiser Germany Bisque Porcelain Bud Vase (Roses)",
+                "estimated_value": 20
+            },
+            {
+                "item_name": "Rosenthal Studio-Linie Bisque Vase (Floral)",
+                "estimated_value": 30
+            },
+            {
+                "item_name": "Kaiser Germany Bisque Porcelain Vase #1292 (Grapes)",
+                "estimated_value": 35
+            },
+            {
+                "item_name": "Hutschenreuther Bisque Porcelain Vase (Swirl)",
+                "estimated_value": 30
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88728055/HUTSCHENREUTHER-ROSENTHAL-KAISER-Pottery-Lot",
+            "title": "HUTSCHENREUTHER / ROSENTHAL / KAISER Pottery Lot",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88728055/HUTSCHENREUTHER-ROSENTHAL-KAISER-Pottery-Lot",
+            "pics": [
+                "887280551.jpg",
+                "887280552.jpg",
+                "887280553.jpg",
+                "887280554.jpg",
+                "887280555.jpg",
+                "887280556.jpg",
+                "887280557.jpg",
+                "887280558.jpg",
+                "887280559.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Pampered Chef New Old Stock Kitchenware Lot Stoneware Baker Cookie Press Carafe",
+        "category": "Miscellaneous",
+        "total_market_value": 130,
+        "items": [
+            {
+                "item_name": "Pampered Chef Red Square Stoneware Bakers (Set of 2)",
+                "estimated_value": 40
+            },
+            {
+                "item_name": "Pampered Chef Stainless Steel Insulated Carafe",
+                "estimated_value": 25
+            },
+            {
+                "item_name": "Pampered Chef Cookie Press #1525",
+                "estimated_value": 15
+            },
+            {
+                "item_name": "Pampered Chef Heart Shaped Bread Tube",
+                "estimated_value": 15
+            },
+            {
+                "item_name": "Pampered Chef BBQ Grill Basket",
+                "estimated_value": 15
+            },
+            {
+                "item_name": "Pampered Chef Small Bowl Caddy",
+                "estimated_value": 10
+            },
+            {
+                "item_name": "Pampered Chef Easy Accent Decorator",
+                "estimated_value": 10
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88591211/Pampered-Chef-Kitchenware-Lot",
+            "title": "Pampered Chef Kitchenware Lot",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88591211/Pampered-Chef-Kitchenware-Lot",
+            "pics": [
+                "885912111.jpg",
+                "885912112.jpg",
+                "885912113.jpg",
+                "885912114.jpg",
+                "885912115.jpg",
+                "885912116.jpg",
+                "885912117.jpg",
+                "885912118.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Lot of 5 Signed R.M. YATES Etched Art Glass Sculptures Paperweights",
+        "category": "Glassware",
+        "total_market_value": 130,
+        "items": [
+            {
+                "item_name": "R.M. Yates Etched Glass Wolf Sculpture 'Prince'",
+                "estimated_value": 40
+            },
+            {
+                "item_name": "R.M. Yates Etched Glass Deer 'Merry Christmas' Sculpture",
+                "estimated_value": 25
+            },
+            {
+                "item_name": "R.M. Yates Etched Glass 'America's Cup' Ship Sculpture",
+                "estimated_value": 25
+            },
+            {
+                "item_name": "R.M. Yates Etched Glass Hunting Dog Sculpture",
+                "estimated_value": 20
+            },
+            {
+                "item_name": "R.M. Yates Etched Glass Owl Sculpture",
+                "estimated_value": 20
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88777037/5-RM-YATES-Etched-Art-Glass-Sculptures",
+            "title": "5 R.M. YATES Etched Art Glass Sculptures",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88777037/5-RM-YATES-Etched-Art-Glass-Sculptures",
+            "pics": [
+                "887770371.jpg",
+                "887770372.jpg",
+                "887770373.jpg",
+                "887770374.jpg",
+                "887770375.jpg",
+                "887770376.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Mid-Century Pearl-Wick Gentleman's Butler Valet Chair w/ Storage",
+        "category": "Furniture",
+        "total_market_value": 125,
+        "items": [
+            {
+                "item_name": "Mid-Century Pearl-Wick Gentleman's Butler Valet Chair",
+                "estimated_value": 125
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88750892/MidCentury-PearlWick-Gentlemans-Butler-Valet-Chair",
+            "title": "Mid-Century Pearl-Wick Gentleman's Butler Valet Chair",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88750892/MidCentury-PearlWick-Gentlemans-Butler-Valet-Chair",
+            "pics": [
+                "887508921.jpg",
+                "887508922.jpg",
+                "887508923.jpg",
+                "887508924.jpg",
+                "887508925.jpg",
+                "887508926.jpg",
+                "887508927.jpg",
+                "887508928.jpg",
+                "887508929.jpg",
+                "8875089210.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Antique Flat Top Steamer Trunk Wood Slats Metal Hardware Storage Chest",
+        "category": "Furniture",
+        "total_market_value": 125,
+        "items": [
+            {
+                "item_name": "Antique Flat Top Steamer Trunk with Decorative Fruit Pattern Interior",
+                "estimated_value": 125
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88780128/Vintage-Storage-Trunk",
+            "title": "Vintage Storage Trunk",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88780128/Vintage-Storage-Trunk",
+            "pics": [
+                "887801281.jpg",
+                "887801282.jpg",
+                "887801283.jpg",
+                "887801284.jpg",
+                "887801285.jpg",
+                "887801286.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Imperial Glass Ruby Red Slag Glass Lot Pitchers Mug Candy Dish Basket",
+        "category": "Glassware",
+        "total_market_value": 120,
+        "items": [
+            {
+                "item_name": "Imperial Ruby Slag Glass Pitchers (2)",
+                "estimated_value": 40
+            },
+            {
+                "item_name": "Imperial Ruby Slag Glass Covered Candy Dish",
+                "estimated_value": 20
+            },
+            {
+                "item_name": "Imperial Ruby Slag Glass Handled Basket",
+                "estimated_value": 15
+            },
+            {
+                "item_name": "Imperial Ruby Slag Glass Mug",
+                "estimated_value": 15
+            },
+            {
+                "item_name": "Imperial Ruby Slag Glass Horn of Plenty Vase",
+                "estimated_value": 12
+            },
+            {
+                "item_name": "Imperial Ruby Slag Glass Heart Shaped Dish",
+                "estimated_value": 10
+            },
+            {
+                "item_name": "Imperial Ruby Slag Glass Footed Bowl",
+                "estimated_value": 8
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88486873/IMPERIAL-Ruby-Red-Slag-Glass-Lot",
+            "title": "IMPERIAL Ruby Red Slag Glass Lot",
+            "current_bid": "$30.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88486873/IMPERIAL-Ruby-Red-Slag-Glass-Lot",
+            "pics": [
+                "884868731.jpg",
+                "884868732.jpg",
+                "884868733.jpg",
+                "884868734.jpg",
+                "884868735.jpg",
+                "884868736.jpg",
+                "884868737.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Large Bulk Lot Vintage Vinyl LP Records Rock Pop Soundtracks Dylan McCartney",
+        "category": "Collectibles",
+        "total_market_value": 120,
+        "items": [
+            {
+                "item_name": "Large box of assorted vintage vinyl LP records (approx. 60 count)",
+                "estimated_value": 120
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88595903/Vintage-Record-Albums",
+            "title": "Vintage Record Albums",
+            "current_bid": "$50.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88595903/Vintage-Record-Albums",
+            "pics": [
+                "885959031.jpg",
+                "885959032.jpg",
+                "885959033.jpg",
+                "885959034.jpg",
+                "885959035.jpg",
+                "885959036.jpg",
+                "885959037.jpg",
+                "885959038.jpg",
+                "885959039.jpg",
+                "8859590310.jpg",
+                "8859590311.jpg",
+                "8859590312.jpg",
+                "8859590313.jpg",
+                "8859590314.jpg",
+                "8859590315.jpg",
+                "8859590316.jpg",
+                "8859590317.jpg",
+                "8859590318.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage 1960s Skil-Craft World of Science Micro-Chemistry Lab Kit No. B-300",
+        "category": "Toys/Games",
+        "total_market_value": 120,
+        "items": [
+            {
+                "item_name": "Vintage Skil-Craft World of Science Combination Micro-Chemistry Lab Kit No. B-300",
+                "estimated_value": 120
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88727148/SKILCRAFT-World-of-Science-MicroChemistry-Lab-Kit",
+            "title": "SKILCRAFT World of Science Micro-Chemistry Lab Kit",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88727148/SKILCRAFT-World-of-Science-MicroChemistry-Lab-Kit",
+            "pics": [
+                "887271481.jpg",
+                "887271482.jpg",
+                "887271483.jpg",
+                "887271484.jpg",
+                "887271485.jpg",
+                "887271486.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Modern Queen Size Bed Frame Dark Wood w/ Upholstered Fabric Headboard",
+        "category": "Furniture",
+        "total_market_value": 120,
+        "items": [
+            {
+                "item_name": "Queen Size Upholstered Panel Bed Frame (Headboard, Footboard, Rails)",
+                "estimated_value": 120
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88777742/Queen-Size-Fabric-Panel-Bed",
+            "title": "Queen Size Fabric Panel Bed",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88777742/Queen-Size-Fabric-Panel-Bed",
+            "pics": [
+                "887777421.jpg",
+                "887777422.jpg",
+                "887777423.jpg",
+                "887777424.jpg",
+                "887777425.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Longaberger Baskets Pottery Lot Casserole Dish Star Bowls Patriotic Plate",
+        "category": "Pottery/China",
+        "total_market_value": 110,
+        "items": [
+            {
+                "item_name": "Longaberger Woven Traditions Square Casserole Dish with Lid & Basket",
+                "estimated_value": 35
+            },
+            {
+                "item_name": "Longaberger Set of 3 Patriotic Star Shaped Bowls",
+                "estimated_value": 20
+            },
+            {
+                "item_name": "Longaberger Patriotic Star Shaped Basket with Protector",
+                "estimated_value": 15
+            },
+            {
+                "item_name": "Longaberger Small Round Patriotic Basket with Lid",
+                "estimated_value": 15
+            },
+            {
+                "item_name": "Longaberger Classic Market Basket",
+                "estimated_value": 15
+            },
+            {
+                "item_name": "Longaberger Woven Traditions Patriotic Plate",
+                "estimated_value": 10
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88590613/Longaberger-Lot",
+            "title": "Longaberger Lot",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88590613/Longaberger-Lot",
+            "pics": [
+                "885906131.jpg",
+                "885906132.jpg",
+                "885906133.jpg",
+                "885906134.jpg",
+                "885906135.jpg",
+                "885906136.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Fenton & Northwood Blue Opalescent Glass Lot Basket Compote Goblet Cruet",
+        "category": "Glassware",
+        "total_market_value": 105,
+        "items": [
+            {
+                "item_name": "Fenton Blue Opalescent Hobnail Ruffled Basket",
+                "estimated_value": 30
+            },
+            {
+                "item_name": "Northwood Blue Opalescent 'Peacocks at the Fountain' Ruffled Compote",
+                "estimated_value": 35
+            },
+            {
+                "item_name": "Fenton Blue Opalescent Hobnail Goblet",
+                "estimated_value": 15
+            },
+            {
+                "item_name": "Blue Opalescent Coin Spot Syrup Pitcher with Metal Lid",
+                "estimated_value": 25
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88484348/FENTON-NORTHWOOD-Blue-Glassware-Lot",
+            "title": "FENTON / NORTHWOOD Blue Glassware Lot",
+            "current_bid": "$30.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88484348/FENTON-NORTHWOOD-Blue-Glassware-Lot",
+            "pics": [
+                "884843481.jpg",
+                "884843482.jpg",
+                "884843483.jpg",
+                "884843484.jpg",
+                "884843485.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Blue Art Glass Lot of 8 Fenton Westmoreland Bell Bird Boot Swan",
+        "category": "Glassware",
+        "total_market_value": 105,
+        "items": [
+            {
+                "item_name": "Fenton Art Glass Blue Bird Figurine",
+                "estimated_value": 18
+            },
+            {
+                "item_name": "Westmoreland Blue Daisy & Button Large Bell",
+                "estimated_value": 15
+            },
+            {
+                "item_name": "Fenton Blue Satin Hand Painted Floral Basket",
+                "estimated_value": 15
+            },
+            {
+                "item_name": "Fenton Blue Hobnail Swan Dish",
+                "estimated_value": 15
+            },
+            {
+                "item_name": "Fenton Blue Hobnail Bell",
+                "estimated_value": 12
+            },
+            {
+                "item_name": "Blue Crackle Glass Rose Bowl Vase",
+                "estimated_value": 12
+            },
+            {
+                "item_name": "L.E. Smith Moon & Stars Blue Toothpick Holder",
+                "estimated_value": 10
+            },
+            {
+                "item_name": "Avon Blue Daisy & Button Boot Perfume Bottle",
+                "estimated_value": 8
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88486313/Vintage-Fenton-Westmoreland-Blue-Glassware-Lot",
+            "title": "Vintage Fenton / Westmoreland Blue Glassware Lot",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88486313/Vintage-Fenton-Westmoreland-Blue-Glassware-Lot",
+            "pics": [
+                "884863131.jpg",
+                "884863132.jpg",
+                "884863133.jpg",
+                "884863134.jpg",
+                "884863135.jpg",
+                "884863136.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Lot of 2 Hardside Spinner Suitcases Ricardo Beverly Hills + Wood Luggage Rack",
+        "category": "Miscellaneous",
+        "total_market_value": 105,
+        "items": [
+            {
+                "item_name": "Ricardo Beverly Hills Blue Hardside Spinner Suitcase",
+                "estimated_value": 50
+            },
+            {
+                "item_name": "Generic Black Hardside Spinner Carry-On Suitcase",
+                "estimated_value": 30
+            },
+            {
+                "item_name": "Folding Wood Luggage Rack Stand",
+                "estimated_value": 25
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88793769/Luggage-wStand",
+            "title": "Luggage w/Stand",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88793769/Luggage-wStand",
+            "pics": [
+                "887937691.jpg",
+                "887937692.jpg",
+                "887937693.jpg",
+                "887937694.jpg",
+                "887937695.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Glass Lot Indiana Carnival Bowl Fostoria Tumblers Purple Decanter",
+        "category": "Glassware",
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "Indiana Glass Marigold Carnival Glass Bowl Grape Pattern",
+                "estimated_value": 25
+            },
+            {
+                "item_name": "Vintage Purple & White Swirl Art Glass Decanter",
+                "estimated_value": 35
+            },
+            {
+                "item_name": "Set of 6 Fostoria American Clear Cubist Tumblers",
+                "estimated_value": 35
+            },
+            {
+                "item_name": "Iridescent Teardrop Art Glass Ornament",
+                "estimated_value": 5
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88482902/Vintage-Glassware-Lot",
+            "title": "Vintage Glassware Lot",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88482902/Vintage-Glassware-Lot",
+            "pics": [
+                "884829021.jpg",
+                "884829022.jpg",
+                "884829023.jpg",
+                "884829024.jpg",
+                "884829025.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Stangl Pottery Double Hummingbird Figurine #3583 Birds of America",
+        "category": "Pottery/China",
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "Stangl Pottery Double Hummingbird Figurine #3583",
+                "estimated_value": 100
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88483273/STANGL-Pottery-Double-Hummingbird-Figurine",
+            "title": "STANGL Pottery Double Hummingbird Figurine",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88483273/STANGL-Pottery-Double-Hummingbird-Figurine",
+            "pics": [
+                "884832731.jpg",
+                "884832732.jpg",
+                "884832733.jpg",
+                "884832734.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Pottery Lot Stangl Birds, Niloak, Royal Tara Vases & Polished Stone Eggs",
+        "category": "Pottery/China",
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "Pair of Vintage Stangl Pottery Bird of Paradise Figurines #3403",
+                "estimated_value": 45
+            },
+            {
+                "item_name": "Niloak Pottery Tan Vase",
+                "estimated_value": 15
+            },
+            {
+                "item_name": "Royal Tara Fine Bone China Vase Handpainted in Ireland",
+                "estimated_value": 12
+            },
+            {
+                "item_name": "Blue & Cream Drip Glaze Art Pottery Vase",
+                "estimated_value": 10
+            },
+            {
+                "item_name": "Purple Matte Glaze Two-Handled Vase",
+                "estimated_value": 10
+            },
+            {
+                "item_name": "Set of 3 Polished Stone/Marble Decorative Eggs",
+                "estimated_value": 8
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88592389/Artisan-Pottery-STANGL-Bird-Figurines",
+            "title": "Artisan Pottery / STANGL Bird Figurines",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88592389/Artisan-Pottery-STANGL-Bird-Figurines",
+            "pics": [
+                "885923891.jpg",
+                "885923892.jpg",
+                "885923893.jpg",
+                "885923894.jpg",
+                "885923895.jpg",
+                "885923896.jpg",
+                "885923897.jpg",
+                "885923898.jpg",
+                "885923899.jpg",
+                "8859238910.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "FINGERDANCE 88 Key Folding Portable Digital Piano Keyboard Semi-Weighted Bluetooth MIDI",
+        "category": "Electronics",
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "FINGERDANCE 88-Key Folding Digital Piano with accessories",
+                "estimated_value": 100
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88720270/FINGERDANCE-Folding-Intelligent-Piano",
+            "title": "FINGERDANCE Folding Intelligent Piano",
+            "current_bid": "$32.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88720270/FINGERDANCE-Folding-Intelligent-Piano",
+            "pics": [
+                "887202701.jpg",
+                "887202702.jpg",
+                "887202703.jpg",
+                "887202704.jpg",
+                "887202705.jpg",
+                "887202706.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Raleigh Retroglide 6-Speed Women's Cruiser Bicycle Green & Cream",
+        "category": "Tools/Equipment",
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "RALEIGH 6-Speed Retroglide Women's Bicycle",
+                "estimated_value": 100
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88729830/RALEIGH-6Speed-Retroglide-Womens-Bicycle",
+            "title": "RALEIGH 6-Speed Retroglide Women's Bicycle",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88729830/RALEIGH-6Speed-Retroglide-Womens-Bicycle",
+            "pics": [
+                "887298301.jpg",
+                "887298302.jpg",
+                "887298303.jpg",
+                "887298304.jpg",
+                "887298305.jpg",
+                "887298306.jpg",
+                "887298307.jpg",
+                "887298308.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Mid-Century White Furniture Co Walnut 3-Drawer Nightstand Side Table",
+        "category": "Furniture",
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "WHITE FURNITURE CO. Mid-Century 3-Drawer Nightstand",
+                "estimated_value": 100
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88745114/WHITE-FURNITURE-CO-MidCentury-FruitwoodWalnut-Nightstand",
+            "title": "WHITE FURNITURE CO. Mid-Century Fruitwood/Walnut Nightstand",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88745114/WHITE-FURNITURE-CO-MidCentury-FruitwoodWalnut-Nightstand",
+            "pics": [
+                "887451141.jpg",
+                "887451142.jpg",
+                "887451143.jpg",
+                "887451144.jpg",
+                "887451145.jpg",
+                "887451146.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Tall 7-Drawer Lingerie Chest Dresser Dark Wood Finish Sunburst Carving",
+        "category": "Furniture",
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "7-Drawer Tall Chest of Drawers with Sunburst Detail",
+                "estimated_value": 100
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88748597/Chest-of-Drawers",
+            "title": "Chest of Drawers",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88748597/Chest-of-Drawers",
+            "pics": [
+                "887485971.jpg",
+                "887485972.jpg",
+                "887485973.jpg",
+                "887485974.jpg",
+                "887485975.jpg",
+                "887485976.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "SONY KDL-60EX700 60\" BRAVIA 1080p LED HDTV TV with Stand & Remote",
+        "category": "Electronics",
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "SONY KDL-60EX700 60\" BRAVIA 1080p LED LCD HDTV with Remote",
+                "estimated_value": 60
+            },
+            {
+                "item_name": "Modern Silver TV Stand with Glass Shelf",
+                "estimated_value": 40
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88782351/SONY-KDL60EX700-60-BRAVIA-Internetready-1080p-LEDLCD-HDTV",
+            "title": "SONY KDL-60EX700 60\" BRAVIA Internet-ready 1080p LED-LCD HDTV",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88782351/SONY-KDL60EX700-60-BRAVIA-Internetready-1080p-LEDLCD-HDTV",
+            "pics": [
+                "887823511.jpg",
+                "887823512.jpg",
+                "887823513.jpg",
+                "887823514.jpg",
+                "887823515.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Watnature Metal Cascading Floor Water Fountain with LED Lights Indoor Zen Decor",
+        "category": "Decor/Lighting",
+        "total_market_value": 95,
+        "items": [
+            {
+                "item_name": "Watnature Metal Cascading Floor Water Fountain with LED Lights",
+                "estimated_value": 95
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88794945/Watnature-Metal-Water-Fountain",
+            "title": "Watnature Metal Water Fountain",
+            "current_bid": "$45.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88794945/Watnature-Metal-Water-Fountain",
+            "pics": [
+                "887949451.jpg",
+                "887949452.jpg",
+                "887949453.jpg",
+                "887949454.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "LePOUF Asher 6.5 ft Giant Bean Bag Chair Lounger Faux Suede Tan",
+        "category": "Furniture",
+        "total_market_value": 90,
+        "items": [
+            {
+                "item_name": "LePOUF Asher 6.5 ft. Bean Bag Chair",
+                "estimated_value": 90
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88724767/LePOUF-Asher-65-ft-Bean-Bag",
+            "title": "LePOUF Asher 6.5 ft. Bean Bag",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88724767/LePOUF-Asher-65-ft-Bean-Bag",
+            "pics": [
+                "887247671.jpg",
+                "887247672.jpg",
+                "887247673.jpg",
+                "887247674.jpg",
+                "887247675.jpg",
+                "887247676.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Milk Glass Lot Fenton Westmoreland Hen on Nest Hobnail Basket Compote",
+        "category": "Glassware",
+        "total_market_value": 90,
+        "items": [
+            {
+                "item_name": "Fenton Silver Crest Milk Glass Ruffled Basket with Tag",
+                "estimated_value": 20
+            },
+            {
+                "item_name": "Westmoreland Milk Glass Hen on a Nest Covered Dish",
+                "estimated_value": 15
+            },
+            {
+                "item_name": "Fenton Hobnail Milk Glass Ruffled Vase",
+                "estimated_value": 12
+            },
+            {
+                "item_name": "Westmoreland Paneled Grape Footed Compote",
+                "estimated_value": 15
+            },
+            {
+                "item_name": "Lot of 5 miscellaneous Milk Glass pieces (bowls, cruet, etc)",
+                "estimated_value": 28
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88485667/Vintage-Milk-Glass-Tableware-Lot",
+            "title": "Vintage Milk Glass Tableware Lot",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88485667/Vintage-Milk-Glass-Tableware-Lot",
+            "pics": [
+                "884856671.jpg",
+                "884856672.jpg",
+                "884856673.jpg",
+                "884856674.jpg",
+                "884856675.jpg",
+                "884856676.jpg",
+                "884856677.jpg",
+                "884856678.jpg",
+                "884856679.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Central Machinery 10 Ton Hydraulic Log Splitter Item 62291 Manual Wood Splitter",
+        "category": "Tools/Equipment",
+        "total_market_value": 90,
+        "items": [
+            {
+                "item_name": "Central Machinery 10 Ton Hydraulic Log Splitter",
+                "estimated_value": 90
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88591442/10-Ton-Hydraulic-Log-Splitter",
+            "title": "10 Ton Hydraulic Log Splitter",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88591442/10-Ton-Hydraulic-Log-Splitter",
+            "pics": [
+                "885914421.jpg",
+                "885914422.jpg",
+                "885914423.jpg",
+                "885914424.jpg",
+                "885914425.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Power Tool Lot Craftsman Jigsaw, B&D Sanders, Router, Drill, Heat Gun & Bits",
+        "category": "Tools/Equipment",
+        "total_market_value": 90,
+        "items": [
+            {
+                "item_name": "Craftsman Variable Speed Jigsaw",
+                "estimated_value": 15
+            },
+            {
+                "item_name": "Drill Master 1/4\" Trim Router",
+                "estimated_value": 15
+            },
+            {
+                "item_name": "Black & Decker Sheet Sander",
+                "estimated_value": 12
+            },
+            {
+                "item_name": "Black & Decker Mouse Detail Sander/Polisher",
+                "estimated_value": 10
+            },
+            {
+                "item_name": "McCulloch Corded Drill",
+                "estimated_value": 10
+            },
+            {
+                "item_name": "Chicago Electric Heat Gun",
+                "estimated_value": 10
+            },
+            {
+                "item_name": "Set of approx. 12 Spade Drill Bits",
+                "estimated_value": 10
+            },
+            {
+                "item_name": "Pair of Handheld Pipe Cutters",
+                "estimated_value": 8
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88594191/Power-Tool-Lot",
+            "title": "Power Tool Lot",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88594191/Power-Tool-Lot",
+            "pics": [
+                "885941911.jpg",
+                "885941912.jpg",
+                "885941913.jpg",
+                "885941914.jpg",
+                "885941915.jpg",
+                "885941916.jpg",
+                "885941917.jpg",
+                "885941918.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Roseville Pottery Vase 444-6 Modern Art Line Turquoise Textured Glaze",
+        "category": "Pottery/China",
+        "total_market_value": 85,
+        "items": [
+            {
+                "item_name": "Roseville Pottery Modern Art Vase 444-6",
+                "estimated_value": 85
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88591752/Roseville-Pottery-Vase",
+            "title": "Roseville Pottery Vase",
+            "current_bid": "$40.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88591752/Roseville-Pottery-Vase",
+            "pics": [
+                "885917521.jpg",
+                "885917522.jpg",
+                "885917523.jpg",
+                "885917524.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Sauder Barrister Lane Tall Bookcase Bookshelf White Washed Finish Display Shelf",
+        "category": "Furniture",
+        "total_market_value": 80,
+        "items": [
+            {
+                "item_name": "Sauder Barrister Lane Tall Bookcase",
+                "estimated_value": 80
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88776725/SAUDER-Barrister-Lane-Tall-Bookcase",
+            "title": "SAUDER Barrister Lane Tall Bookcase",
+            "current_bid": "$40.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88776725/SAUDER-Barrister-Lane-Tall-Bookcase",
+            "pics": [
+                "887767251.jpg",
+                "887767252.jpg",
+                "887767253.jpg",
+                "887767254.jpg",
+                "887767255.jpg",
+                "887767256.jpg",
+                "887767257.jpg",
+                "887767258.jpg",
+                "887767259.jpg",
+                "8877672510.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Traditional Mahogany Finish 4-Shelf Bookcase with Fluted Columns",
+        "category": "Furniture",
+        "total_market_value": 80,
+        "items": [
+            {
+                "item_name": "Traditional Mahogany Finish 4-Shelf Bookcase",
+                "estimated_value": 80
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88729148/4Shelf-Bookcase",
+            "title": "4-Shelf Bookcase",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88729148/4Shelf-Bookcase",
+            "pics": [
+                "887291481.jpg",
+                "887291482.jpg",
+                "887291483.jpg",
+                "887291484.jpg",
+                "887291485.jpg",
+                "887291486.jpg",
+                "887291487.jpg",
+                "887291488.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Yakima 2-Bike Hitch Mount Vehicle Bike Rack Carrier",
+        "category": "Tools/Equipment",
+        "total_market_value": 80,
+        "items": [
+            {
+                "item_name": "Yakima 2-Bike Hitch Mount Bike Rack",
+                "estimated_value": 80
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88762779/YAKIMA-Vehicle-Bike-Rack",
+            "title": "YAKIMA Vehicle Bike Rack",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88762779/YAKIMA-Vehicle-Bike-Rack",
+            "pics": [
+                "887627791.jpg",
+                "887627792.jpg",
+                "887627793.jpg",
+                "887627794.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "PRO-FORM 505S Cross Trainer Folding Treadmill Exercise Machine",
+        "category": "Tools/Equipment",
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "PRO-FORM 505S Cross Trainer Treadmill",
+                "estimated_value": 75
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88763684/PROFORM-505S-Cross-Trainer-Treadmill",
+            "title": "PRO-FORM 505S Cross Trainer Treadmill",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88763684/PROFORM-505S-Cross-Trainer-Treadmill",
+            "pics": [
+                "887636841.jpg",
+                "887636842.jpg",
+                "887636843.jpg",
+                "887636844.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Lot of 2 Vintage Villaware Pizzelle Makers - Prima Baker & Uno Pastry Iron",
+        "category": "Electronics",
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "Vintage Villaware Prima Pizzelle Baker with Box",
+                "estimated_value": 40
+            },
+            {
+                "item_name": "Vintage Villaware Uno Pastry Baker",
+                "estimated_value": 35
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88593077/VILLAWARE-Pizzelle-Makers",
+            "title": "VILLAWARE Pizzelle Makers",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88593077/VILLAWARE-Pizzelle-Makers",
+            "pics": [
+                "885930771.jpg",
+                "885930772.jpg",
+                "885930773.jpg",
+                "885930774.jpg",
+                "885930775.jpg",
+                "885930776.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Meito China Lusterware Tea Set Service for 6 Blue & Gold Trim Art Deco",
+        "category": "Pottery/China",
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "Vintage 21-Piece Meito China Lusterware Tea & Luncheon Set for Six",
+                "estimated_value": 75
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88593593/MEITO-China-TeaLuncheon-Set",
+            "title": "MEITO China Tea/Luncheon Set",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88593593/MEITO-China-TeaLuncheon-Set",
+            "pics": [
+                "885935931.jpg",
+                "885935932.jpg",
+                "885935933.jpg",
+                "885935934.jpg",
+                "885935935.jpg",
+                "885935936.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Raleigh M40 All-Terrain Men's Mountain Bike MTB Teal",
+        "category": "Tools/Equipment",
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "RALEIGH M40 All-Terrain Men's Bicycle",
+                "estimated_value": 75
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88730472/RALEIGH-M40-AllTerrain-Mens-Bicycle",
+            "title": "RALEIGH M40 All-Terrain Men's Bicycle",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88730472/RALEIGH-M40-AllTerrain-Mens-Bicycle",
+            "pics": [
+                "887304721.jpg",
+                "887304722.jpg",
+                "887304723.jpg",
+                "887304724.jpg",
+                "887304725.jpg",
+                "887304726.jpg",
+                "887304727.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Large Traditional Wood Framed Wall Mirror Mahogany Finish Gold Trim Rosettes",
+        "category": "Decor/Lighting",
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "Large Traditional Wood Framed Wall Mirror with Corner Rosettes",
+                "estimated_value": 75
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88747606/Wall-Mirror",
+            "title": "Wall Mirror",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88747606/Wall-Mirror",
+            "pics": [
+                "887476061.jpg",
+                "887476062.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "BEAUTYREST Harmony Lux Hybrid Queen Mattress",
+        "category": "Furniture",
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "BEAUTYREST Harmony Lux Hybrid Queen Mattress",
+                "estimated_value": 75
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88778567/BEAUTYREST-Harmony-Lux-Hybrid-Queen-Mattress",
+            "title": "BEAUTYREST Harmony Lux Hybrid Queen Mattress",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88778567/BEAUTYREST-Harmony-Lux-Hybrid-Queen-Mattress",
+            "pics": [
+                "887785671.jpg",
+                "887785672.jpg",
+                "887785673.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Upholstered Storage Ottoman Bench Light Gray Fabric Nailhead Trim",
+        "category": "Furniture",
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "Upholstered Light Gray Storage Bench with Nailhead Trim",
+                "estimated_value": 75
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88792160/Storage-Bench",
+            "title": "Storage Bench",
+            "current_bid": "$35.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88792160/Storage-Bench",
+            "pics": [
+                "887921601.jpg",
+                "887921602.jpg",
+                "887921603.jpg",
+                "887921604.jpg",
+                "887921605.jpg",
+                "887921606.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Set of 3 Vintage Hull Art Pottery Wildflower Vases W-10 & W-11 Pink/Blue",
+        "category": "Pottery/China",
+        "total_market_value": 70,
+        "items": [
+            {
+                "item_name": "Hull Pottery Wildflower Vase (W-10-10 1/2\")",
+                "estimated_value": 35
+            },
+            {
+                "item_name": "Pair of Hull Pottery Wildflower Vases (W-11-6 1/4\")",
+                "estimated_value": 35
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88484986/HULL-Pottery-Vase-Lot",
+            "title": "HULL Pottery Vase Lot",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88484986/HULL-Pottery-Vase-Lot",
+            "pics": [
+                "884849861.jpg",
+                "884849862.jpg",
+                "884849863.jpg",
+                "884849864.jpg",
+                "884849865.jpg",
+                "884849866.jpg",
+                "884849867.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Large Mixed Lot Hand Tools & Equipment in 2 Totes - Saws, Trowels, Level, Clamps",
+        "category": "Tools/Equipment",
+        "total_market_value": 70,
+        "items": [
+            {
+                "item_name": "Mixed lot of hand tools (saws, trowels, clamps, wrenches)",
+                "estimated_value": 45
+            },
+            {
+                "item_name": "Craftsman level & various measuring tools",
+                "estimated_value": 15
+            },
+            {
+                "item_name": "Two large plastic storage bins with lids",
+                "estimated_value": 10
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88719793/Hand-Tool-Lot",
+            "title": "Hand Tool Lot",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88719793/Hand-Tool-Lot",
+            "pics": [
+                "887197931.jpg",
+                "887197932.jpg",
+                "887197933.jpg",
+                "887197934.jpg",
+                "887197935.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Pair of Mission Style Wood Folding Dining Chairs Padded Vinyl Seat",
+        "category": "Furniture",
+        "total_market_value": 70,
+        "items": [
+            {
+                "item_name": "Pair of Mission Style Wood Folding Chairs with Padded Seats",
+                "estimated_value": 70
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88746682/Folding-Chairs",
+            "title": "Folding Chairs",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88746682/Folding-Chairs",
+            "pics": [
+                "887466821.jpg",
+                "887466822.jpg",
+                "887466823.jpg",
+                "887466824.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Lot of 2 Large Artificial Palm Trees Faux Home Decor",
+        "category": "Decor/Lighting",
+        "total_market_value": 70,
+        "items": [
+            {
+                "item_name": "Large Artificial Parlor Palm Tree in Green Urn Planter",
+                "estimated_value": 40
+            },
+            {
+                "item_name": "Artificial Ponytail Palm Tree in Wicker Basket",
+                "estimated_value": 30
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88781393/Artificial-Potted-Plant-Tree",
+            "title": "Artificial Potted Plant & Tree",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88781393/Artificial-Potted-Plant-Tree",
+            "pics": [
+                "887813931.jpg",
+                "887813932.jpg",
+                "887813933.jpg",
+                "887813934.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Ninja Foodi FD302 6.5 Quart 9-in-1 Pressure Cooker & Air Fryer TenderCrisp",
+        "category": "Electronics",
+        "total_market_value": 65,
+        "items": [
+            {
+                "item_name": "Ninja Foodi Cooker Model FD302 6.5 Quart",
+                "estimated_value": 65
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88594709/NINJA-Foodi-Cooker",
+            "title": "NINJA Foodi Cooker",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88594709/NINJA-Foodi-Cooker",
+            "pics": [
+                "885947091.jpg",
+                "885947092.jpg",
+                "885947093.jpg",
+                "885947094.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Design Toscano 'The Dance of Spring' Neoclassical Bonded Marble Resin Statue",
+        "category": "Decor/Lighting",
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "Design Toscano 'The Dance of Spring' Bonded Marble Resin Statue",
+                "estimated_value": 60
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88483087/Toscano-Dance-of-Spring-Statue",
+            "title": "Toscano Dance of Spring Statue",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88483087/Toscano-Dance-of-Spring-Statue",
+            "pics": [
+                "884830871.jpg",
+                "884830872.jpg",
+                "884830873.jpg",
+                "884830874.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Lot of 4 Vintage USA Art Pottery Vases Hull & Shawnee Floral",
+        "category": "Pottery/China",
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "Hull Art Pottery Magnolia Vase (W-5-6 1/2\")",
+                "estimated_value": 18
+            },
+            {
+                "item_name": "Shawnee Pottery White Floral Double Handled Vase",
+                "estimated_value": 12
+            },
+            {
+                "item_name": "Hull Art Pottery Wildflower Vase with Yellow Rose (W-1-5 1/2\")",
+                "estimated_value": 15
+            },
+            {
+                "item_name": "Hull Art Pottery Wildflower Vase with Pink Rose (W-1-5 1/2\")",
+                "estimated_value": 15
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88483788/HULL-SHAWNEE-Pottery-Vase-Lot",
+            "title": "HULL / SHAWNEE Pottery Vase Lot",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88483788/HULL-SHAWNEE-Pottery-Vase-Lot",
+            "pics": [
+                "884837881.jpg",
+                "884837882.jpg",
+                "884837883.jpg",
+                "884837884.jpg",
+                "884837885.jpg",
+                "884837886.jpg",
+                "884837887.jpg",
+                "884837888.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Ridgid R213BNA 18-Gauge 2-1/8 in. Pneumatic Brad Nailer with Bag",
+        "category": "Tools/Equipment",
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "Ridgid R213BNA Pneumatic 18-Gauge Brad Nailer with Bag",
+                "estimated_value": 60
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88719134/RIGID-Pneumatic-Brad-Nailer",
+            "title": "RIGID Pneumatic Brad Nailer",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88719134/RIGID-Pneumatic-Brad-Nailer",
+            "pics": [
+                "887191341.jpg",
+                "887191342.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Lamberton Ivory China 'Reverie' Floral Gold Trim 26-Piece Dinnerware Set",
+        "category": "Pottery/China",
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "Lamberton Ivory China 'Reverie' 26-Piece Dinnerware Set",
+                "estimated_value": 60
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88726795/LAMBERTON-China-Reverie-26piece-Set",
+            "title": "LAMBERTON China 'Reverie' 26-piece Set",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88726795/LAMBERTON-China-Reverie-26piece-Set",
+            "pics": [
+                "887267951.jpg",
+                "887267952.jpg",
+                "887267953.jpg",
+                "887267954.jpg",
+                "887267955.jpg",
+                "887267956.jpg",
+                "887267957.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "SoftGym Vibration Plate Whole Body Exercise Machine Platform",
+        "category": "Tools/Equipment",
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "SoftGym Vibration Plate Exercise Machine",
+                "estimated_value": 60
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88728597/SoftGym-Vibration-Plate-Exercise-Machine",
+            "title": "SoftGym Vibration Plate Exercise Machine",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88728597/SoftGym-Vibration-Plate-Exercise-Machine",
+            "pics": []
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "George Letch A.W.S. Signed Framed Lithograph Print Seaside Sand Dune Art",
+        "category": "Art/Prints",
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "George Letch A.W.S. Framed Seaside Dune Print",
+                "estimated_value": 60
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88745900/Seaside-Art-Print",
+            "title": "Seaside Art Print",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88745900/Seaside-Art-Print",
+            "pics": [
+                "887459001.jpg",
+                "887459002.jpg",
+                "887459003.jpg",
+                "887459004.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Flexible Flyer III Wood & Steel Runner Snow Sled Eagle Graphic",
+        "category": "Collectibles",
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "Vintage Flexible Flyer III Wooden Snow Sled",
+                "estimated_value": 60
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88762245/Flexible-Flyer-Wooden-Snow-Sled",
+            "title": "Flexible Flyer Wooden Snow Sled",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88762245/Flexible-Flyer-Wooden-Snow-Sled",
+            "pics": [
+                "887622451.jpg",
+                "887622452.jpg",
+                "887622453.jpg",
+                "887622454.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Lot of 3 Outdoor Chairs: Zero Gravity Lounger & 2 Striped Folding Beach Chairs",
+        "category": "Furniture",
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "Blue Zero Gravity Reclining Lounge Chair",
+                "estimated_value": 30
+            },
+            {
+                "item_name": "Pair of Striped Aluminum Folding Beach Chairs with Wood Arms",
+                "estimated_value": 30
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88763414/Folding-Beach-Chairs-wAntiGravity-Lounge-Chair",
+            "title": "Folding Beach Chairs w/Anti-Gravity Lounge Chair",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88763414/Folding-Beach-Chairs-wAntiGravity-Lounge-Chair",
+            "pics": [
+                "887634141.jpg",
+                "887634142.jpg",
+                "887634143.jpg",
+                "887634144.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Optimus STAV-3160 Digital Synthesized A/V Stereo Receiver Dolby Surround",
+        "category": "Electronics",
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "Optimus STAV-3160 Digital Synthesized A/V Receiver",
+                "estimated_value": 60
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88777226/OPTIMUS-STAV3160-Digital-Synthesized-AV-Receiver",
+            "title": "OPTIMUS STAV-3160 Digital Synthesized A/V Receiver",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88777226/OPTIMUS-STAV3160-Digital-Synthesized-AV-Receiver",
+            "pics": [
+                "887772261.jpg",
+                "887772262.jpg",
+                "887772263.jpg",
+                "887772264.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Industrial Rustic 3-Piece End Table Set w/ Charging Station & Magazine Rack",
+        "category": "Furniture",
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "Industrial End Table with Drawer & USB Power Outlets",
+                "estimated_value": 25
+            },
+            {
+                "item_name": "C-Shaped Flip-Top Sofa Side Table",
+                "estimated_value": 20
+            },
+            {
+                "item_name": "Narrow Side Table with Magazine Sling",
+                "estimated_value": 15
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88778975/3Piece-End-Table-Set",
+            "title": "3-Piece End Table Set",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88778975/3Piece-End-Table-Set",
+            "pics": [
+                "887789751.jpg",
+                "887789752.jpg",
+                "887789753.jpg",
+                "887789754.jpg",
+                "887789755.jpg",
+                "887789756.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Lot of 2 Large Artificial Silk Plants Ficus Tree & Dieffenbachia in Wicker Baskets",
+        "category": "Decor/Lighting",
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "Large Artificial Ficus Tree in Wicker Basket",
+                "estimated_value": 35
+            },
+            {
+                "item_name": "Large Artificial Dieffenbachia Plant in Wicker Basket",
+                "estimated_value": 25
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88781043/Artificial-Potted-Plant-Tree",
+            "title": "Artificial Potted Plant & Tree",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88781043/Artificial-Potted-Plant-Tree",
+            "pics": [
+                "887810431.jpg",
+                "887810432.jpg",
+                "887810433.jpg",
+                "887810434.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Milk Glass Hurricane Parlor Lamp Floral Hand Painted Design",
+        "category": "Decor/Lighting",
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Vintage Milk Glass Floral Hurricane Parlor Table Lamp",
+                "estimated_value": 50
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88482635/Hurricane-Parlor-Table-Lamp",
+            "title": "Hurricane Parlor Table Lamp",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88482635/Hurricane-Parlor-Table-Lamp",
+            "pics": [
+                "884826351.jpg",
+                "884826352.jpg",
+                "884826353.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Pair Vintage Colonial Style Turned Wood & Brass Base Table Lamps with Shades",
+        "category": "Decor/Lighting",
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Pair of vintage turned wood and brass table lamps with shades",
+                "estimated_value": 50
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88648984/Vintage-Wooden-Post-Table-Lamps",
+            "title": "Vintage Wooden Post Table Lamps",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88648984/Vintage-Wooden-Post-Table-Lamps",
+            "pics": [
+                "886489841.jpg",
+                "886489842.jpg",
+                "886489843.jpg",
+                "886489844.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Pyle 1/2 Size Student Beginner Violin Starter Kit w/ Case Bow Rosin",
+        "category": "Miscellaneous",
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Pyle 1/2 Size Student Violin Starter Kit with Case & Accessories",
+                "estimated_value": 50
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88718452/PYLE-12-Size-Beginner-Violin-Starter-Kit",
+            "title": "PYLE 1/2 Size Beginner Violin Starter Kit",
+            "current_bid": "$35.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88718452/PYLE-12-Size-Beginner-Violin-Starter-Kit",
+            "pics": [
+                "887184521.jpg",
+                "887184522.jpg",
+                "887184523.jpg",
+                "887184524.jpg",
+                "887184525.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Husky FP202999DB 1 Gallon 100 PSI Portable Pancake Air Compressor",
+        "category": "Tools/Equipment",
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Husky FP202999DB 1 Gallon Air Compressor with Hose",
+                "estimated_value": 50
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88718851/HUSKY-1-Gallon-Air-Compressor",
+            "title": "HUSKY 1 Gallon Air Compressor",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88718851/HUSKY-1-Gallon-Air-Compressor",
+            "pics": [
+                "887188511.jpg",
+                "887188512.jpg",
+                "887188513.jpg",
+                "887188514.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Power Tool Lot Black & Decker Circular Saw, Drill & Craftsman Orbital Sander",
+        "category": "Tools/Equipment",
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Black & Decker 7 1/4\" 2HP Circular Saw",
+                "estimated_value": 20
+            },
+            {
+                "item_name": "Craftsman 5-inch Random Orbit Sander",
+                "estimated_value": 15
+            },
+            {
+                "item_name": "Black & Decker Corded Drill",
+                "estimated_value": 15
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88719400/Power-Tool-Lot",
+            "title": "Power Tool Lot",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88719400/Power-Tool-Lot",
+            "pics": [
+                "887194001.jpg",
+                "887194002.jpg",
+                "887194003.jpg",
+                "887194004.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Large Modern Rectangular Wall Mirror with Cherry Finish Wood Frame",
+        "category": "Decor/Lighting",
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Large Wall Mirror with Cherry Finish Wood Frame",
+                "estimated_value": 50
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88747791/Wall-Mirror",
+            "title": "Wall Mirror",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88747791/Wall-Mirror",
+            "pics": [
+                "887477911.jpg",
+                "887477912.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Lighted Bookcase Secretary Cabinet with Drop Down Desk",
+        "category": "Furniture",
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Lighted Bookcase with Drop-Down Desk and Lower Cabinet",
+                "estimated_value": 50
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88749977/Lighted-Bookcase-Cabinet",
+            "title": "Lighted Bookcase Cabinet",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88749977/Lighted-Bookcase-Cabinet",
+            "pics": [
+                "887499771.jpg",
+                "887499772.jpg",
+                "887499773.jpg",
+                "887499774.jpg",
+                "887499775.jpg",
+                "887499776.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Heavy Duty Convertible Hand Truck Dolly & Platform Cart",
+        "category": "Tools/Equipment",
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Convertible Hand Truck Dolly & Platform Cart",
+                "estimated_value": 50
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88763106/Hand-Truck-Dolly",
+            "title": "Hand Truck Dolly",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88763106/Hand-Truck-Dolly",
+            "pics": [
+                "887631061.jpg",
+                "887631062.jpg",
+                "887631063.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Large Square Wall Mirror Dark Espresso Brown Wood Frame Modern",
+        "category": "Decor/Lighting",
+        "total_market_value": 45,
+        "items": [
+            {
+                "item_name": "Large Square Wall Mirror with Dark Brown Wood Frame",
+                "estimated_value": 45
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88794100/Wall-Mirror",
+            "title": "Wall Mirror",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88794100/Wall-Mirror",
+            "pics": [
+                "887941001.jpg",
+                "887941002.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage 1981 Shell Oil Cleveland Browns NFL Sketch Prints by K. Akins - Lot of 8",
+        "category": "Art/Prints",
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Set of 8 1981 Shell Oil Cleveland Browns Sketch Prints by K. Akins",
+                "estimated_value": 40
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88594977/1981-Shell-Oil-Cleveland-Browns-Sketch-Prints-by-K-Akins",
+            "title": "1981 Shell Oil Cleveland Browns Sketch Prints by K. Akins",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88594977/1981-Shell-Oil-Cleveland-Browns-Sketch-Prints-by-K-Akins",
+            "pics": [
+                "885949771.jpg",
+                "885949772.jpg",
+                "885949773.jpg",
+                "885949774.jpg",
+                "885949775.jpg",
+                "885949776.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Lot of 6 Southwire 16 AWG 50 ft Speaker Wire Spools Copper Clad Aluminum",
+        "category": "Electronics",
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Lot of 6 Southwire 16 AWG 50 ft Speaker Wire Spools",
+                "estimated_value": 40
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88721263/SOUTHWIRE-16-gauge-Speaker-Wire-Lot",
+            "title": "SOUTHWIRE 16 gauge Speaker Wire Lot",
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88721263/SOUTHWIRE-16-gauge-Speaker-Wire-Lot",
+            "pics": [
+                "887212631.jpg",
+                "887212632.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Metal Wall Art Sculpture 3D Birds on Vine Leaves Hand Painted Decor",
+        "category": "Decor/Lighting",
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Metal Wall Art Sculpture with Birds and Leaves",
+                "estimated_value": 40
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88747378/Metal-Wall-Art-Bird-Sculpture",
+            "title": "Metal Wall Art Bird Sculpture",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88747378/Metal-Wall-Art-Bird-Sculpture",
+            "pics": [
+                "887473781.jpg",
+                "887473782.jpg",
+                "887473783.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage French Provincial Gold Scalloped Demilune Console Hall Table",
+        "category": "Furniture",
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Vintage Scalloped Edge Demilune Console Table",
+                "estimated_value": 40
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88779738/Scalloped-Edge-Console-Table",
+            "title": "Scalloped Edge Console Table",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88779738/Scalloped-Edge-Console-Table",
+            "pics": [
+                "887797381.jpg",
+                "887797382.jpg",
+                "887797383.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage 80s 90s Framed Matted Abstract Art Print Pink Blue Gold Accents",
+        "category": "Art/Prints",
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Vintage Framed and Matted Abstract Art Print",
+                "estimated_value": 40
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88794367/Abstract-Art-Print",
+            "title": "Abstract Art Print",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88794367/Abstract-Art-Print",
+            "pics": [
+                "887943671.jpg",
+                "887943672.jpg",
+                "887943673.jpg",
+                "887943674.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Traditional Brass Table Lamp Square Base with Cream Bell Shade",
+        "category": "Decor/Lighting",
+        "total_market_value": 35,
+        "items": [
+            {
+                "item_name": "Vintage Traditional Brass Table Lamp with Cream Bell Shade",
+                "estimated_value": 35
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88482323/Brass-Table-Lamp",
+            "title": "Brass Table Lamp",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88482323/Brass-Table-Lamp",
+            "pics": [
+                "884823231.jpg",
+                "884823232.jpg",
+                "884823233.jpg",
+                "884823234.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "PAFAL Portable Pilates Exercise Bar Kit with Resistance Bands & Board",
+        "category": "Tools/Equipment",
+        "total_market_value": 35,
+        "items": [
+            {
+                "item_name": "PAFAL Pilates Board",
+                "estimated_value": 35
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88728492/PAFAL-Pilates-Board",
+            "title": "PAFAL Pilates Board",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88728492/PAFAL-Pilates-Board",
+            "pics": []
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Traditional Dark Wood 3-Drawer Nightstand Side Table Carved Detail",
+        "category": "Furniture",
+        "total_market_value": 35,
+        "items": [
+            {
+                "item_name": "Traditional 3-Drawer Wood Nightstand",
+                "estimated_value": 35
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88750442/3Drawer-Nightstand",
+            "title": "3-Drawer Nightstand",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88750442/3Drawer-Nightstand",
+            "pics": [
+                "887504421.jpg",
+                "887504422.jpg",
+                "887504423.jpg",
+                "887504424.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Light Wood Wine Rack Table Console with Stemware Holder",
+        "category": "Furniture",
+        "total_market_value": 35,
+        "items": [
+            {
+                "item_name": "Wooden Wine Rack Console Table with Glass Holder",
+                "estimated_value": 35
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88779427/Wooden-Wine-Rack",
+            "title": "Wooden Wine Rack",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88779427/Wooden-Wine-Rack",
+            "pics": [
+                "887794271.jpg",
+                "887794272.jpg",
+                "887794273.jpg",
+                "887794274.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Shop-Vac 6 Gallon 3.0 Peak HP Wet/Dry Utility Vacuum Cleaner",
+        "category": "Tools/Equipment",
+        "total_market_value": 35,
+        "items": [
+            {
+                "item_name": "Shop-Vac 6 Gallon 3.0 HP Wet/Dry Shop Vacuum",
+                "estimated_value": 35
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88794678/WetDry-Shop-Vac",
+            "title": "Wet/Dry Shop Vac",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88794678/WetDry-Shop-Vac",
+            "pics": [
+                "887946781.jpg",
+                "887946782.jpg",
+                "887946783.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Framed Teufel Hunden US Marines WWI Devil Dog Recruiting Poster REPRINT",
+        "category": "Art/Prints",
+        "total_market_value": 30,
+        "items": [
+            {
+                "item_name": "Framed replica of Teufel Hunden U.S. Marines WWI recruiting poster",
+                "estimated_value": 30
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88718177/Teufel-Hunden-US-Marines-WWI-Replica-Recruiting-Poster",
+            "title": "Teufel Hunden U.S. Marines WWI Replica Recruiting Poster",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88718177/Teufel-Hunden-US-Marines-WWI-Replica-Recruiting-Poster",
+            "pics": [
+                "887181771.jpg",
+                "887181772.jpg",
+                "887181773.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Lot of 3 Vintage Rubbermaid Red Ice Chest Coolers - Small, Medium, Large",
+        "category": "Miscellaneous",
+        "total_market_value": 30,
+        "items": [
+            {
+                "item_name": "Large Rubbermaid Red Cooler",
+                "estimated_value": 15
+            },
+            {
+                "item_name": "Medium Rubbermaid Red Cooler",
+                "estimated_value": 10
+            },
+            {
+                "item_name": "Small Rubbermaid Personal Cooler",
+                "estimated_value": 5
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88745468/RUBBERMAID-3Piece-Cooler-Lot",
+            "title": "RUBBERMAID 3-Piece Cooler Lot",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88745468/RUBBERMAID-3Piece-Cooler-Lot",
+            "pics": [
+                "887454681.jpg",
+                "887454682.jpg",
+                "887454683.jpg",
+                "887454684.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Notre Dame Fighting Irish Logo Area Rug Floor Mat",
+        "category": "Decor/Lighting",
+        "total_market_value": 30,
+        "items": [
+            {
+                "item_name": "Notre Dame Logo Area Rug",
+                "estimated_value": 30
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88778135/Notre-Dame-Area-Rug",
+            "title": "Notre Dame Area Rug",
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88778135/Notre-Dame-Area-Rug",
+            "pics": [
+                "887781351.jpg",
+                "887781352.jpg",
+                "887781353.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Mid Century Modern Style Oak Wood Magazine Rack Holder",
+        "category": "Decor/Lighting",
+        "total_market_value": 30,
+        "items": [
+            {
+                "item_name": "Vintage Oak Wood Magazine Rack",
+                "estimated_value": 30
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88793377/Magazine-Rack",
+            "title": "Magazine Rack",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88793377/Magazine-Rack",
+            "pics": [
+                "887933771.jpg",
+                "887933772.jpg",
+                "887933773.jpg",
+                "887933774.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Power Rider Total Body Workout Machine Upright Exercise Fitness Equipment",
+        "category": "Tools/Equipment",
+        "total_market_value": 25,
+        "items": [
+            {
+                "item_name": "Power Rider Exercise Machine",
+                "estimated_value": 25
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88762513/POWER-RIDER-Exercise-Machine",
+            "title": "POWER RIDER Exercise Machine",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88762513/POWER-RIDER-Exercise-Machine",
+            "pics": [
+                "887625131.jpg",
+                "887625132.jpg"
+            ]
+        }
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Lot of Assorted Vintage Hardcover Books for Decor or Reading",
+        "category": "Collectibles",
+        "total_market_value": 10,
+        "items": [
+            {
+                "item_name": "Bulk lot of vintage books (contents unknown)",
+                "estimated_value": 10
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88717994/Vintage-Books",
+            "title": "Vintage Books",
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88717994/Vintage-Books",
+            "pics": []
+        }
+    }
+]
+</script>
+
+<script>
+    const jsonData = JSON.parse(document.getElementById('auctionData').textContent);
+    const tableBody = document.getElementById('data-table-body');
+    const headers = document.querySelectorAll('thead th[data-column]');
+    let currentSort = { column: 'price', isAscending: false };
+
+    function populateTable() {
+        tableBody.innerHTML = '';
+        const formatCurrency = (value) => (value || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 });
+
+        jsonData.forEach(lot => {
+            // Main Lot Row
+            const mainRow = document.createElement('tr');
+            mainRow.className = 'lot-main';
+
+            const lotNumberCell = document.createElement('td');
+            lotNumberCell.textContent = lot.lot_number > 0 ? lot.lot_number : '';
+
+            const nameCell = document.createElement('td');
+            const nameLink = document.createElement('a');
+            nameLink.href = lot.original_listing.url;
+            nameLink.textContent = lot.ebay_search_title || 'N/A';
+            nameLink.target = "_blank";
+            nameLink.title = lot.original_listing.title; // This creates the hover-over tooltip
+            nameCell.appendChild(nameLink);
+
+            const categoryCell = document.createElement('td');
+            categoryCell.textContent = lot.category || 'Miscellaneous';
+
+            const priceCell = document.createElement('td');
+            priceCell.textContent = formatCurrency(lot.total_market_value);
+
+            const linkCell = document.createElement('td');
+            const searchLink = document.createElement('a');
+            searchLink.href = `https://www.google.com/search?q=${encodeURIComponent(lot.ebay_search_title || '')}&tbm=shop`;
+            searchLink.textContent = 'Search';
+            searchLink.target = "_blank";
+            linkCell.appendChild(searchLink);
+
+            mainRow.appendChild(lotNumberCell);
+            mainRow.appendChild(nameCell);
+            mainRow.appendChild(categoryCell);
+            mainRow.appendChild(priceCell);
+            mainRow.appendChild(linkCell);
+            tableBody.appendChild(mainRow);
+
+            // Sub-item Rows (if more than one item in the lot)
+            if (lot.items && lot.items.length > 1) {
+                lot.items.forEach(subItem => {
+                    const subRow = document.createElement('tr');
+                    subRow.className = 'lot-sub-item';
+
+                    const subLotCell = document.createElement('td'); // Empty lot number cell
+                    subLotCell.textContent = '';
+
+                    const subNameCell = document.createElement('td');
+                    subNameCell.textContent = subItem.item_name || 'N/A';
+
+                    const subCategoryCell = document.createElement('td'); // Empty category cell
+                    subCategoryCell.textContent = '';
+
+                    const subPriceCell = document.createElement('td');
+                    subPriceCell.textContent = formatCurrency(subItem.estimated_value);
+
+                    const subLinkCell = document.createElement('td');
+                    const subSearchLink = document.createElement('a');
+                    subSearchLink.href = `https://www.google.com/search?q=${encodeURIComponent(subItem.item_name || '')}&tbm=shop`;
+                    subSearchLink.textContent = 'Search';
+                    subSearchLink.target = "_blank";
+                    subLinkCell.appendChild(subSearchLink);
+
+                    subRow.appendChild(subLotCell);
+                    subRow.appendChild(subNameCell);
+                    subRow.appendChild(subCategoryCell);
+                    subRow.appendChild(subPriceCell);
+                    subRow.appendChild(subLinkCell);
+                    tableBody.appendChild(subRow);
+                });
+            }
+        });
+    }
+
+    function sortData(column) {
+        const isNumeric = column === 'price' || column === 'lot_number';
+        if (currentSort.column === column) {
+            currentSort.isAscending = !currentSort.isAscending;
+        } else {
+            currentSort.column = column;
+            currentSort.isAscending = !isNumeric; // Default sort for numeric is descending, for text is ascending
+        }
+
+        jsonData.sort((a, b) => {
+            let valA, valB;
+            switch (column) {
+                case 'price':
+                    valA = a.total_market_value || 0;
+                    valB = b.total_market_value || 0;
+                    break;
+                case 'lot_number':
+                    valA = a.lot_number || 0;
+                    valB = b.lot_number || 0;
+                    break;
+                case 'name':
+                    valA = (a.ebay_search_title || '').toLowerCase();
+                    valB = (b.ebay_search_title || '').toLowerCase();
+                    break;
+                case 'category':
+                    valA = (a.category || '').toLowerCase();
+                    valB = (b.category || '').toLowerCase();
+                    break;
+                default: return 0;
+            }
+            let comparison = 0;
+            if (valA > valB) { comparison = 1; }
+            else if (valA < valB) { comparison = -1; }
+            return currentSort.isAscending ? comparison : comparison * -1;
+        });
+        updateSortIndicators();
+        populateTable();
+    }
+
+    function updateSortIndicators() {
+        headers.forEach(header => {
+            const indicator = header.querySelector('.sort-indicator');
+            if (header.dataset.column === currentSort.column) {
+                indicator.textContent = currentSort.isAscending ? ' ▲' : ' ▼';
+            } else {
+                indicator.textContent = '';
+            }
+        });
+    }
+
+    headers.forEach(header => { header.addEventListener('click', () => { sortData(header.dataset.column); }); });
+    sortData('price');
+</script>
+</body>
+</html>
