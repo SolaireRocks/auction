@@ -1,0 +1,453 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Item Analysis</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a; --table-bg-color: #2c2c2c; --header-bg-color: #3a3a3a;
+            --header-hover-bg-color: #4a4a4a; --row-even-bg-color: #333333; --row-odd-bg-color: #2c2c2c;
+            --border-color: #444444; --text-color: #e0e0e0; --link-color: #4a90e2;
+            --link-hover-color: #81b5f5; --sort-indicator-color: #81b5f5;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 2rem; line-height: 1.6; }
+        h1 { text-align: center; color: #ffffff; font-weight: 300; margin-bottom: 2rem; }
+        .table-container { max-width: 1400px; margin: auto; overflow-x: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        table { width: 100%; border-collapse: collapse; background-color: var(--table-bg-color); border-spacing: 0; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        thead th { background-color: var(--header-bg-color); color: #ffffff; font-weight: 600; position: sticky; top: 0; z-index: 10; }
+        thead th[data-column] { cursor: pointer; transition: background-color 0.2s ease-in-out; user-select: none; }
+        thead th[data-column]:hover { background-color: var(--header-hover-bg-color); }
+        tbody tr:hover { background-color: var(--header-hover-bg-color); }
+        td { font-size: 0.95em; }
+        td:nth-child(4), td:nth-child(5) { font-family: 'Courier New', Courier, monospace; text-align: right; white-space: nowrap; }
+        td:nth-child(6) { text-align: center; }
+        a { color: var(--link-color); text-decoration: none; transition: color 0.2s ease-in-out; }
+        a:hover { color: var(--link-hover-color); text-decoration: underline; }
+        .sort-indicator { color: var(--sort-indicator-color); font-size: 0.8em; margin-left: 8px; display: inline-block; width: 10px; }
+        .lot-main td { font-weight: bold; }
+        .lot-main:nth-child(4n+1), .lot-main:nth-child(4n+2) { background-color: var(--row-odd-bg-color); }
+        .lot-main:nth-child(4n+3), .lot-main:nth-child(4n) { background-color: var(--row-even-bg-color); }
+        .lot-sub-item { background-color: rgba(0,0,0,0.15) !important; }
+        .lot-sub-item td { font-size: 0.9em; color: #c0c0c0; border-color: #383838; }
+        .lot-sub-item td:nth-child(2) { padding-left: 35px; }
+    </style>
+</head>
+<body>
+    <h1>Auction Item Analysis</h1>
+    <div class="table-container"><table><thead><tr><th data-column="lot_number">Lot # <span class="sort-indicator"></span></th><th data-column="name">Item Name <span class="sort-indicator"></span></th><th data-column="category">Category <span class="sort-indicator"></span></th><th data-column="price">AI Market Value <span class="sort-indicator"></span></th><th data-column="ebay_price">eBay Avg. Sold <span class="sort-indicator"></span></th><th>eBay Search</th></tr></thead><tbody id="data-table-body"></tbody></table></div>
+
+<script type="application/json" id="auctionData">
+    [
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Armless Modular Sectional Slipper Chair Light Gray Upholstered Nailhead Trim",
+        "category": "Furniture",
+        "total_market_value": 80,
+        "items": [
+            {
+                "item_name": "Armless Modular Sectional Chair Piece with Nailhead Trim",
+                "estimated_value": 80
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56444856/New-Armless-Chair",
+            "title": "New Armless Chair",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56444856/New-Armless-Chair",
+            "pics": [
+                "564448561.jpg",
+                "564448562.jpg",
+                "564448563.jpg",
+                "564448564.jpg",
+                "564448565.jpg",
+                "564448566.jpg",
+                "564448567.jpg"
+            ]
+        },
+        "ebay_avg_price": 392.3633333333334,
+        "ebay_avg_shipping": 0.0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Armless+Modular+Sectional+Slipper+Chair+Light+Gray+Upholstered+Nailhead+Trim&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "lot_number": 3,
+        "ebay_search_title": "Set of 3 Mid-Century Modern Style Nesting End Tables Walnut Finish (Damaged)",
+        "category": "Furniture",
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "Large Nesting Table (Damaged Corner)",
+                "estimated_value": 15
+            },
+            {
+                "item_name": "Medium Nesting Table",
+                "estimated_value": 30
+            },
+            {
+                "item_name": "Small Nesting Table",
+                "estimated_value": 30
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/57101781/3-New-Nesting-Tables-Damage-to-tall-table",
+            "title": "3 New Nesting Tables- Damage to tall table",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/57101781/3-New-Nesting-Tables-Damage-to-tall-table",
+            "pics": [
+                "571017811.jpg",
+                "571017812.jpg",
+                "571017813.jpg",
+                "571017814.jpg",
+                "571017815.jpg",
+                "571017816.jpg",
+                "571017817.jpg",
+                "571017818.jpg",
+                "571017819.jpg",
+                "5710178110.jpg",
+                "5710178111.jpg"
+            ]
+        },
+        "ebay_avg_price": 265.8396,
+        "ebay_avg_shipping": 92.60166666666667,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Set+of+3+Mid-Century+Modern+Style+Nesting+End+Tables+Walnut+Finish+%28Damaged%29&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Traditional Rectangular End Table Nightstand Wood Veneer Inlay Single Drawer (Damaged)",
+        "category": "Furniture",
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Traditional Wood Veneer End Table with Drawer (Damaged)",
+                "estimated_value": 50
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/57103745/New-Nightstand-End-Table-Damage-to-edge",
+            "title": "New Nightstand/ End Table- Damage to edge",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/57103745/New-Nightstand-End-Table-Damage-to-edge",
+            "pics": [
+                "571037451.jpg",
+                "571037452.jpg",
+                "571037453.jpg",
+                "571037454.jpg",
+                "571037455.jpg",
+                "571037456.jpg",
+                "571037457.jpg",
+                "571037458.jpg",
+                "571037459.jpg",
+                "5710374510.jpg"
+            ]
+        },
+        "ebay_avg_price": 189.43464285714285,
+        "ebay_avg_shipping": 105.78571428571429,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Traditional+Rectangular+End+Table+Nightstand+Wood+Veneer+Inlay+Single+Drawer+%28Damaged%29&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Mid Century Modern Style Nightstand End Table Wood Finish Single Drawer",
+        "category": "Furniture",
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "Mid-Century Modern Style Nightstand with Drawer",
+                "estimated_value": 75
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/57104485/New-Mid-Century-Style-Nightstand",
+            "title": "New Mid Century Style Nightstand",
+            "current_bid": "$11.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/57104485/New-Mid-Century-Style-Nightstand",
+            "pics": [
+                "571044851.jpg",
+                "571044852.jpg",
+                "571044853.jpg",
+                "571044854.jpg",
+                "571044855.jpg",
+                "571044856.jpg",
+                "571044857.jpg",
+                "571044858.jpg"
+            ]
+        },
+        "ebay_avg_price": 140.4557142857143,
+        "ebay_avg_shipping": 32.0025,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Mid+Century+Modern+Style+Nightstand+End+Table+Wood+Finish+Single+Drawer&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "MAQQL Upholstered Wall Panels Peel & Stick Headboard Queen Size Dark Coffee New",
+        "category": "Furniture",
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "MAQQL Queen Size Stick-On Upholstered Headboard Panels (9-pack, Dark Coffee)",
+                "estimated_value": 60
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56643986/New-Queen-Headboard-Stick-On-Panels",
+            "title": "New Queen Headboard Stick On Panels",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56643986/New-Queen-Headboard-Stick-On-Panels",
+            "pics": [
+                "566439861.jpg",
+                "566439862.jpg",
+                "566439863.jpg",
+                "566439864.jpg",
+                "566439865.jpg"
+            ]
+        },
+        "ebay_avg_price": 120.80066666666667,
+        "ebay_avg_shipping": 33.96142857142858,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=MAQQL+Upholstered+Wall+Panels+Peel+%26+Stick+Headboard+Queen+Size+Dark+Coffee+New&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Round Wood Top End Table Side Table Metal Frame Industrial Farmhouse Style Gray",
+        "category": "Furniture",
+        "total_market_value": 35,
+        "items": [
+            {
+                "item_name": "Industrial Round End Table Wood Top Metal Frame (Minor Damage)",
+                "estimated_value": 35
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/57103241/New-Round-End-Table-Small-Knick-on-Side",
+            "title": "New Round End Table Small Knick on Side",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/57103241/New-Round-End-Table-Small-Knick-on-Side",
+            "pics": [
+                "571032411.jpg",
+                "571032412.jpg",
+                "571032413.jpg",
+                "571032414.jpg",
+                "571032415.jpg",
+                "571032416.jpg",
+                "571032417.jpg"
+            ]
+        },
+        "ebay_avg_price": 102.99666666666666,
+        "ebay_avg_shipping": 81.86500000000001,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Round+Wood+Top+End+Table+Side+Table+Metal+Frame+Industrial+Farmhouse+Style+Gray&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "New 28\" 4-Light Bathroom Vanity Fixture Matte Black Clear Glass Globes",
+        "category": "Decor/Lighting",
+        "total_market_value": 45,
+        "items": [
+            {
+                "item_name": "New 4-Light Matte Black Vanity Light with Glass Globes",
+                "estimated_value": 45
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/57102622/New-Bathroom-Vanity-Light-4-Globes-28-Inches-Long",
+            "title": "New Bathroom Vanity Light 4 Globes 28 Inches Long",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/57102622/New-Bathroom-Vanity-Light-4-Globes-28-Inches-Long",
+            "pics": [
+                "571026221.jpg",
+                "571026222.jpg",
+                "571026223.jpg",
+                "571026224.jpg",
+                "571026225.jpg",
+                "571026226.jpg",
+                "571026227.jpg"
+            ]
+        },
+        "ebay_avg_price": 75.20689655172414,
+        "ebay_avg_shipping": 24.849999999999998,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=New+28%22+4-Light+Bathroom+Vanity+Fixture+Matte+Black+Clear+Glass+Globes&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Basic Swivel Office Task Chair Black Fabric Upholstery Armrests",
+        "category": "Furniture",
+        "total_market_value": 20,
+        "items": [
+            {
+                "item_name": "Basic Black Fabric Swivel Office Chair",
+                "estimated_value": 20
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/56678379/Swivel-Office-Chair",
+            "title": "Swivel Office Chair",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/56678379/Swivel-Office-Chair",
+            "pics": [
+                "566783791.jpg",
+                "566783792.jpg"
+            ]
+        },
+        "ebay_avg_price": 67.38583333333334,
+        "ebay_avg_shipping": 0.0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Basic+Swivel+Office+Task+Chair+Black+Fabric+Upholstery+Armrests&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "KCRET Toddler Bed Guard Rail Safety Fence for Queen King Bed Gray New",
+        "category": "Miscellaneous",
+        "total_market_value": 90,
+        "items": [
+            {
+                "item_name": "KCRET Toddler Bed Guard Rail System",
+                "estimated_value": 90
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/57105189/New-Bed-Guard-Rails",
+            "title": "New Bed Guard Rails",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/57105189/New-Bed-Guard-Rails",
+            "pics": [
+                "571051891.jpg",
+                "571051892.jpg",
+                "571051893.jpg",
+                "571051894.jpg",
+                "571051895.jpg"
+            ]
+        },
+        "ebay_avg_price": 49.358620689655176,
+        "ebay_avg_shipping": 17.11888888888889,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=KCRET+Toddler+Bed+Guard+Rail+Safety+Fence+for+Queen+King+Bed+Gray+New&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "White 3-Drawer Dresser Chest Gold Ring Pulls Damaged Corner AS-IS",
+        "category": "Furniture",
+        "total_market_value": 70,
+        "items": [
+            {
+                "item_name": "White 3-Drawer Dresser with Gold Ring Pulls (corner damage)",
+                "estimated_value": 70
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/57104843/New-3-Drawer-Dresser-Small-damage-to-front-corner",
+            "title": "New 3 Drawer Dresser - Small damage to front corner",
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/57104843/New-3-Drawer-Dresser-Small-damage-to-front-corner",
+            "pics": [
+                "571048431.jpg",
+                "571048432.jpg",
+                "571048433.jpg",
+                "571048434.jpg",
+                "571048435.jpg",
+                "571048436.jpg",
+                "571048437.jpg",
+                "571048438.jpg"
+            ]
+        },
+        "ebay_avg_price": 0.0,
+        "ebay_avg_shipping": 0.0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=White+3-Drawer+Dresser+Chest+Gold+Ring+Pulls+Damaged+Corner+AS-IS&_sacat=0&LH_Complete=1&LH_Sold=1"
+    }
+]
+</script>
+
+<script>
+    const jsonData = JSON.parse(document.getElementById('auctionData').textContent);
+    const tableBody = document.getElementById('data-table-body');
+    const headers = document.querySelectorAll('thead th[data-column]');
+    let currentSort = { column: 'ebay_price', isAscending: false };
+
+    function populateTable() {
+        tableBody.innerHTML = '';
+        const formatCurrency = (value) => (value || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 });
+
+        jsonData.forEach(lot => {
+            const mainRow = document.createElement('tr');
+            mainRow.className = 'lot-main';
+
+            mainRow.innerHTML = `
+                <td>${lot.lot_number > 0 ? lot.lot_number : ''}</td>
+                <td><a href="${lot.original_listing.url}" target="_blank" title="${lot.original_listing.title}">${lot.ebay_search_title || 'N/A'}</a></td>
+                <td>${lot.category || 'Miscellaneous'}</td>
+                <td style="text-align: right;">${formatCurrency(lot.total_market_value)}</td>
+                <td style="text-align: right;"></td>
+                <td style="text-align: center;"><a href="${lot.ebay_search_url || '#'}" target="_blank">Search</a></td>
+            `;
+
+            const ebayPriceCell = mainRow.cells[4];
+            const avgPrice = lot.ebay_avg_price || 0;
+            const avgShipping = lot.ebay_avg_shipping || 0;
+
+            if (avgPrice > 0) {
+                let displayPrice = formatCurrency(avgPrice);
+                if (avgShipping > 0) {
+                    displayPrice += ` (${formatCurrency(avgShipping).replace(/\D/g, '')})`;
+                }
+                ebayPriceCell.textContent = displayPrice;
+            } else {
+                ebayPriceCell.textContent = 'N/A';
+            }
+            
+            tableBody.appendChild(mainRow);
+
+            if (lot.items && lot.items.length > 1) {
+                lot.items.forEach(subItem => {
+                    const subRow = document.createElement('tr');
+                    subRow.className = 'lot-sub-item';
+                    subRow.innerHTML = `
+                        <td></td>
+                        <td style="padding-left: 35px;">${subItem.item_name || 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: right;">${formatCurrency(subItem.estimated_value)}</td>
+                        <td></td>
+                        <td></td>
+                    `;
+                    tableBody.appendChild(subRow);
+                });
+            }
+        });
+    }
+
+    function sortData(column) {
+        const isNumeric = ['price', 'ebay_price', 'lot_number'].includes(column);
+        if (currentSort.column === column) {
+            currentSort.isAscending = !currentSort.isAscending;
+        } else {
+            currentSort.column = column;
+            currentSort.isAscending = !isNumeric;
+        }
+
+        jsonData.sort((a, b) => {
+            let valA, valB;
+            switch (column) {
+                case 'price': valA = a.total_market_value || 0; valB = b.total_market_value || 0; break;
+                case 'ebay_price': valA = a.ebay_avg_price || 0; valB = b.ebay_avg_price || 0; break;
+                case 'lot_number': valA = a.lot_number || 0; valB = b.lot_number || 0; break;
+                case 'name': valA = (a.ebay_search_title || '').toLowerCase(); valB = (b.ebay_search_title || '').toLowerCase(); break;
+                case 'category': valA = (a.category || '').toLowerCase(); valB = (b.category || '').toLowerCase(); break;
+                default: return 0;
+            }
+            let comparison = 0;
+            if (valA > valB) { comparison = 1; }
+            else if (valA < valB) { comparison = -1; }
+            return currentSort.isAscending ? comparison : comparison * -1;
+        });
+        updateSortIndicators();
+        populateTable();
+    }
+
+    function updateSortIndicators() {
+        headers.forEach(header => {
+            const indicator = header.querySelector('.sort-indicator');
+            if (header.dataset.column === currentSort.column) {
+                indicator.textContent = currentSort.isAscending ? ' ▲' : ' ▼';
+            } else { indicator.textContent = ''; }
+        });
+    }
+
+    headers.forEach(header => { header.addEventListener('click', () => { sortData(header.dataset.column); }); });
+    sortData('ebay_price');
+</script>
+</body>
+</html>
