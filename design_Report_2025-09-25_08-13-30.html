@@ -1,0 +1,617 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Item Analysis</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a; --table-bg-color: #2c2c2c; --header-bg-color: #3a3a3a;
+            --header-hover-bg-color: #4a4a4a; --row-even-bg-color: #333333; --row-odd-bg-color: #2c2c2c;
+            --border-color: #444444; --text-color: #e0e0e0; --link-color: #4a90e2;
+            --link-hover-color: #81b5f5; --sort-indicator-color: #81b5f5;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 2rem; line-height: 1.6; }
+        h1 { text-align: center; color: #ffffff; font-weight: 300; margin-bottom: 2rem; }
+        .table-container { max-width: 1500px; margin: auto; overflow-x: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        table { width: 100%; border-collapse: collapse; background-color: var(--table-bg-color); border-spacing: 0; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        thead th { background-color: var(--header-bg-color); color: #ffffff; font-weight: 600; position: sticky; top: 0; z-index: 10; }
+        thead th[data-column] { cursor: pointer; transition: background-color 0.2s ease-in-out; user-select: none; }
+        thead th[data-column]:hover { background-color: var(--header-hover-bg-color); }
+        tbody tr:hover { background-color: var(--header-hover-bg-color); }
+        td { font-size: 0.95em; }
+        td:nth-child(4), td:nth-child(5) { font-family: 'Courier New', Courier, monospace; text-align: right; white-space: nowrap; }
+        td:nth-child(6), td:nth-child(7) { text-align: center; }
+        a { color: var(--link-color); text-decoration: none; transition: color 0.2s ease-in-out; }
+        a:hover { color: var(--link-hover-color); text-decoration: underline; }
+        .sort-indicator { color: var(--sort-indicator-color); font-size: 0.8em; margin-left: 8px; display: inline-block; width: 10px; }
+        .lot-main td { font-weight: bold; }
+        .lot-main:nth-child(4n+1), .lot-main:nth-child(4n+2) { background-color: var(--row-odd-bg-color); }
+        .lot-main:nth-child(4n+3), .lot-main:nth-child(4n) { background-color: var(--row-even-bg-color); }
+        .lot-sub-item { background-color: rgba(0,0,0,0.15) !important; }
+        .lot-sub-item td { font-size: 0.9em; color: #c0c0c0; border-color: #383838; }
+        .lot-sub-item td:nth-child(2) { padding-left: 35px; }
+    </style>
+</head>
+<body>
+    <h1>Auction Item Analysis</h1>
+    <div class="table-container"><table><thead><tr><th data-column="lot_number">Lot # <span class="sort-indicator"></span></th><th data-column="name">Item Name <span class="sort-indicator"></span></th><th data-column="category">Category <span class="sort-indicator"></span></th><th data-column="price">AI Market Value <span class="sort-indicator"></span></th><th data-column="ebay_price">eBay Avg. Sold <span class="sort-indicator"></span></th><th>eBay Search</th><th>Google Search</th></tr></thead><tbody id="data-table-body"></tbody></table></div>
+
+<script type="application/json" id="auctionData">
+    [
+    {
+        "ebay_search_title": "Vintage Henredon Federal Style Bow Front 12-Drawer Double Dresser Chest Mahogany",
+        "category": "Furniture",
+        "total_market_value": 400,
+        "items": [
+            {
+                "item_name": "Henredon Vintage Federal Style Mahogany Bow Front 12-Drawer Dresser / Chest of Drawers",
+                "estimated_value": 400,
+                "ebay_avg_price": 1895.5916666666667,
+                "ebay_avg_shipping": 799.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88697461/Henredon-Dresser",
+            "title": "Henredon Dresser",
+            "lot_number": 3,
+            "current_bid": "$30.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88697461/Henredon-Dresser",
+            "pics": [
+                "886974611.jpg",
+                "886974612.jpg",
+                "886974613.jpg",
+                "886974614.jpg",
+                "886974615.jpg",
+                "886974616.jpg",
+                "886974617.jpg",
+                "886974618.jpg"
+            ]
+        },
+        "lot_number": 3,
+        "ebay_avg_price": 1895.5916666666667,
+        "ebay_avg_shipping": 799.0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Henredon+Federal+Style+Bow+Front+12-Drawer+Double+Dresser+Chest+Mahogany&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Honda GX340 11HP Engine Portable Generator Heavy Duty on Wheels w/ Cord & Manuals",
+        "category": "Tools/Equipment",
+        "total_market_value": 350,
+        "items": [
+            {
+                "item_name": "Honda GX340 11.0 HP Engine Portable Generator on Custom Wheeled Cart with Manuals",
+                "estimated_value": 325,
+                "ebay_avg_price": 1721.3333333333333,
+                "ebay_avg_shipping": 48.33
+            },
+            {
+                "item_name": "Heavy Duty Orange Outdoor Extension Cord",
+                "estimated_value": 25,
+                "ebay_avg_price": 31.990714285714287,
+                "ebay_avg_shipping": 7.235
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88606173/Honda-Generator",
+            "title": "Honda Generator",
+            "lot_number": 12,
+            "current_bid": "$35.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88606173/Honda-Generator",
+            "pics": [
+                "886061731.jpg",
+                "886061732.jpg",
+                "886061733.jpg",
+                "886061734.jpg",
+                "886061735.jpg",
+                "886061736.jpg",
+                "886061737.jpg",
+                "886061738.jpg"
+            ]
+        },
+        "lot_number": 12,
+        "ebay_avg_price": 1753.3240476190476,
+        "ebay_avg_shipping": 55.565,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Honda+GX340+11HP+Engine+Portable+Generator+Heavy+Duty+on+Wheels+w%2F+Cord+%26+Manuals&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Henredon Genuine Mahogany Chest on Chest Highboy Dresser Traditional Style",
+        "category": "Furniture",
+        "total_market_value": 450,
+        "items": [
+            {
+                "item_name": "Vintage Henredon Genuine Mahogany 8-Drawer Chest on Chest Highboy Dresser",
+                "estimated_value": 450,
+                "ebay_avg_price": 1709.6019230769232,
+                "ebay_avg_shipping": 799.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88697513/Henredon-Chest-on-Chest",
+            "title": "Henredon Chest on Chest",
+            "lot_number": 7,
+            "current_bid": "$30.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88697513/Henredon-Chest-on-Chest",
+            "pics": [
+                "886975131.jpg",
+                "886975132.jpg",
+                "886975133.jpg",
+                "886975134.jpg",
+                "886975135.jpg",
+                "886975136.jpg",
+                "886975137.jpg",
+                "886975138.jpg",
+                "886975139.jpg",
+                "8869751310.jpg",
+                "8869751311.jpg"
+            ]
+        },
+        "lot_number": 7,
+        "ebay_avg_price": 1709.6019230769232,
+        "ebay_avg_shipping": 799.0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Henredon+Genuine+Mahogany+Chest+on+Chest+Highboy+Dresser+Traditional+Style&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Federal Style Bow Front Dresser Chest of Drawers Mahogany Project Piece",
+        "category": "Furniture",
+        "total_market_value": 85,
+        "items": [
+            {
+                "item_name": "Antique/Vintage Federal Style Bow Front 3-Drawer Dresser Chest for Restoration",
+                "estimated_value": 85,
+                "ebay_avg_price": 1675.5326666666667,
+                "ebay_avg_shipping": 561.2627272727273
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88697589/Federal-Style-Dresser",
+            "title": "Federal Style Dresser",
+            "lot_number": 10,
+            "current_bid": "$20.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88697589/Federal-Style-Dresser",
+            "pics": [
+                "886975891.jpg",
+                "886975892.jpg",
+                "886975893.jpg",
+                "886975894.jpg",
+                "886975895.jpg",
+                "886975896.jpg",
+                "886975897.jpg",
+                "886975898.jpg",
+                "886975899.jpg",
+                "8869758910.jpg",
+                "8869758911.jpg"
+            ]
+        },
+        "lot_number": 10,
+        "ebay_avg_price": 1675.5326666666667,
+        "ebay_avg_shipping": 561.2627272727273,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Federal+Style+Bow+Front+Dresser+Chest+of+Drawers+Mahogany+Project+Piece&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Sterling Silver Lot - Watson/Mauser Weighted Candlesticks, Berry Spoon, Awl",
+        "category": "Collectibles",
+        "total_market_value": 125,
+        "items": [
+            {
+                "item_name": "Pair of Vintage Watson/Mauser Sterling Silver Weighted Candlesticks 2150 Etched Floral",
+                "estimated_value": 75,
+                "ebay_avg_price": 879.9979999999999,
+                "ebay_avg_shipping": 20.259999999999998
+            },
+            {
+                "item_name": "Antique Sterling Silver Ornate Repousse Berry Serving Spoon",
+                "estimated_value": 30,
+                "ebay_avg_price": 149.77642857142857,
+                "ebay_avg_shipping": 9.013571428571428
+            },
+            {
+                "item_name": "Antique Sterling Silver Handle Pointed Awl Scribe Tool",
+                "estimated_value": 15,
+                "ebay_avg_price": 0.0,
+                "ebay_avg_shipping": 0.0
+            },
+            {
+                "item_name": "Small Sterling Silver Bookmark Piece",
+                "estimated_value": 5,
+                "ebay_avg_price": 39.498695652173915,
+                "ebay_avg_shipping": 6.078235294117647
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88539150/Sterling-Silver-Candlesticks",
+            "title": "Sterling Silver / Candlesticks",
+            "lot_number": 6,
+            "current_bid": "$40.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88539150/Sterling-Silver-Candlesticks",
+            "pics": [
+                "885391501.jpg",
+                "885391502.jpg",
+                "885391503.jpg",
+                "885391504.jpg",
+                "885391505.jpg",
+                "885391506.jpg",
+                "885391507.jpg",
+                "885391508.jpg",
+                "885391509.jpg",
+                "8853915010.jpg"
+            ]
+        },
+        "lot_number": 6,
+        "ebay_avg_price": 1069.2731242236023,
+        "ebay_avg_shipping": 35.351806722689076,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Sterling+Silver+Lot+-+Watson%2FMauser+Weighted+Candlesticks%2C+Berry+Spoon%2C+Awl&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Traditional Style 2-Piece China Cabinet Buffet Hutch w/ Lighted Glass Doors",
+        "category": "Furniture",
+        "total_market_value": 250,
+        "items": [
+            {
+                "item_name": "Traditional Two-Piece Lighted China Cabinet Buffet and Hutch, Walnut Finish",
+                "estimated_value": 250,
+                "ebay_avg_price": 779.7737931034483,
+                "ebay_avg_shipping": 214.21
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88697443/Buffet-Hutch",
+            "title": "Buffet Hutch",
+            "lot_number": 1,
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88697443/Buffet-Hutch",
+            "pics": [
+                "886974431.jpg",
+                "886974432.jpg",
+                "886974433.jpg",
+                "886974434.jpg",
+                "886974435.jpg",
+                "886974436.jpg"
+            ]
+        },
+        "lot_number": 1,
+        "ebay_avg_price": 779.7737931034483,
+        "ebay_avg_shipping": 214.21,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Traditional+Style+2-Piece+China+Cabinet+Buffet+Hutch+w%2F+Lighted+Glass+Doors&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Acacia Home & Garden Rattan Wicker 3-Seater Sofa Couch w/ Cushions Tropical Coastal",
+        "category": "Furniture",
+        "total_market_value": 250,
+        "items": [
+            {
+                "item_name": "Acacia Home & Garden Rattan Wicker 3-Seater Sofa Couch w/ Yellow Cushions",
+                "estimated_value": 250,
+                "ebay_avg_price": 580.9864,
+                "ebay_avg_shipping": 99.99
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88697552/Acacia-Home-Rattan-Couch",
+            "title": "Acacia Home / Rattan Couch",
+            "lot_number": 8,
+            "current_bid": "$55.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88697552/Acacia-Home-Rattan-Couch",
+            "pics": [
+                "886975521.jpg",
+                "886975522.jpg",
+                "886975523.jpg",
+                "886975524.jpg",
+                "886975525.jpg",
+                "886975526.jpg",
+                "886975527.jpg",
+                "886975528.jpg",
+                "886975529.jpg"
+            ]
+        },
+        "lot_number": 8,
+        "ebay_avg_price": 580.9864,
+        "ebay_avg_shipping": 99.99,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Acacia+Home+%26+Garden+Rattan+Wicker+3-Seater+Sofa+Couch+w%2F+Cushions+Tropical+Coastal&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Traditional Dark Wood Bookcase Etagere Wall Unit Arched Top 2 Drawers",
+        "category": "Furniture",
+        "total_market_value": 200,
+        "items": [
+            {
+                "item_name": "Tall Traditional Style Dark Stained Wood Bookcase Etagere with Adjustable Shelves and Two Drawers",
+                "estimated_value": 200,
+                "ebay_avg_price": 132.545,
+                "ebay_avg_shipping": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88697570/Wall-Unit",
+            "title": "Wall Unit",
+            "lot_number": 9,
+            "current_bid": "$45.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88697570/Wall-Unit",
+            "pics": [
+                "886975701.jpg",
+                "886975702.jpg",
+                "886975703.jpg",
+                "886975704.jpg",
+                "886975705.jpg"
+            ]
+        },
+        "lot_number": 9,
+        "ebay_avg_price": 132.545,
+        "ebay_avg_shipping": 0.0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Traditional+Dark+Wood+Bookcase+Etagere+Wall+Unit+Arched+Top+2+Drawers&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Samsung 82\" QN82Q70R Q70R Series 4K UHD QLED Smart TV (2019 Model) w/ Wall Mount",
+        "category": "Electronics",
+        "total_market_value": 850,
+        "items": [
+            {
+                "item_name": "Samsung 82-Inch Class Q70R QLED 4K UHD HDR Smart TV (Model QN82Q70RAFXZA)",
+                "estimated_value": 820,
+                "ebay_avg_price": 0.0,
+                "ebay_avg_shipping": 0.0
+            },
+            {
+                "item_name": "Universal Heavy Duty TV Wall Mount Bracket",
+                "estimated_value": 30,
+                "ebay_avg_price": 35.528571428571425,
+                "ebay_avg_shipping": 18.97
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88697484/Samsung-Wall-Mount-Television-85",
+            "title": "Samsung Wall Mount Television / 85\"",
+            "lot_number": 5,
+            "current_bid": "$65.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88697484/Samsung-Wall-Mount-Television-85",
+            "pics": [
+                "886974841.jpg",
+                "886974842.jpg",
+                "886974843.jpg",
+                "886974844.jpg",
+                "886974845.jpg",
+                "886974846.jpg"
+            ]
+        },
+        "lot_number": 5,
+        "ebay_avg_price": 35.528571428571425,
+        "ebay_avg_shipping": 18.97,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Samsung+82%22+QN82Q70R+Q70R+Series+4K+UHD+QLED+Smart+TV+%282019+Model%29+w%2F+Wall+Mount&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Troy-Bilt Super Tomahawk 15016 Chipper Shredder 8HP Briggs & Stratton Gas Engine",
+        "category": "Tools/Equipment",
+        "total_market_value": 450,
+        "items": [
+            {
+                "item_name": "Troy-Bilt Super Tomahawk Chipper Shredder Model 15016 w/ 8HP B&S Engine & Accessories",
+                "estimated_value": 450,
+                "ebay_avg_price": 32.24384615384616,
+                "ebay_avg_shipping": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88606153/Troy-Bilt-Chipper-Shredder",
+            "title": "Troy Bilt Chipper Shredder",
+            "lot_number": 4,
+            "current_bid": "$50.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88606153/Troy-Bilt-Chipper-Shredder",
+            "pics": [
+                "886061531.jpg",
+                "886061532.jpg",
+                "886061533.jpg",
+                "886061534.jpg",
+                "886061535.jpg",
+                "886061536.jpg",
+                "886061537.jpg",
+                "886061538.jpg",
+                "886061539.jpg",
+                "8860615310.jpg",
+                "8860615311.jpg"
+            ]
+        },
+        "lot_number": 4,
+        "ebay_avg_price": 32.24384615384616,
+        "ebay_avg_shipping": 0.0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Troy-Bilt+Super+Tomahawk+15016+Chipper+Shredder+8HP+Briggs+%26+Stratton+Gas+Engine&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Bolens ST180H Hydro DuraTrac Garden Tractor w/ 48\" Mower Deck Attachment",
+        "category": "Tools/Equipment",
+        "total_market_value": 300,
+        "items": [
+            {
+                "item_name": "Bolens ST180H Hydro DuraTrac Garden Tractor (Untested)",
+                "estimated_value": 225,
+                "ebay_avg_price": 0.0,
+                "ebay_avg_shipping": 0.0
+            },
+            {
+                "item_name": "Bolens 48-Inch Mower Deck Attachment (As-Is Condition in Box)",
+                "estimated_value": 75,
+                "ebay_avg_price": 0.0,
+                "ebay_avg_shipping": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88606132/Bolens-Tractor-Mower-Deck",
+            "title": "Bolens Tractor / Mower Deck",
+            "lot_number": 2,
+            "current_bid": "$25.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88606132/Bolens-Tractor-Mower-Deck",
+            "pics": [
+                "886061321.jpg",
+                "886061322.jpg",
+                "886061323.jpg",
+                "886061324.jpg",
+                "886061325.jpg",
+                "886061326.jpg",
+                "886061327.jpg",
+                "886061328.jpg",
+                "886061329.jpg",
+                "8860613210.jpg",
+                "8860613211.jpg",
+                "8860613212.jpg",
+                "8860613213.jpg"
+            ]
+        },
+        "lot_number": 2,
+        "ebay_avg_price": 0.0,
+        "ebay_avg_shipping": 0.0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Bolens+ST180H+Hydro+DuraTrac+Garden+Tractor+w%2F+48%22+Mower+Deck+Attachment&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Bernhardt Traditional Lighted Secretary Desk Bookcase Wall Unit Cabinet",
+        "category": "Furniture",
+        "total_market_value": 225,
+        "items": [
+            {
+                "item_name": "Vintage Bernhardt Traditional Lighted Secretary Desk Wall Unit with Drop Down Desk, Drawer, and Lower Cabinet",
+                "estimated_value": 225,
+                "ebay_avg_price": 0.0,
+                "ebay_avg_shipping": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88697607/Bernhardt-Wall-Unit",
+            "title": "Bernhardt Wall Unit",
+            "lot_number": 11,
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88697607/Bernhardt-Wall-Unit",
+            "pics": [
+                "886976071.jpg",
+                "886976072.jpg",
+                "886976073.jpg",
+                "886976074.jpg",
+                "886976075.jpg",
+                "886976076.jpg",
+                "886976077.jpg",
+                "886976078.jpg"
+            ]
+        },
+        "lot_number": 11,
+        "ebay_avg_price": 0.0,
+        "ebay_avg_shipping": 0.0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Bernhardt+Traditional+Lighted+Secretary+Desk+Bookcase+Wall+Unit+Cabinet&_sacat=0&LH_Complete=1&LH_Sold=1"
+    }
+]
+</script>
+
+<script>
+    const jsonData = JSON.parse(document.getElementById('auctionData').textContent);
+    const tableBody = document.getElementById('data-table-body');
+    const headers = document.querySelectorAll('thead th[data-column]');
+    let currentSort = { column: 'ebay_price', isAscending: false };
+
+    function populateTable() {
+        tableBody.innerHTML = '';
+        const formatCurrency = (value) => (value || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 });
+
+        jsonData.forEach(lot => {
+            const mainRow = document.createElement('tr');
+            mainRow.className = 'lot-main';
+            const encodedSearch = encodeURIComponent(lot.ebay_search_title || '');
+
+            mainRow.innerHTML = `
+                <td>${lot.lot_number > 0 ? lot.lot_number : ''}</td>
+                <td><a href="${lot.original_listing.url}" target="_blank" title="${lot.original_listing.title}">${lot.ebay_search_title || 'N/A'}</a></td>
+                <td>${lot.category || 'Miscellaneous'}</td>
+                <td style="text-align: right;">${formatCurrency(lot.total_market_value)}</td>
+                <td style="text-align: right;"></td>
+                <td style="text-align: center;"><a href="${lot.ebay_search_url || '#'}" target="_blank">eBay</a></td>
+                <td style="text-align: center;"><a href="https://www.google.com/search?q=${encodedSearch}" target="_blank">Google</a></td>
+            `;
+
+            const ebayPriceCell = mainRow.cells[4];
+            const avgPrice = lot.ebay_avg_price || 0;
+            const avgShipping = lot.ebay_avg_shipping || 0;
+
+            if (avgPrice > 0) {
+                let displayPrice = formatCurrency(avgPrice);
+                if (avgShipping > 0) {
+                    displayPrice += ` (${Math.round(avgShipping)})`;
+                }
+                ebayPriceCell.textContent = displayPrice;
+            } else {
+                ebayPriceCell.textContent = 'N/A';
+            }
+            
+            tableBody.appendChild(mainRow);
+
+            if (lot.items && lot.items.length > 1) {
+                lot.items.forEach(subItem => {
+                    const subRow = document.createElement('tr');
+                    subRow.className = 'lot-sub-item';
+                    
+                    const subAvgPrice = subItem.ebay_avg_price || 0;
+                    const subAvgShipping = subItem.ebay_avg_shipping || 0;
+                    const subEncodedSearch = encodeURIComponent(subItem.item_name || '');
+                    const subEbayUrl = `https://www.ebay.com/sch/i.html?_from=R40&_nkw=${subEncodedSearch}&_sacat=0&LH_Complete=1&LH_Sold=1`;
+                    const subGoogleUrl = `https://www.google.com/search?q=${subEncodedSearch}`;
+
+                    let subDisplayPrice = 'N/A';
+                    if (subAvgPrice > 0) {
+                        subDisplayPrice = formatCurrency(subAvgPrice);
+                        if (subAvgShipping > 0) {
+                            subDisplayPrice += ` (${Math.round(subAvgShipping)})`;
+                        }
+                    }
+
+                    subRow.innerHTML = `
+                        <td></td>
+                        <td style="padding-left: 35px;">${subItem.item_name || 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: right;">${formatCurrency(subItem.estimated_value)}</td>
+                        <td style="text-align: right;">${subDisplayPrice}</td>
+                        <td style="text-align: center;"><a href="${subEbayUrl}" target="_blank">eBay</a></td>
+                        <td style="text-align: center;"><a href="${subGoogleUrl}" target="_blank">Google</a></td>
+                    `;
+                    tableBody.appendChild(subRow);
+                });
+            }
+        });
+    }
+
+    function sortData(column) {
+        const isNumeric = ['price', 'ebay_price', 'lot_number'].includes(column);
+        if (currentSort.column === column) {
+            currentSort.isAscending = !currentSort.isAscending;
+        } else {
+            currentSort.column = column;
+            currentSort.isAscending = !isNumeric;
+        }
+
+        jsonData.sort((a, b) => {
+            let valA, valB;
+            switch (column) {
+                case 'price': valA = a.total_market_value || 0; valB = b.total_market_value || 0; break;
+                case 'ebay_price': valA = a.ebay_avg_price || 0; valB = b.ebay_avg_price || 0; break;
+                case 'lot_number': valA = a.lot_number || 0; valB = b.lot_number || 0; break;
+                case 'name': valA = (a.ebay_search_title || '').toLowerCase(); valB = (b.ebay_search_title || '').toLowerCase(); break;
+                case 'category': valA = (a.category || '').toLowerCase(); valB = (b.category || '').toLowerCase(); break;
+                default: return 0;
+            }
+            let comparison = 0;
+            if (valA > valB) { comparison = 1; }
+            else if (valA < valB) { comparison = -1; }
+            return currentSort.isAscending ? comparison : comparison * -1;
+        });
+        updateSortIndicators();
+        populateTable();
+    }
+
+    function updateSortIndicators() {
+        headers.forEach(header => {
+            const indicator = header.querySelector('.sort-indicator');
+            if (header.dataset.column === currentSort.column) {
+                indicator.textContent = currentSort.isAscending ? ' ▲' : ' ▼';
+            } else { indicator.textContent = ''; }
+        });
+    }
+
+    headers.forEach(header => { header.addEventListener('click', () => { sortData(header.dataset.column); }); });
+    sortData('ebay_price');
+</script>
+</body>
+</html>
