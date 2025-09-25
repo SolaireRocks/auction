@@ -1,0 +1,555 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Item Analysis</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a; --table-bg-color: #2c2c2c; --header-bg-color: #3a3a3a;
+            --header-hover-bg-color: #4a4a4a; --row-even-bg-color: #333333; --row-odd-bg-color: #2c2c2c;
+            --border-color: #444444; --text-color: #e0e0e0; --link-color: #4a90e2;
+            --link-hover-color: #81b5f5; --sort-indicator-color: #81b5f5;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 2rem; line-height: 1.6; }
+        h1 { text-align: center; color: #ffffff; font-weight: 300; margin-bottom: 2rem; }
+        .table-container { max-width: 1500px; margin: auto; overflow-x: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        table { width: 100%; border-collapse: collapse; background-color: var(--table-bg-color); border-spacing: 0; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        thead th { background-color: var(--header-bg-color); color: #ffffff; font-weight: 600; position: sticky; top: 0; z-index: 10; }
+        thead th[data-column] { cursor: pointer; transition: background-color 0.2s ease-in-out; user-select: none; }
+        thead th[data-column]:hover { background-color: var(--header-hover-bg-color); }
+        tbody tr:hover { background-color: var(--header-hover-bg-color); }
+        td { font-size: 0.95em; }
+        td:nth-child(4), td:nth-child(5) { font-family: 'Courier New', Courier, monospace; text-align: right; white-space: nowrap; }
+        td:nth-child(6), td:nth-child(7) { text-align: center; }
+        a { color: var(--link-color); text-decoration: none; transition: color 0.2s ease-in-out; }
+        a:hover { color: var(--link-hover-color); text-decoration: underline; }
+        .sort-indicator { color: var(--sort-indicator-color); font-size: 0.8em; margin-left: 8px; display: inline-block; width: 10px; }
+        .lot-main td { font-weight: bold; }
+        .lot-main:nth-child(4n+1), .lot-main:nth-child(4n+2) { background-color: var(--row-odd-bg-color); }
+        .lot-main:nth-child(4n+3), .lot-main:nth-child(4n) { background-color: var(--row-even-bg-color); }
+        .lot-sub-item { background-color: rgba(0,0,0,0.15) !important; }
+        .lot-sub-item td { font-size: 0.9em; color: #c0c0c0; border-color: #383838; }
+        .lot-sub-item td:nth-child(2) { padding-left: 35px; }
+    </style>
+</head>
+<body>
+    <h1>Auction Item Analysis</h1>
+    <div class="table-container"><table><thead><tr><th data-column="lot_number">Lot # <span class="sort-indicator"></span></th><th data-column="name">Item Name <span class="sort-indicator"></span></th><th data-column="category">Category <span class="sort-indicator"></span></th><th data-column="price">AI Market Value <span class="sort-indicator"></span></th><th data-column="ebay_price">eBay Avg. Sold <span class="sort-indicator"></span></th><th>eBay Search</th><th>Google Search</th></tr></thead><tbody id="data-table-body"></tbody></table></div>
+
+<script type="application/json" id="auctionData">
+    [
+    {
+        "ebay_search_title": "Kohler Gen 5.0 Portable Generator 5000 Watt 14HP Command PRO Engine",
+        "category": "Tools/Equipment",
+        "total_market_value": 400,
+        "items": [
+            {
+                "item_name": "Kohler Gen 5.0 Portable Generator 5000 Watt with 14HP Command PRO Engine",
+                "estimated_value": 400
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88436636/KOHLER-Gen-50-Generator",
+            "title": "KOHLER Gen 5.0 Generator",
+            "lot_number": 0,
+            "current_bid": "$95.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88436636/KOHLER-Gen-50-Generator",
+            "pics": [
+                "884366361.jpg",
+                "884366362.jpg",
+                "884366363.jpg",
+                "884366364.jpg",
+                "884366365.jpg",
+                "884366366.jpg",
+                "884366367.jpg"
+            ]
+        },
+        "lot_number": 0,
+        "ebay_avg_price": 2747.148846153846,
+        "ebay_avg_shipping": 216.785,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Kohler+Gen+5.0+Portable+Generator+5000+Watt+14HP+Command+PRO+Engine&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "10' ft Aluminum Jon Fishing Boat V-Hull with 2 Seats, Humminbird Fish Finders, Oars",
+        "category": "Tools/Equipment",
+        "total_market_value": 600,
+        "items": [
+            {
+                "item_name": "10 ft Aluminum V-Hull / Jon Boat Fishing Boat",
+                "estimated_value": 400
+            },
+            {
+                "item_name": "Humminbird PiranhaMAX 4 DI Fish Finder with Transducer",
+                "estimated_value": 60
+            },
+            {
+                "item_name": "Vintage Electronic Fish Finder (Brand Unconfirmed)",
+                "estimated_value": 25
+            },
+            {
+                "item_name": "Set of 2 Padded Pedestal Swivel Boat Seats Vinyl/Plastic",
+                "estimated_value": 60
+            },
+            {
+                "item_name": "Pair of Wooden Boat Oars/Paddles",
+                "estimated_value": 25
+            },
+            {
+                "item_name": "Lot of 2 Boat Anchors with Rope",
+                "estimated_value": 30
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88530018/10-ft-Aluminum-Fishing-Boat",
+            "title": "10 ft. Aluminum Fishing Boat",
+            "lot_number": 0,
+            "current_bid": "$85.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88530018/10-ft-Aluminum-Fishing-Boat",
+            "pics": [
+                "885300181.jpg",
+                "885300182.jpg",
+                "885300183.jpg",
+                "885300184.jpg",
+                "885300185.jpg",
+                "885300186.jpg",
+                "885300187.jpg",
+                "885300188.jpg",
+                "885300189.jpg",
+                "8853001810.jpg",
+                "8853001811.jpg",
+                "8853001812.jpg"
+            ]
+        },
+        "lot_number": 0,
+        "ebay_avg_price": 1530.8607033885653,
+        "ebay_avg_shipping": 84.5350695812808,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=10%27+ft+Aluminum+Jon+Fishing+Boat+V-Hull+with+2+Seats%2C+Humminbird+Fish+Finders%2C+Oars&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Kling Colonial Oak Slant Front Secretary Desk w/ Glass Door Hutch Bookcase",
+        "category": "Furniture",
+        "total_market_value": 175,
+        "items": [
+            {
+                "item_name": "Vintage Kling Colonial Solid Oak Secretary Desk with Bookcase Hutch",
+                "estimated_value": 175
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88528673/KLING-Colonial-Oak-Secretary-Desk",
+            "title": "KLING Colonial Oak Secretary Desk",
+            "lot_number": 0,
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88528673/KLING-Colonial-Oak-Secretary-Desk",
+            "pics": [
+                "885286731.jpg",
+                "885286732.jpg",
+                "885286733.jpg",
+                "885286734.jpg",
+                "885286735.jpg",
+                "885286736.jpg",
+                "885286737.jpg",
+                "885286738.jpg",
+                "885286739.jpg",
+                "8852867310.jpg",
+                "8852867311.jpg",
+                "8852867312.jpg"
+            ]
+        },
+        "lot_number": 0,
+        "ebay_avg_price": 1335.861111111111,
+        "ebay_avg_shipping": 365.095,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Kling+Colonial+Oak+Slant+Front+Secretary+Desk+w%2F+Glass+Door+Hutch+Bookcase&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Modern Brown Genuine Leather Loveseat Sofa 2-Seater Rolled Arm Couch",
+        "category": "Furniture",
+        "total_market_value": 350,
+        "items": [
+            {
+                "item_name": "Modern Brown Genuine Leather Loveseat Sofa 2-Seater Rolled Arm Couch",
+                "estimated_value": 350
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88312924/Leather-Loveseat",
+            "title": "Leather Loveseat",
+            "lot_number": 0,
+            "current_bid": "$160.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88312924/Leather-Loveseat",
+            "pics": [
+                "883129241.jpg",
+                "883129242.jpg",
+                "883129243.jpg",
+                "883129244.jpg",
+                "883129245.jpg"
+            ]
+        },
+        "lot_number": 0,
+        "ebay_avg_price": 586.0977777777778,
+        "ebay_avg_shipping": 67.5,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Modern+Brown+Genuine+Leather+Loveseat+Sofa+2-Seater+Rolled+Arm+Couch&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Cub Cadet Ultima ZT1 42\" Zero-Turn Mower 22HP Kohler w/ Dual Bagger Attachment",
+        "category": "Tools/Equipment",
+        "total_market_value": 2700,
+        "items": [
+            {
+                "item_name": "Cub Cadet Ultima ZT1 42-inch Zero-Turn Riding Mower with 22HP Kohler 7000 Series Engine (2022 Model)",
+                "estimated_value": 2300
+            },
+            {
+                "item_name": "Cub Cadet Double Bagger Attachment for 42\" Zero-Turn Mowers",
+                "estimated_value": 400
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88311639/CUB-CADET-Ultima-ZT1-ZeroTurn-Lawn-Mower-wBagger-Attachment",
+            "title": "CUB CADET Ultima ZT1 Zero-Turn Lawn Mower w/Bagger Attachment",
+            "lot_number": 0,
+            "current_bid": "$1,600.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88311639/CUB-CADET-Ultima-ZT1-ZeroTurn-Lawn-Mower-wBagger-Attachment",
+            "pics": [
+                "883116391.jpg",
+                "883116392.jpg",
+                "883116393.jpg",
+                "883116394.jpg",
+                "883116395.jpg",
+                "883116396.jpg",
+                "883116397.jpg",
+                "883116398.jpg",
+                "883116399.jpg",
+                "8831163910.jpg",
+                "8831163911.jpg",
+                "8831163912.jpg",
+                "8831163913.jpg",
+                "8831163914.jpg",
+                "8831163915.jpg",
+                "8831163916.jpg",
+                "8831163917.jpg",
+                "8831163918.jpg",
+                "8831163919.jpg",
+                "8831163920.jpg",
+                "8831163921.jpg",
+                "8831163922.jpg",
+                "8831163923.jpg",
+                "8831163924.jpg",
+                "8831163925.jpg",
+                "8831163926.jpg"
+            ]
+        },
+        "lot_number": 0,
+        "ebay_avg_price": 472.31172413793104,
+        "ebay_avg_shipping": 0.0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Cub+Cadet+Ultima+ZT1+42%22+Zero-Turn+Mower+22HP+Kohler+w%2F+Dual+Bagger+Attachment&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Craftsman 5HP Front Tine Tiller Gas Rototiller Garden Cultivator",
+        "category": "Tools/Equipment",
+        "total_market_value": 150,
+        "items": [
+            {
+                "item_name": "Craftsman 5HP Gas Powered Front Tine Garden Tiller Rototiller",
+                "estimated_value": 150
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88275592/CRAFTSMAN-5-HP-Front-Line-Tiller",
+            "title": "CRAFTSMAN 5 HP Front Line Tiller",
+            "lot_number": 0,
+            "current_bid": "$90.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88275592/CRAFTSMAN-5-HP-Front-Line-Tiller",
+            "pics": [
+                "882755921.jpg",
+                "882755922.jpg",
+                "882755923.jpg",
+                "882755924.jpg",
+                "882755925.jpg",
+                "882755926.jpg"
+            ]
+        },
+        "lot_number": 0,
+        "ebay_avg_price": 310.92238095238093,
+        "ebay_avg_shipping": 48.93,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Craftsman+5HP+Front+Tine+Tiller+Gas+Rototiller+Garden+Cultivator&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Schwinn 205P Recumbent Exercise Bike Stationary Home Gym Cardio Fitness",
+        "category": "Tools/Equipment",
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "Schwinn 205P Recumbent Exercise Bike with Digital Console & Adjustable Resistance",
+                "estimated_value": 75
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88531428/SCHWINN-205P-Recumbent-Bike",
+            "title": "SCHWINN 205P Recumbent Bike",
+            "lot_number": 0,
+            "current_bid": "$15.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88531428/SCHWINN-205P-Recumbent-Bike",
+            "pics": [
+                "885314281.jpg",
+                "885314282.jpg",
+                "885314283.jpg",
+                "885314284.jpg",
+                "885314285.jpg"
+            ]
+        },
+        "lot_number": 0,
+        "ebay_avg_price": 268.9,
+        "ebay_avg_shipping": 124.21444444444445,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Schwinn+205P+Recumbent+Exercise+Bike+Stationary+Home+Gym+Cardio+Fitness&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Yard Machines MTD 24\" 5.5HP 2-Stage Snow Blower Thrower Electric Start Tecumseh",
+        "category": "Tools/Equipment",
+        "total_market_value": 225,
+        "items": [
+            {
+                "item_name": "Yard Machines by MTD 24-inch 5.5HP 2-Stage Snow Blower w/ Electric Start (31AS6BCE752)",
+                "estimated_value": 225
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88437609/MTD-55-HP-Electric-Start-2Stage-Snowblower",
+            "title": "MTD 5.5 HP Electric Start 2-Stage Snowblower",
+            "lot_number": 0,
+            "current_bid": "$90.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88437609/MTD-55-HP-Electric-Start-2Stage-Snowblower",
+            "pics": [
+                "884376091.jpg",
+                "884376092.jpg",
+                "884376093.jpg",
+                "884376094.jpg",
+                "884376095.jpg",
+                "884376096.jpg",
+                "884376097.jpg",
+                "884376098.jpg",
+                "884376099.jpg"
+            ]
+        },
+        "lot_number": 0,
+        "ebay_avg_price": 173.34137931034482,
+        "ebay_avg_shipping": 58.3575,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Yard+Machines+MTD+24%22+5.5HP+2-Stage+Snow+Blower+Thrower+Electric+Start+Tecumseh&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Used Brown Leather 3-Seater Sofa Couch and Matching Tufted Ottoman Set",
+        "category": "Furniture",
+        "total_market_value": 150,
+        "items": [
+            {
+                "item_name": "Brown Leather Rolled Arm 3-Seater Sofa Couch (Used Condition)",
+                "estimated_value": 100
+            },
+            {
+                "item_name": "Matching Brown Leather Tufted Rectangular Ottoman",
+                "estimated_value": 50
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88312363/Leather-Sofa-wOttoman",
+            "title": "Leather Sofa w/Ottoman",
+            "lot_number": 0,
+            "current_bid": "$170.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88312363/Leather-Sofa-wOttoman",
+            "pics": [
+                "883123631.jpg",
+                "883123632.jpg",
+                "883123633.jpg",
+                "883123634.jpg",
+                "883123635.jpg",
+                "883123636.jpg",
+                "883123637.jpg",
+                "883123638.jpg"
+            ]
+        },
+        "lot_number": 0,
+        "ebay_avg_price": 153.31166666666667,
+        "ebay_avg_shipping": 0.0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Used+Brown+Leather+3-Seater+Sofa+Couch+and+Matching+Tufted+Ottoman+Set&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "MTD Yard Machines 20-Ton Gas Log Splitter 5HP Tecumseh Engine Horizontal/Vertical",
+        "category": "Tools/Equipment",
+        "total_market_value": 750,
+        "items": [
+            {
+                "item_name": "MTD Yard Machines 20-Ton Gas Powered Log Splitter with 5HP Tecumseh Engine",
+                "estimated_value": 750
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88435356/MTD-20Ton-50-HP-Log-Splitter",
+            "title": "MTD 20-Ton 5.0 HP Log Splitter",
+            "lot_number": 0,
+            "current_bid": "$555.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88435356/MTD-20Ton-50-HP-Log-Splitter",
+            "pics": [
+                "884353561.jpg",
+                "884353562.jpg",
+                "884353563.jpg",
+                "884353564.jpg",
+                "884353565.jpg",
+                "884353566.jpg",
+                "884353567.jpg",
+                "884353568.jpg",
+                "884353569.jpg",
+                "8843535610.jpg",
+                "8843535611.jpg",
+                "8843535612.jpg"
+            ]
+        },
+        "lot_number": 0,
+        "ebay_avg_price": 0.0,
+        "ebay_avg_shipping": 0.0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=MTD+Yard+Machines+20-Ton+Gas+Log+Splitter+5HP+Tecumseh+Engine+Horizontal%2FVertical&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "American Drew 7-Piece French Country Dining Set Oval Table & 6 Ladder Back Chairs",
+        "category": "Furniture",
+        "total_market_value": 600,
+        "items": [
+            {
+                "item_name": "American Drew French Country Oval Dining Table with Cabriole Legs",
+                "estimated_value": 250
+            },
+            {
+                "item_name": "Set of 6 American Drew French Country Ladder Back Dining Chairs (2 Arm, 4 Side)",
+                "estimated_value": 350
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/88530909/AMERICAN-DREW-Oak-Dining-Set",
+            "title": "AMERICAN DREW Oak Dining Set",
+            "lot_number": 0,
+            "current_bid": "$185.00",
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/88530909/AMERICAN-DREW-Oak-Dining-Set",
+            "pics": [
+                "885309091.jpg",
+                "885309092.jpg",
+                "885309093.jpg",
+                "885309094.jpg",
+                "885309095.jpg",
+                "885309096.jpg",
+                "885309097.jpg",
+                "885309098.jpg",
+                "885309099.jpg"
+            ]
+        },
+        "lot_number": 0,
+        "ebay_avg_price": 0.0,
+        "ebay_avg_shipping": 0.0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=American+Drew+7-Piece+French+Country+Dining+Set+Oval+Table+%26+6+Ladder+Back+Chairs&_sacat=0&LH_Complete=1&LH_Sold=1"
+    }
+]
+</script>
+
+<script>
+    const jsonData = JSON.parse(document.getElementById('auctionData').textContent);
+    const tableBody = document.getElementById('data-table-body');
+    const headers = document.querySelectorAll('thead th[data-column]');
+    let currentSort = { column: 'ebay_price', isAscending: false };
+
+    function populateTable() {
+        tableBody.innerHTML = '';
+        const formatCurrency = (value) => (value || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 });
+
+        jsonData.forEach(lot => {
+            const mainRow = document.createElement('tr');
+            mainRow.className = 'lot-main';
+            const encodedSearch = encodeURIComponent(lot.ebay_search_title || '');
+
+            mainRow.innerHTML = `
+                <td>${lot.lot_number > 0 ? lot.lot_number : ''}</td>
+                <td><a href="${lot.original_listing.url}" target="_blank" title="${lot.original_listing.title}">${lot.ebay_search_title || 'N/A'}</a></td>
+                <td>${lot.category || 'Miscellaneous'}</td>
+                <td style="text-align: right;">${formatCurrency(lot.total_market_value)}</td>
+                <td style="text-align: right;"></td>
+                <td style="text-align: center;"><a href="${lot.ebay_search_url || '#'}" target="_blank">eBay</a></td>
+                <td style="text-align: center;"><a href="https://www.google.com/search?q=${encodedSearch}" target="_blank">Google</a></td>
+            `;
+
+            const ebayPriceCell = mainRow.cells[4];
+            const avgPrice = lot.ebay_avg_price || 0;
+            const avgShipping = lot.ebay_avg_shipping || 0;
+
+            if (avgPrice > 0) {
+                let displayPrice = formatCurrency(avgPrice);
+                if (avgShipping > 0) {
+                    displayPrice += ` (${Math.round(avgShipping)})`;
+                }
+                ebayPriceCell.textContent = displayPrice;
+            } else {
+                ebayPriceCell.textContent = 'N/A';
+            }
+            
+            tableBody.appendChild(mainRow);
+
+            if (lot.items && lot.items.length > 1) {
+                lot.items.forEach(subItem => {
+                    const subRow = document.createElement('tr');
+                    subRow.className = 'lot-sub-item';
+                    subRow.innerHTML = `
+                        <td></td>
+                        <td style="padding-left: 35px;">${subItem.item_name || 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: right;">${formatCurrency(subItem.estimated_value)}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    `;
+                    tableBody.appendChild(subRow);
+                });
+            }
+        });
+    }
+
+    function sortData(column) {
+        const isNumeric = ['price', 'ebay_price', 'lot_number'].includes(column);
+        if (currentSort.column === column) {
+            currentSort.isAscending = !currentSort.isAscending;
+        } else {
+            currentSort.column = column;
+            currentSort.isAscending = !isNumeric;
+        }
+
+        jsonData.sort((a, b) => {
+            let valA, valB;
+            switch (column) {
+                case 'price': valA = a.total_market_value || 0; valB = b.total_market_value || 0; break;
+                case 'ebay_price': valA = a.ebay_avg_price || 0; valB = b.ebay_avg_price || 0; break;
+                case 'lot_number': valA = a.lot_number || 0; valB = b.lot_number || 0; break;
+                case 'name': valA = (a.ebay_search_title || '').toLowerCase(); valB = (b.ebay_search_title || '').toLowerCase(); break;
+                case 'category': valA = (a.category || '').toLowerCase(); valB = (b.category || '').toLowerCase(); break;
+                default: return 0;
+            }
+            let comparison = 0;
+            if (valA > valB) { comparison = 1; }
+            else if (valA < valB) { comparison = -1; }
+            return currentSort.isAscending ? comparison : comparison * -1;
+        });
+        updateSortIndicators();
+        populateTable();
+    }
+
+    function updateSortIndicators() {
+        headers.forEach(header => {
+            const indicator = header.querySelector('.sort-indicator');
+            if (header.dataset.column === currentSort.column) {
+                indicator.textContent = currentSort.isAscending ? ' ▲' : ' ▼';
+            } else { indicator.textContent = ''; }
+        });
+    }
+
+    headers.forEach(header => { header.addEventListener('click', () => { sortData(header.dataset.column); }); });
+    sortData('ebay_price');
+</script>
+</body>
+</html>
