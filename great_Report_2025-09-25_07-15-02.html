@@ -1,0 +1,444 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Item Analysis</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a; --table-bg-color: #2c2c2c; --header-bg-color: #3a3a3a;
+            --header-hover-bg-color: #4a4a4a; --row-even-bg-color: #333333; --row-odd-bg-color: #2c2c2c;
+            --border-color: #444444; --text-color: #e0e0e0; --link-color: #4a90e2;
+            --link-hover-color: #81b5f5; --sort-indicator-color: #81b5f5;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 2rem; line-height: 1.6; }
+        h1 { text-align: center; color: #ffffff; font-weight: 300; margin-bottom: 2rem; }
+        .table-container { max-width: 1500px; margin: auto; overflow-x: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        table { width: 100%; border-collapse: collapse; background-color: var(--table-bg-color); border-spacing: 0; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        thead th { background-color: var(--header-bg-color); color: #ffffff; font-weight: 600; position: sticky; top: 0; z-index: 10; }
+        thead th[data-column] { cursor: pointer; transition: background-color 0.2s ease-in-out; user-select: none; }
+        thead th[data-column]:hover { background-color: var(--header-hover-bg-color); }
+        tbody tr:hover { background-color: var(--header-hover-bg-color); }
+        td { font-size: 0.95em; }
+        td:nth-child(4), td:nth-child(5) { font-family: 'Courier New', Courier, monospace; text-align: right; white-space: nowrap; }
+        td:nth-child(6), td:nth-child(7) { text-align: center; }
+        a { color: var(--link-color); text-decoration: none; transition: color 0.2s ease-in-out; }
+        a:hover { color: var(--link-hover-color); text-decoration: underline; }
+        .sort-indicator { color: var(--sort-indicator-color); font-size: 0.8em; margin-left: 8px; display: inline-block; width: 10px; }
+        .lot-main td { font-weight: bold; }
+        .lot-main:nth-child(4n+1), .lot-main:nth-child(4n+2) { background-color: var(--row-odd-bg-color); }
+        .lot-main:nth-child(4n+3), .lot-main:nth-child(4n) { background-color: var(--row-even-bg-color); }
+        .lot-sub-item { background-color: rgba(0,0,0,0.15) !important; }
+        .lot-sub-item td { font-size: 0.9em; color: #c0c0c0; border-color: #383838; }
+        .lot-sub-item td:nth-child(2) { padding-left: 35px; }
+    </style>
+</head>
+<body>
+    <h1>Auction Item Analysis</h1>
+    <div class="table-container"><table><thead><tr><th data-column="lot_number">Lot # <span class="sort-indicator"></span></th><th data-column="name">Item Name <span class="sort-indicator"></span></th><th data-column="category">Category <span class="sort-indicator"></span></th><th data-column="price">AI Market Value <span class="sort-indicator"></span></th><th data-column="ebay_price">eBay Avg. Sold <span class="sort-indicator"></span></th><th>eBay Search</th><th>Google Search</th></tr></thead><tbody id="data-table-body"></tbody></table></div>
+
+<script type="application/json" id="auctionData">
+    [
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage MCM Barrel Back Accent Chair Tufted Velvet & Cane Wood Frame (Project)",
+        "category": "Furniture",
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "Vintage MCM-style Barrel Chair with Cane Sides (damaged cane)",
+                "estimated_value": 75
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/57148061/MidCentury-Modern-Barrel-Chair",
+            "title": "Mid-Century Modern Barrel Chair",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/57148061/MidCentury-Modern-Barrel-Chair",
+            "pics": [
+                "571480611.jpg",
+                "571480612.jpg",
+                "571480613.jpg",
+                "571480614.jpg"
+            ]
+        },
+        "ebay_avg_price": 300.1633333333333,
+        "ebay_avg_shipping": 190.62,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+MCM+Barrel+Back+Accent+Chair+Tufted+Velvet+%26+Cane+Wood+Frame+%28Project%29&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Stack-On GCB-8RTA Black Metal 8-Gun Security Cabinet Lock & Key Firearm Safe",
+        "category": "Tools/Equipment",
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "Stack-On 8-Gun Security Cabinet",
+                "estimated_value": 100
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/57108756/Stack-On-Firearm-Cabinet",
+            "title": "Stack On Firearm Cabinet",
+            "current_bid": "$30.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/57108756/Stack-On-Firearm-Cabinet",
+            "pics": [
+                "571087561.jpg",
+                "571087562.jpg",
+                "571087563.jpg",
+                "571087564.jpg",
+                "571087565.jpg",
+                "571087566.jpg",
+                "571087567.jpg"
+            ]
+        },
+        "ebay_avg_price": 206.43666666666664,
+        "ebay_avg_shipping": 69.5,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Stack-On+GCB-8RTA+Black+Metal+8-Gun+Security+Cabinet+Lock+%26+Key+Firearm+Safe&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Crosman Mark I Target .177 Cal CO2 Air Pistol with Case",
+        "category": "Collectibles",
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "Vintage Crosman Mark I .177 Cal CO2 Air Pistol with Hard Case",
+                "estimated_value": 100
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/57149086/Crosman-Airgun-177",
+            "title": "Crosman Airgun .177",
+            "current_bid": "$11.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/57149086/Crosman-Airgun-177",
+            "pics": [
+                "571490861.jpg",
+                "571490862.jpg"
+            ]
+        },
+        "ebay_avg_price": 196.21035714285716,
+        "ebay_avg_shipping": 16.924583333333334,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Crosman+Mark+I+Target+.177+Cal+CO2+Air+Pistol+with+Case&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Brass Finish Swing Arm Floor Lamp Torchiere Uplight Reading Light MCM Style",
+        "category": "Decor/Lighting",
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Vintage Brass Swing Arm Torchiere Floor Lamp",
+                "estimated_value": 40
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/57147717/Swing-Arm-Floor-Lamp",
+            "title": "Swing Arm Floor Lamp",
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/57147717/Swing-Arm-Floor-Lamp",
+            "pics": [
+                "571477171.jpg",
+                "571477172.jpg"
+            ]
+        },
+        "ebay_avg_price": 192.9925,
+        "ebay_avg_shipping": 85.7525,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Brass+Finish+Swing+Arm+Floor+Lamp+Torchiere+Uplight+Reading+Light+MCM+Style&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Anders Nicholson F-900 Nostalgic 3-Speed Turntable CD Player AM/FM Radio",
+        "category": "Electronics",
+        "total_market_value": 30,
+        "items": [
+            {
+                "item_name": "Anders Nicholson F-900 Nostalgic Record Player with CD and Radio",
+                "estimated_value": 30
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/57108869/Anders-Nicholson-Nostalgic-Record-Player",
+            "title": "Anders Nicholson Nostalgic Record Player",
+            "current_bid": "$11.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/57108869/Anders-Nicholson-Nostalgic-Record-Player",
+            "pics": [
+                "571088691.jpg",
+                "571088692.jpg"
+            ]
+        },
+        "ebay_avg_price": 174.995,
+        "ebay_avg_shipping": 0.0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Anders+Nicholson+F-900+Nostalgic+3-Speed+Turntable+CD+Player+AM%2FFM+Radio&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Hatsan Striker Edge Camo .177 Cal Air Rifle w/ Optima 3-9x32 Scope",
+        "category": "Tools/Equipment",
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "Hatsan Striker Edge Camo .177 Cal Air Rifle with Optima 3-9x32 Scope",
+                "estimated_value": 75
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/57148767/Precision-Airgun-177",
+            "title": "Precision Airgun .177",
+            "current_bid": "$15.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/57148767/Precision-Airgun-177",
+            "pics": [
+                "571487671.jpg",
+                "571487672.jpg",
+                "571487673.jpg",
+                "571487674.jpg",
+                "571487675.jpg"
+            ]
+        },
+        "ebay_avg_price": 156.64636363636362,
+        "ebay_avg_shipping": 17.995,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Hatsan+Striker+Edge+Camo+.177+Cal+Air+Rifle+w%2F+Optima+3-9x32+Scope&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Vintage Framed Panamanian Kuna Mola Textile Art Eagle Bird Design Folk Art",
+        "category": "Art/Prints",
+        "total_market_value": 65,
+        "items": [
+            {
+                "item_name": "Framed Panamanian Kuna Mola Textile Folk Art (Eagle Design)",
+                "estimated_value": 65
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/57147865/Panamanian-Kuna-Mola",
+            "title": "Panamanian Kuna Mola",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/57147865/Panamanian-Kuna-Mola",
+            "pics": [
+                "571478651.jpg",
+                "571478652.jpg",
+                "571478653.jpg"
+            ]
+        },
+        "ebay_avg_price": 105.75172413793103,
+        "ebay_avg_shipping": 25.924285714285713,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Framed+Panamanian+Kuna+Mola+Textile+Art+Eagle+Bird+Design+Folk+Art&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Colt Defender .177 Caliber CO2 BB Gun Air Pistol with Case & CO2 Cartridges",
+        "category": "Collectibles",
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Colt Defender .177 Caliber CO2 BB Air Pistol",
+                "estimated_value": 35
+            },
+            {
+                "item_name": "Hard-shell pistol case with foam lining",
+                "estimated_value": 10
+            },
+            {
+                "item_name": "Crosman CO2 Powerlet 12g Cartridges (partial box)",
+                "estimated_value": 5
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/57149374/Colt-Airgun-177",
+            "title": "Colt Airgun .177",
+            "current_bid": "$13.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/57149374/Colt-Airgun-177",
+            "pics": [
+                "571493741.jpg",
+                "571493742.jpg",
+                "571493743.jpg"
+            ]
+        },
+        "ebay_avg_price": 60.60703703703704,
+        "ebay_avg_shipping": 8.803636363636365,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Colt+Defender+.177+Caliber+CO2+BB+Gun+Air+Pistol+with+Case+%26+CO2+Cartridges&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Handmade Pottery Clay Wind Chimes Garden Decor",
+        "category": "Decor/Lighting",
+        "total_market_value": 12,
+        "items": [
+            {
+                "item_name": "Pottery Wind Chimes (unknown style/condition)",
+                "estimated_value": 12
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/57148512/Pottery-Wind-Chimes",
+            "title": "Pottery Wind Chimes",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/57148512/Pottery-Wind-Chimes",
+            "pics": []
+        },
+        "ebay_avg_price": 19.076551724137932,
+        "ebay_avg_shipping": 12.432857142857143,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Handmade+Pottery+Clay+Wind+Chimes+Garden+Decor&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Ashley Furniture Mildred Table Lamp Black Metal Urn Base 28\" L243394",
+        "category": "Decor/Lighting",
+        "total_market_value": 35,
+        "items": [
+            {
+                "item_name": "Ashley Furniture Mildred Table Lamp (L243394)",
+                "estimated_value": 35
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/57148243/Ashley-Mildred-Table-Lamp",
+            "title": "Ashley Mildred Table Lamp",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/57148243/Ashley-Mildred-Table-Lamp",
+            "pics": [
+                "571482431.jpg",
+                "571482432.jpg",
+                "571482433.jpg"
+            ]
+        },
+        "ebay_avg_price": 0.0,
+        "ebay_avg_shipping": 0.0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Ashley+Furniture+Mildred+Table+Lamp+Black+Metal+Urn+Base+28%22+L243394&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "lot_number": 0,
+        "ebay_search_title": "Ashley Furniture Mildred Table Lamp Black Metal Urn Base 28\" L243394",
+        "category": "Decor/Lighting",
+        "total_market_value": 35,
+        "items": [
+            {
+                "item_name": "Ashley Furniture Mildred Table Lamp (L243394)",
+                "estimated_value": 35
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/57148437/Ashley-Mildred-Table-Lamp",
+            "title": "Ashley Mildred Table Lamp",
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/57148437/Ashley-Mildred-Table-Lamp",
+            "pics": [
+                "571484371.jpg",
+                "571484372.jpg",
+                "571484373.jpg"
+            ]
+        },
+        "ebay_avg_price": 0.0,
+        "ebay_avg_shipping": 0.0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Ashley+Furniture+Mildred+Table+Lamp+Black+Metal+Urn+Base+28%22+L243394&_sacat=0&LH_Complete=1&LH_Sold=1"
+    }
+]
+</script>
+
+<script>
+    const jsonData = JSON.parse(document.getElementById('auctionData').textContent);
+    const tableBody = document.getElementById('data-table-body');
+    const headers = document.querySelectorAll('thead th[data-column]');
+    let currentSort = { column: 'ebay_price', isAscending: false };
+
+    function populateTable() {
+        tableBody.innerHTML = '';
+        const formatCurrency = (value) => (value || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 });
+
+        jsonData.forEach(lot => {
+            const mainRow = document.createElement('tr');
+            mainRow.className = 'lot-main';
+            const encodedSearch = encodeURIComponent(lot.ebay_search_title || '');
+
+            mainRow.innerHTML = `
+                <td>${lot.lot_number > 0 ? lot.lot_number : ''}</td>
+                <td><a href="${lot.original_listing.url}" target="_blank" title="${lot.original_listing.title}">${lot.ebay_search_title || 'N/A'}</a></td>
+                <td>${lot.category || 'Miscellaneous'}</td>
+                <td style="text-align: right;">${formatCurrency(lot.total_market_value)}</td>
+                <td style="text-align: right;"></td>
+                <td style="text-align: center;"><a href="${lot.ebay_search_url || '#'}" target="_blank">eBay</a></td>
+                <td style="text-align: center;"><a href="https://www.google.com/search?q=${encodedSearch}" target="_blank">Google</a></td>
+            `;
+
+            // --- CORRECTED LOGIC FOR EBAY PRICE CELL ---
+            const ebayPriceCell = mainRow.cells[4];
+            const avgPrice = lot.ebay_avg_price || 0;
+            const avgShipping = lot.ebay_avg_shipping || 0;
+
+            if (avgPrice > 0) {
+                let displayPrice = formatCurrency(avgPrice);
+                if (avgShipping > 0) {
+                    // Use Math.round() to get a clean integer for shipping
+                    displayPrice += ` (${Math.round(avgShipping)})`;
+                }
+                ebayPriceCell.textContent = displayPrice;
+            } else {
+                ebayPriceCell.textContent = 'N/A';
+            }
+            
+            tableBody.appendChild(mainRow);
+
+            if (lot.items && lot.items.length > 1) {
+                lot.items.forEach(subItem => {
+                    const subRow = document.createElement('tr');
+                    subRow.className = 'lot-sub-item';
+                    subRow.innerHTML = `
+                        <td></td>
+                        <td style="padding-left: 35px;">${subItem.item_name || 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: right;">${formatCurrency(subItem.estimated_value)}</td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    `;
+                    tableBody.appendChild(subRow);
+                });
+            }
+        });
+    }
+
+    function sortData(column) {
+        const isNumeric = ['price', 'ebay_price', 'lot_number'].includes(column);
+        if (currentSort.column === column) {
+            currentSort.isAscending = !currentSort.isAscending;
+        } else {
+            currentSort.column = column;
+            currentSort.isAscending = !isNumeric;
+        }
+
+        jsonData.sort((a, b) => {
+            let valA, valB;
+            switch (column) {
+                case 'price': valA = a.total_market_value || 0; valB = b.total_market_value || 0; break;
+                case 'ebay_price': valA = a.ebay_avg_price || 0; valB = b.ebay_avg_price || 0; break;
+                case 'lot_number': valA = a.lot_number || 0; valB = b.lot_number || 0; break;
+                case 'name': valA = (a.ebay_search_title || '').toLowerCase(); valB = (b.ebay_search_title || '').toLowerCase(); break;
+                case 'category': valA = (a.category || '').toLowerCase(); valB = (b.category || '').toLowerCase(); break;
+                default: return 0;
+            }
+            let comparison = 0;
+            if (valA > valB) { comparison = 1; }
+            else if (valA < valB) { comparison = -1; }
+            return currentSort.isAscending ? comparison : comparison * -1;
+        });
+        updateSortIndicators();
+        populateTable();
+    }
+
+    function updateSortIndicators() {
+        headers.forEach(header => {
+            const indicator = header.querySelector('.sort-indicator');
+            if (header.dataset.column === currentSort.column) {
+                indicator.textContent = currentSort.isAscending ? ' ▲' : ' ▼';
+            } else { indicator.textContent = ''; }
+        });
+    }
+
+    headers.forEach(header => { header.addEventListener('click', () => { sortData(header.dataset.column); }); });
+    sortData('ebay_price');
+</script>
+</body>
+</html>
