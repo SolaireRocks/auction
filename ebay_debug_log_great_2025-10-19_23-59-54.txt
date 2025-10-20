@@ -1,0 +1,181 @@
+
+--- [2025-10-20 00:02:08] eBay Market Price Analysis for 'Vintage Ardalt Artware Japan Capodimonte Style Cherub Compote Pedestal Dish Pair 6858' (Lot #301) ---
+
+--- RAW Items from API ---
+- $  75.00 | Vtg Capodimonte Italy Floral Forest Cherub Porcelain Stamped 533 Pedestal Dish
+- $  17.25 | Capodimonte Italy Hand Painted Pedestal Pierced Dish with Cherubs 
+- $ 300.00 | Vtg Capodimonte Italy Floral Forest Cherub Porcelain Stamped 533 Pedestal Dish
+- $  60.00 | Capodimonte Porcelain Covered Cherub Floral Candy Dish VTG Pedestal Italy #77
+- $  99.69 | Vintage Ardalt Capodimonte Pedestal Tureen 5329 signed Blue an Gold Cherub Italy
+- $  15.99 | ARDALT Signed Capodimonte Bianco Compote Footed Bowl ~ ITALY ~ Cherubs
+- $  14.50 | Vintage Ardalt Capodimonte Italy Ceramic Trinket Dish With Cherub Relief
+- $  65.00 | Rare Capodimonte Lidded Dish with Cherub on Top. #408 Excellent Condition!
+- $  24.95 | Vintage Capodimonte Ardalt Italy Cherub Plate numbered Dish Gold Trim
+- $  99.95 | VINTAGE SIGNED CAPODIMONTE ITALY CHERUB PATTERN PEDESTAL LIDDED BOWL DISH
+- $  86.95 | *RARE* HTF Vintage MADE IN ITALY Cherub CAPODIMONTE Footed COVERED DISH
+- $  38.90 | PAIR VTG CAPODIMONTE PORCELAIN DISHES, CHERUBS, GILT ACCENTS, SCALLOPED EDGE vg
+- $  59.50 | Capodimonte Vint Blue  Cherubs Gold Trim Made Italy Compote Sm Chip Inside Rim
+- $  12.00 | Vintage R. Capodimonte style Cherub Figural Covered Candy Dish 
+- $  50.00 | Vintage/Antique Capodimonte Italy Reticulated Pedestal Bowl Dish 3-D Cherubs 848
+- $  25.00 | R. Capodimonte Italy~Cherubs~Decorative Compote Pedestal Bowl~4.5” H x 7.5” W
+- $  12.50 | AS-IS   R CAPODIMONTE MAS  Covered PEDESTAL Compote  BOWL DISH with CHERUBS 
+- $  59.99 | Beautiful Porcelain Capodimonte 1632/36 Italy Footed Pedestal Cherub Bowl w/Lid
+- $  42.00 | ARDALT Signed Capodimonte Bianco Compote Footed Bowl ~ ITALY ~ Cherubs
+
+--- AI-CLEANED Items for Calculation ---
+- $  99.69 | Vintage Ardalt Capodimonte Pedestal Tureen 5329 signed Blue an Gold Cherub Italy
+- $  15.99 | ARDALT Signed Capodimonte Bianco Compote Footed Bowl ~ ITALY ~ Cherubs
+- $  42.00 | ARDALT Signed Capodimonte Bianco Compote Footed Bowl ~ ITALY ~ Cherubs
+
+--- AI Analyst's Reasoning ---
+Filtered results to include only pedestal compotes explicitly labeled with the 'Ardalt' brand, since no exact model matches were available.
+---------------------------------
+Final Average Selling Price: $52.56
+AI Confidence Score: 65%
+---------------------------------------------------------
+
+--- [2025-10-20 00:02:08] eBay Market Price Analysis for 'Vintage Pair Czechoslovakian White Ceramic Scroll Candle Holders Candlesticks' (Lot #302) ---
+
+--- RAW Items from API ---
+- $  19.99 | Vintage Pair Candlesticks White Porcelain Gold Leaf Grape Design Made In Czech
+- $  32.40 | (4) Art Deco Czechoslovakia Candle Holders Ceramic Candlesticks vintage modern 
+- $  26.99 | Set of 2 Vintage Czechoslovakian Pottery Hand Painted Floral Candlestick Holders
+- $  28.00 | Vintage Ceramic Candle Holders Candlesticks Czechoslovakia
+- $  90.00 | Vintage Pair Czech Pottery Swirl Taper Candle Stick Holders
+- $   8.99 | Vintage 5” Candlestick Holder Floral  Czechoslovakia Hand Painted
+- $  14.99 | Vintage Unique Ceramic Candlestick Candle Holders Iridescent  Czechoslovakia
+- $  20.00 | Vintage Ceramic Candle Holder Czechoslovakia, Candlestick
+- $  50.00 | VTG Porcelain Hand Painted Candlestick Holders 2 1930 Signed Czecho-Slovakia
+- $  26.98 | Czechoslovakia Vtg MCM Candleholder White Ceramic
+- $  20.00 | Vtg Pair Czech Czechoslovakia Art Deco White Ceramic Candleholders Candlesticks
+- $  19.85 | VTG Czechoslovakia Porcelain Candlestick Holders Rare Handled Floral Blue Trim
+- $  30.00 | Czech Deco Pair of Ceramic Hand Painted Candle Holders....
+- $  27.99 | Porcelain Candle Stick Holder Handle Bright Colorful Czechoslovakia 11 5/8" Tall
+- $  19.00 | Vintage Czechoslovakia Candle Holders With Handles
+- $  13.95 | Vintage Ceramic Floral Candlestick Holder Czechoslovakia
+- $   9.00 | Vintage Czechoslovakian Hand Painted Ceramic Candle Stick Holder 4" Tall Handle
+- $  20.00 | Czechoslovakia Ceramic Handpainted Candlestick Holder Floral RARE
+- $  15.29 | Vtg Pair Czech Art Deco White/blue Ceramic Candleholders Candlesticks
+- $  60.00 | Vintage Czechoslovakian Porcelain Candle Holders White Pair Holds Six Candles
+- $  29.75 | Vintage Czechoslovakia Porcelain 2 Candlesticks White Blue Trim Floral Accents 
+- $  22.00 | Vintage Hand Painted Czechoslovakia Candle Sticks / Holders 
+- $  15.00 | White 5 1/2" Porcelain Candle Stick Holder With 3 Orange Strips / Marked Czechia
+- $  25.00 | Set of 2 Czechoslovakia Hand Painted Candle Stick Holders
+- $  18.99 | Pair of Vintage Czechoslovakia Candle Sticks Holders 5-1/4", China
+
+--- AI-CLEANED Items for Calculation ---
+- $  19.99 | Vintage Pair Candlesticks White Porcelain Gold Leaf Grape Design Made In Czech
+- $  32.40 | (4) Art Deco Czechoslovakia Candle Holders Ceramic Candlesticks vintage modern 
+- $  28.00 | Vintage Ceramic Candle Holders Candlesticks Czechoslovakia
+- $  90.00 | Vintage Pair Czech Pottery Swirl Taper Candle Stick Holders
+- $  20.00 | Vintage Ceramic Candle Holder Czechoslovakia, Candlestick
+- $  26.98 | Czechoslovakia Vtg MCM Candleholder White Ceramic
+- $  20.00 | Vtg Pair Czech Czechoslovakia Art Deco White Ceramic Candleholders Candlesticks
+- $  19.00 | Vintage Czechoslovakia Candle Holders With Handles
+- $  15.29 | Vtg Pair Czech Art Deco White/blue Ceramic Candleholders Candlesticks
+- $  18.99 | Pair of Vintage Czechoslovakia Candle Sticks Holders 5-1/4", China
+
+--- AI Analyst's Reasoning ---
+Retained all vintage Czechoslovakian ceramic candlesticks, prioritizing white pairs and excluding visibly hand-painted or highly colored items.
+---------------------------------
+Final Average Selling Price: $22.29
+AI Confidence Score: 85%
+---------------------------------------------------------
+
+--- [2025-10-20 00:02:08] eBay Market Price Analysis for 'Vintage Westmoreland English Hobnail Milk Glass Table Lamps PAIR' (Lot #303) ---
+
+--- RAW Items from API ---
+- $  99.00 | Vintage Pair Of Hobnail Milk Glass Table Lamps Works
+- $  39.95 | Vintage (2) Hobnail Milk Glass Table Lamps with Shades 15" WORKS
+- $  14.99 | Vintage Westmoreland ENGLISH HOBNAIL  ELECTRIC LAMP
+- $  44.00 | Vintage Matching Pair Hobnail Milk Glass White Electric Table Lamps Test/works 
+- $  45.00 | Pair Of Vintage ? Fenton Milk Glass Hobnail Lamps
+- $  38.95 | Pair Vintage Hobnail Milk Glass Table Lamps – 11” Tall – Tested Works
+- $  75.00 | Pair Vintage/Antique White Hobnail/ Quilted Diamond Milk Glass Table Lamps WORK
+- $  63.99 | Vtg Pair Milk Glass Hobnail Electric Lamps With Hobnail Globes 14"H
+- $  22.50 | PERFECT Vintage Westmoreland "ENGLISH HOBNAIL" Milk Glass Lamp Base!!
+- $  31.80 | VTG MCM White Milk Glass Hobnail Lamp Pair Set of 2 Boudoir Lamps ✨ Fenton Style
+- $  69.99 | Vtg Pair Heavy Milk Glass Hobnail Electric Table Lamps Opalescent Base 9.5" H
+- $  45.95 | Vintage White Hobnail Milk Glass Lamps Set + milk glass dish
+- $  75.00 | Pair Of Vintage Milk Glass Hobnail Table Lamps
+- $ 449.99 | Hobnail White Milk Glass Lamps - Electric Turn Key Mint Condition Boudoir Pair
+- $  49.00 | VINTAGE Set Of Two White Hobnail Milk Glass Lamps, Tested
+- $  44.99 | Vintage Pair Of Hobnail White Diamond Milk Glass Bedroom Lamps both work 
+- $ 135.00 | A Pair Of Vintage Milk Glass Hobnail  Electric Lamps. Great Condition!
+- $  38.25 | Pair Vintage Milk Glass Hobnail Table Lamp Electric Light 
+- $  64.99 | Lot of 2 Vintage White Hobnail Milk Glass Table Lamps EUC 22.5" WORK GREAT
+- $  55.00 | Vintage Pair White Hobnail Milk Glass Electric Table Lamps - No Shades
+- $  75.00 | Set Of 2 Vintage Hobnail Milk Glass Lamps Excellent Condition 13.5" Tall Ea. 
+- $  24.00 | Pair Of Vintage Milk Glass Hobnail Electric  Lamps 11. 25” Metal Base -No Shades
+- $  49.99 | Vintage Pair Hobnail Milk Glass Lamps 10.5" Tall (bulbs Is Not Included)
+- $  99.95 | Pair Vintage Fenton Milk Art Glass Hobnail Table Lamps Mid Century Boudoir Lamps
+- $ 175.00 | Vintage Pair of Hobnail Milk Glass Table Lamps with Ornate Metal Base
+- $  24.00 | Fenton White Milk Glass Hobnail Table Lamp 13" Cottage Works Tested  Vintage
+- $  50.00 | Vintage  white milk glass hobnail lamps (2)
+- $  46.00 | 2 Vintage White Milk Glass Hobnail 1950s WORKS Fenton Electric Table Lamp Lot
+- $  29.95 | Vintage (2) Hobnail Milk Glass Table Lamps with Shades 15" WORKS
+- $ 111.71 | fenton milk glass hobnail table lamps vintage
+
+--- AI-CLEANED Items for Calculation ---
+- $  99.00 | Vintage Pair Of Hobnail Milk Glass Table Lamps Works
+- $  39.95 | Vintage (2) Hobnail Milk Glass Table Lamps with Shades 15" WORKS
+- $  14.99 | Vintage Westmoreland ENGLISH HOBNAIL  ELECTRIC LAMP
+- $  44.00 | Vintage Matching Pair Hobnail Milk Glass White Electric Table Lamps Test/works 
+- $  38.95 | Pair Vintage Hobnail Milk Glass Table Lamps – 11” Tall – Tested Works
+- $  75.00 | Pair Vintage/Antique White Hobnail/ Quilted Diamond Milk Glass Table Lamps WORK
+- $  63.99 | Vtg Pair Milk Glass Hobnail Electric Lamps With Hobnail Globes 14"H
+- $  22.50 | PERFECT Vintage Westmoreland "ENGLISH HOBNAIL" Milk Glass Lamp Base!!
+- $  31.80 | VTG MCM White Milk Glass Hobnail Lamp Pair Set of 2 Boudoir Lamps ✨ Fenton Style
+- $  69.99 | Vtg Pair Heavy Milk Glass Hobnail Electric Table Lamps Opalescent Base 9.5" H
+- $  45.95 | Vintage White Hobnail Milk Glass Lamps Set + milk glass dish
+- $  75.00 | Pair Of Vintage Milk Glass Hobnail Table Lamps
+- $ 449.99 | Hobnail White Milk Glass Lamps - Electric Turn Key Mint Condition Boudoir Pair
+- $  49.00 | VINTAGE Set Of Two White Hobnail Milk Glass Lamps, Tested
+- $  44.99 | Vintage Pair Of Hobnail White Diamond Milk Glass Bedroom Lamps both work 
+- $ 135.00 | A Pair Of Vintage Milk Glass Hobnail Electric Lamps. Great Condition!
+- $  38.25 | Pair Vintage Milk Glass Hobnail Table Lamp Electric Light 
+- $  64.99 | Lot of 2 Vintage White Hobnail Milk Glass Table Lamps EUC 22.5" WORK GREAT
+- $  55.00 | Vintage Pair White Hobnail Milk Glass Electric Table Lamps - No Shades
+- $  75.00 | Set Of 2 Vintage Hobnail Milk Glass Lamps Excellent Condition 13.5" Tall Ea. 
+- $  24.00 | Pair Of Vintage Milk Glass Hobnail Electric  Lamps 11. 25” Metal Base -No Shades
+- $  49.99 | Vintage Pair Hobnail Milk Glass Lamps 10.5" Tall (bulbs Is Not Included)
+- $ 175.00 | Vintage Pair of Hobnail Milk Glass Table Lamps with Ornate Metal Base
+- $  50.00 | Vintage  white milk glass hobnail lamps (2)
+- $  29.95 | Vintage (2) Hobnail Milk Glass Table Lamps with Shades 15" WORKS
+
+--- AI Analyst's Reasoning ---
+Retained all pairs or sets of two hobnail milk glass table lamps, including the Westmoreland-branded items, while strictly excluding items explicitly labeled as the competing Fenton brand.
+---------------------------------
+Final Average Selling Price: $50.10
+AI Confidence Score: 90%
+---------------------------------------------------------
+
+--- [2025-10-20 00:02:08] eBay Market Price Analysis for 'Vintage Fifth Avenue Accessories Metal Tankard Stein with Ceramic Liner Made in Hong Kong' (Lot #304) ---
+
+--- RAW Items from API ---
+- $  24.99 | Vintage Fifth Avenue Pewter Tankard Lidded Mug 7" Tall Hong Kong NY Barware
+
+--- AI-CLEANED Items for Calculation ---
+- $  24.99 | Vintage Fifth Avenue Pewter Tankard Lidded Mug 7" Tall Hong Kong NY Barware
+
+--- AI Analyst's Reasoning ---
+Only one result matched the 'Fifth Avenue' brand and 'Hong Kong Tankard' description, but it is uncertain if it includes the required ceramic liner.
+---------------------------------
+Final Average Selling Price: $24.99
+AI Confidence Score: 30%
+---------------------------------------------------------
+
+--- [2025-10-20 00:02:08] eBay Market Price Analysis for 'Vintage Japanese Silver Plate Dragon Condiment Caddy Set Cobalt Blue Glass Lined Boxed' (Lot #305) ---
+
+--- RAW Items from API ---
+No items returned from API.
+
+--- AI-CLEANED Items for Calculation ---
+AI removed all items or no items were valid.
+
+--- AI Analyst's Reasoning ---
+No search results were available to filter or compare against the specific characteristics of the item.
+---------------------------------
+Final Average Selling Price: $0.00
+AI Confidence Score: 0%
+---------------------------------------------------------

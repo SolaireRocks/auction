@@ -1,0 +1,318 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Item Analysis</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a; --table-bg-color: #2c2c2c; --header-bg-color: #3a3a3a;
+            --header-hover-bg-color: #4a4a4a; --row-even-bg-color: #333333; --row-odd-bg-color: #2c2c2c;
+            --border-color: #444444; --text-color: #e0e0e0; --link-color: #4a90e2;
+            --link-hover-color: #81b5f5; --sort-indicator-color: #81b5f5;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 2rem; line-height: 1.6; }
+        h1 { text-align: center; color: #ffffff; font-weight: 300; margin-bottom: 2rem; }
+        .table-container { max-width: 1600px; margin: auto; overflow-x: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        table { width: 100%; border-collapse: collapse; background-color: var(--table-bg-color); border-spacing: 0; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        thead th { background-color: var(--header-bg-color); color: #ffffff; font-weight: 600; position: sticky; top: 0; z-index: 10; }
+        thead th[data-column] { cursor: pointer; transition: background-color 0.2s ease-in-out; user-select: none; }
+        thead th[data-column]:hover { background-color: var(--header-hover-bg-color); }
+        tbody tr:not(.reasoning-row):hover { background-color: var(--header-hover-bg-color); }
+        td { font-size: 0.95em; }
+        td:nth-child(4), td:nth-child(5), td:nth-child(6) { font-family: 'Courier New', Courier, monospace; text-align: right; white-space: nowrap; }
+        td:nth-child(7), td:nth-child(8) { text-align: center; }
+        a { color: var(--link-color); text-decoration: none; transition: color 0.2s ease-in-out; }
+        a:hover { color: var(--link-hover-color); text-decoration: underline; }
+        .sort-indicator { color: var(--sort-indicator-color); font-size: 0.8em; margin-left: 8px; display: inline-block; width: 10px; }
+        .lot-main td { font-weight: bold; }
+        .lot-main.expandable { cursor: pointer; }
+        .lot-main:nth-child(4n+1), .lot-main:nth-child(4n+2) { background-color: var(--row-odd-bg-color); }
+        .lot-main:nth-child(4n+3), .lot-main:nth-child(4n) { background-color: var(--row-even-bg-color); }
+        .lot-sub-item { background-color: rgba(0,0,0,0.15) !important; }
+        .lot-sub-item td { font-size: 0.9em; color: #c0c0c0; border-color: #383838; }
+        .lot-sub-item td:nth-child(2) { padding-left: 35px; }
+        .reasoning-row { display: none; background-color: #222 !important; }
+        .reasoning-row.visible { display: table-row; }
+        .reasoning-row td {
+            padding: 10px 20px 10px 40px;
+            font-style: italic;
+            color: #b0b0b0;
+            border-top: 1px dashed #555;
+            white-space: normal;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Auction Item Analysis</h1>
+    <div class="table-container"><table><thead><tr><th data-column="lot_number">Lot # <span class="sort-indicator"></span></th><th data-column="name">Item Name <span class="sort-indicator"></span></th><th data-column="category">Category <span class="sort-indicator"></span></th><th data-column="price">AI Market Value <span class="sort-indicator"></span></th><th data-column="ebay_price">eBay Avg. Sold <span class="sort-indicator"></span></th><th data-column="confidence">Confidence <span class="sort-indicator"></span></th><th>eBay Search</th><th>Google Search</th></tr></thead><tbody id="data-table-body"></tbody></table></div>
+
+<script type="application/json" id="auctionData">
+    [
+    {
+        "ebay_search_title": "Vintage Ardalt Artware Japan Capodimonte Style Cherub Compote Pedestal Dish Pair 6858",
+        "category": "Pottery/China",
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Vintage Ardalt Artware Japan Capodimonte Style Cherub Compote Pedestal Dish Pair 6858",
+                "estimated_value": 40,
+                "ebay_avg_price": 52.56
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59507160/Pair-of-Vintage-CapodimonteStyle-Cherub-Porcelain",
+            "title": "Pair of Vintage Capodimonte/Style Cherub Porcelain",
+            "lot_number": 301,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59507160/Pair-of-Vintage-CapodimonteStyle-Cherub-Porcelain",
+            "pics": [
+                "595071601.jpg",
+                "595071602.jpg",
+                "595071603.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on comparable sales for Ardalt Artware pieces made in Japan, which are distinct from more valuable Italian Capodimonte. The pair is valued together as they are most desirable as a set.",
+        "lot_number": 301,
+        "ebay_avg_price": 52.56,
+        "ebay_confidence_score": 65,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Ardalt+Artware+Japan+Capodimonte+Style+Cherub+Compote+Pedestal+Dish+Pair+6858&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Westmoreland English Hobnail Milk Glass Table Lamps PAIR",
+        "category": "Decor/Lighting",
+        "total_market_value": 80,
+        "items": [
+            {
+                "item_name": "Vintage Westmoreland English Hobnail Milk Glass Table Lamps PAIR",
+                "estimated_value": 80,
+                "ebay_avg_price": 50.10409090909091
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59507512/Pair-of-Westmoreland-English-Hobnail-Glass-Lamps",
+            "title": "Pair of Westmoreland English Hobnail Glass Lamps",
+            "lot_number": 303,
+            "current_bid": "$6.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59507512/Pair-of-Westmoreland-English-Hobnail-Glass-Lamps",
+            "pics": []
+        },
+        "reasoning": "This valuation is a conservative estimate based on the potential value of authentic, undamaged Westmoreland lamps, but it is heavily discounted due to the high risk from the complete lack of photos and unknown condition.",
+        "lot_number": 303,
+        "ebay_avg_price": 50.10409090909091,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Westmoreland+English+Hobnail+Milk+Glass+Table+Lamps+PAIR&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Fifth Avenue Accessories Metal Tankard Stein with Ceramic Liner Made in Hong Kong",
+        "category": "Collectibles",
+        "total_market_value": 15,
+        "items": [
+            {
+                "item_name": "Vintage Fifth Avenue Accessories Metal Tankard Stein with Ceramic Liner Made in Hong Kong",
+                "estimated_value": 15,
+                "ebay_avg_price": 24.99
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59507671/Vintage-Metal-Tankard",
+            "title": "Vintage Metal Tankard",
+            "lot_number": 304,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59507671/Vintage-Metal-Tankard",
+            "pics": [
+                "595076711.jpg",
+                "595076712.jpg",
+                "595076713.jpg",
+                "595076714.jpg"
+            ]
+        },
+        "reasoning": "The value is modest, as the maker's mark 'Fifth Avenue Accessories' and 'Made in Hong Kong' indicate it's a modern decorative piece, not an antique pewter stein.",
+        "lot_number": 304,
+        "ebay_avg_price": 24.99,
+        "ebay_confidence_score": 30,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Fifth+Avenue+Accessories+Metal+Tankard+Stein+with+Ceramic+Liner+Made+in+Hong+Kong&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Pair Czechoslovakian White Ceramic Scroll Candle Holders Candlesticks",
+        "category": "Pottery/China",
+        "total_market_value": 15,
+        "items": [
+            {
+                "item_name": "Vintage Pair Czechoslovakian White Ceramic Scroll Candle Holders Candlesticks",
+                "estimated_value": 15,
+                "ebay_avg_price": 22.294444444444444
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59507478/Pair-of-Ardalt-Artware-Candle-Stick-Holders",
+            "title": "Pair of Ardalt Artware Candle Stick Holders",
+            "lot_number": 302,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59507478/Pair-of-Ardalt-Artware-Candle-Stick-Holders",
+            "pics": [
+                "595074781.jpg",
+                "595074782.jpg"
+            ]
+        },
+        "reasoning": "The valuation reflects that these are relatively common Czechoslovakian ceramics, not Ardalt as misidentified in the listing title. The value is modest and for the pair together.",
+        "lot_number": 302,
+        "ebay_avg_price": 22.294444444444444,
+        "ebay_confidence_score": 85,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Pair+Czechoslovakian+White+Ceramic+Scroll+Candle+Holders+Candlesticks&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Japanese Silver Plate Dragon Condiment Caddy Set Cobalt Blue Glass Lined Boxed",
+        "category": "Collectibles",
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Vintage Japanese Silver Plate Dragon Condiment Caddy Set Cobalt Blue Glass Lined Boxed",
+                "estimated_value": 40,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59507909/Vintage-Cobalt-Blue-Salt-and-Pepper-Shakers-and-Condiment-Dish",
+            "title": "Vintage Cobalt Blue Salt and Pepper Shakers and Condiment Dish",
+            "lot_number": 305,
+            "current_bid": "$9.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59507909/Vintage-Cobalt-Blue-Salt-and-Pepper-Shakers-and-Condiment-Dish",
+            "pics": [
+                "595079091.jpg",
+                "595079092.jpg",
+                "595079093.jpg",
+                "595079094.jpg"
+            ]
+        },
+        "reasoning": "Valuation is based on the set being complete with its original box, the desirable cobalt blue glass inserts, and the popular dragon motif common on mid-century Japanese export ware.",
+        "lot_number": 305,
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Japanese+Silver+Plate+Dragon+Condiment+Caddy+Set+Cobalt+Blue+Glass+Lined+Boxed&_sacat=0&LH_Complete=1&LH_Sold=1"
+    }
+]
+</script>
+
+<script>
+    const jsonData = JSON.parse(document.getElementById('auctionData').textContent);
+    const tableBody = document.getElementById('data-table-body');
+    const headers = document.querySelectorAll('thead th[data-column]');
+    let currentSort = { column: 'ebay_price', isAscending: false };
+
+    function populateTable() {
+        tableBody.innerHTML = '';
+        const formatCurrency = (value) => (value || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 });
+        const sanitizeText = (text) => (text || 'No reasoning provided.');
+
+        jsonData.forEach(lot => {
+            const hasReasoning = lot.reasoning && lot.reasoning.trim() !== '';
+            
+            const mainRow = document.createElement('tr');
+            mainRow.className = 'lot-main' + (hasReasoning ? ' expandable' : '');
+            
+            const encodedSearch = encodeURIComponent(lot.ebay_search_title || '');
+            
+            mainRow.innerHTML = `
+                <td>${lot.lot_number > 0 ? lot.lot_number : ''}</td>
+                <td><a href="${lot.original_listing.url}" target="_blank" title="${lot.original_listing.title}">${lot.ebay_search_title || 'N/A'}</a></td>
+                <td>${lot.category || 'Miscellaneous'}</td>
+                <td style="text-align: right;">${formatCurrency(lot.total_market_value)}</td>
+                <td style="text-align: right;">${lot.ebay_avg_price > 0 ? formatCurrency(lot.ebay_avg_price) : 'N/A'}</td>
+                <td style="text-align: right;">${lot.ebay_confidence_score > 0 ? lot.ebay_confidence_score + '%' : 'N/A'}</td>
+                <td style="text-align: center;"><a href="${lot.ebay_search_url || '#'}" target="_blank">eBay</a></td>
+                <td style="text-align: center;"><a href="https://www.google.com/search?q=${encodedSearch}" target="_blank">Google</a></td>
+            `;
+            
+            tableBody.appendChild(mainRow);
+            
+            if (hasReasoning) {
+                const reasoningRow = document.createElement('tr');
+                reasoningRow.className = 'reasoning-row';
+                reasoningRow.innerHTML = `<td colspan="8">${sanitizeText(lot.reasoning)}</td>`;
+                tableBody.appendChild(reasoningRow);
+
+                mainRow.addEventListener('click', () => {
+                    reasoningRow.classList.toggle('visible');
+                });
+            }
+
+            if (lot.items && lot.items.length > 1) {
+                lot.items.forEach(subItem => {
+                    const subRow = document.createElement('tr');
+                    subRow.className = 'lot-sub-item';
+                    
+                    const subAvgPrice = subItem.ebay_avg_price || 0;
+                    const subEncodedSearch = encodeURIComponent(subItem.item_name || '');
+                    const subEbayUrl = `https://www.ebay.com/sch/i.html?_from=R40&_nkw=${subEncodedSearch}&_sacat=0&LH_Complete=1&LH_Sold=1`;
+                    const subGoogleUrl = `https://www.google.com/search?q=${subEncodedSearch}`;
+
+                    subRow.innerHTML = `
+                        <td></td>
+                        <td style="padding-left: 35px;">${subItem.item_name || 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: right;">${formatCurrency(subItem.estimated_value)}</td>
+                        <td style="text-align: right;">${subAvgPrice > 0 ? formatCurrency(subAvgPrice) : 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: center;"><a href="${subEbayUrl}" target="_blank">eBay</a></td>
+                        <td style="text-align: center;"><a href="${subGoogleUrl}" target="_blank">Google</a></td>
+                    `;
+                    tableBody.appendChild(subRow);
+                });
+            }
+        });
+    }
+
+    function sortData(column) {
+        const isNumeric = ['price', 'ebay_price', 'lot_number', 'confidence'].includes(column);
+        if (currentSort.column === column) {
+            currentSort.isAscending = !currentSort.isAscending;
+        } else {
+            currentSort.column = column;
+            currentSort.isAscending = !isNumeric;
+        }
+
+        jsonData.sort((a, b) => {
+            let valA, valB;
+            switch (column) {
+                case 'price': valA = a.total_market_value || 0; valB = b.total_market_value || 0; break;
+                case 'ebay_price': valA = a.ebay_avg_price || 0; valB = b.ebay_avg_price || 0; break;
+                case 'confidence': valA = a.ebay_confidence_score || 0; valB = b.ebay_confidence_score || 0; break;
+                case 'lot_number': valA = a.lot_number || 0; valB = b.lot_number || 0; break;
+                case 'name': valA = (a.ebay_search_title || '').toLowerCase(); valB = (b.ebay_search_title || '').toLowerCase(); break;
+                case 'category': valA = (a.category || '').toLowerCase(); valB = (b.category || '').toLowerCase(); break;
+                default: return 0;
+            }
+            let comparison = 0;
+            if (valA > valB) { comparison = 1; }
+            else if (valA < valB) { comparison = -1; }
+            return currentSort.isAscending ? comparison : comparison * -1;
+        });
+        updateSortIndicators();
+        populateTable();
+    }
+
+    function updateSortIndicators() {
+        headers.forEach(header => {
+            const indicator = header.querySelector('.sort-indicator');
+            if (header.dataset.column === currentSort.column) {
+                indicator.textContent = currentSort.isAscending ? ' ▲' : ' ▼';
+            } else { indicator.textContent = ''; }
+        });
+    }
+
+    headers.forEach(header => { header.addEventListener('click', () => { sortData(header.dataset.column); }); });
+    sortData('ebay_price');
+</script>
+
+    <div style="text-align: center; margin-top: 2rem; font-size: 0.8em; color: #888;">
+        <p>Analysis powered by:</p>
+        <p><strong>Auction Analysis Model:</strong> gemini-2.5-pro (Gemini)</p>
+        <p><strong>eBay Cleaning Model(s):</strong> gemini-flash-latest (Gemini)</p>
+    </div>
+
+</body>
+</html>
