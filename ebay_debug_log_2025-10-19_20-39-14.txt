@@ -1,0 +1,750 @@
+
+--- [2025-10-19 20:42:09] eBay Market Price Analysis for 'Vintage Sanyu Crystal Glass Vase Heavy Optic Ribbed Design' (Lot #91) ---
+
+--- RAW Items from API ---
+No items returned from API.
+
+--- AI-CLEANED Items for Calculation ---
+AI removed all items or no items were valid.
+
+--- AI Analyst's Reasoning ---
+No eBay results were returned, so no items could be kept.
+---------------------------------
+Final Average Selling Price: $0.00
+AI Confidence Score: 0%
+---------------------------------------------------------
+
+--- [2025-10-19 20:42:09] eBay Market Price Analysis for 'Vintage Winfield Santa Monica Dragon Flower Ashtrays Set of 12' (Lot #92) ---
+
+--- RAW Items from API ---
+- $   5.99 | Vintage Winfield Santa Monica California Ashtrays set of 2 Dragon Flower 4"x 3"
+- $  12.97 | Vintage Winfield Santa Monica California MCM Ashtray Blue Dragon Flower Set Of 5
+- $  17.00 | Vtg MCM Ashtray Winfield Santa Monica California Blue Dragon Flower 4"x 3"
+- $  30.00 | Vintage Winfield Santa Monica California MCM Ashtray Blue Dragon Flower Set Of 5
+- $   6.95 | Lot of 2 Vintage Winfield Santa Monica Dragon Flower Leaf Ashtrays
+- $  27.00 | Vtg Winfield Santa Monica California 5 pc LOT Ashtrays Dragon Flower Collectible
+- $   9.99 | 2 Vintage Winfield California Pottery Dragon Flower Ashtray Santa Monica
+- $  16.95 | Vintage Winfield Santa Monica California MCM Ashtray Blue Dragon Flower 
+- $  12.00 | Vintage Winfield California Pottery Dragon Flower Ashtray Santa Monica
+- $   4.99 | Vtg Ashtray Winfield Santa Monica California MCM Blue Dragon Flower 4"x 3"
+- $  22.00 | Vtg Winfield Dragon Flower Ashtray Trinket Dish santa Monica  California Pottery
+- $  18.00 | WINFIELD WARE SANTA MONICA DRAGON FLOWER 6  INDIVIDUAL ASHTRAYS
+- $  25.00 | Winfield Santa Monica Calif. USA Pottery Dragon Flower Ashtray 
+- $  45.95 | VTG Winfield Porcelain Hand Painted Ashtray Set of 9 Americana Dragon Flower
+- $  24.99 | Winfield Dragon Flower Large MCM Divided Relish/Ashtray & Two Personal Ashtrays
+- $  15.00 | Set of 2 VTG 1950s Winfield USA Dragon Flower  & Bamboo Single Rest Ashtrays 
+- $   5.99 | Vintage Winfield Ashtray DRAGON FLOWER Pattern Personal Cigarette Size
+- $   4.00 | Vintage~WINFIELD~Brown Ashtray~Dragon Flower
+- $  12.00 | WINFIELD WARE SANTA MONICA DRAGON FLOWER ASHTRAY 10" X 6"
+- $   4.99 | Winfield Dragon Flower Small Ashtray
+- $   6.00 | Vintage 1950s Winfield USA Dragon Flower Ashtray Trinket Dish California Pottery
+- $  13.50 | Vintage MCM Winfield China Dragon Flower Porcelain Ashtray; Retro; Large
+- $   4.99 | Vintage Winfield USA Dragon Flower Ashtray Trinket Dish 
+- $   5.00 | Vintage 1950s Winfield USA Dragon Flower Ashtray Trinket Dish California Pottery
+- $  15.00 | Vintage 1960s Winfield of California Dragon Flower Porcelain Ashtray
+- $  17.99 | Winfield China Dragon Flower Large Ashtray mcm
+- $   7.00 | Winfield DRAGON FLOWER Set of 4 Individual Ashtrays EXCELLENT
+- $  12.00 | 3 Vintage Winfield Santa Monica USA China Ashtray
+- $   8.50 | Vintage~WINFIELD True Porcelain Hand Crafted DRAGON FLOWER ASHTRAY
+- $   2.50 | 2 Winfield China DRAGON FLOWER ASHTRAY MCM VINTAGE ONE CIGARETTE 
+
+--- AI-CLEANED Items for Calculation ---
+- $   5.99 | Vintage Winfield Santa Monica California Ashtrays set of 2 Dragon Flower 4"x 3"
+- $  12.97 | Vintage Winfield Santa Monica California MCM Ashtray Blue Dragon Flower Set Of 5
+- $  17.00 | Vtg MCM Ashtray Winfield Santa Monica California Blue Dragon Flower 4"x 3"
+- $  30.00 | Vintage Winfield Santa Monica California MCM Ashtray Blue Dragon Flower Set Of 5
+- $   6.95 | Lot of 2 Vintage Winfield Santa Monica Dragon Flower Leaf Ashtrays
+- $  27.00 | Vtg Winfield Santa Monica California 5 pc LOT Ashtrays Dragon Flower Collectible
+- $   9.99 | 2 Vintage Winfield California Pottery Dragon Flower Ashtray Santa Monica
+- $  16.95 | Vintage Winfield Santa Monica California MCM Ashtray Blue Dragon Flower
+- $  12.00 | Vintage Winfield California Pottery Dragon Flower Ashtray Santa Monica
+- $   4.99 | Vtg Ashtray Winfield Santa Monica California MCM Blue Dragon Flower 4"x 3"
+- $  45.95 | VTG Winfield Porcelain Hand Painted Ashtray Set of 9 Americana Dragon Flower
+- $  24.99 | Winfield Dragon Flower Large MCM Divided Relish/Ashtray & Two Personal Ashtrays
+
+--- AI Analyst's Reasoning ---
+Kept various Winfield Santa Monica Dragon Flower ashtray listings, including sets and singles, as no exact 12‑piece set was found.
+---------------------------------
+Final Average Selling Price: $17.90
+AI Confidence Score: 60%
+---------------------------------------------------------
+
+--- [2025-10-19 20:42:09] eBay Market Price Analysis for 'Vintage Art Deco Cobalt Blue Glass Cigarette Box' (Lot #93) ---
+
+--- RAW Items from API ---
+- $  65.00 | Vintage Art Deco Cobalt Blue Glass cigarette Box w/chrome lid and ashtray
+- $  39.99 | Vintage Art Deco Cobalt Blue Glass cigarette Box w/chrome lid bakelite finial
+- $  28.00 | VTG Boyd Glass Cigarette Cobalt Blue Trinket Box W/Lid Vanity Dolphin Feet
+- $   7.99 | Vintage art deco blue glass 4” cigarette or trinket box
+- $  12.00 | Vintage Cobalt Blue 3 Footed For Three Cigarettes.
+
+--- AI-CLEANED Items for Calculation ---
+- $  65.00 | Vintage Art Deco Cobalt Blue Glass cigarette Box w/chrome lid and ashtray
+- $  39.99 | Vintage Art Deco Cobalt Blue Glass cigarette Box w/chrome lid bakelite finial
+- $  28.00 | VTG Boyd Glass Cigarette Cobalt Blue Trinket Box W/Lid Vanity Dolphin Feet
+- $   7.99 | Vintage art deco blue glass 4” cigarette or trinket box
+
+--- AI Analyst's Reasoning ---
+Retained only cobalt‑blue glass cigarette box listings and excluded ashtrays or unrelated items.
+---------------------------------
+Final Average Selling Price: $35.24
+AI Confidence Score: 90%
+---------------------------------------------------------
+
+--- [2025-10-19 20:42:09] eBay Market Price Analysis for 'Vintage Art Deco Cobalt Blue Glass Ashtray with Gold Toned Tray' (Lot #93) ---
+
+--- RAW Items from API ---
+- $  16.99 | Vintage Art Deco Cobalt Blue Glass Ashtray, MCM, possibly Davidson Glass
+- $   9.99 | VINTAGE COBALT BLUE RIBBED GLASS ASHTRAY DISH RETRO ART DECO RARE
+- $  22.10 | Cobalt Blue Glass Art Deco Ashtray Vintage MCM 1960s Swirl Design on Bottom
+- $  27.97 | Beautiful Cobalt Blue Round Glass Cigarette Ash Tray Mid Century Art Deco
+- $  37.00 | art deco Vintage Cobalt Blue Glass Ashtray Square Design
+- $  59.99 | Art Deco thick cut cobalt blue glass card desk tray ashtray soap dish gold trim
+- $  22.99 | Cobalt Blue Glass Ash Tray,  Square Heavy,  Fair to Good Condition
+- $  12.00 | Vintage  MCM Square Cobalt Blue Glass Ashtray Art Deco Unmarked 4 Holder
+- $  22.00 | Beautiful Cobalt Blue Round Glass Cigarette Ashtray Mid Century Art Deco
+- $  12.85 | Cobalt Blue Art Glass Ashtray Trinket Dish Art Deco Design Metal Rim Rope Design
+- $  24.00 | Art Deco Cobalt Ashtray Glass **Damage VTG
+- $  45.00 | Set of 2 Vintage Cobalt Blue Ash Trays Art Deco Style 3 Points Trinket Dishes
+- $  45.00 | Vintage Cobalt Blue Glass Ashtray Art Deco 2lb 9.7oz
+- $  35.99 | Vintage Deco Cobalt Blue Ashtray
+- $  76.47 | Cobalt Blue Ashtray Lot (3) MCM Large Heavy Duty Glass 6” + Colbalt Small Trays
+- $  60.00 | Rare Vintage Art Deco cobalt glass ashtray, France Or Bohemia circa 1930–1950
+- $  42.00 | COBALT BLUE extremely heavy ART GLASS ASHTRAY...Art Deco Design
+- $  39.99 | Vintage - Cobalt Blue Glass Square Ashtray - 4 Slots Retro Art Deco - Beautiful!
+- $  15.99 | Set of 2 Cobalt Blue Round Glass Cigarette Ash Tray Mid Century Art Deco
+- $  17.95 | 1960's Vintage VTG Ash Tray Cobalt Blue scalloped edges textured bottom 6" wide.
+- $  12.99 | Vintage Mid Century Blue Round Glass Cigar Cigarette Ash Tray Cobalt Blue 6” MCM
+- $  29.99 | Cobalt Blue Vintage Ashtray Art Deco Style Ground Base
+- $  10.19 | Vintage Cobalt Blue And Gold Ash Tray
+- $  29.99 | CLEAR COBALT BLUE FLORAL GLASS ASHTRAY ART DECO PAINTED FLOWERS LEAVES HANDMADE 
+- $  18.00 | Vintage Mid Century Blue Round Glass 6” Cigar / Cigarette Ash Tray Cobalt Blue
+
+--- AI-CLEANED Items for Calculation ---
+- $  59.99 | Art Deco thick cut cobalt blue glass card desk tray ashtray soap dish gold trim
+- $  10.19 | Vintage Cobalt Blue And Gold Ash Tray
+
+--- AI Analyst's Reasoning ---
+Selected only ashtrays that mention gold‑toned trim, discarding other cobalt blue ashtrays.
+---------------------------------
+Final Average Selling Price: $35.09
+AI Confidence Score: 70%
+---------------------------------------------------------
+
+--- [2025-10-19 20:42:09] eBay Market Price Analysis for 'Vintage Sewing Box with Floral Pattern' (Lot #94) ---
+
+--- RAW Items from API ---
+- $  38.99 | Beautiful Vintage Floral Pattern Sewing Box
+- $  27.50 | Vintage Floral Retro Floral Sewing Box Handle 70’s Style Pattern~Philippines
+- $  29.95 | Vintage STANDING SEWING BOX Wooden Pale Green PINK FLORAL DECAL Sliding Tray 18"
+- $  16.99 | VINTAGE SEWING BOX! FLIP UP LID! FLORAL PRINT 8x5x3. Bow Closure
+- $  19.99 | Vintage Quilted Floral Sewing Box  w/ Supplies 
+- $  31.50 | Vintage Sewing Box- Set of 2 Boxes, With Handles. Japan. Floral Print. 
+- $  82.49 | Accordian Style Fold Out Sewing Box 12x7.5 Box 3 Tiers with Floral Pattern
+- $  60.00 | Floral- Vintage- Sewing Box - Purple 
+- $  18.00 | Vintage Fabric Sewing Box With Handle, Green & Floral, house design  11x7x9 
+- $  17.99 | Vintage 1980s Large Octagon Sewing Box w Handle Wicker with Floral Design
+- $  39.00 | Vintage Quilted Sewing Box Floral Pink Roses Inside Tray w/ Contents 4a
+- $  45.00 | Vintage Floral Pattern Sewing Box Full Of Sewing Items
+- $  48.00 | Vtg. Handmade Sewing Box W/ Drawer Floral Design Wood Top Opens Great Condition
+- $  12.99 | VINTAGE, BLACK/PINK FLORAL SEWING BOX WITH HANDLE/RUFFLES
+- $  15.95 | Vintage Floral Square Sewing Box W/Gold Satin Lining 8" X 8" With Tray, Taiwan 
+- $  19.96 | Vintage Floral Square Sewing Box W/creme Satin Lining 8" X 8" With Tray, Taiwan
+- $  39.98 | Vintage Woven Wicker Sewing Box With Hinged Lid And Handle Floral Pattern Top
+- $  24.99 | VTG 1960s SEWING BOX Blu/Wt/Red Floral Bead Handle Padded Top Pocket Lined 9x5x5
+- $  44.00 | Vintage Unique 1950’s Floral Wicker Square Sewing Box
+- $  44.00 | Vintage Unique 1950’s Floral Wicker Square Sewing Box
+- $  18.11 | SEWING BOX RED ROSE FLORAL WITH HANDLE 7"Hx10"Wx7.5"D & CONTENTS
+- $  29.95 | Vintage Floral & Butterfly Padded Sewing Box with Tray & Plastic Handle EUC
+- $  40.00 | Beautiful Vintage Floral Pattern Sewing Box
+- $  22.00 | Vintage 1950's Woven Sewing Box with Pink Ribbon Accents
+- $  19.95 | Antique/Vintage Collectible Metal Sewing Accessories Box with Floral Design.
+- $  75.00 | Vintage Quilted Vinyl Padded Floral Sewing Box 1960s + Grandma's Notions Mod G24
+- $  13.39 | Vintage Fabric Covered Sewing Box Basket Padded Button Print
+- $  22.66 | Vintage Pink Sewing box with contents
+- $  54.99 | VTG MCM Redmon Sewing box basket Supplies eagles Bells Tray Insert Gold Cream
+- $  24.99 | Vintage 1980s Large Octagon Sewing Box w Handle Wicker Dusty Rose/Blue Floral
+
+--- AI-CLEANED Items for Calculation ---
+- $  38.99 | Beautiful Vintage Floral Pattern Sewing Box
+- $  27.50 | Vintage Floral Retro Floral Sewing Box Handle 70’s Style Pattern~Philippines
+- $  16.99 | VINTAGE SEWING BOX! FLIP UP LID! FLORAL PRINT 8x5x3. Bow Closure
+- $  19.99 | Vintage Quilted Floral Sewing Box  w/ Supplies 
+- $  31.50 | Vintage Sewing Box- Set of 2 Boxes, With Handles. Japan. Floral Print. 
+- $  82.49 | Accordian Style Fold Out Sewing Box 12x7.5 Box 3 Tiers with Floral Pattern
+- $  60.00 | Floral- Vintage- Sewing Box - Purple 
+- $  18.00 | Vintage Fabric Sewing Box With Handle, Green & Floral, house design  11x7x9 
+- $  17.99 | Vintage 1980s Large Octagon Sewing Box w Handle Wicker with Floral Design
+- $  45.00 | Vintage Floral Pattern Sewing Box Full Of Sewing Items
+
+--- AI Analyst's Reasoning ---
+Included all listings describing a floral‑pattern sewing box, ignoring brand differences.
+---------------------------------
+Final Average Selling Price: $30.66
+AI Confidence Score: 85%
+---------------------------------------------------------
+
+--- [2025-10-19 20:42:09] eBay Market Price Analysis for 'Assorted Sewing Notions and Threads' (Lot #94) ---
+
+--- RAW Items from API ---
+- $  40.00 | Vintage Sewing Kit Lot Thread Spools Wooden Organizer Notions Elastic Wrapped
+- $  12.95 | Assorted Sewing Notions Mostly Fasteners some New Original Packs
+- $  15.00 | LOT: (39) Various Size Sewing Thread Spools plus (7) Notions
+- $  22.50 | Mixed Lot of Vintage & Modern Sewing Notions – Thread, Elastic, Floss, Patches
+- $  35.00 | LARGE 100+ LOT VINTAGE SEWING NOTIONS, THREADS, ACCESSORIES, Buttons, Needles
+- $   9.00 | Huge Lot of Sewing Notions Crafts Display Original Zippers Bobbins Thread
+- $  22.00 | 88 Lot SEWING NOTIONS Mostly Vtg New/Used Thread-Buttons-Bobbins-Tools + More 
+- $  35.99 | Large Lot VTG & Modern Sewing Notions - 2.3 lbs Buttons Thread Tools Trim More
+- $  35.99 | Lot 75+ Sewing Notions Thread Buttons Needles Thimbles Iron-on Tape Vintage
+- $   3.50 | Sewing Notions Lot, Needles, Bobbins, Fabric Tape & Glue, Pins. NEW In Packages
+- $  27.00 | Lot of Assorted Sewing Room Supplies, Notions: Thread, Elastic, Patches, Binding
+- $  13.47 | Vtg Sewing Notions Lot Thread Fasteners Needles Bobbins Lace 60s 70s 80s Craft
+- $  49.99 | HUGE LOT OF A LARGE VARIETY OF VINTAGE, SEALED RICK RACK & SEWING NOTIONS
+- $  69.99 | Lot of Vintage Sewing Notions: Rick Rack/Bias Tape/Snaps/Buttons/Lace NOS Unused
+- $  18.59 | Sewing Notions Vintage lot Mixed Seam Binding Needle Threaders Buttons Tape Misc
+- $  35.99 | MIXED LOT OF OPENED SEWING VARIOUS THREAD & CASES MISC
+- $  17.50 | Lot Sewing Notions & Craft Supplies Thread - Wood Spools Ric Rac Bias Scissors
+- $  39.99 | LARGE LOT VINTAGE SEWING NOTIONS, THREADS, ACCESSORIES, SISSORS, PLIERS, DARNING
+- $  39.99 | HUGE lot of sewing notions ~ hook and eyes, buttons Trim Pieces Thread, Zipper
+- $  24.95 | 3.5 lbs Vtg Lot Sewing Notions Buttons Pins Thread Kismet Atco Coats Clarks
+- $  14.45 | Lot Vintage Sewing  Threads Notions Fasteners Snaps Needles
+- $  20.00 | vintage sewing notions and thread spools lot Some Wood Spools
+- $  11.49 | LOT OF SEWING NOTIONS EMBROIDERY KNITTING 50 ITEMS
+- $  25.00 | VTG Sewing Notions, 56 Spools Thread, Coats, Sewing Kits, Sew/Knit Gauge, Misc.
+- $  18.99 | Vintage Sewing Notions Mixed Lot Thread Spool Zippers Elastic Misc Supplies
+- $  10.00 | 10 SEWING NOTIONS SUPPLIES BUYER INPUT HONORED VINTAGE & NEW GOOD VARIETY 
+- $  39.95 | Lot Sewing Notions 4.5 Pounds Supplies, Notions, Tools, Trim
+- $  19.99 | Lot Vintage Sewing Notions Needle Cards Snaps Thread Spools Some Wooden Misc.
+- $  10.00 | 10 SEWING NOTIONS SUPPLIES BUYER INPUT HONORED VINTAGE & NEW GOOD VARIETY 
+- $   8.00 | Mixed Lot of Sewing Supply Notions  Needles, And Everything You See In The Photo
+
+--- AI-CLEANED Items for Calculation ---
+- $  40.00 | Vintage Sewing Kit Lot Thread Spools Wooden Organizer Notions Elastic Wrapped
+- $  12.95 | Assorted Sewing Notions Mostly Fasteners some New Original Packs
+- $  15.00 | LOT: (39) Various Size Sewing Thread Spools plus (7) Notions
+- $  22.50 | Mixed Lot of Vintage & Modern Sewing Notions – Thread, Elastic, Floss, Patches
+- $  35.00 | LARGE 100+ LOT VINTAGE SEWING NOTIONS, THREADS, ACCESSORIES, Buttons, Needles
+- $   9.00 | Huge Lot of Sewing Notions Crafts Display Original Zippers Bobbins Thread
+- $  22.00 | 88 Lot SEWING NOTIONS Mostly Vtg New/Used Thread-Buttons-Bobbins-Tools + More 
+- $  35.99 | Large Lot VTG & Modern Sewing Notions - 2.3 lbs Buttons Thread Tools Trim More
+- $  35.99 | Lot 75+ Sewing Notions Thread Buttons Needles Thimbles Iron-on Tape Vintage
+- $   3.50 | Sewing Notions Lot, Needles, Bobbins, Fabric Tape & Glue, Pins. NEW In Packages
+- $  27.00 | Lot of Assorted Sewing Room Supplies, Notions: Thread, Elastic, Patches, Binding
+- $  13.47 | Vtg Sewing Notions Lot Thread Fasteners Needles Bobbins Lace 60s 70s 80s Craft
+- $  49.99 | HUGE LOT OF A LARGE VARIETY OF VINTAGE, SEALED RICK RACK & SEWING NOTIONS
+- $  69.99 | Lot of Vintage Sewing Notions: Rick Rack/Bias Tape/Snaps/Buttons/Lace NOS Unused
+- $  18.59 | Sewing Notions Vintage lot Mixed Seam Binding Needle Threaders Buttons Tape Misc
+- $  35.99 | MIXED LOT OF OPENED SEWING VARIOUS THREAD & CASES MISC
+- $  17.50 | Lot Sewing Notions & Craft Supplies Thread - Wood Spools Ric Rac Bias Scissors
+- $  39.99 | LARGE LOT VINTAGE SEWING NOTIONS, THREADS, ACCESSORIES, SISSORS, PLIERS, DARNING
+- $  39.99 | HUGE lot of sewing notions ~ hook and eyes, buttons Trim Pieces Thread, Zipper
+- $  24.95 | 3.5 lbs Vtg Lot Sewing Notions Buttons Pins Thread Kismet Atco Coats Clarks
+- $  14.45 | Lot Vintage Sewing  Threads Notions Fasteners Snaps Needles
+- $  20.00 | vintage sewing notions and thread spools lot Some Wood Spools
+- $  11.49 | LOT OF SEWING NOTIONS EMBROIDERY KNITTING 50 ITEMS
+- $  25.00 | VTG Sewing Notions, 56 Spools Thread, Coats, Sewing Kits, Sew/Knit Gauge, Misc.
+- $  18.99 | Vintage Sewing Notions Mixed Lot Thread Spool Zippers Elastic Misc Supplies
+- $  10.00 | 10 SEWING NOTIONS SUPPLIES BUYER INPUT HONORED VINTAGE & NEW GOOD VARIETY 
+- $  39.95 | Lot Sewing Notions 4.5 Pounds Supplies, Notions, Tools, Trim
+- $  19.99 | Lot Vintage Sewing Notions Needle Cards Snaps Thread Spools Some Wooden Misc.
+- $  10.00 | 10 SEWING NOTIONS SUPPLIES BUYER INPUT HONORED VINTAGE & NEW GOOD VARIETY 
+- $   8.00 | Mixed Lot of Sewing Supply Notions  Needles, And Everything You See In The Photo
+
+--- AI Analyst's Reasoning ---
+Kept all generic assorted sewing notions and thread lots, ignoring brand differences.
+---------------------------------
+Final Average Selling Price: $23.35
+AI Confidence Score: 90%
+---------------------------------------------------------
+
+--- [2025-10-19 20:42:09] eBay Market Price Analysis for 'Pearl Embellishments and Other Sewing Accessories' (Lot #94) ---
+
+--- RAW Items from API ---
+No items returned from API.
+
+--- AI-CLEANED Items for Calculation ---
+AI removed all items or no items were valid.
+
+--- AI Analyst's Reasoning ---
+No eBay results were provided, so no comparable items could be found.
+---------------------------------
+Final Average Selling Price: $0.00
+AI Confidence Score: 0%
+---------------------------------------------------------
+
+--- [2025-10-19 20:42:09] eBay Market Price Analysis for 'Vintage Miniature Porcelain Tea Set Floral Pattern 13 Pieces' (Lot #95) ---
+
+--- RAW Items from API ---
+- $   9.99 | 15pc Vintage Miniature White Porcelain Tea Set Pot Cup Plate for Tableware House
+- $  39.14 | 10 Piece Vintage Floral Print Porcelain Tea Set BRAND NEW In Original Box
+- $  28.00 | Lot Of 19 Pieces Vintage Miniature Mini Porcelain Floral Tea Sets Collectibles
+- $  32.00 | Vintage Miniature Tea Set; Porcelain Floral Design; Cups & Plates; Creamer/Sugar
+- $  15.60 | Miniature Porcelain Tea Set Floral Pattern Dollhouse Child Play Vintage Lot Of 2
+- $  19.99 | Vintage Hand Painted Miniature Porcelain Tea Set Of 10 Pcs. FLORAL & BLUE RIBBON
+- $  20.00 | Miniature Porcelain Tea Set Floral Roses Dollhouse Collectible Vintage
+- $  47.00 | Vintage Miniature Floral Porcelain Tea Set Made in Japan 25 Pieces SSE
+- $  59.99 | RARE VTG Mini Porcelain Tea Set DN & E L Floral Dollhouse Yellow Blue Gold Trim
+- $  12.99 | Miniature Tea Set Rose Floral Pattern Porcelain 6 pieces  
+- $  14.90 | Miniature Doll Size White Porcelain Floral Pattern China Tea Set Japan Vintage
+- $  25.00 | Vintage Miniature Purple Floral Porcelain Tea Set
+- $  15.38 | Vintage Miniature Porcelain Tea Set on Plate Gold Trim Floral Design Glued 
+- $  21.00 | Japan Vintage China Porcelain Miniature Dollhouse Floral Tea Set 10 Pieces
+- $   9.99 | Miniature Porcelain Tea Set  Floral Pattern Dollhouse
+- $  25.00 | Vintage Miniature Tea Set Floral Pattern 17 Piece Hand Painted Porcelain
+- $  19.99 | 2 Sets Vintage Mini Porcelain Tea Set Flowers 13 Pieces
+- $  25.00 | Vintage Miniature Pink Swirl & White Porcelain Tea Set
+- $  15.00 | Vintage Miniature Porcelain Tea Set & Pitchers Lot – Mixed Brands, Floral
+- $  21.59 | Vintage Miniature Porcelain Tea Set In Box Floral Asian 6 Cups Tea Pot Plate
+- $  25.00 | Nice Vintage 13-Piece Miniature Porcelain Tea/Coffee Set - Blue & White Floral
+- $  14.99 | Vintage Miniature Porcelain  Tea Set- 9 piece set-Victorian Floral Doll House
+- $  16.95 | Vintage Miniature Tea Set 8 Pieces Porcelain Floral Hand Painted
+- $  19.99 | Vintage 13pc Porcelain Miniature Tea Set
+- $   5.60 | Vintage Floral Miniature Tea Set Porcelain
+- $   8.00 | Miniature Pink Floral Porcelain Tea Set with Tray 1:12 Scale
+- $   9.99 | Japan Vintage China Porcelain Miniature Dollhouse Floral Tea Set 12 Pieces Assor
+- $  14.95 | Vintage Miniature Porcelain Tea Set Plate Cups Pink Floral Gold Trim
+- $  14.50 | Vintage Miniature Porcelain Floral, Gold Pattern Tea Set Made In Occupied Japan
+- $  12.00 | 🎁Child's Miniature Tea Set Porcelain Painted Purple and Green !
+
+--- AI-CLEANED Items for Calculation ---
+- $  19.99 | 2 Sets Vintage Mini Porcelain Tea Set Flowers 13 Pieces
+- $  25.00 | Nice Vintage 13-Piece Miniature Porcelain Tea/Coffee Set - Blue & White Floral
+- $  19.99 | Vintage 13pc Porcelain Miniature Tea Set
+
+--- AI Analyst's Reasoning ---
+Kept only listings that specifically state a 13‑piece floral‑pattern miniature porcelain tea set.
+---------------------------------
+Final Average Selling Price: $21.66
+AI Confidence Score: 85%
+---------------------------------------------------------
+
+--- [2025-10-19 20:42:09] eBay Market Price Analysis for 'Vintage Minnie Mouse Disney Tea Set Plate by Sango Japan' (Lot #96) ---
+
+--- RAW Items from API ---
+- $  35.00 | *RARE* Disney Character Sango Japan Plate - Mickey Mouse And Minnie Mouse Boat
+- $  39.99 | Mickey Minnie Disney Sango Japan Plates Set Of 5
+- $ 120.00 | RARE Disney Character Series Sango Japan Mickey &Minnie Blue &Pink 2 Tea Cups
+- $  88.00 | Disney Mickey Mouse Tea set (Teapot & Tea Cups) Unused Sango from japan
+- $  10.00 | Disney Enterprises Minnie Mouse Tea Cup Sango Japan Disney Character Series
+- $  19.50 | Vintage Minnie Mouse Porcelain Teacup Sango Japan Walt Disney Productions Cup
+- $  70.99 | Brand New Disney Mickey Mouse Teacup & Saucer 2pcs Set Sango Made in Japan
+
+--- AI-CLEANED Items for Calculation ---
+- $  35.00 | *RARE* Disney Character Sango Japan Plate - Mickey Mouse And Minnie Mouse Boat
+- $  39.99 | Mickey Minnie Disney Sango Japan Plates Set Of 5
+
+--- AI Analyst's Reasoning ---
+Retained only Sango Japan plates featuring Minnie Mouse, excluding cups, teapots and other accessories.
+---------------------------------
+Final Average Selling Price: $37.50
+AI Confidence Score: 80%
+---------------------------------------------------------
+
+--- [2025-10-19 20:42:09] eBay Market Price Analysis for 'Vintage Minnie Mouse Disney Teapot by Sango Japan' (Lot #96) ---
+
+--- RAW Items from API ---
+- $  45.00 | RARE Vtg  Sango, Mickey Mouse Tea Set-Teapot W/Diffuser, 2 Mugs . 1970s-1990s
+- $  88.00 | Disney Mickey Mouse Tea set (Teapot & Tea Cups) Unused Sango from japan
+
+--- AI-CLEANED Items for Calculation ---
+- $  45.00 | RARE Vtg  Sango, Mickey Mouse Tea Set-Teapot W/Diffuser, 2 Mugs . 1970s-1990s
+- $  88.00 | Disney Mickey Mouse Tea set (Teapot & Tea Cups) Unused Sango from japan
+
+--- AI Analyst's Reasoning ---
+No exact Minnie Mouse teapot found; included similar Sango teapots with Mickey as the closest comparable items.
+---------------------------------
+Final Average Selling Price: $66.50
+AI Confidence Score: 50%
+---------------------------------------------------------
+
+--- [2025-10-19 20:42:09] eBay Market Price Analysis for 'Vintage Minnie Mouse Disney Tea Cup and Saucer Set by Sango Japan' (Lot #96) ---
+
+--- RAW Items from API ---
+- $  84.91 | Sango China Walt Disney Vintage Tea Cup & Bowls 4pc Set Mickey Mouse Dumbo Bambi
+- $   1.75 | DISNEY MINNIE MOUSE Tea Cup Sango Japan Character Series Coffee Mug Collectible
+- $  19.50 | Vintage Minnie Mouse Porcelain Teacup Sango Japan Walt Disney Productions Cup
+- $ 112.00 | Disney Mickey Mouse Cup & Saucer Set of 5 Sango New Shipped From Japan
+- $  19.99 | Disney Mickey Mouse Childrens Teacup Juice Cup 3" Sango Japan
+- $  10.00 | Mickey Mouse Disney Sango Japanese style tea cup
+- $  17.99 | Vintage Minnie And Mickey Mouse Coffee/ Espresso Mug Sango China Made In Japan
+- $  25.00 | Vintage Disney Sango Teacups & Saucers
+- $  29.00 | Walt Disney Productions Mitsukoshi Sango Japan Mickey Minnie Mouse 4 oz Tea Cup
+- $ 120.00 | RARE Disney Character Series Sango Japan Mickey &Minnie Blue &Pink 2 Tea Cups
+- $  10.00 | Disney Enterprises Minnie Mouse Tea Cup Sango Japan Disney Character Series
+- $  70.99 | Brand New Disney Mickey Mouse Teacup & Saucer 2pcs Set Sango Made in Japan
+- $  65.89 | Unused Showa Retro Sango Disney Cup & Saucer Mickey Mouse
+- $  14.95 | Vtg Sango China Walt Disney Mickey And Minnie Coffee Cup Mug Japan Red
+- $  88.00 | Disney Mickey Mouse Tea set (Teapot & Tea Cups) Unused Sango from japan
+- $  22.99 | SET OF TWO WALT DISNEY PORCELAIN CUPS IN 2 COLORS MICKEY & MINNIE BY SANGO JAPAN
+- $  38.00 | Disney Enterprises Mickey Mouse Tea Cup & Rice Bowl Set Sango Japan
+
+--- AI-CLEANED Items for Calculation ---
+- $  25.00 | Vintage Disney Sango Teacups & Saucers
+
+--- AI Analyst's Reasoning ---
+Kept only a generic Sango tea cup and saucer set because no exact vintage Minnie Mouse set was found.
+---------------------------------
+Final Average Selling Price: $25.00
+AI Confidence Score: 45%
+---------------------------------------------------------
+
+--- [2025-10-19 20:42:09] eBay Market Price Analysis for 'Vintage Minnie Mouse Disney Creamer by Sango Japan' (Lot #96) ---
+
+--- RAW Items from API ---
+No items returned from API.
+
+--- AI-CLEANED Items for Calculation ---
+AI removed all items or no items were valid.
+
+--- AI Analyst's Reasoning ---
+No relevant listings were present in the raw results.
+---------------------------------
+Final Average Selling Price: $0.00
+AI Confidence Score: 0%
+---------------------------------------------------------
+
+--- [2025-10-19 20:42:09] eBay Market Price Analysis for 'Vintage Minnie Mouse Disney Sugar Bowl by Sango Japan' (Lot #96) ---
+
+--- RAW Items from API ---
+- $  32.60 | Walt Disney Company Minnie Mouse Rice Bowl Sango Made In Japan Original Box
+- $  20.00 | Walt Disney Company Minnie Mouse Rice Bowl Sango Made In Japan 
+
+--- AI-CLEANED Items for Calculation ---
+AI removed all items or no items were valid.
+
+--- AI Analyst's Reasoning ---
+The only items were rice bowls, not sugar bowls, so none were kept.
+---------------------------------
+Final Average Selling Price: $0.00
+AI Confidence Score: 0%
+---------------------------------------------------------
+
+--- [2025-10-19 20:42:09] eBay Market Price Analysis for 'Vintage Noritake Japan Ceramic Tea Set for Children' (Lot #97) ---
+
+--- RAW Items from API ---
+- $  34.95 | NORITAKE CHILD'S TEA SET Vintage 10 Handpainted Pieces Nippon Pink Roses
+- $  29.99 | VINTAGE NORITAKE JAPAN Hand Painted Child's 11 pc China Tea Set~SO CUTE!!
+- $ 100.00 | NORITAKE Morimura Child's Tea Set Complete 6 Serving Original Box Vintage
+- $ 100.00 | VTG Hand-painted Noritake Childs Tea Set, House on the Lake w/ Dog - RARE - 1918
+- $  19.99 | Vintage Noritake Child’s “TREE IN THE MEADOW WINDMILL” Tea Set (Pre WW 2) Japan
+- $  26.24 | 4 Noritake Cups To Childs Toy Tea Set House In Meadow & Lid Porcelain Vintage
+- $  49.95 | Noritake Miniature Bluebird Tea Set Child's Toy Vintage Porcelain Handpainted
+- $  54.50 | 13 PCS ANTIQUE "NORITAKE" CHILD'S TEA SET-GREEN BACKSTAMP, HIGH QUALITY, LUXURY
+- $  30.99 | Antique Noritake Children's Tea Set "Tree in Meadow" 17 pieces Complete Set 1925
+- $  27.95 | Vintage Noritake Child’s “TREE IN THE MEADOW WINDMILL” Tea Set (Pre WW 2) 20 PCS
+- $  25.00 | Noritake A Servre Mini Child Tea Set 8 Piece Hand Painted Blue flower Gold.
+- $ 144.00 | Noritake Childrens Tea Set 19 Pieces Elephant Tiger Lion Soldier Hand Painted
+- $  44.00 | Noritake Vintage Mini Tea Set Orange Children’s
+- $  40.00 | Noritake “M” Circus Children’s Tea Set - 10 Pieces
+- $  77.00 | Noritake Childrens Tea Set 11 Pieces Elephant Tiger Lion Soldier Hand Painted
+- $  29.97 | Noritake Child's Tea Set Japan Tea Pot Sugar Creamer
+- $  29.99 | Noritake (Japan) Child's Tea Set - Tea Pot, Sugar, Creamer
+- $  44.00 | Antique Handpainted Noritake Childs 13 Piece Floral Tea Set READ
+- $ 300.00 | 24 Piece Noritake Iridescent Blue Bird Child’s Hand Painted Tea Set -FloralJapan
+- $ 130.00 | Noritake 18 Piece Child’s Tea Luncheon Set Gold Flower Pattern Japan  Vintage
+- $  45.00 | 21 Pc Child’s Tea Set Tree In Meadow Windmill Noritake? Japan c. Early 1900s
+- $ 109.88 | Vintage 16 pc Noritake Little Hostess Rose Black Pink Child's Tea Set Antique 
+- $  22.00 | Noritake Child's Tea 14-pc Set Hand Painted Sunrise, Windmill, Tree ~ Orange
+- $  79.99 | Vintage Noritake 20 pcs Child's Tea set Orange Luster with Birds
+- $  65.00 | Vintage Noritake Child’s “TREE IN THE MEADOW WINDMILL” Tea Set (Pre WW 2) 
+- $  18.89 | Noritake Children's Tea Set "FLORAL" Porcelain Sugar Bowl with Lid
+- $  17.99 | Vintage Childs Tea Set Cup And Saucer  Noritake Nippon *
+- $  48.95 | Sixteen (16) Piece Noritake Child's Hand Painted China Morimura Tea Set
+- $  21.99 | Noritake childrens small Japan hand painted tea set Missing Pieces
+- $  99.00 | VINTAGE NORITAKE JAPAN HAND PAINTED CHILD'S TEA SET - 15 PCS.
+
+--- AI-CLEANED Items for Calculation ---
+- $  34.95 | NORITAKE CHILD'S TEA SET Vintage 10 Handpainted Pieces Nippon Pink Roses
+- $  29.99 | VINTAGE NORITAKE JAPAN Hand Painted Child's 11 pc China Tea Set~SO CUTE!!
+- $ 100.00 | NORITAKE Morimura Child's Tea Set Complete 6 Serving Original Box Vintage
+- $ 100.00 | VTG Hand-painted Noritake Childs Tea Set, House on the Lake w/ Dog - RARE - 1918
+- $  19.99 | Vintage Noritake Child’s “TREE IN THE MEADOW WINDMILL” Tea Set (Pre WW 2) Japan
+- $  26.24 | 4 Noritake Cups To Childs Toy Tea Set House In Meadow & Lid Porcelain Vintage
+- $  49.95 | Noritake Miniature Bluebird Tea Set Child's Toy Vintage Porcelain Handpainted
+- $  54.50 | 13 PCS ANTIQUE "NORITAKE" CHILD'S TEA SET-GREEN BACKSTAMP, HIGH QUALITY, LUXURY
+- $  30.99 | Antique Noritake Children's Tea Set "Tree in Meadow" 17 pieces Complete Set 1925
+- $  27.95 | Vintage Noritake Child’s “TREE IN THE MEADOW WINDMILL” Tea Set (Pre WW 2) 20 PCS
+- $  25.00 | Noritake A Servre Mini Child Tea Set 8 Piece Hand Painted Blue flower Gold.
+- $ 144.00 | Noritake Childrens Tea Set 19 Pieces Elephant Tiger Lion Soldier Hand Painted
+- $  44.00 | Noritake Vintage Mini Tea Set Orange Children’s
+- $  40.00 | Noritake “M” Circus Children’s Tea Set - 10 Pieces
+- $  77.00 | Noritake Childrens Tea Set 11 Pieces Elephant Tiger Lion Soldier Hand Painted
+- $  29.97 | Noritake Child's Tea Set Japan Tea Pot Sugar Creamer
+- $  29.99 | (Japan) Child's Tea Set - Tea Pot, Sugar, Creamer
+- $  44.00 | Antique Handpainted Noritake Childs 13 Piece Floral Tea Set READ
+- $ 300.00 | 24 Piece Noritake Iridescent Blue Bird Child’s Hand Painted Tea Set -FloralJapan
+- $ 130.00 | Noritake 18 Piece Child’s Tea Luncheon Set Gold Flower Pattern Japan Vintage
+- $  45.00 | 21 Pc Child’s Tea Set Tree In Meadow Windmill Noritake? Japan c. Early 1900s
+- $ 109.88 | Vintage 16 pc Noritake Little Hostess Rose Black Pink Child's Tea Set Antique 
+- $  22.00 | Noritake Child's Tea 14-pc Set Hand Painted Sunrise, Windmill, Tree ~ Orange
+- $  79.99 | Vintage Noritake 20 pcs Child's Tea set Orange Luster with Birds
+- $  17.99 | Vintage Childs Tea Set Cup And Saucer  Noritake Nippon *
+- $  48.95 | Sixteen (16) Piece Noritake Child's Hand Painted China Morimura Tea Set
+- $  99.00 | VINTAGE NORITAKE JAPAN HAND PAINTED CHILD'S TEA SET - 15 PCS.
+
+--- AI Analyst's Reasoning ---
+Kept all Noritake vintage children tea sets that match the query's brand and description.
+---------------------------------
+Final Average Selling Price: $56.20
+AI Confidence Score: 90%
+---------------------------------------------------------
+
+--- [2025-10-19 20:42:09] eBay Market Price Analysis for 'Vintage Schmid Teddy Bear Miniature Porcelain Tea Set 1' (Lot #98) ---
+
+--- RAW Items from API ---
+- $  20.00 | Porcelain Teddy Bear Tea Set 11 Pieces Vintage 
+- $   6.50 | Vintage Miniature Porcelain Teddy Bear Tea Set
+- $  12.00 | Teddy Bear Miniature Porcelain 9 Piece Tea Set Vintage
+- $   7.49 | Vintage Miniature Teddy Bear Porcelain Tea Set 13 Pieces
+- $  14.70 | Vintage 13 Piece Porcelain Miniature Tea Set Teddy Bears Plates Cups -NEW
+- $  20.00 | Miniature Teddy Bear Tea Set Flower Floral Resin Vintage , NEW
+- $  22.50 | Vintage Miniature Porcelain Tea Set With Teddy Bears Family Design
+- $   9.95 | Vintage Style Teddy Bear Figurine Holding Miniature Tea Set
+- $  22.00 | TEDDY BEAR MINIATURE TEA POT CUP SET REUTTER PORCELAIN W. GERMANY SUGAR CREAMER 
+- $  13.95 | Mini Tea Set 13 pcs. Porcelain Vintage 1995 Teddy Bears
+- $  14.77 | Vintage Handcrafted Porcelain Teddy Bear - 13 Pcs Mini Bone China Tea Set
+- $   9.95 | Vintage TEDDY BEAR TEA SET for Two in Original Box No. 1982 Porcelain Complete
+- $   8.00 | Vintage Porcelain Teddy Bear 7 Piece Miniature Tea Set
+- $  19.99 | Vintage Miniature Porcelain China Tea Set Teddy Bears 13 Piece
+- $  14.00 | Porcelain Teddy Bear Tea Set 7 Pieces Vintage 
+- $  19.50 | Vintage 13 Piece Porcelain Miniature Tea Set Teddy Bears Plates Cups -NEW
+- $  10.62 | Vintage Miniature Teddy Bear Picnic Tea Set Porcelain
+- $  17.50 | Vintage Miniature Teddy Bear Porcelain Child's Tea Set 12 pcs
+- $   9.99 | Porcelain Miniature Teddy Bear Tea Set 17 Piece 
+- $   9.99 | Vintage Miniature Porcelain China 13 pc Pink & Blue Teddy Bears Tea Set 1998 THT
+- $  19.99 | REUTTER Porzellan Teddy Bears Porcelain West Germany Miniature Tea Set of 8
+- $  14.00 | Reutter Miniature Porcelain Teddy Bear Tea Set Made In Germany
+- $  19.00 | TEDDY BEAR MINIATURE TEA POT SET REUTTER PORCELAIN WEST GERMANY SUGAR CREAMER 
+- $  15.00 | Vtg. Bears Miniature Tea Set For 2
+- $  10.00 | Vintage Miniature Teddy Bear Porcelain Child's Tea Set 9 pcs
+- $  19.00 | Vintage Bears In Flowers Miniature Porcelain Tea Set
+- $  15.00 | VTG Porcelain Miniature Tea Set: Teddy Bears, Gold Trimmed
+- $  12.97 | Porcelain Teddy Bear Tea Set 11 Pieces Vintage 
+- $   6.00 | Teddy Bear Miniature Tea Set
+- $  29.50 | Porcelain Miniature Teddy Bear Tea Set 16 Piece + Lined Basket
+
+--- AI-CLEANED Items for Calculation ---
+- $  20.00 | Porcelain Teddy Bear Tea Set 11 Pieces Vintage 
+- $   6.50 | Vintage Miniature Porcelain Teddy Bear Tea Set
+- $  12.00 | Teddy Bear Miniature Porcelain 9 Piece Tea Set Vintage
+- $   7.49 | Vintage Miniature Teddy Bear Porcelain Tea Set 13 Pieces
+- $  14.70 | Vintage 13 Piece Porcelain Miniature Tea Set Teddy Bears Plates Cups -NEW
+- $  22.50 | Vintage Miniature Porcelain Tea Set With Teddy Bears Family Design
+- $  22.00 | TEDDY BEAR MINIATURE TEA POT CUP SET REUTTER PORCELAIN W. GERMANY SUGAR CREAMER 
+- $  13.95 | Mini Tea Set 13 pcs. Porcelain Vintage 1995 Teddy Bears
+- $  14.77 | Vintage Handcrafted Porcelain Teddy Bear - 13 Pcs Mini Bone China Tea Set
+- $   9.95 | Vintage TEDDY BEAR TEA SET for Two in Original Box No. 1982 Porcelain Complete
+- $   8.00 | Vintage Porcelain Teddy Bear 7 Piece Miniature Tea Set
+- $  19.99 | Vintage Miniature Porcelain China Tea Set Teddy Bears 13 Piece
+- $  14.00 | Porcelain Teddy Bear Tea Set 7 Pieces Vintage 
+- $  10.62 | Vintage Miniature Teddy Bear Picnic Tea Set Porcelain
+- $  17.50 | Vintage Miniature Teddy Bear Porcelain Child's Tea Set 12 pcs
+- $   9.99 | Porcelain Miniature Teddy Bear Tea Set 17 Piece 
+- $   9.99 | Vintage Miniature Porcelain China 13 pc Pink & Blue Teddy Bears Tea Set 1998 THT
+- $  19.99 | REUTTER Porzellan Teddy Bears Porcelain West Germany Miniature Tea Set of 8
+- $  14.00 | Reutter Miniature Porcelain Teddy Bear Tea Set Made In Germany
+- $  19.00 | TEDDY BEAR MINIATURE TEA POT SET REUTTER PORCELAIN WEST GERMANY SUGAR CREAMER 
+- $  15.00 | Vtg. Bears Miniature Tea Set For 2
+- $  10.00 | Vintage Miniature Teddy Bear Porcelain Child's Tea Set 9 pcs
+- $  19.00 | Vintage Bears In Flowers Miniature Porcelain Tea Set
+- $  15.00 | VTG Porcelain Miniature Tea Set: Teddy Bears, Gold Trimmed
+- $   6.00 | Teddy Bear Miniature Tea Set
+- $  29.50 | Porcelain Miniature Teddy Bear Tea Set 16 Piece + Lined Basket
+
+--- AI Analyst's Reasoning ---
+Kept all generic porcelain teddy bear miniature tea sets since no Schmid-specific listings were found.
+---------------------------------
+Final Average Selling Price: $14.67
+AI Confidence Score: 70%
+---------------------------------------------------------
+
+--- [2025-10-19 20:42:09] eBay Market Price Analysis for 'Vintage Schmid Teddy Bear Miniature Porcelain Tea Set 2' (Lot #98) ---
+
+--- RAW Items from API ---
+- $  20.00 | Porcelain Teddy Bear Tea Set 11 Pieces Vintage 
+- $   6.50 | Vintage Miniature Porcelain Teddy Bear Tea Set
+- $  12.00 | Teddy Bear Miniature Porcelain 9 Piece Tea Set Vintage
+- $   7.49 | Vintage Miniature Teddy Bear Porcelain Tea Set 13 Pieces
+- $  14.70 | Vintage 13 Piece Porcelain Miniature Tea Set Teddy Bears Plates Cups -NEW
+- $  20.00 | Miniature Teddy Bear Tea Set Flower Floral Resin Vintage , NEW
+- $  22.50 | Vintage Miniature Porcelain Tea Set With Teddy Bears Family Design
+- $   9.95 | Vintage Style Teddy Bear Figurine Holding Miniature Tea Set
+- $   8.00 | Vintage Porcelain Teddy Bear 7 Piece Miniature Tea Set
+- $  14.77 | Vintage Handcrafted Porcelain Teddy Bear - 13 Pcs Mini Bone China Tea Set
+- $   9.95 | Vintage TEDDY BEAR TEA SET for Two in Original Box No. 1982 Porcelain Complete
+- $  10.62 | Vintage Miniature Teddy Bear Picnic Tea Set Porcelain
+- $  17.50 | Vintage Miniature Teddy Bear Porcelain Child's Tea Set 12 pcs
+- $  19.99 | Vintage Miniature Porcelain China Tea Set Teddy Bears 13 Piece
+- $  14.00 | Porcelain Teddy Bear Tea Set 7 Pieces Vintage 
+- $  19.50 | Vintage 13 Piece Porcelain Miniature Tea Set Teddy Bears Plates Cups -NEW
+- $   9.99 | Vintage Miniature Porcelain China 13 pc Pink & Blue Teddy Bears Tea Set 1998 THT
+- $  19.99 | REUTTER Porzellan Teddy Bears Porcelain West Germany Miniature Tea Set of 8
+- $   9.99 | Porcelain Miniature Teddy Bear Tea Set 17 Piece 
+- $  14.00 | Reutter Miniature Porcelain Teddy Bear Tea Set Made In Germany
+- $  15.00 | Vtg. Bears Miniature Tea Set For 2
+- $  19.00 | TEDDY BEAR MINIATURE TEA POT SET REUTTER PORCELAIN WEST GERMANY SUGAR CREAMER 
+- $  13.95 | Mini Tea Set 13 pcs. Porcelain Vintage 1995 Teddy Bears
+- $  22.00 | TEDDY BEAR MINIATURE TEA POT CUP SET REUTTER PORCELAIN W. GERMANY SUGAR CREAMER 
+- $  10.00 | Vintage Miniature Teddy Bear Porcelain Child's Tea Set 9 pcs
+- $  19.00 | Vintage Bears In Flowers Miniature Porcelain Tea Set
+- $  10.99 | Vintage Teddy Bear Mini Porcelain 10 Pc Tea Set
+- $  12.97 | Porcelain Teddy Bear Tea Set 11 Pieces Vintage 
+- $  29.50 | Porcelain Miniature Teddy Bear Tea Set 16 Piece + Lined Basket
+- $  12.95 | 14 Piece Vintage Miniature Teddy Bear Tea Set with 4 Cup & Saucers
+
+--- AI-CLEANED Items for Calculation ---
+AI removed all items or no items were valid.
+
+--- AI Analyst's Reasoning ---
+Removed all items as none matched the specific Schmid brand
+---------------------------------
+Final Average Selling Price: $0.00
+AI Confidence Score: 0%
+---------------------------------------------------------
+
+--- [2025-10-19 20:42:09] eBay Market Price Analysis for 'Vintage Porcelain Mini Tea Set - Rose Pattern - 13 Piece - Unopened' (Lot #99) ---
+
+--- RAW Items from API ---
+- $  12.99 | Vintage Porcelain Mini Tea Set With Pink Roses 8 Pieces With Lids 3 1/2"
+- $  20.00 | VTG 12 Piece PORCELAIN MINI TEA SET FLORAL ROSE PATTERN WITH GOLD TRIM
+- $   9.95 | Vintage Porcelain Mini 8 Piece Tea Pot Set, With Pink Rose & Gold Trim Pattern.
+- $  12.99 | Vintage Beautiful Mini Porcelain Tea /  Soup Set - 15 Pieces Sealed 1990s roses
+- $  25.00 | Vintage Cabbage Rose Gold Trimmed 10 Piece Porcelain Mini Tea Set
+- $  19.00 | Tea Set Rose Pattern Miniature 39 Piece Porcelain Vintage Tea Set Used
+- $  16.89 | 13 Pc Tea Time - Miniature Porcelain Set Pink Rose Pattern in Original Box
+- $  19.99 | Vintage Porcelain Mini Tea Set Rose Design Encore Sales Ltd NIB 9-Pc
+- $  17.00 | Vintage 9 Piece Porcelain Miniature Tea Set Rose & Star Pattern Gold Trim
+- $  19.99 | Vintage Miniature Rose Pattern Porcelain 8 Piece Tea Set
+- $  20.00 | Vtg 6 Piece Porcelain Gold Toned Mini Tea Set NEW Open box
+- $   5.25 | Vintage DOLL TEA PARTY 13 Piece Mini Bone China Tea Set Pink Roses
+- $  14.99 | Vtg 1980's New Handcrafted Porcelain Decor Blue Rose 13pc Mini China Tea Set 766
+- $  45.50 | Vintage White Porcelain Rose Motif Mini Tea Set 14 Pc
+- $  39.14 | 10 Piece Vintage Floral Print Porcelain Tea Set BRAND NEW In Original Box
+- $  45.00 | Bone China Mini Tea Set  Porcelain Floral Rose Lattice
+- $  13.00 | Vintage Porcelain 10 Piece Miniature Tea Set-Rose & Star Pattern
+- $   8.97 | Vintage Miniature Porcelain Tea Set White Rose Pattern Eight Pieces Incomplete
+- $  16.00 | Vtg 8pc Ivory Rose Porcelain Mini TEA SET Cup, Saucer, Creamer, Sugar, & Tea Pot
+- $  11.00 | Miniature Porcelain 10 pc Tea Set w/Rose Pattern Made in England with Tin
+- $  19.99 | Vintage House & Flowers Mini Porcelain Tea Set - 8 Piece Set
+- $  15.00 | VTG Miniature Ivory Porcelain Bisque 10 Piece Tea Set w/ Roses Exquisite Detail
+- $   6.99 | Vintage Mini Porcelain 15 Pc Tea Set (of 8)in White With Hand Painted Flowers
+- $  17.99 | VTG Porcelain Miniature 10 Pieces Tea/ Coffee Set Pink Rose Pattern Gold Trim
+- $  29.95 | Vintage Rare Miniature Decor Pink Rose with Gold Trim 7 Piece Porcelain Tea Set
+- $   8.07 | 2 Miniature Porcelain Tea Sets--13 pc Rose Pattern & 9 pc Floral Basket Pattern
+- $  39.90 | DECORATIVE 10 PIECE MINIATURE PORCELAIN TEA SET WITH TRAY IN ROSE PATTERN(15433)
+- $  15.99 | 17-Piece Mini Tea Set w/ rose pattern (v. nice)
+- $  27.49 | Classic Treasures Porcelain Collectible 10pc Mini Tea Set Elegant Roses
+- $  24.95 | Vintage Rose Tea Set ~ (9Piece) Creamer,  7 Cups & 1 Saucer NOT COMPLETE
+
+--- AI-CLEANED Items for Calculation ---
+- $  16.89 | 13 Pc Tea Time - Miniature Porcelain Set Pink Rose Pattern in Original Box
+
+--- AI Analyst's Reasoning ---
+Kept only the exact 13‑piece pink rose pattern miniature set that was sealed in the original box
+---------------------------------
+Final Average Selling Price: $16.89
+AI Confidence Score: 70%
+---------------------------------------------------------
+
+--- [2025-10-19 20:42:09] eBay Market Price Analysis for 'Vintage Porcelain Mini Tea Set - Plain White - 7 Piece - Unopened' (Lot #99) ---
+
+--- RAW Items from API ---
+- $  20.00 | Vtg 6 Piece Porcelain Gold Toned Mini Tea Set NEW Open box
+- $  22.00 | Vtg 1993 Fishel 12 Pcs Fine Porcelain Mini Tea Set 2041
+- $   6.99 | Vintage Mini Porcelain 15 Pc Tea Set (of 8)in White With Hand Painted Flowers
+- $  28.00 | Lot Of 19 Pieces Vintage Miniature Mini Porcelain Floral Tea Sets Collectibles
+- $  20.00 | Porcelain Collectable 10 Piece Mini Tea Set by Classic Treasures
+- $  14.00 | 8 Pc Set VTG 1997 Bisque Porcelain Mini Tea Set White Floral Gold Color Trim
+- $  12.99 | Vintage Beautiful Mini Porcelain Tea /  Soup Set - 15 Pieces Sealed 1990s roses
+- $  19.99 | Vintage House & Flowers Mini Porcelain Tea Set - 8 Piece Set
+- $  19.99 | Vintage Porcelain Mini Tea Set Rose Design Encore Sales Ltd NIB 9-Pc
+- $   5.00 | MINI TEA SETS ASSORTED "PICK YOUR FAVORITE" PORCELAIN GLASS POTTERY
+- $   7.99 | Vintage 8 Piece Porcelain Mini Tea Set
+- $  14.99 | Vintage Mini Tea Set Porcelain Pink Floral Design Complete Set
+- $  10.00 | Vintage Mini Tea Porcelain Sets 32 Total Pieces
+- $  45.50 | Vintage White Porcelain Rose Motif Mini Tea Set 14 Pc
+- $  39.14 | 10 Piece Vintage Floral Print Porcelain Tea Set BRAND NEW In Original Box
+- $  31.50 | Mini Colonial Themed Tea Set, 15 Piece
+- $  89.99 | Vintage mini tea set porcelain.  10 Piece Set.  No Chips.  Perfect Condition
+- $  16.95 | Ja-Ru Vintage Mini Porcelain Tea Set 8 Pieces 
+- $  19.50 | Vintage porcelain collectable 10 piece mini tea set-NEW   NICE DETAIL
+- $  19.99 | NOS PORCELAIN COLLECTABLE 10 PIECE MINI TEA SET
+- $  21.99 | Vintage Regal Fine Porcelain Mini Tea Set Gold Accent Floral
+- $  25.95 | Vintage porcelain collectable *10 piece mini tea set*-NEW
+- $  13.00 | 11 Pc. Vintage Mini Tea Set Porcelain White w/Pink Floral 
+- $  25.00 | Vintage Miniature 12 Piece Porcelain White Tea Set w/Pink Rosettes and Gold Trim
+- $   9.68 | Mini Tea Set Porcelain 13 Pieces Floral Design New Vintage I.D.# PPM-91617
+- $  12.99 | Vintage 13 Piece MINI TEA SET PORCELAIN BOXED Tea Party  COMPLETE RABBIT PRINT
+- $  19.99 | MINI TEA SET PORCELAIN 10 PIECE COLLECTABLE CLASSIC TREASURES RETIRED 2002
+- $  25.00 | 5 Mini Tea Sets
+- $ 100.00 | Vintage Miniature Porcelain Colorfull Tea Set. Extremely Rare Japan Mini Tea Set
+- $  42.99 | 4 Lot Of 35 Pieces Vintage Miniature Mini Porcelain Tea Sets Collectibles
+
+--- AI-CLEANED Items for Calculation ---
+AI removed all items or no items were valid.
+
+--- AI Analyst's Reasoning ---
+Removed all items as none matched the plain white 7‑piece unopened criteria
+---------------------------------
+Final Average Selling Price: $0.00
+AI Confidence Score: 0%
+---------------------------------------------------------
+
+--- [2025-10-19 20:42:09] eBay Market Price Analysis for 'Vintage Chinese Dragon Tea Set Porcelain Teapot Cups Plate Collectible' (Lot #100) ---
+
+--- RAW Items from API ---
+- $  50.00 | Chinese Porcelain Dragon Tea Set 7 Pc (Teapot + 6 Cups) Red & Gold with Box
+- $  24.88 | 8 Piece Ceramic ORIENTAL DRAGON Chinese Tea Set Teapot 6 Cups Original Box
+- $  29.95 | Vintage Zhongguo China Red Dragon Porcelain Tea Set –Teapot (Missing Lid) 4 Cups
+- $  24.00 | 6-Piece Chinese Porcelain Tea Set w/ Flying Blue Dragon Teapot, Strainer, 4 Cups
+- $  31.20 | Vintage Yellow & Blue Porcelain Chinese Dragon Teapot With Matching Tea Cups Set
+- $  28.00 | 7 piece Chinese  Dragon Porcelain Teapot Set In Case Removable Mesh
+- $  35.00 | Vintage Chinese Porcelain Dragon & Phoenix Mini Tea Set in Silk Box
+- $  79.97 | Vintage 6 PIECE Rice Eye Porcelain China TEA SET Blue White Dragon Jingdezhen
+- $  38.00 | Chinese Teapot Gold Gild Dragon Phoenix Porcelain Vintage Dragonware
+- $  17.00 | Vintage Chinese Porcelain Mini Dragon Tea Set w/ 2 Cups Tray And Lidded Teapot
+- $  30.00 | 5PC Chinese Ceramic Tea Set Flying Blue Dragon Teapot, Strainer & Cups
+- $  64.00 | Vintage Chinese Dragon Phoenix  Teapot Tea Cup Tray Set Gold
+- $  19.99 | Vintage Red Dragon Phoenix Chinese Wedding Ceremony Tea Set Porcelain 7 Pc.
+- $ 171.88 | Porcelain Chinese Tea Set 8 Cups Dragon Teapot Teaware Set Kung Fu Portable
+- $  35.10 | Dragon And Phoenix Color-changing White Porcelain Teapot 2 Cups Chinese Tea Set
+- $ 597.00 | 1900's Chinese Famille Rose Jaune Yellow Ground Porcelain Teapot Tea Set Dragon
+- $ 149.99 | VTG Chinese Hand-Painted Porcelain Tea Set Scenic Motif Red Dragon Hallmark
+- $  29.96 | VINTAGE RED DRAGON CHINESE  TEAPOT  W/ SET 4 CUPS 
+- $  23.99 | Vintage DRAGON Tea Set Porcelain Yellow Blue , 7 pcs
+- $  59.95 | Vintage Chinese Porcelain Tea Set with Tray Dragon Rice Eyes Blue & White 7 PC
+- $  45.00 | Golden Dragon Red Glaze Ceramic Chinese Tea Set
+- $ 100.00 | Vintage Chinese Porcelain Tea Set –TRAY TEA POT, 4 CUPS - Gold, Dragon & Phoenix
+- $  40.90 | Oriental Dragon Porcelain Square Tea Set, 20oz Teapot & 4 Hexagon Tea Cups
+- $ 238.88 | 21 Piece Blue Dragon Teapot Rice Fruit Set Jingdezhen China Porcelain Gold Rim B
+- $ 148.00 | Vintage Chinese Porcelain Teapot & Cup Set Dragon & Phoenix Guangxu Mark – Mint
+- $ 225.50 | Vintage Tea Sets Blue and White Chinese Dragon Teapot 4 Cups Tray Porcelain
+- $  14.00 | VTG Chinese Dragon Phoenix Tea Set NO TEA POT 4 Cups and Plate
+- $ 250.00 | Chinese Porcelain Dragon Tea Set - Complete 4-Piece Collection
+- $  39.90 | Vintage Chinese Porcelain Colorful Dragon Teapot with 3 Tea Cups
+- $ 499.99 | 8.2" old vintage ming dynasty xuande mark porcelain dragon tea set 5 pcs 1 set
+
+--- AI-CLEANED Items for Calculation ---
+- $  50.00 | Chinese Porcelain Dragon Tea Set 7 Pc (Teapot + 6 Cups) Red & Gold with Box
+- $  24.88 | 8 Piece Ceramic ORIENTAL DRAGON Chinese Tea Set Teapot 6 Cups Original Box
+- $  35.00 | Vintage Chinese Porcelain Dragon & Phoenix Mini Tea Set in Silk Box
+- $  79.97 | Vintage 6 PIECE Rice Eye Porcelain China TEA SET Blue White Dragon Jingdezhen
+- $  17.00 | Vintage Chinese Porcelain Mini Dragon Tea Set w/ 2 Cups Tray And Lidded Teapot
+- $  64.00 | Vintage Chinese Dragon Phoenix  Teapot Tea Cup Tray Set Gold
+- $  19.99 | Vintage Red Dragon Phoenix Chinese Wedding Ceremony Tea Set Porcelain 7 Pc.
+- $ 597.00 | 1900's Chinese Famille Rose Jaune Yellow Ground Porcelain Teapot Tea Set Dragon
+- $ 149.99 | VTG Chinese Hand-Painted Porcelain Tea Set Scenic Motif Red Dragon Hallmark
+- $  23.99 | Vintage DRAGON Tea Set Porcelain Yellow Blue , 7 pcs
+- $  59.95 | Vintage Chinese Porcelain Tea Set with Tray Dragon Rice Eyes Blue & White 7 PC
+- $ 100.00 | Vintage Chinese Porcelain Tea Set –TRAY TEA POT, 4 CUPS - Gold, Dragon & Phoenix
+- $ 238.88 | 21 Piece Blue Dragon Teapot Rice Fruit Set Jingdezhen China Porcelain Gold Rim B
+- $ 225.50 | Vintage Tea Sets Blue and White Chinese Dragon Teapot 4 Cups Tray Porcelain
+- $ 250.00 | Chinese Porcelain Dragon Tea Set - Complete 4-Piece Collection
+- $ 499.99 | 8.2" old vintage ming dynasty xuande mark porcelain dragon tea set 5 pcs 1 set
+
+--- AI Analyst's Reasoning ---
+Kept items that explicitly include a dragon motif porcelain set with teapot, cups and a plate/tray, excluding incomplete or part‑only listings
+---------------------------------
+Final Average Selling Price: $122.61
+AI Confidence Score: 88%
+---------------------------------------------------------

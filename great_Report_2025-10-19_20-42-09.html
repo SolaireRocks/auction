@@ -1,0 +1,515 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Item Analysis</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a; --table-bg-color: #2c2c2c; --header-bg-color: #3a3a3a;
+            --header-hover-bg-color: #4a4a4a; --row-even-bg-color: #333333; --row-odd-bg-color: #2c2c2c;
+            --border-color: #444444; --text-color: #e0e0e0; --link-color: #4a90e2;
+            --link-hover-color: #81b5f5; --sort-indicator-color: #81b5f5;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 2rem; line-height: 1.6; }
+        h1 { text-align: center; color: #ffffff; font-weight: 300; margin-bottom: 2rem; }
+        .table-container { max-width: 1600px; margin: auto; overflow-x: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        table { width: 100%; border-collapse: collapse; background-color: var(--table-bg-color); border-spacing: 0; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        thead th { background-color: var(--header-bg-color); color: #ffffff; font-weight: 600; position: sticky; top: 0; z-index: 10; }
+        thead th[data-column] { cursor: pointer; transition: background-color 0.2s ease-in-out; user-select: none; }
+        thead th[data-column]:hover { background-color: var(--header-hover-bg-color); }
+        tbody tr:not(.reasoning-row):hover { background-color: var(--header-hover-bg-color); }
+        td { font-size: 0.95em; }
+        td:nth-child(4), td:nth-child(5), td:nth-child(6) { font-family: 'Courier New', Courier, monospace; text-align: right; white-space: nowrap; }
+        td:nth-child(7), td:nth-child(8) { text-align: center; }
+        a { color: var(--link-color); text-decoration: none; transition: color 0.2s ease-in-out; }
+        a:hover { color: var(--link-hover-color); text-decoration: underline; }
+        .sort-indicator { color: var(--sort-indicator-color); font-size: 0.8em; margin-left: 8px; display: inline-block; width: 10px; }
+        .lot-main td { font-weight: bold; }
+        .lot-main.expandable { cursor: pointer; }
+        .lot-main:nth-child(4n+1), .lot-main:nth-child(4n+2) { background-color: var(--row-odd-bg-color); }
+        .lot-main:nth-child(4n+3), .lot-main:nth-child(4n) { background-color: var(--row-even-bg-color); }
+        .lot-sub-item { background-color: rgba(0,0,0,0.15) !important; }
+        .lot-sub-item td { font-size: 0.9em; color: #c0c0c0; border-color: #383838; }
+        .lot-sub-item td:nth-child(2) { padding-left: 35px; }
+        .reasoning-row { display: none; background-color: #222 !important; }
+        .reasoning-row.visible { display: table-row; }
+        .reasoning-row td {
+            padding: 10px 20px 10px 40px;
+            font-style: italic;
+            color: #b0b0b0;
+            border-top: 1px dashed #555;
+            white-space: normal;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Auction Item Analysis</h1>
+    <div class="table-container"><table><thead><tr><th data-column="lot_number">Lot # <span class="sort-indicator"></span></th><th data-column="name">Item Name <span class="sort-indicator"></span></th><th data-column="category">Category <span class="sort-indicator"></span></th><th data-column="price">AI Market Value <span class="sort-indicator"></span></th><th data-column="ebay_price">eBay Avg. Sold <span class="sort-indicator"></span></th><th data-column="confidence">Confidence <span class="sort-indicator"></span></th><th>eBay Search</th><th>Google Search</th></tr></thead><tbody id="data-table-body"></tbody></table></div>
+
+<script type="application/json" id="auctionData">
+    [
+    {
+        "ebay_search_title": "Vintage Minnie Mouse Disney 9-Piece Tea Set by Sango Japan",
+        "category": "Pottery/China",
+        "total_market_value": 120,
+        "items": [
+            {
+                "item_name": "Vintage Minnie Mouse Disney Tea Set Plate by Sango Japan",
+                "estimated_value": 15,
+                "ebay_avg_price": 37.495000000000005
+            },
+            {
+                "item_name": "Vintage Minnie Mouse Disney Teapot by Sango Japan",
+                "estimated_value": 30,
+                "ebay_avg_price": 66.5
+            },
+            {
+                "item_name": "Vintage Minnie Mouse Disney Tea Cup and Saucer Set by Sango Japan",
+                "estimated_value": 25,
+                "ebay_avg_price": 25.0
+            },
+            {
+                "item_name": "Vintage Minnie Mouse Disney Creamer by Sango Japan",
+                "estimated_value": 20,
+                "ebay_avg_price": 0.0
+            },
+            {
+                "item_name": "Vintage Minnie Mouse Disney Sugar Bowl by Sango Japan",
+                "estimated_value": 30,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59065457/Vintage-Childrens-Toy-China-Tea-Set",
+            "title": "Vintage Children's Toy China Tea Set",
+            "lot_number": 96,
+            "current_bid": "$4.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59065457/Vintage-Childrens-Toy-China-Tea-Set",
+            "pics": [
+                "590654571.jpg",
+                "590654572.jpg",
+                "590654573.jpg",
+                "590654574.jpg",
+                "590654575.jpg"
+            ]
+        },
+        "reasoning": "The total market value was determined by analyzing the",
+        "lot_number": 96,
+        "ebay_avg_price": 128.995,
+        "ebay_confidence_score": 35,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Minnie+Mouse+Disney+9-Piece+Tea+Set+by+Sango+Japan&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Chinese Dragon Tea Set Porcelain Teapot Cups Plate Collectible",
+        "category": "Pottery/China",
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Vintage Chinese Dragon Tea Set Porcelain Teapot Cups Plate Collectible",
+                "estimated_value": 40,
+                "ebay_avg_price": 122.60933333333334
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59065580/Vintage-Chinese-Childrens-Toy-Tea-Set-Dragon-Design",
+            "title": "Vintage Chinese Children's Toy Tea Set Dragon Design",
+            "lot_number": 100,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59065580/Vintage-Chinese-Childrens-Toy-Tea-Set-Dragon-Design",
+            "pics": [
+                "590655801.jpg",
+                "590655802.jpg",
+                "590655803.jpg",
+                "590655804.jpg",
+                "590655805.jpg"
+            ]
+        },
+        "reasoning": "The tea set is valued at $40 based on its vintage Chinese porcelain construction, dragon design, and completeness. The presence of the original box and 'Made in China' marking on the teapot adds to its collectible value.",
+        "lot_number": 100,
+        "ebay_avg_price": 122.60933333333334,
+        "ebay_confidence_score": 88,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Chinese+Dragon+Tea+Set+Porcelain+Teapot+Cups+Plate+Collectible&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Art Deco Cobalt Blue Glass Cigarette Box and Ashtray Set",
+        "category": "Decor/Lighting",
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Vintage Art Deco Cobalt Blue Glass Cigarette Box",
+                "estimated_value": 25,
+                "ebay_avg_price": 35.245
+            },
+            {
+                "item_name": "Vintage Art Deco Cobalt Blue Glass Ashtray with Gold Toned Tray",
+                "estimated_value": 25,
+                "ebay_avg_price": 35.09
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59065380/Art-Deco-Cigarette-Box-and-Ashtray-with-Cobalt-Blue-Glass",
+            "title": "Art Deco Cigarette Box and Ashtray with Cobalt Blue Glass",
+            "lot_number": 93,
+            "current_bid": "$18.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59065380/Art-Deco-Cigarette-Box-and-Ashtray-with-Cobalt-Blue-Glass",
+            "pics": [
+                "590653801.jpg",
+                "590653802.jpg",
+                "590653803.jpg"
+            ]
+        },
+        "reasoning": "The total market value is estimated at $50, with the cigarette box and ashtray valued equally at $25 each, based on their condition, rarity, and demand for Art Deco items.",
+        "lot_number": 93,
+        "ebay_avg_price": 70.33500000000001,
+        "ebay_confidence_score": 80,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Art+Deco+Cobalt+Blue+Glass+Cigarette+Box+and+Ashtray+Set&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Noritake Japan Ceramic Tea Set for Children",
+        "category": "Pottery/China",
+        "total_market_value": 120,
+        "items": [
+            {
+                "item_name": "Vintage Noritake Japan Ceramic Tea Set for Children",
+                "estimated_value": 120,
+                "ebay_avg_price": 56.205
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59065485/Vintage-Childrens-Toy-China-Tea-Set",
+            "title": "Vintage Children's Toy China Tea Set",
+            "lot_number": 97,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59065485/Vintage-Childrens-Toy-China-Tea-Set",
+            "pics": [
+                "590654851.jpg",
+                "590654852.jpg",
+                "590654853.jpg"
+            ]
+        },
+        "reasoning": "The tea set is valued at $120 based on its rarity, condition, and demand for vintage Noritake Japan ceramics. The set is complete and in good condition, with a unique floral design, making it a desirable collectible.",
+        "lot_number": 97,
+        "ebay_avg_price": 56.205,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Noritake+Japan+Ceramic+Tea+Set+for+Children&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Sewing Box with Notions and Accessories",
+        "category": "Collectibles",
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Vintage Sewing Box with Floral Pattern",
+                "estimated_value": 20,
+                "ebay_avg_price": 30.66222222222222
+            },
+            {
+                "item_name": "Assorted Sewing Notions and Threads",
+                "estimated_value": 15,
+                "ebay_avg_price": 23.354137931034483
+            },
+            {
+                "item_name": "Pearl Embellishments and Other Sewing Accessories",
+                "estimated_value": 15,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59065413/Sewing-Box-with-Notions",
+            "title": "Sewing Box with Notions",
+            "lot_number": 94,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59065413/Sewing-Box-with-Notions",
+            "pics": [
+                "590654131.jpg",
+                "590654132.jpg",
+                "590654133.jpg",
+                "590654134.jpg",
+                "590654135.jpg",
+                "590654136.jpg",
+                "590654137.jpg"
+            ]
+        },
+        "reasoning": "The total market value is estimated based on the condition and rarity of the vintage sewing box and its contents. The items are grouped into three categories for easier resale.",
+        "lot_number": 94,
+        "ebay_avg_price": 54.0163601532567,
+        "ebay_confidence_score": 58,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Sewing+Box+with+Notions+and+Accessories&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Miniature Porcelain Tea Set Floral Pattern 13 Pieces",
+        "category": "Toys/Games",
+        "total_market_value": 25,
+        "items": [
+            {
+                "item_name": "Vintage Miniature Porcelain Tea Set Floral Pattern 13 Pieces",
+                "estimated_value": 25,
+                "ebay_avg_price": 21.659999999999997
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59065435/Vintage-Toy-China-Tea-Set",
+            "title": "Vintage Toy China Tea Set",
+            "lot_number": 95,
+            "current_bid": "$4.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59065435/Vintage-Toy-China-Tea-Set",
+            "pics": [
+                "590654351.jpg",
+                "590654352.jpg",
+                "590654353.jpg",
+                "590654354.jpg"
+            ]
+        },
+        "reasoning": "The total market value is estimated at $25 based on the condition and rarity of the vintage miniature porcelain tea set. The set is grouped as a single item as it is a complete 13-piece tea set.",
+        "lot_number": 95,
+        "ebay_avg_price": 21.659999999999997,
+        "ebay_confidence_score": 85,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Miniature+Porcelain+Tea+Set+Floral+Pattern+13+Pieces&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Winfield Santa Monica Dragon Flower Ashtrays Set of 12",
+        "category": "Pottery/China",
+        "total_market_value": 240,
+        "items": [
+            {
+                "item_name": "Vintage Winfield Santa Monica Dragon Flower Ashtrays Set of 12",
+                "estimated_value": 20,
+                "ebay_avg_price": 17.898333333333333
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59065325/Set-of-12-Vintage-Winfield-Dragon-Flower-Ashtrays",
+            "title": "Set of 12 Vintage Winfield Dragon Flower Ashtrays",
+            "lot_number": 92,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59065325/Set-of-12-Vintage-Winfield-Dragon-Flower-Ashtrays",
+            "pics": [
+                "590653251.jpg",
+                "590653252.jpg",
+                "590653253.jpg",
+                "590653254.jpg"
+            ]
+        },
+        "reasoning": "The total market value is estimated at $240, with each ashtray valued at $20. The lot consists of 12 identical ashtrays, so they are grouped together as a single item type.",
+        "lot_number": 92,
+        "ebay_avg_price": 17.898333333333333,
+        "ebay_confidence_score": 60,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Winfield+Santa+Monica+Dragon+Flower+Ashtrays+Set+of+12&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Porcelain Mini Tea Sets - 2 Sets - Rose Pattern",
+        "category": "Pottery/China",
+        "total_market_value": 20,
+        "items": [
+            {
+                "item_name": "Vintage Porcelain Mini Tea Set - Rose Pattern - 13 Piece - Unopened",
+                "estimated_value": 10,
+                "ebay_avg_price": 16.89
+            },
+            {
+                "item_name": "Vintage Porcelain Mini Tea Set - Plain White - 7 Piece - Unopened",
+                "estimated_value": 10,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59065544/2-Vintage-Miniature-Tea-Sets",
+            "title": "2 Vintage Miniature Tea Sets",
+            "lot_number": 99,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59065544/2-Vintage-Miniature-Tea-Sets",
+            "pics": [
+                "590655441.jpg",
+                "590655442.jpg",
+                "590655443.jpg",
+                "590655444.jpg"
+            ]
+        },
+        "reasoning": "The total market value is estimated at $20, with each tea set valued at $10. The valuation is based on the condition, rarity, and demand for similar items.",
+        "lot_number": 99,
+        "ebay_avg_price": 16.89,
+        "ebay_confidence_score": 35,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Porcelain+Mini+Tea+Sets+-+2+Sets+-+Rose+Pattern&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Teddy Bear Miniature Porcelain Tea Sets Lot of 2 Schmid",
+        "category": "Pottery/China",
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Vintage Schmid Teddy Bear Miniature Porcelain Tea Set 1",
+                "estimated_value": 20,
+                "ebay_avg_price": 14.670769230769231
+            },
+            {
+                "item_name": "Vintage Schmid Teddy Bear Miniature Porcelain Tea Set 2",
+                "estimated_value": 20,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59065512/2-Vintage-Miniature-Porcelain-Tea-Sets",
+            "title": "2 Vintage Miniature Porcelain Tea Sets",
+            "lot_number": 98,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59065512/2-Vintage-Miniature-Porcelain-Tea-Sets",
+            "pics": [
+                "590655121.jpg",
+                "590655122.jpg",
+                "590655123.jpg"
+            ]
+        },
+        "reasoning": "The total market value is estimated at $40 based on the rarity and condition of the vintage miniature porcelain tea sets, with each set valued at $20. The tea sets are likely from Schmid, a known brand for such collectibles.",
+        "lot_number": 98,
+        "ebay_avg_price": 14.670769230769231,
+        "ebay_confidence_score": 35,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Teddy+Bear+Miniature+Porcelain+Tea+Sets+Lot+of+2+Schmid&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Sanyu Crystal Glass Vase Heavy Optic Ribbed Design",
+        "category": "Glassware",
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Vintage Sanyu Crystal Glass Vase Heavy Optic Ribbed Design",
+                "estimated_value": 50,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59065287/Vintage-Sanyu-Glass-Vase",
+            "title": "Vintage Sanyu Glass Vase",
+            "lot_number": 91,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59065287/Vintage-Sanyu-Glass-Vase",
+            "pics": [
+                "590652871.jpg",
+                "590652872.jpg",
+                "590652873.jpg"
+            ]
+        },
+        "reasoning": "The vase is valued at $50 based on its vintage Sanyu crystal glass construction and unique optic ribbed design, which are characteristic of high-quality glassware. The images provided show the vase's clarity and craftsmanship.",
+        "lot_number": 91,
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Sanyu+Crystal+Glass+Vase+Heavy+Optic+Ribbed+Design&_sacat=0&LH_Complete=1&LH_Sold=1"
+    }
+]
+</script>
+
+<script>
+    const jsonData = JSON.parse(document.getElementById('auctionData').textContent);
+    const tableBody = document.getElementById('data-table-body');
+    const headers = document.querySelectorAll('thead th[data-column]');
+    let currentSort = { column: 'ebay_price', isAscending: false };
+
+    function populateTable() {
+        tableBody.innerHTML = '';
+        const formatCurrency = (value) => (value || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 });
+        const sanitizeText = (text) => (text || 'No reasoning provided.');
+
+        jsonData.forEach(lot => {
+            const hasReasoning = lot.reasoning && lot.reasoning.trim() !== '';
+            
+            const mainRow = document.createElement('tr');
+            mainRow.className = 'lot-main' + (hasReasoning ? ' expandable' : '');
+            
+            const encodedSearch = encodeURIComponent(lot.ebay_search_title || '');
+            
+            mainRow.innerHTML = `
+                <td>${lot.lot_number > 0 ? lot.lot_number : ''}</td>
+                <td><a href="${lot.original_listing.url}" target="_blank" title="${lot.original_listing.title}">${lot.ebay_search_title || 'N/A'}</a></td>
+                <td>${lot.category || 'Miscellaneous'}</td>
+                <td style="text-align: right;">${formatCurrency(lot.total_market_value)}</td>
+                <td style="text-align: right;">${lot.ebay_avg_price > 0 ? formatCurrency(lot.ebay_avg_price) : 'N/A'}</td>
+                <td style="text-align: right;">${lot.ebay_confidence_score > 0 ? lot.ebay_confidence_score + '%' : 'N/A'}</td>
+                <td style="text-align: center;"><a href="${lot.ebay_search_url || '#'}" target="_blank">eBay</a></td>
+                <td style="text-align: center;"><a href="https://www.google.com/search?q=${encodedSearch}" target="_blank">Google</a></td>
+            `;
+            
+            tableBody.appendChild(mainRow);
+            
+            if (hasReasoning) {
+                const reasoningRow = document.createElement('tr');
+                reasoningRow.className = 'reasoning-row';
+                reasoningRow.innerHTML = `<td colspan="8">${sanitizeText(lot.reasoning)}</td>`;
+                tableBody.appendChild(reasoningRow);
+
+                mainRow.addEventListener('click', () => {
+                    reasoningRow.classList.toggle('visible');
+                });
+            }
+
+            if (lot.items && lot.items.length > 1) {
+                lot.items.forEach(subItem => {
+                    const subRow = document.createElement('tr');
+                    subRow.className = 'lot-sub-item';
+                    
+                    const subAvgPrice = subItem.ebay_avg_price || 0;
+                    const subEncodedSearch = encodeURIComponent(subItem.item_name || '');
+                    const subEbayUrl = `https://www.ebay.com/sch/i.html?_from=R40&_nkw=${subEncodedSearch}&_sacat=0&LH_Complete=1&LH_Sold=1`;
+                    const subGoogleUrl = `https://www.google.com/search?q=${subEncodedSearch}`;
+
+                    subRow.innerHTML = `
+                        <td></td>
+                        <td style="padding-left: 35px;">${subItem.item_name || 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: right;">${formatCurrency(subItem.estimated_value)}</td>
+                        <td style="text-align: right;">${subAvgPrice > 0 ? formatCurrency(subAvgPrice) : 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: center;"><a href="${subEbayUrl}" target="_blank">eBay</a></td>
+                        <td style="text-align: center;"><a href="${subGoogleUrl}" target="_blank">Google</a></td>
+                    `;
+                    tableBody.appendChild(subRow);
+                });
+            }
+        });
+    }
+
+    function sortData(column) {
+        const isNumeric = ['price', 'ebay_price', 'lot_number', 'confidence'].includes(column);
+        if (currentSort.column === column) {
+            currentSort.isAscending = !currentSort.isAscending;
+        } else {
+            currentSort.column = column;
+            currentSort.isAscending = !isNumeric;
+        }
+
+        jsonData.sort((a, b) => {
+            let valA, valB;
+            switch (column) {
+                case 'price': valA = a.total_market_value || 0; valB = b.total_market_value || 0; break;
+                case 'ebay_price': valA = a.ebay_avg_price || 0; valB = b.ebay_avg_price || 0; break;
+                case 'confidence': valA = a.ebay_confidence_score || 0; valB = b.ebay_confidence_score || 0; break;
+                case 'lot_number': valA = a.lot_number || 0; valB = b.lot_number || 0; break;
+                case 'name': valA = (a.ebay_search_title || '').toLowerCase(); valB = (b.ebay_search_title || '').toLowerCase(); break;
+                case 'category': valA = (a.category || '').toLowerCase(); valB = (b.category || '').toLowerCase(); break;
+                default: return 0;
+            }
+            let comparison = 0;
+            if (valA > valB) { comparison = 1; }
+            else if (valA < valB) { comparison = -1; }
+            return currentSort.isAscending ? comparison : comparison * -1;
+        });
+        updateSortIndicators();
+        populateTable();
+    }
+
+    function updateSortIndicators() {
+        headers.forEach(header => {
+            const indicator = header.querySelector('.sort-indicator');
+            if (header.dataset.column === currentSort.column) {
+                indicator.textContent = currentSort.isAscending ? ' ▲' : ' ▼';
+            } else { indicator.textContent = ''; }
+        });
+    }
+
+    headers.forEach(header => { header.addEventListener('click', () => { sortData(header.dataset.column); }); });
+    sortData('ebay_price');
+</script>
+</body>
+</html>
