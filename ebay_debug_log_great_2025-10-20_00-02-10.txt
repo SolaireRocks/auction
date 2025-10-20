@@ -1,0 +1,200 @@
+
+--- [2025-10-20 00:04:46] eBay Market Price Analysis for 'New Patricia Nash First Bloom Italian Leather Wristlet Clutch Purse Floral NWT' (Lot #1) ---
+
+--- RAW Items from API ---
+- $  28.00 | Patricia Nash Cassini Italian Leather Prairie Rose Floral Wristlet Bag Purse
+- $  31.75 | Patricia Nash Leather Winter Bloom Floral Clutch Lock Chain Strap
+- $  49.99 | PATRICIA NASH Valerie  Italian FLoral Paisley Foldover WRISTLET CLUTCH/NWT/99.00
+- $  26.00 | Patricia Nash Reala Floral Leather Wristlet clutch leather flower appliqué
+- $  55.00 | Patricia Nash Valerie Leather Wristlet Clutch in Vintage Victorian Garden NEW
+- $  38.95 | Patricia Nash Foldover Floral Embossed Leather Wristlet Clutch Handbag
+- $  39.00 | Patricia Nash CASSINI WRISTLET Italian Leather First Bloom Floral Multi
+- $  55.00 | NEW Patricia Nash Valerie Leather Wristlet Clutch in Watercolor Butterflies  NWT
+- $  49.00 | NWT Patricia Nash   Cassini  Leather Wristlet Clutch Kent Countryside
+- $  49.00 | PATRICIA NASH Valerie LEATHER Fold Over Wristlet Purse SPRING MULTI FLORAL NWT
+- $  51.98 | NEW PATRICIA NASH Leather Cassini Mini Flower Meadows Print Med Wristlet Clutch
+- $  31.50 | PATRICIA NASH Fresco Bouquet Wristlet  Leather Floral Multi Color-NWT-MSRP$69.00
+- $  55.00 | Patricia Nash Cassini Tooled Leather Wristlet Clutch Handbag Smoke  New
+- $  45.00 | Patricia Nash Gray Floral Appliqué Wristlet Clutch Purse – Layered Flower Medium
+- $ 199.00 | Patricia Nash Apricot Blossoms Collection Leather Wristlet
+- $  50.00 | NWT Patricia Nash Savena Mini Meadows Wristlet Clutch Purse
+- $  47.95 | PATRICIA NASH Wristlet Clutch Purse Cassini WINTER BLOOM Floral Leather NWT $79
+- $  48.00 | Patricia Nash Rose Floral Flower Leather Wristlet Purse Bloomcore
+- $  51.75 | Patricia Nash Savena Winter Bloom Floral Kiss Lock Clutch Wristlet Bag NWT $69
+- $  64.95 | Patricia Nash Floral Embossed Leather Wristlet Bag Brown Gift Boxed NWT Handbag
+- $  47.99 | PATRICIA NASH Valerie LEATHER Fold Over Wristlet Purse SPRING MULTI FLORAL NWT
+- $  42.00 | NWT Patricia Nash Cassini Wristlet Floral Multicolor Italian Leather Purse
+- $  39.99 | Patricia Nash Fira Spring Multi Floral Clutch #P1680252 NIB
+- $  58.00 | Patricia Nash NWT VALERIE Foldover Wristlet/Clutch Leather-Prairie Rose MSRP $99
+- $  67.99 | Patricia Nash Desert Bloom Red Green Italian Leather Wallet Wristlet Clutch NWT
+- $  54.00 | NEW Patricia Nash Valerie Leather Wristlet Clutch in Spring Multi Color Print
+- $  40.00 | PATRICIA NASH Valerie Floral Flowers Purse LEATHER WRISTLET CLUTCH Kisslock 9x6
+- $  36.49 | New Patricia Nash Leather Spring Multi Floral Leather Wristlet Pouch Bag
+- $  49.99 | PATRICIA NASH Valerie Bag Multi Color Italian Leather Wristlet Clutch Foldover
+- $  45.00 | Patricia Nash Italian Leather Multi-color Floral Wallet Wristlet Clutch
+
+--- AI-CLEANED Items for Calculation ---
+- $  28.00 | Patricia Nash Cassini Italian Leather Prairie Rose Floral Wristlet Bag Purse
+- $  31.75 | Patricia Nash Leather Winter Bloom Floral Clutch Lock Chain Strap
+- $  49.99 | PATRICIA NASH Valerie  Italian FLoral Paisley Foldover WRISTLET CLUTCH/NWT/99.00
+- $  26.00 | Patricia Nash Reala Floral Leather Wristlet clutch leather flower appliqué
+- $  55.00 | Patricia Nash Valerie Leather Wristlet Clutch in Vintage Victorian Garden NEW
+- $  38.95 | Patricia Nash Foldover Floral Embossed Leather Wristlet Clutch Handbag
+- $  39.00 | Patricia Nash CASSINI WRISTLET Italian Leather First Bloom Floral Multi
+- $  55.00 | NEW Patricia Nash Valerie Leather Wristlet Clutch in Watercolor Butterflies  NWT
+- $  49.00 | NWT Patricia Nash   Cassini  Leather Wristlet Clutch Kent Countryside
+- $  49.00 | PATRICIA NASH Valerie LEATHER Fold Over Wristlet Purse SPRING MULTI FLORAL NWT
+- $  51.98 | NEW PATRICIA NASH Leather Cassini Mini Flower Meadows Print Med Wristlet Clutch
+- $  31.50 | PATRICIA NASH Fresco Bouquet Wristlet  Leather Floral Multi Color-NWT-MSRP$69.00
+- $  45.00 | Patricia Nash Gray Floral Appliqué Wristlet Clutch Purse – Layered Flower Medium
+- $ 199.00 | Patricia Nash Apricot Blossoms Collection Leather Wristlet
+- $  50.00 | NWT Patricia Nash Savena Mini Meadows Wristlet Clutch Purse
+- $  47.95 | PATRICIA NASH Wristlet Clutch Purse Cassini WINTER BLOOM Floral Leather NWT $79
+- $  48.00 | Patricia Nash Rose Floral Flower Leather Wristlet Purse Bloomcore
+- $  51.75 | Patricia Nash Savena Winter Bloom Floral Kiss Lock Clutch Wristlet Bag NWT $69
+- $  64.95 | Patricia Nash Floral Embossed Leather Wristlet Bag Brown Gift Boxed NWT Handbag
+- $  47.99 | PATRICIA NASH Valerie LEATHER Fold Over Wristlet Purse SPRING MULTI FLORAL NWT
+- $  42.00 | NWT Patricia Nash Cassini Wristlet Floral Multicolor Italian Leather Purse
+- $  39.99 | Patricia Nash Fira Spring Multi Floral Clutch #P1680252 NIB
+- $  58.00 | Patricia Nash NWT VALERIE Foldover Wristlet/Clutch Leather-Prairie Rose MSRP $99
+- $  67.99 | Patricia Nash Desert Bloom Red Green Italian Leather Wallet Wristlet Clutch NWT
+- $  54.00 | NEW Patricia Nash Valerie Leather Wristlet Clutch in Spring Multi Color Print
+- $  40.00 | PATRICIA NASH Valerie Floral Flowers Purse LEATHER WRISTLET CLUTCH Kisslock 9x6
+- $  36.49 | New Patricia Nash Leather Spring Multi Floral Leather Wristlet Pouch Bag
+- $  49.99 | PATRICIA NASH Valerie Bag Multi Color Italian Leather Wristlet Clutch Foldover
+- $  45.00 | Patricia Nash Italian Leather Multi-color Floral Wallet Wristlet Clutch
+
+--- AI Analyst's Reasoning ---
+Kept the one exact pattern match and all other Patricia Nash floral wristlet clutches as strong comparables within the same product line.
+---------------------------------
+Final Average Selling Price: $46.22
+AI Confidence Score: 85%
+---------------------------------------------------------
+
+--- [2025-10-20 00:04:46] eBay Market Price Analysis for 'Mary Kay Silver Metallic Tote Bag Purse Embossed Hearts Promotional' (Lot #2) ---
+
+--- RAW Items from API ---
+- $  37.42 | New Mary Kay Tote bag with bling pink flower on chain 12” x 14” shoulder bag
+- $  14.36 | New Mary Kay Red Quilted Hearts Cosmetic Bag with Gold Chain Handle & Tassels
+- $  48.00 | New Mary Kay Tote bag with bling pink flower on chain 12” x 14”with accessories 
+- $  19.00 | New. Mary Kay 50th Metallic Gold Expandable Zipper/Flash tote shopping bag
+- $  19.99 | Mary Kay Tote Bag - 15” Long X 19.5” Wide Bonus Midnight Jewels Clutch
+- $  25.00 | New Mary Kay Tote bag with bling pink flower on chain 12” x 14” shoulder bag
+- $  35.00 | *RARE* Beautiful & Vintage Mary kay Glitter Striped Heart Bag 10x10 Inches
+
+--- AI-CLEANED Items for Calculation ---
+AI removed all items or no items were valid.
+
+--- AI Analyst's Reasoning ---
+All results were excluded because they were either the wrong color, the wrong bag type (cosmetic bag), or different generic promotional totes.
+---------------------------------
+Final Average Selling Price: $0.00
+AI Confidence Score: 0%
+---------------------------------------------------------
+
+--- [2025-10-20 00:04:46] eBay Market Price Analysis for 'New White Faux Leather Crossbody Cell Phone Purse Bag with Fringe Tassel' (Lot #3) ---
+
+--- RAW Items from API ---
+- $  36.95 | Teal Blue fringe purse crossbody Cell Phone Purse
+- $  36.95 | Yellow Mustard fringe purse crossbody Cell Phone Purse
+- $  36.95 | Dark Red  fringe purse crossbody Cell Phone Purse
+- $  36.95 | Pink Rose Mauve fringe purse crossbody Cell Phone Purse
+- $  15.00 | Small Crossbody Bag Leather Cell Phone Purse Fringe  Accent Adjustable Strap
+- $  14.95 | Faux Suede Leather Fringed Crossbody Bag Festival Cellphone Holder Travel NWT
+- $  26.85 | Women Mini Fringe Tassel PU Leather Crossbody Bag Hobo Bag Cell Phone Coin Pu...
+- $  15.00 | Faux Suede Leather Fringed Crossbody Bag Festival Cellphone Holder Travel
+- $  49.99 | Leather and Medium Size Bag with Shawl Accessory Zippered Multi-Pocket women bag
+- $  24.97 | Deluxity LA Handbag Purse Crossbody Tasseled Y2K Vegan/Faux Leather Black NWT
+- $  35.99 | Like Designer BLACK Crossbody PURSE  Everyday Evening Bag Metal Chain White Pink
+- $  30.79 | NWOT Jessica Simpson Handbag  Crossbody  Clutch Ivory, Black, Pewter Bag. O 6
+- $  14.99 | B.BRENTANO ULTRA SOFT Vegan LEATHER Sky Blue Crossbody Purse
+- $ 199.99 | 💥 MICHAEL KORS BEDFORD crossbody Handbag SNAKE EMBOSSED LEATHER NWT💥
+- $  11.99 | Unbranded Women’s Blue Fringe Crossbody Cell Phone Holder Bag Purse
+- $  11.99 | Unbranded Women’s Black Fringe Crossbody Cell Phone Holder Bag Purse
+- $  35.00 | Fringe Cell Phone Crossbody Purse  Rose Mauve Color
+
+--- AI-CLEANED Items for Calculation ---
+- $  15.00 | Small Crossbody Bag Leather Cell Phone Purse Fringe  Accent Adjustable Strap
+- $  14.95 | Faux Suede Leather Fringed Crossbody Bag Festival Cellphone Holder Travel NWT
+- $  26.85 | Women Mini Fringe Tassel PU Leather Crossbody Bag Hobo Bag Cell Phone Coin Pu...
+- $  15.00 | Faux Suede Leather Fringed Crossbody Bag Festival Cellphone Holder Travel
+
+--- AI Analyst's Reasoning ---
+Kept only generic crossbody cell phone purses featuring fringe/tassels, despite the specific white color being unavailable in the results.
+---------------------------------
+Final Average Selling Price: $17.95
+AI Confidence Score: 60%
+---------------------------------------------------------
+
+--- [2025-10-20 00:04:46] eBay Market Price Analysis for 'Coach Legacy Stripe Duffle Shoulder Bag 19389 Multicolor Canvas Tan Leather Purse' (Lot #4) ---
+
+--- RAW Items from API ---
+- $ 159.99 | NWT COACH 19357 Hamptons Legacy Stripe Multi Canvas Weekend Tote Shoulder Bag
+- $  59.07 | Coach Legacy 19918 Black Gray Signature Stripe Jacquard Duffle Shoulder Bag
+- $  45.00 | COACH Legacy Stripe Signature Duffel Shoulder Bag D1271-19918 Coral & Beige, EUC
+- $  18.98 | Coach Legacy 19918 Black Gray Signature Stripe Jacquard Duffle Shoulder Bag 
+- $ 125.00 | Coach Hadley Stripe Duffle Shoulder handbag F30302 Brown Canvas Leather New $328
+- $  59.97 | Coach Women’s Legacy Duffle Shoulder Bag Leather 19979 Blue Pink Brown #3973
+- $ 140.00 | Coach Legacy Rugby Stripe Duffel Shoulder Bag 21180 Leather Tassel 
+- $  85.00 | Coach Legacy Stripe Duffle Shoulder Bag Black Gray Signature Canvas Leather Trim
+- $  49.99 | Coach Legacy 19918 Black Gray Signature Stripe Jacquard Duffle Shoulder Bag
+- $  97.75 | Coach Hadley Multicolor Stripe Canvas Leather Trim  Duffle Shoulder Bag
+- $  55.00 | Coach Legacy 19918 Black Gray Signature Stripe Jacquard Duffle Shoulder Bag
+- $  75.00 | Authentic Coach 19918 Legacy Signature Stripe Duffle Bag Red / Tan CLEAN
+- $ 108.00 | COACH Legacy Signature Stripe Duffle Shoulder Bag 19918 Navy Women USED
+- $ 224.99 | Coach Legacy Color Block Leather Duffle/shoulder Bag
+- $  29.00 | Coach Legacy 19918 Black Gray Signature Stripe Jacquard Duffle Shoulder Bag
+- $  48.00 | COACH Legacy Stripe Signature Duffel Shoulder Bag
+- $  40.00 | Coach Legacy 19918 Brown And Ran Signature Stripe Jacquard Duffle Shoulder Bag
+- $  46.85 | Coach Legacy 19918 Black Gray Signature Stripe Jacquard Duffle Shoulder Bag 
+- $  69.99 | Coach Legacy Signature Stripe Orange Duffle Jacquard Leather Bag 19918
+- $  43.00 | Coach Legacy 19918 Black Gray Signature Stripe Jacquard Duffle Shoulder Bag 
+- $  49.00 | Coach Legacy 19918 Black Gray Signature Stripe Jacquard Duffle Shoulder Bag 
+- $ 150.00 | NWT Coach Legacy Signature Stripe Khaki/Mahogany Duffle Shoulder Bag 19918($298)
+- $  93.81 | Coach (COACH) Bleecker Signature Duffle Shoulder Bag F13358 JA-19397 Used ICHI-0
+- $  60.00 | Coach Legacy Signature Stripe Khaki/Brown Duffle Shoulder Bag
+
+--- AI-CLEANED Items for Calculation ---
+- $  59.07 | Coach Legacy 19918 Black Gray Signature Stripe Jacquard Duffle Shoulder Bag
+- $  45.00 | COACH Legacy Stripe Signature Duffel Shoulder Bag D1271-19918 Coral & Beige, EUC
+- $  18.98 | Coach Legacy 19918 Black Gray Signature Stripe Jacquard Duffle Shoulder Bag 
+- $  85.00 | Coach Legacy Stripe Duffle Shoulder Bag Black Gray Signature Canvas Leather Trim
+- $  49.99 | Coach Legacy 19918 Black Gray Signature Stripe Jacquard Duffle Shoulder Bag
+- $  55.00 | Coach Legacy 19918 Black Gray Signature Stripe Jacquard Duffle Shoulder Bag
+- $  75.00 | Authentic Coach 19918 Legacy Signature Stripe Duffle Bag Red / Tan CLEAN
+- $ 108.00 | COACH Legacy Signature Stripe Duffle Shoulder Bag 19918 Navy Women USED
+- $  29.00 | Coach Legacy 19918 Black Gray Signature Stripe Jacquard Duffle Shoulder Bag
+- $  48.00 | COACH Legacy Stripe Signature Duffel Shoulder Bag
+- $  40.00 | Coach Legacy 19918 Brown And Ran Signature Stripe Jacquard Duffle Shoulder Bag
+- $  46.85 | Coach Legacy 19918 Black Gray Signature Stripe Jacquard Duffle Shoulder Bag 
+- $  69.99 | Coach Legacy Signature Stripe Orange Duffle Jacquard Leather Bag 19918
+- $  43.00 | Coach Legacy 19918 Black Gray Signature Stripe Jacquard Duffle Shoulder Bag 
+- $  49.00 | Coach Legacy 19918 Black Gray Signature Stripe Jacquard Duffle Shoulder Bag 
+- $ 150.00 | NWT Coach Legacy Signature Stripe Khaki/Mahogany Duffle Shoulder Bag 19918($298)
+- $  60.00 | Coach Legacy Signature Stripe Khaki/Brown Duffle Shoulder Bag
+
+--- AI Analyst's Reasoning ---
+Since the specific 19389 model was not found, all comparable Coach Legacy Stripe Duffle bags, primarily model 19918, were retained for valuation.
+---------------------------------
+Final Average Selling Price: $51.59
+AI Confidence Score: 65%
+---------------------------------------------------------
+
+--- [2025-10-20 00:04:46] eBay Market Price Analysis for 'New Hallmark Pineapple Lemonade Scented Soy Blend Candle 3-Wick 16 oz Jar' (Lot #200) ---
+
+--- RAW Items from API ---
+- $  29.99 | Hallmark 3 Wick Pineapple Lemonade 16oz. Candle (New/Unused)
+- $  29.54 | Hallmark  Pineapple Lemonade  Candle 16 Oz Glass Jar NEW
+- $  12.00 | Pineapple Lemonade scented candle hallmark used once
+
+--- AI-CLEANED Items for Calculation ---
+- $  29.99 | Hallmark 3 Wick Pineapple Lemonade 16oz. Candle (New/Unused)
+- $  29.54 | Hallmark  Pineapple Lemonade  Candle 16 Oz Glass Jar NEW
+- $  12.00 | Pineapple Lemonade scented candle hallmark used once
+
+--- AI Analyst's Reasoning ---
+All items were retained as they are direct matches for the brand, scent, size, and type specified in the query.
+---------------------------------
+Final Average Selling Price: $23.84
+AI Confidence Score: 100%
+---------------------------------------------------------
