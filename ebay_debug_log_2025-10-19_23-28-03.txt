@@ -1,0 +1,493 @@
+
+--- [2025-10-19 23:29:30] eBay Market Price Analysis for 'New Patricia Nash Italian Leather Clutch Wristlet Purse' (Lot #1) ---
+
+--- RAW Items from API ---
+- $  59.00 | PATRICIA NASH Wristlet Clutch Purse  Soft Green Leather - NWT
+- $  39.50 | PATRICIA NASH TOOLED LEATHER Fold Over Wristlet CLUTCH FLORENCE TAN NEW W/O Tags
+- $  62.00 | Patricia Nash Wristlet Valentia Italian Leather Billfold Floral Magnetic Close
+- $  58.00 | PATRICIA NASH "Valerie" Fold-Over Leather Wristlet Clutch Bag Blue Fog New
+- $  55.00 | Patricia Nash Cassini Tooled Leather Wristlet Clutch Handbag Smoke  New
+- $  49.99 | PATRICIA NASH Valerie  Italian FLoral Paisley Foldover WRISTLET CLUTCH/NWT/99.00
+- $  79.99 | PATRICIA NASH Carved Pink BAKU Crossbody Wristlet Bag Clutch Italian Leather NWT
+- $  85.98 | Patricia Nash Italian Leather Floral Blooming Romance Clutch Bag!
+- $  46.00 | PATRICIA NASH Valerie TOOLED LEATHER Fold Over Wristlet CLUTCH FLORENCE TAN Nwt
+- $  59.25 | Patricia Nash Cassini Sienna Sunset Genuine Leather Wristlet Clutch NWT $79
+- $  49.00 | NWT Patricia Nash   Cassini  Leather Wristlet Clutch Kent Countryside
+- $  25.00 | Patricia Nash Savena Leather Wristlet Clutch Handbag Brown New
+- $  38.50 | Patricia Nash Cassini Tooled Leather Wristlet Clutch Handbag Magenta New
+- $  44.95 | Patricia Nash Cassini Italian Sketchbook Wristlet Clutch 9"x 6" NWT MSRP $79.00
+- $  28.99 | Gorgeous Awesome New Italian leather Patricia Nash  Clutch  Accessory Bag
+- $  40.00 | Patricia Nash Paisley Kiss Lock Clutch New W/ Tags Retail $69.
+- $  55.79 | Patricia Nash Savena Antique Gold Leather Kisslock Wristlet Clutch Handbag New!
+- $  69.00 | Patricia Nash Italian Leather Clutch / Wristlet Tooled Turquoise NWT
+- $  29.99 | Patricia Nash Tooled Italian Leather Purse/Wristlet NWT 8.5”x 6.5”
+- $  74.39 | Patricia Nash Valerie Tooled Leather Foldover Wristlet Clutch Handbag Brown New!
+- $  53.99 | PATRICIA NASH Valerie Leather Fold Over Wristlet Clutch Purse European Map NEW
+- $  37.99 | Patricia Nash Savena NWT Tan Leather Kiss Lock Clutch Wristlet Bag MSRP $69.00!!
+- $  34.99 | Patricia Nash Tooled Turquoise Teal Brown Capri Wristlet Bag Purse Clutch NWT
+- $  46.00 | PATRICIA NASH Valerie TOOLED LEATHER Wristlet CLUTCH PURSE BERRY RED BAG Nwt $99
+- $  55.00 | NIB - Patricia Nash Valerie Wristlet - Florence Tan Tooled Leather Foldover Bag
+- $  44.00 | NWT Patricia Nash Cassini Leather Wristlet, Sienna Sunset
+- $  49.99 | Patricia Nash Valerie Fold Over Clutch Wristlet Bag NWT 
+- $  65.00 | Patricia Nash Women's Valerie Tan Italian Leather Fold Over Clutch Wristlet NEW
+- $  49.00 | PATRICIA NASH Cassini Italian Leather & Brown Rabbit Fur Zip Wristlet Clutch Bag
+- $  69.00 | Patricia Nash Kent English Countryside Purse Zipper Equestrian  Horse Clutch 
+
+--- AI-CLEANED Items for Calculation ---
+- $  59.00 | PATRICIA NASH Wristlet Clutch Purse  Soft Green Leather - NWT
+- $  55.00 | Patricia Nash Cassini Tooled Leather Wristlet Clutch Handbag Smoke  New
+- $  49.99 | PATRICIA NASH Valerie  Italian FLoral Paisley Foldover WRISTLET CLUTCH/NWT/99.00
+- $  59.25 | Patricia Nash Cassini Sienna Sunset Genuine Leather Wristlet Clutch NWT $79
+- $  49.00 | NWT Patricia Nash   Cassini  Leather Wristlet Clutch Kent Countryside
+- $  25.00 | Patricia Nash Savena Leather Wristlet Clutch Handbag Brown New
+- $  38.50 | Patricia Nash Cassini Tooled Leather Wristlet Clutch Handbag Magenta New
+- $  44.95 | Patricia Nash Cassini Italian Sketchbook Wristlet Clutch 9"x 6" NWT MSRP $79.00
+- $  55.79 | Patricia Nash Savena Antique Gold Leather Kisslock Wristlet Clutch Handbag New!
+- $  69.00 | Patricia Nash Italian Leather Clutch / Wristlet Tooled Turquoise NWT
+
+--- AI Analyst's Reasoning ---
+Kept Patricia Nash wristlet clutches made of Italian leather, focusing on similar style and material.
+---------------------------------
+Final Average Selling Price: $53.39
+AI Confidence Score: 80%
+---------------------------------------------------------
+
+--- [2025-10-19 23:29:30] eBay Market Price Analysis for 'Mary Kay Silver Heart-Embossed Tote Bag' (Lot #2) ---
+
+--- RAW Items from API ---
+- $  37.42 | New Mary Kay Tote bag with bling pink flower on chain 12” x 14” shoulder bag
+- $  15.00 | MARY KAY Consultant Makeup Bag Tote Love Amor Amour Liebe Black w/ Pockets NEW
+- $  24.99 | MARY KAY Consultant Makeup Bag Tote Love Amor Amour Liebe Black w/ Pockets NEW
+- $  29.91 | Official Genuine Mary Kay  Carrying Shoulder Tote Bag Purse Black MINT
+- $  40.00 | MARY KAY . TOTE BAG With Zipper. NEW.
+- $  14.03 | Mary Kay Logo Bag Tote Black Pink Stitching Large Shoulder Travel Bag + Mirror
+- $  19.99 | NEW....Mary Kay Black Quilted Tote Bag with Pink inside lining!
+- $  24.99 | Mary Kay Tote Bag Purse Black with Pale Pink Diamond Print Organizer 16” X 12”
+- $  11.90 | Mary Kay Large Burgundy Maroon Open Tote Bag. Pink. Nice!
+- $   9.95 | VINTGAGE 1984 MARY KAY MAROON LARGE OPEN TOTE BAG
+- $   9.90 | mary kay tote bags 15x21 with handles new bin 102
+- $  22.99 | Mary Kay Consultant Black Tote Bag Purse w/ Clip-On Charm & NEW Make-Up Bag
+- $  14.36 | New Mary Kay Red Quilted Hearts Cosmetic Bag with Gold Chain Handle & Tassels
+- $  48.99 | Mary Kay Exclusive Pink Quilted Nylon Bag Luggage Consultant Large Tote Bag 2013
+- $  16.95 | Mary Kay Black Pink Tote Bag w/ Display Pocket + “The Look” Catalogs, 9.5x12x5"
+- $  35.00 | MARY KAY Consultant Makeup Bag Tote Love Amor Amour Liebe Black w/ Pockets NEW
+- $   9.85 | Mary Kay Black Large Tote Bag 18"L - 12.5"T - 3”D Pink Floral Lined Multi Pocket
+- $  48.00 | New Mary Kay Tote bag with bling pink flower on chain 12” x 14”with accessories 
+- $  25.00 | Mary Kay Tote Large Black w/ Pink Love Amor Consultant Travel Sales Bag
+- $  19.99 | Mary Kay Consultant Tote Travel Bag Purse Large Pink Floral EXTRAS INCLUDED! 
+- $  19.99 | Mary Kay Tote Bag - 15” Long X 19.5” Wide Bonus Midnight Jewels Clutch
+- $  19.50 | Mary Kay Red Heart Quilted Cosmetic/toiletries Bag Packable
+- $  12.99 | Mary Kay LG Black Zipper Tote Double Handles Pockets Pink/Purple Floral Lining
+- $  40.00 | Mary Kay Starter Bag with Party Supplies Black White Quilted Tote
+- $   9.99 | MARY KAY TRAVEL TOTE~LARGE BLACK PURSE CONSULTANT BAG/CASE
+- $  35.64 | Mary Kay Exclusive Pink Quilted Nylon Bag Luggage Consultant Large Tote Bag 2013
+- $  80.00 | Mary Kay Quilted Consultant Tote Bag w/ Damask Organizer Insert | Black & Cream 
+- $  21.99 | MARY KAY Consultant Makeup Bag Tote Love Amor Amour Liebe Black with Pockets NEW
+- $  17.99 | Mary Kay LG Black Zipper Tote Double Handles Pockets Pink/Purple Floral Lining
+- $  30.99 | Mary Kay Tote Bag Purse Black with Diamond Print & Caddy Organizer Preowned
+
+--- AI-CLEANED Items for Calculation ---
+- $  14.03 | Mary Kay Logo Bag Tote Black Pink Stitching Large Shoulder Travel Bag + Mirror
+- $  19.99 | NEW....Mary Kay Black Quilted Tote Bag with Pink inside lining!
+- $  24.99 | Mary Kay Tote Bag Purse Black with Pale Pink Diamond Print Organizer 16” X 12”
+- $   9.85 | Mary Kay Black Large Tote Bag 18"L - 12.5"T - 3”D Pink Floral Lined Multi Pocket
+- $  12.99 | Mary Kay LG Black Zipper Tote Double Handles Pockets Pink/Purple Floral Lining
+- $  17.99 | Mary Kay LG Black Zipper Tote Double Handles Pockets Pink/Purple Floral Lining
+- $  30.99 | Mary Kay Tote Bag Purse Black with Diamond Print & Caddy Organizer Preowned
+
+--- AI Analyst's Reasoning ---
+Kept Mary Kay tote bags that are black with various pink or floral details, focusing on similar style and functionality.
+---------------------------------
+Final Average Selling Price: $18.69
+AI Confidence Score: 70%
+---------------------------------------------------------
+
+--- [2025-10-19 23:29:30] eBay Market Price Analysis for 'New Cream Leather Crossbody Purse with Tassel Detail' (Lot #3) ---
+
+--- RAW Items from API ---
+- $ 349.95 | NWT Tory Burch 153463 Thea Mini Satchel Embossed Leather Crossbody in New Cream
+- $  59.46 | Kate Spade Orchard Street Hemsley Pebbled Leather  Crossbody Purse Satchel Roomy
+- $ 159.95 | Kate Spade | Catch Small Optic White Leather Crossbody Messenger Bag Purse NEW ✨
+- $  17.99 | Nwt Altar'd State Bag Vegan Leather Belt Buckle Strap Ivory Crossbody Purse 
+- $  32.95 | New Joy & Iman Diamond Quilted Leather Crossbody Shoulder Handbag Purse Cream
+- $  34.00 | KATE SPADE NY Chester Street Allyn BEIGE Pebbled Leather Crossbody Handbag
+- $  16.00 | WOMEN'S ROUND CANTEEN CROSSBODY SHOULDER PURSE BAG BEIGE CREAM...
+- $  39.00 | Kate Spade cream Naomi satchel shoulder crossbody bag purse leather
+- $  39.99 | Kate Spade New York Jackson Street Gabriele Ivory Leather Crossbody Purse
+- $ 288.00 | Tory Burch Thea Ivory Pebbled Leather Flap Crossbody Shoulder Bag Purse 144688
+- $  50.00 | Kate Spade Orchard Street Hemsley Pebbled Leather  Crossbody Purse Satchel Roomy
+- $  16.00 | NEW CLAIRE'S CROSSBODY BAG WHITE FAUX LEATHER PINK PATTERN STRAP FRINGE TASSEL
+- $  59.00 | Camila Italian Leather Crossbody Clutch
+- $ 225.00 | Tory Bur H Thea Mini Satchel Embossed Leather Handbag in New Cream
+- $ 125.00 | Beautiful Valentino Cream colored purse never used still has tag on
+- $ 275.00 | See By Chloe Leather & Suede Brown Joan Satchel Crossbody Bag NEW with tags
+- $  12.95 | Tasseled 4 Zipper Crossbody Shoulder Purse With Compartments Pockets
+- $  60.00 | NWT The Sak Reseda Leather Crossbody Purse - Ivory/Off-White - MSRP $149
+- $  79.99 | Kate Spade Sadie Crossbody Bag Meringue White Leather Purse KE594 NWT $259 MSRP
+- $  15.25 | Crossbody Shoulder Bag-Black Cream-Expandable Zippers Tassel Pocket-Brand New
+- $ 134.45 | Kate Spade Bag Newbury Lane Pink Leather Loden Satchel Crossbody Purse +Wristlet
+- $  39.90 | Myra Hand Crafted Crossbody Shoulder Bag Up Cycled Hair On Leather W/ Tapestry
+- $  41.51 | Kate Spade New York Orchard Street Medium Penelope Crossbody Black Pebbled
+- $  49.99 | Leather and Medium Size Bag with Shawl Accessory Zippered Multi-Pocket women bag
+- $ 109.99 | NWT Myra Connector  Leather & Hide Western crossbody shoulder bag purse
+- $  95.00 | Kate Spade Amy Ivory Street Smooth Leather Shoulder/Crossbody Bag Blue NWT🎀NEW
+- $  52.00 | Americana By Sharif Designer Crossbody Long Strap Bag Purse Cream Ivory Leather
+- $  32.75 | Kate Spade New York Womens Pebbled Leather Crossbody Shoulder Handbag Beige
+- $ 209.25 | Tory Burch Women's Perry Bombe Mini Bag - Colorblock  Crossbody Bag New
+- $ 349.95 | NWT Tory Burch 153463 Thea Mini Satchel Embossed Leather Crossbody in New Cream
+
+--- AI-CLEANED Items for Calculation ---
+- $ 159.95 | Kate Spade | Catch Small Optic White Leather Crossbody Messenger Bag Purse NEW ✨
+- $  39.99 | Kate Spade New York Jackson Street Gabriele Ivory Leather Crossbody Purse
+- $ 288.00 | Tory Burch Thea Ivory Pebbled Leather Flap Crossbody Shoulder Bag Purse 144688
+- $  60.00 | NWT The Sak Reseda Leather Crossbody Purse - Ivory/Off-White - MSRP $149
+- $  79.99 | Kate Spade Sadie Crossbody Bag Meringue White Leather Purse KE594 NWT $259 MSRP
+- $ 349.95 | NWT Tory Burch 153463 Thea Mini Satchel Embossed Leather Crossbody in New Cream
+
+--- AI Analyst's Reasoning ---
+Kept cream or ivory leather crossbody purses from notable brands like Kate Spade and Tory Burch, focusing on similar material and style.
+---------------------------------
+Final Average Selling Price: $162.98
+AI Confidence Score: 60%
+---------------------------------------------------------
+
+--- [2025-10-19 23:29:30] eBay Market Price Analysis for 'Coach Multicolor Stripe Canvas Leather Shoulder Bag' (Lot #4) ---
+
+--- RAW Items from API ---
+- $  74.99 | Coach Striped Hobo Shoulder Bag Purse F10702 Multicolor Stripes Dec 2006
+- $ 179.99 | NWT COACH 19021 POPPY LEGACY STRIPE GLAM TOTE Shoulder Bag Sequins Multicolor
+- $ 165.00 | Coach Soho Hampton Daisy Stripe Canvas Leather Multicolor Satchel Bag 4438
+- $ 159.99 | NWT COACH 19357 Hamptons Legacy Stripe Multi Canvas Weekend Tote Shoulder Bag
+- $  50.00 | Coach Purse Navy Multicolored Chelsea Heritage Signature Stripe Shoulder Bag
+- $  65.00 | Coach Soho Hampton Daisy Stripe Canvas Leather Multicolor Top Handle Bag  4438
+- $  34.95 | Coach F15586 Multicolor Signature Stripe Brown Shoulder Bag
+- $ 145.00 | Coach Gold and Brown Signature Shoulder Bag legacy multicolor stripe turn lock 
+- $  38.00 | COACH HAMPTONS TOTE 4434 Handbag Purse lined leather multi-color striped canvas
+- $  48.00 | Coach Hampton Stripe Tote F13553 Multicolor Canvas Leather Trim Bag
+- $  85.00 | COACH LEGACY MULTICOLOR SATIN STRIPE  MED TOTE BAG/PURSE/ SATCHEL/HANDBAG - RARE
+- $  39.99 | Coach Leather and Canvas Signature Multi-Stripe Small Shoulder Bag C06Q-10856
+- $  32.00 | COACH Pastel Multi-Color Stripe Shoulder Bag Handbag Tote F13719 Read Descript.
+- $ 224.99 | NWT Coach Large Canvas/Leather Multi-Colored Tote Bag 71310 Shoulder Bag $398
+- $  68.00 | Coach Vtg Tan Canvas Varsity Stripe Shoulder Bag w/ Leather Trim
+- $  57.50 | Coach watercolor Rainbow Striped Hampton Purse Canvas Shoulder Tote Hand Bag
+- $  45.00 | Coach Striped Canvas And Leather Bag
+- $  85.00 | Coach Striped Canvas And Leather Bag
+- $  39.99 | Coach watercolor Rainbow Striped Hampton Purse Canvas Shoulder Tote Hand Bag
+- $ 138.57 | Coach Legacy Signature Multicolor Shoulder Bag Brown Canvas Striped Turn Lock
+- $  47.99 | Coach Signature Stripe Color block shoulder bag
+- $ 209.00 | NWT Coach Teri Shoulder Bag In Signature Canvas With Floral/Stripe  CBG73/CAL81
+- $  55.00 | Coach 10704 Vintage Hampton Multicolor Satchel Shoulder Hand Bag Purse EUC
+- $  35.00 | COACH Pastel Multi-Color Stripe Shoulder Bag Handbag Tote F13719 Excellent Cond
+- $  49.99 | Coach Hampton Pastel Stripe Leather Trim Flap Buckle Shoulder Bag Barbiecore
+- $  75.00 | Coach Signature Multicolor Leather Stripe Shoulder Bag F17425
+- $ 150.00 | Coach watercolor Rainbow Striped Hampton Purse Canvas Shoulder Tote Hand Bag
+- $  99.99 | Coach Hamptons Stripes Large Hobo Shoulder Bag Multicolor Stripe Rare # F10702
+- $  97.75 | Coach Hadley Multicolor Stripe Canvas Leather Trim  Duffle Shoulder Bag
+- $  40.00 | Coach Hampton Hobo Bag Multicolor Watercolor Handbag Shoulder Purse
+
+--- AI-CLEANED Items for Calculation ---
+- $  74.99 | Coach Striped Hobo Shoulder Bag Purse F10702 Multicolor Stripes Dec 2006
+- $ 165.00 | Coach Soho Hampton Daisy Stripe Canvas Leather Multicolor Satchel Bag 4438
+- $  65.00 | Coach Soho Hampton Daisy Stripe Canvas Leather Multicolor Top Handle Bag  4438
+- $  34.95 | Coach F15586 Multicolor Signature Stripe Brown Shoulder Bag
+- $  48.00 | Coach Hampton Stripe Tote F13553 Multicolor Canvas Leather Trim Bag
+- $ 138.57 | Coach Legacy Signature Multicolor Shoulder Bag Brown Canvas Striped Turn Lock
+
+--- AI Analyst's Reasoning ---
+Kept Coach shoulder bags with multicolor stripe patterns on canvas and leather, focusing on similar brand, material, and style.
+---------------------------------
+Final Average Selling Price: $87.75
+AI Confidence Score: 85%
+---------------------------------------------------------
+
+--- [2025-10-19 23:29:30] eBay Market Price Analysis for 'Hallmark Pineapple Lemonade Scented Soy Blend Jar Candle 16 oz New' (Lot #200) ---
+
+--- RAW Items from API ---
+- $  29.99 | Hallmark 3 Wick Pineapple Lemonade 16oz. Candle (New/Unused)
+- $  29.54 | Hallmark  Pineapple Lemonade  Candle 16 Oz Glass Jar NEW
+- $  12.00 | Pineapple Lemonade scented candle hallmark used once
+
+--- AI-CLEANED Items for Calculation ---
+- $  29.99 | Hallmark 3 Wick Pineapple Lemonade 16oz. Candle (New/Unused)
+- $  29.54 | Hallmark  Pineapple Lemonade  Candle 16 Oz Glass Jar NEW
+
+--- AI Analyst's Reasoning ---
+Kept Hallmark candles with the exact scent and size, focusing on new and unused items.
+---------------------------------
+Final Average Selling Price: $29.77
+AI Confidence Score: 90%
+---------------------------------------------------------
+
+--- [2025-10-19 23:29:30] eBay Market Price Analysis for 'Scentsy Teacup Wax Warmer with Gold Floral Design' (Lot #520) ---
+
+--- RAW Items from API ---
+- $  22.00 | Scentsy English Breakfast Gold Leaf Tea Cup Saucer Warmer RETIRED. 
+- $  24.99 | Scentsy English Breakfast Tea Cup And Saucer Wax Warmer Gold Trim Very Elegant
+- $  41.99 | Retired Scentsy English Breakfast Gold Leaf Tea Cup Saucer Wax Warmer Tested
+- $  37.94 | Scentsy English Breakfast Gold Leaf Tea Cup & Saucer Electric Warmer Retired
+- $  31.95 | Scentsy English Breakfast Gold Leaf Teacup & Electric Saucer Wax Warmer - NEW
+- $  30.00 | Scentsy Retired English Breakfast Teacup & Saucer Fancy Gold Flowers Wax Warmer
+- $  22.00 | Scentsy Warmer English Breakfast Tea Cup & Saucer White Gold Florals Retired
+- $  20.49 | Scentsy Wax Warmer Vintage Teapot Retired Rose Pink Tested Working 6.5"
+- $  44.95 | Scentsy English Breakfast Retired Unused Open Box Teacup and Saucer Gold Floral
+- $  20.23 | Scentsy TEA ROSE 🌹WHITE Mini Wall Wax Warmer FLORAL ROMANTIC LOOK  NEW IN BOX
+- $  27.00 | Scentsy “TEA ROSE “🌹WHITE Mini Wall Wax Warmer FLORAL ROMANTIC LOOK  NEW
+- $  24.99 | Scentsy Tea Rose Plug In Wax Mini Warmer. New. Retired
+- $  29.08 | Scentsy Wax Warmer Teapot Retired Rose Pink Electric Bulb Included 6.5 in Tall
+- $  14.98 | Scentsy Tea Rose Plug In Wax Warmer With Original Box
+- $  29.97 | Scentsy Retired Teapot Scented Wax Warmer Dusty Pink Nightlight Shabby Chic EUC
+- $  20.62 | Scentsy Vintage Teapot Nightlight Wax Warmer Dusty Pink  Retired 2014 
+- $  44.95 | Scentsy English Breakfast Retired Unused Open Box Teacup & Saucer Gold Floral
+- $  19.99 | SCENTSY Tea Rose Plug In Wax Warmer 2010 With Original Box
+- $  18.00 | Scentsy Ceramic Electric Wax Warmer  Mug Explore Dream Discover New In Box
+- $   8.25 | Scentsy Tea Rose Plug In Wax Warmer w Bulb
+- $  17.00 | Scentsy Electric Wax Warmer Retired Teapot Light Pink Glossy Ceramic 
+- $  19.96 | Scentsy Tea Rose Nightlight Wax Warmer New in Box Retired White Bisque Floral
+- $  31.95 | SCENTSY ENGLISH BREAKFAST CUP & SAUCER WAX WARMER RETIRED WITH BOX GREAT COND.
+- $  20.77 | Scentsy Pink Teapot Wax Warmer 2014 Kitchen Decor 6" x 7.5" Retired Design
+- $  25.00 | Scentsy Ceramic Electric Wax Warmer  Mug Explore Dream Discover New In Box
+- $  25.99 | SCENTSY Tea Rose Plug In Wax Warmer 2010~Enchanted Mist And Fields Of Gold
+- $  22.00 | Scentsy Wax Warmer Vintage Teapot Retired Rose Pink Tested Working 6.5"
+- $  34.95 | Retired 2010 Scentsy Vintage Teapot Nightlight Wax Warmer Dusty Pink Complete
+- $  19.99 | Scentsy Tea Cup Warmer Blue Speckle Heated Coffee Mug Heater 
+- $  19.59 | Scentsy Premium Teapot Warmer Dusty Rose Elec. Bulb Wax Scent Incl. Retired VTG 
+
+--- AI-CLEANED Items for Calculation ---
+- $  22.00 | Scentsy English Breakfast Gold Leaf Tea Cup Saucer Warmer RETIRED. 
+- $  24.99 | Scentsy English Breakfast Tea Cup And Saucer Wax Warmer Gold Trim Very Elegant
+- $  41.99 | Retired Scentsy English Breakfast Gold Leaf Tea Cup Saucer Wax Warmer Tested
+- $  37.94 | Scentsy English Breakfast Gold Leaf Tea Cup & Saucer Electric Warmer Retired
+- $  31.95 | Scentsy English Breakfast Gold Leaf Teacup & Electric Saucer Wax Warmer - NEW
+- $  30.00 | Scentsy Retired English Breakfast Teacup & Saucer Fancy Gold Flowers Wax Warmer
+- $  22.00 | Scentsy Warmer English Breakfast Tea Cup & Saucer White Gold Florals Retired
+- $  44.95 | Scentsy English Breakfast Retired Unused Open Box Teacup and Saucer Gold Floral
+- $  44.95 | Scentsy English Breakfast Retired Unused Open Box Teacup & Saucer Gold Floral
+
+--- AI Analyst's Reasoning ---
+Kept Scentsy teacup wax warmers with gold floral design, focusing on 'English Breakfast' pattern as the closest match.
+---------------------------------
+Final Average Selling Price: $33.42
+AI Confidence Score: 80%
+---------------------------------------------------------
+
+--- [2025-10-19 23:29:30] eBay Market Price Analysis for 'Wembley Inflatable Lawn Darts Game - New Dual-Sided Target Mat & 3 Darts' (Lot #212) ---
+
+--- RAW Items from API ---
+- $ 296.99 | 10Ft Giant Inflatable Soccer Dart Game Target Darts Board +Blower Outdoor Garden
+- $  23.99 | Flarts Lawn Darts - Outdoor Games for Family Fun - Safe Inflatable Dart Games fo
+- $  40.00 | BLACK SERIES INFLATABLE LAWN DARTS/BASEBALL GAME
+- $  24.00 | Flarts Lawn Darts - Outdoor Games for Family Fun - Safe Inflatable Dart Games fo
+- $  25.00 | Wembley Inflatable Lawn Darts Game (New - Box slighly damanged)
+- $  20.99 | Black Series INFLATABLE LAWN DARTS Indoor Outdoor DUAL SIDED Baseball & Darts
+- $  24.95 | Inflatable Lawn Darts Game NIB  B Black Series 8+ Dual Sided Mat
+- $  21.80 | Flarts Lawn Darts - Outdoor Games for Family Fun - Safe Inflatable Dart Games fo
+- $  15.00 | Lawn Darts Yard Games Black Series Inflatable Reversible Target Baseball
+- $  26.99 | Quick Setup Inflatable Lawn Darts Game - Indoor and Outdoor Family Entertainment
+- $  22.63 | Flarts Lawn Darts - Outdoor Games for Family Fun - Safe Inflatable Dart Games fo
+- $  10.99 | Lawn Darts Yard Games Black Series Inflatable Reversible Target Baseball
+- $  15.88 | BLACK SERIES INFLATABLE LAWN DARTS/BASEBALL GAME
+- $  24.97 | MD Sports Light Up Backyard Lawn Darts Game - Targets and Darts Light Up ages 8+
+- $   5.99 | Lawn Darts Yard Games Black Series Inflatable Reversible Target Baseball
+- $  14.99 | University Games Lawn Darts Lawn Party Game Darts And Target. No Outer Box.
+- $  15.00 | MD Sports Light Up Backyard Lawn Darts Game - Targets and Darts Light Up ages 8+
+- $  25.62 | Family-Friendly Inflatable Lawn Darts - Quick Setup for Indoor & Outdoor Fun
+- $   5.00 | ToyerZ Inflatable Lawn Darts Games for Kids & Adults - Family Yard Full Set
+- $  10.00 | MD Sports Light Up Backyard Lawn Darts Game - Targets and Darts Light Up ages 8+
+- $   3.99 | Outdoor lawn darts game
+- $   4.99 | Black Series Inflatable Lawn Darts
+- $   9.50 | Inflatable Lawn Darts For Indoor And Outdoors
+- $  22.94 | Light Up Lawn Darts Game 2-4 Players Indoor Outdoor Fun Includes 4 Darts New
+- $  18.00 | MD Sports Light Up Backyard Lawn Darts Game - Targets and Darts Light Up ages 8+
+- $  16.95 | Jakks Sports Zone Inflatable Lawn Darts   Easy Assembly ~ Outdoor Fun
+- $  15.00 | MD Sports Light Up Backyard Lawn Darts Game - Targets and Darts Light Up ages 8+
+- $  27.99 | LED Lawn Darts | Summer Fun | Outdoor Games | Sports
+- $   9.99 | Jakks Sports Zone Inflatable Lawn Darts.
+- $  22.00 | MD Sports Light Up Backyard Lawn Darts Game - Targets and Darts Light Up ages 8+
+
+--- AI-CLEANED Items for Calculation ---
+- $  25.00 | Wembley Inflatable Lawn Darts Game (New - Box slighly damanged)
+
+--- AI Analyst's Reasoning ---
+Only one exact 'Wembley Inflatable Lawn Darts Game' was found; other results were mostly 'Black Series' or 'Flarts' brand inflatable lawn darts.
+---------------------------------
+Final Average Selling Price: $25.00
+AI Confidence Score: 20%
+---------------------------------------------------------
+
+--- [2025-10-19 23:29:30] eBay Market Price Analysis for 'Peanuts Snoopy Welcome Fall 16x16 Throw Pillow Decor' (Lot #242) ---
+
+--- RAW Items from API ---
+- $  35.00 | New Peanuts Snoopy Doghouse Happy Halloween Throw Pillow 16x16in Decor Pumpkin
+- $  44.99 | Peanuts Snoopy Fall Autumn Decorative Throw Pillow Pumpkin 2024 Sherpa NEW
+- $  28.00 | Peanuts Fall Snoopy Throw Pillow 16”X 16”
+- $  19.99 | Peanuts Snoopy Scarecrow & Woodstock Welcome Fall Throw Pillow
+- $  12.17 | Peanuts Snoopy “ Welcome Fall” Decorative Pillow 14” x 14” Woodstock Pumpkins
+- $  23.99 | NWT Peanuts Snoopy Throw Pillow Hugging Woodstock Great Pumpkin 18"X18"
+- $  45.00 | NWT 2025 Peanuts Snoopy Coffee And Donut Fall Autumn Decor Throw Pillow Sherpa
+- $  23.99 | Peanuts Charlie Brown Snoopy Decorative HALLOWEEN Pillow NOURISON 12" X 20" New
+- $  21.99 | Peanuts Happy Harvest Throw Pillow Snoopy Pumpkin Halloween NWT 12”x20” Nourison
+- $  34.99 | Peanuts Snoopy Welcome Fall Square Leaves Throw Pillow EUC
+- $  34.99 | New Halloween Peanuts Snoopy & Woodstock Plush Throw Pillows 9" x 12" - Set of 3
+- $  22.99 | Peanuts set of 3 Snoopy & Woodstock Halloween Decorative Pillows NEW
+- $  45.95 | Peanuts Snoopy Fall Sherpa Decorative Throw Pillow with Pumpkin BRAND NEW
+- $  49.95 | Peanuts Snoopy & Woodstock Pumpkin Halloween Fall pillow 14x16" NWT 2025
+- $  54.28 | 2 Peanuts Snoopy Happy Harvest/Welcome Fall Leaves Decorative Pillow 18x18
+- $  19.99 | Peanuts Snoopy & Woodstock Accent Pillow 16" x 16" New with tags
+- $  23.95 | Peanuts Snoopy And Woodstock AUTUMN FUN! Soft Throw Pillow Fall Leaves 19 x 11
+- $  14.74 | NWT! Kohl's Happy Halloween Snoopy Peanuts Throw Pillow 15" x 15" Holiday
+- $  15.99 | NEW peanuts halloween throw pillow snoopy
+- $  14.95 | Peanuts Charlie Brown Snoopy Decorative HALLOWEEN Pillow NOURISON 16" X 16" New
+- $  14.95 | Peanuts Charlie Brown Snoopy Decorative HALLOWEEN Pillow NOURISON 16" X 16" New
+- $  18.00 | Peanuts Snoopy & Woodstock WELCOME/. Fall pillow 18 x 11”
+- $  15.99 | NEW peanuts halloween throw pillow snoopy
+- $  45.99 | Peanuts Snoopy With Pumpkin Sherpa Decorative Fall Pillow
+- $  24.99 | Snoopy Woodstock Halloween Thanksgiving Pillow 10"x18"
+- $  34.99 | Peanuts New Snoopy Halloween Decorative Pillow Fall Theme 14in x 17in
+- $  23.00 | Peanuts Snoopy Charlie Brown Decorative Handmade 16" Throw Pillow cover
+- $  35.00 | Peanuts Snoopy & Woodstock Sherpa Pillow Fall Leaves 18in X 18" NWT Sealed
+- $  40.00 | peanuts snoopy halloween sofa decorative throw pillow 
+- $  34.95 | Peanuts Halloween Snoopy on Doghouse Accent Decorative Pillow 16" x 16"
+
+--- AI-CLEANED Items for Calculation ---
+- $  12.17 | Peanuts Snoopy “ Welcome Fall” Decorative Pillow 14” x 14” Woodstock Pumpkins
+- $  34.99 | Peanuts Snoopy Welcome Fall Square Leaves Throw Pillow EUC
+- $  18.00 | Peanuts Snoopy & Woodstock WELCOME/. Fall pillow 18 x 11”
+
+--- AI Analyst's Reasoning ---
+Kept Peanuts Snoopy 'Welcome Fall' throw pillows, allowing for some variation in size and design.
+---------------------------------
+Final Average Selling Price: $21.72
+AI Confidence Score: 60%
+---------------------------------------------------------
+
+--- [2025-10-19 23:29:30] eBay Market Price Analysis for 'Peanuts Halloween Throw Pillow - Snoopy and Friends Decorative Pillow' (Lot #241) ---
+
+--- RAW Items from API ---
+- $  40.00 | peanuts snoopy halloween sofa decorative throw pillow 
+- $  27.95 | 2025 Halloween Snoopy Pillow Plush and Throw Set 40in By 50in "Peanuts & Gang"
+- $  15.99 | NEW peanuts halloween throw pillow snoopy
+- $  22.99 | Peanuts set of 3 Snoopy & Woodstock Halloween Decorative Pillows NEW
+- $  26.00 | Peanuts Halloween Throw Pillow 12" x 20" - Snoopy & Friends Trick or Treat
+- $  23.99 | Peanuts Charlie Brown Snoopy Decorative HALLOWEEN Pillow NOURISON 12" X 20" New
+- $  15.99 | NEW peanuts halloween throw pillow snoopy
+- $  26.00 | Peanuts Halloween Throw Pillow 18"x18" – Snoopy & Friends Trick or Treat
+- $  34.99 | New Halloween Peanuts Snoopy & Woodstock Plush Throw Pillows 9" x 12" - Set of 3
+- $  14.74 | NWT! Kohl's Happy Halloween Snoopy Peanuts Throw Pillow 15" x 15" Holiday
+- $  19.99 | Peanuts Halloween Pillow "Trick Or Treat" Peanuts Gang Halloween Pillow 18 x 18"
+- $  42.95 | Halloween Peanuts Snoopy & Woodstock Plush Throw Pillows 9" x 12" - Set of 3
+- $  32.99 | Peanuts Snoopy Decorative Throw Plaid Halloween Pillow Black, White, Orange New
+- $  25.00 | Peanuts Snoopy Vampire Sherpa Pillow Purple Cape Halloween NWT 2025 Rare
+- $  34.95 | Peanuts Snoopy Pillow Halloween Spider Webs Decorative Pillow
+- $  21.99 | Peanuts Happy Harvest Throw Pillow Snoopy Pumpkin Halloween NWT 12”x20” Nourison
+- $  23.99 | Peanuts Charlie Brown Snoopy Decorative HALLOWEEN Pillow Hello Pum 12" X 20" New
+- $  44.99 | Peanuts Snoopy Fall Autumn Decorative Throw Pillow Pumpkin 2024 Sherpa NEW
+- $  23.99 | NWT Peanuts Snoopy Throw Pillow Hugging Woodstock Great Pumpkin 18"X18"
+- $  38.99 | Peanuts SNOOPY Cut-Out Sherpa Pillow SNOOPY MUMMY Adorable NWT Halloween
+- $  19.99 | Peanuts Halloween Throw Pillow Charlie Brown, Snoopy Halloween Pillow 18" x 18"
+- $  35.00 | New Peanuts Snoopy Doghouse Happy Halloween Throw Pillow 16x16in Decor Pumpkin
+- $  21.25 | Peanuts Snoopy Halloween Witch/Wizard Hat Sherpa Pillow
+- $  38.50 | Peanuts Snoopy Halloween Vampire Decorative Throw Pillow 15” X 17”  New 2025
+- $  36.54 | Peanuts SNOOPY Cut-Out Sherpa Pillow WOODSTOCK SNOOPY PUMPKIN JOL HALLOWEEN NWT
+- $  59.95 | pair peanuts snoopy on doghouse halloween sofa decorative throw pillows nwt
+- $  39.99 | Peanuts Nourison Home Vampire Snoopy Halloween 14" x 17" Throw Decorative Pillow
+- $  49.99 | Peanuts Snoopy Halloween Pumpkin Decorative Sherpa Pillow 11x17 inches
+- $  42.99 | Peanuts Snoopy Halloween Vampire Decorative Throw Pillow 15” X17” NEW
+- $  13.69 | Peanuts✨Snoopy Woodstock✨Halloween✨Decorative Pillow✨18”x18”✨So Cute It’s Scary
+
+--- AI-CLEANED Items for Calculation ---
+- $  26.00 | Peanuts Halloween Throw Pillow 12" x 20" - Snoopy & Friends Trick or Treat
+- $  26.00 | Peanuts Halloween Throw Pillow 18"x18" – Snoopy & Friends Trick or Treat
+- $  19.99 | Peanuts Halloween Pillow "Trick Or Treat" Peanuts Gang Halloween Pillow 18 x 18"
+- $  19.99 | Peanuts Halloween Throw Pillow Charlie Brown, Snoopy Halloween Pillow 18" x 18"
+
+--- AI Analyst's Reasoning ---
+Kept Peanuts Halloween throw pillows featuring Snoopy and friends, with various designs and sizes.
+---------------------------------
+Final Average Selling Price: $22.99
+AI Confidence Score: 80%
+---------------------------------------------------------
+
+--- [2025-10-19 23:29:30] eBay Market Price Analysis for 'Mary Kay Domain Men's Cologne Spray Vial 0.07 oz' (Lot #233) ---
+
+--- RAW Items from API ---
+- $  29.00 | Mary Kay Domain Cologne Spray for Men – 2.5 fl. oz / 73 mL –
+- $  33.99 | Mary Kay Domain Cologne Spray for Men – 2.5 fl. oz / 73 mL –
+- $  29.99 | 2 PC Set DOMAIN by Mary Kay Men’s Cologne Spray + Aftershave Balm 2.5oz Each
+- $  28.00 | Mary Kay Domain Cologne Spray for Men 2.5 FL. OZ.
+- $  25.00 | Mary Kay DOMAIN Almost Gone Eau de COLOGNE SPRAY For Men/NIB/2.5oz./25.00/HTF
+- $  34.84 | Mary Kay Domain 2.5 fl. oz. Men's Eau de Cologne Spray
+- $  29.95 | Mary Kay Domain Cologne Spray for Men – 2.5 fl. oz / 73 mL –
+- $  24.99 | Mary Kay Domain Men’s Cologne Spray 2.5 oz #5964 New
+- $  24.99 | Mary Kay Domain (2.5 fl. oz.) Men's Eau de - Cologne Spray - New Old Stock
+- $  29.95 | Mary Kay Domain Cologne Spray for Men 2.5 FL. OZ.
+- $  30.00 | Mary Kay DOMAIN Eau de COLOGNE SPRAY NIB 2.5 oz. Full Size New in Box
+- $  25.99 | Mary Kay Domain Cologne Spray for Men 2.5 fl. oz / 73 mL  ~ Brand New No Box
+- $  12.95 | New Mary Kay Men's Domain Splash Cologne .33 fl oz Travel Size Fast Ship
+- $  40.95 | MARY KAY MEN'S COLOGNE SPRAY~DOMAIN~028783~2.5 FL. OZ.~NIB~FULL SIZE!
+- $  35.00 | Mary Kay Domain 2.5 fl. oz. Men's Eau de Cologne Spray
+- $  16.99 | Vintage MARY KAY Domain Men’s Cologne Spray 2.5 oz 73 ml Half-Full BH-14
+- $  34.98 | Mary Kay ~ Domain ~ Mens Spray Eau de Cologne Colonia 2.5 Oz ~ New in Box
+- $   8.00 | Mary Kay Domain Mini Travel Men's Eau de Cologne Spray 
+- $  36.88 | Mary Kay Domain Cologne Spray for Men – 2.5 fl. oz NIB stocking stuffer
+- $  29.99 | MARY KAY ~  DOMAIN  men's cologne spray  ~ 2.5 Fl Oz ~  New in box
+- $  29.95 | Mary Kay Domain 2.5 oz Way De Cologne Spray For Men Read - 90% Full
+- $  42.50 | Mary Kay Domain Cologne Mens 2.5 Fl Oz Spray Eau de Cologne New In Box
+- $  25.00 | Mary Kay Domain Men’s Cologne Spray 2.5 FL OZ/73ml New Without Box
+- $   9.99 | Mary Kay DOMAIN men's cologne sample vials with cards ~ LOT of 6
+- $  12.99 | Lot of 6 Mary Kay DOMAIN Cologne Sample Splash Vials Travel Samples Testers NEW
+- $  39.37 | Mary Kay DOMAIN Men's Eau de Cologne Spray 2.5 oz Bottle RARE Discontinued
+- $  15.99 | 12 MARY KAY DOMAIN MEN'S COLOGNE  .02 OZ VIALS NEW IN PACKAGE Purse /pocket Size
+- $  29.99 | Mary Kay Domain Cologne Spray for Men – 2.5 fl. oz / 73 mL
+- $  42.00 | Mary Kay Domain Cologne Spray for Men 2.5 oz / 73 ml New Sealed
+- $  59.95 | Mary Kay Domain 2.5 FL OZ Men's Cologne Spray # 5964 NIB New Old Stock Vintage
+
+--- AI-CLEANED Items for Calculation ---
+- $  12.95 | New Mary Kay Men's Domain Splash Cologne .33 fl oz Travel Size Fast Ship
+- $   9.99 | Mary Kay DOMAIN men's cologne sample vials with cards ~ LOT of 6
+- $  12.99 | Lot of 6 Mary Kay DOMAIN Cologne Sample Splash Vials Travel Samples Testers NEW
+- $  15.99 | 12 MARY KAY DOMAIN MEN'S COLOGNE  .02 OZ VIALS NEW IN PACKAGE Purse /pocket Size
+
+--- AI Analyst's Reasoning ---
+Kept Mary Kay Domain men's cologne vials in various sizes, as they are comparable to the requested 0.07 oz vial.
+---------------------------------
+Final Average Selling Price: $12.98
+AI Confidence Score: 60%
+---------------------------------------------------------
+
+--- [2025-10-19 23:29:30] eBay Market Price Analysis for 'Mary Kay Domain Men's After-Shave Balm 0.48 oz' (Lot #233) ---
+
+--- RAW Items from API ---
+- $  14.99 | Mary Kay Domain Moisturizing Shave Cream 6.5 Oz SEALED
+- $  49.95 | Discontinued Mary Kay Domain Mens Shave Kit
+- $  34.99 | 2PC Lot Mary Kay DOMAIN COOLING AFTER SHAVE GEL  2.5 fl oz each NEW - READ
+- $  29.99 | 2 PC Mary Kay DOMAIN OR VELOCITY  MOISTURIZING SHAVE CREAM 6.5 fl Net wt ea NEW
+- $  30.00 | Mary Kay Domain Men's After Shave Balm. &  BODY AND HAIRSHAMPOO & COLOGNE SPRAY
+- $  14.36 | Mary Kay DOMAIN Men’s Cooling After Shave Gel & Moisturizing Shave Cream Set New
+- $  34.99 | Mary Kay SKIN CARE for MEN Selection…Choose - NEW- READ
+- $   9.99 | Mary Kay Domain Moisturizing Shave Cream 6.5 Oz NEW
+- $  29.99 | 2 PC LOT Mary Kay DOMAIN MOISTURIZING SHAVE CREAM 6.5 oz Net Wt each NEW
+
+--- AI-CLEANED Items for Calculation ---
+AI removed all items or no items were valid.
+
+--- AI Analyst's Reasoning ---
+No relevant items found as all results were for different products within the Mary Kay Domain men's line or not the exact size.
+---------------------------------
+Final Average Selling Price: $0.00
+AI Confidence Score: 0%
+---------------------------------------------------------
+
+--- [2025-10-19 23:29:30] eBay Market Price Analysis for 'Mary Kay Domain Men's Fob Keychain' (Lot #233) ---
+
+--- RAW Items from API ---
+- $   9.95 | Vintage Mary Kay Cosmetic Mens Domain Logo Brown Leather Keychain in Metal Tin
+
+--- AI-CLEANED Items for Calculation ---
+- $   9.95 | Vintage Mary Kay Cosmetic Mens Domain Logo Brown Leather Keychain in Metal Tin
+
+--- AI Analyst's Reasoning ---
+Kept one item as it was a Mary Kay Domain men's keychain, closely matching the query.
+---------------------------------
+Final Average Selling Price: $9.95
+AI Confidence Score: 80%
+---------------------------------------------------------
