@@ -1,0 +1,3575 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Item Analysis</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a; --table-bg-color: #2c2c2c; --header-bg-color: #3a3a3a;
+            --header-hover-bg-color: #4a4a4a; --row-even-bg-color: #333333; --row-odd-bg-color: #2c2c2c;
+            --border-color: #444444; --text-color: #e0e0e0; --link-color: #4a90e2;
+            --link-hover-color: #81b5f5; --sort-indicator-color: #81b5f5;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 2rem; line-height: 1.6; }
+        h1 { text-align: center; color: #ffffff; font-weight: 300; margin-bottom: 2rem; }
+        .controls-container { max-width: 1600px; margin: auto; margin-bottom: 1rem; }
+        .filter-container { text-align: left; padding: 10px 15px; background-color: var(--table-bg-color); border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        .filter-container label { margin-right: 20px; font-size: 0.9em; cursor: pointer; user-select: none; }
+        .filter-container input { vertical-align: middle; margin-right: 5px; }
+        .table-container { max-width: 1600px; margin: auto; overflow-x: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        table { width: 100%; border-collapse: collapse; background-color: var(--table-bg-color); border-spacing: 0; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        thead th { background-color: var(--header-bg-color); color: #ffffff; font-weight: 600; position: sticky; top: 0; z-index: 10; }
+        thead th[data-column] { cursor: pointer; transition: background-color 0.2s ease-in-out; user-select: none; }
+        thead th[data-column]:hover { background-color: var(--header-hover-bg-color); }
+        tbody tr:not(.reasoning-row):hover { background-color: var(--header-hover-bg-color); }
+        td { font-size: 0.95em; }
+        td:nth-child(4), td:nth-child(5), td:nth-child(6) { font-family: 'Courier New', Courier, monospace; text-align: right; white-space: nowrap; }
+        td:nth-child(7), td:nth-child(8) { text-align: center; }
+        a { color: var(--link-color); text-decoration: none; transition: color 0.2s ease-in-out; }
+        a:hover { color: var(--link-hover-color); text-decoration: underline; }
+        .sort-indicator { color: var(--sort-indicator-color); font-size: 0.8em; margin-left: 8px; display: inline-block; width: 10px; }
+        .lot-main td { font-weight: bold; }
+        .lot-main.expandable { cursor: pointer; }
+        .lot-main:nth-child(4n+1), .lot-main:nth-child(4n+2) { background-color: var(--row-odd-bg-color); }
+        .lot-main:nth-child(4n+3), .lot-main:nth-child(4n) { background-color: var(--row-even-bg-color); }
+        .lot-sub-item { background-color: rgba(0,0,0,0.15) !important; }
+        .lot-sub-item td { font-size: 0.9em; color: #c0c0c0; border-color: #383838; }
+        .lot-sub-item td:nth-child(2) { padding-left: 35px; }
+        .reasoning-row { display: none; background-color: #222 !important; }
+        .reasoning-row.visible { display: table-row; }
+        .reasoning-row td {
+            padding: 10px 20px 10px 40px;
+            font-style: italic;
+            color: #b0b0b0;
+            border-top: 1px dashed #555;
+            white-space: normal;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Auction Item Analysis</h1>
+    <div class="controls-container">
+        <div class="filter-container">
+            <label><input type="checkbox" id="hideFurniture"> Hide Large Furniture</label>
+            <label><input type="checkbox" id="hideMedical"> Hide Medical Devices</label>
+        </div>
+    </div>
+    <div class="table-container"><table><thead><tr><th data-column="lot_number">Lot # <span class="sort-indicator"></span></th><th data-column="name">Item Name <span class="sort-indicator"></span></th><th data-column="category">Category <span class="sort-indicator"></span></th><th data-column="price">AI Market Value <span class="sort-indicator"></span></th><th data-column="ebay_price">eBay Avg. Sold <span class="sort-indicator"></span></th><th data-column="confidence">Confidence <span class="sort-indicator"></span></th><th>eBay Search</th><th>Google Search</th></tr></thead><tbody id="data-table-body"></tbody></table></div>
+
+<script type="application/json" id="auctionData">
+    [
+    {
+        "ebay_search_title": "Kanilea K-1 DLX Koa Wood Concert Ukulele High End Hawaiian Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 950,
+        "items": [
+            {
+                "item_name": "Kanilea K-1 DLX Koa Wood Concert Ukulele High End Hawaiian Instrument",
+                "estimated_value": 950,
+                "ebay_avg_price": 1861.7633333333333
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034426/Kanilea-K1-DLX-Ukulele",
+            "title": "Kanile\u2019a K-1 DLX Ukulele",
+            "lot_number": 45,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034426/Kanilea-K1-DLX-Ukulele",
+            "pics": [
+                "590344261.jpg",
+                "590344262.jpg",
+                "590344263.jpg",
+                "590344264.jpg"
+            ]
+        },
+        "reasoning": "Kanilea K-1 DLX ukuleles are highly regarded, handcrafted Koa wood instruments known for their quality. Used models typically resell for $800-$1200+ depending on condition, making $950 a reasonable estimate.",
+        "ebay_avg_price": 1861.7633333333333,
+        "ebay_confidence_score": 70,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Kanilea+K-1+DLX+Koa+Wood+Concert+Ukulele+High+End+Hawaiian+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Breedlove Crossover OO Mandolin Acoustic Musical Instrument Guitar",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 500,
+        "items": [
+            {
+                "item_name": "Breedlove Crossover OO Mandolin Acoustic Musical Instrument Guitar",
+                "estimated_value": 500,
+                "ebay_avg_price": 1324.6666666666667
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037080/Breedlove-Crossover-OO-Mandolin",
+            "title": "Breedlove Crossover OO Mandolin",
+            "lot_number": 66,
+            "current_bid": "$17.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037080/Breedlove-Crossover-OO-Mandolin",
+            "pics": [
+                "590370801.jpg",
+                "590370802.jpg",
+                "590370803.jpg",
+                "590370804.jpg",
+                "590370805.jpg",
+                "590370806.jpg",
+                "590370807.jpg"
+            ]
+        },
+        "reasoning": "The total market value is based on typical resale prices for a used Breedlove Crossover OO Mandolin, which generally fall in the $400-$600 range depending on condition. We assigned a conservative mid-range value.",
+        "additional_notes": "Consider including a hard case if available to enhance value and shipping safety.",
+        "ebay_avg_price": 1324.6666666666667,
+        "ebay_confidence_score": 60,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Breedlove+Crossover+OO+Mandolin+Acoustic+Musical+Instrument+Guitar&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Romero Creations Spalted Mango Grand Tenor Ukulele Hawaiian Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 1350,
+        "items": [
+            {
+                "item_name": "Romero Creations Spalted Mango Grand Tenor Ukulele Hawaiian Instrument",
+                "estimated_value": 1350,
+                "ebay_avg_price": 1117.598
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034470/Romero-Creations-Spalted-Mango-Grand-Tenor-Ukulele",
+            "title": "Romero Creations Spalted Mango Grand Tenor Ukulele",
+            "lot_number": 47,
+            "current_bid": "$10.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034470/Romero-Creations-Spalted-Mango-Grand-Tenor-Ukulele",
+            "pics": [
+                "590344701.jpg",
+                "590344702.jpg",
+                "590344703.jpg",
+                "590344704.jpg",
+                "590344705.jpg"
+            ]
+        },
+        "reasoning": "This is a high-end instrument from a reputable brand, Romero Creations, known for quality. The use of spalted mango wood further enhances its appeal and market value among ukulele enthusiasts and collectors.",
+        "ebay_avg_price": 1117.598,
+        "ebay_confidence_score": 85,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Romero+Creations+Spalted+Mango+Grand+Tenor+Ukulele+Hawaiian+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Romero Creations Tiny Tenor Koa XS Ukulele Uke Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 500,
+        "items": [
+            {
+                "item_name": "Romero Creations Tiny Tenor Koa XS Ukulele Uke Instrument",
+                "estimated_value": 500,
+                "ebay_avg_price": 1022.2475
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037407/Romero-Creations-Tiny-Tenor-Koa-XS-Ukulele",
+            "title": "Romero Creations Tiny Tenor Koa XS Ukulele",
+            "lot_number": 79,
+            "current_bid": "$6.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037407/Romero-Creations-Tiny-Tenor-Koa-XS-Ukulele",
+            "pics": [
+                "590374071.jpg",
+                "590374072.jpg",
+                "590374073.jpg",
+                "590374074.jpg",
+                "590374075.jpg",
+                "590374076.jpg",
+                "590374077.jpg"
+            ]
+        },
+        "reasoning": "Romero Creations ukuleles, especially those made with Koa, are highly regarded and maintain strong resale value. This model typically sells for $500-$700+ new, and used examples command significant prices.",
+        "ebay_avg_price": 1022.2475,
+        "ebay_confidence_score": 50,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Romero+Creations+Tiny+Tenor+Koa+XS+Ukulele+Uke+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "KoAloha Opio KCO-10 Solid Acacia Concert Ukulele Uke Instrument Hawaiian",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 425,
+        "items": [
+            {
+                "item_name": "KoAloha Opio KCO-10 Solid Acacia Concert Ukulele Uke Instrument Hawaiian",
+                "estimated_value": 425,
+                "ebay_avg_price": 954.693
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034404/KoAloha-Opio-KCO10-Solid-Acacia-Ukulele",
+            "title": "KoAloha Opio KCO-10 Solid Acacia Ukulele",
+            "lot_number": 44,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034404/KoAloha-Opio-KCO10-Solid-Acacia-Ukulele",
+            "pics": [
+                "590344041.jpg",
+                "590344042.jpg",
+                "590344043.jpg",
+                "590344044.jpg",
+                "590344045.jpg",
+                "590344046.jpg"
+            ]
+        },
+        "reasoning": "KoAloha is a well-regarded Hawaiian ukulele brand, and the Opio KCO-10 model, made with solid acacia, is a desirable instrument that typically resells for $350-$450 in good used condition.",
+        "ebay_avg_price": 954.693,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=KoAloha+Opio+KCO-10+Solid+Acacia+Concert+Ukulele+Uke+Instrument+Hawaiian&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "KoAloha Ukulele Hawaiian Koa Wood Acoustic Instrument Premium Quality",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 850,
+        "items": [
+            {
+                "item_name": "KoAloha Ukulele Hawaiian Koa Wood Acoustic Instrument Premium Quality",
+                "estimated_value": 850,
+                "ebay_avg_price": 947.1342857142856
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034734/KoAloha-Ukulele",
+            "title": "KoAloha Ukulele",
+            "lot_number": 59,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034734/KoAloha-Ukulele",
+            "pics": [
+                "590347341.jpg",
+                "590347342.jpg",
+                "590347343.jpg",
+                "590347344.jpg",
+                "590347345.jpg",
+                "590347346.jpg"
+            ]
+        },
+        "reasoning": "KoAloha is a highly respected Hawaiian brand known for its premium koa wood ukuleles. These instruments are sought after for their quality craftsmanship and sound, retaining significant value in the secondary market.",
+        "ebay_avg_price": 947.1342857142856,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=KoAloha+Ukulele+Hawaiian+Koa+Wood+Acoustic+Instrument+Premium+Quality&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Mele Concert Pineapple Ukulele Hawaiian Acoustic Instrument Musical",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 300,
+        "items": [
+            {
+                "item_name": "Mele Concert Pineapple Ukulele Hawaiian Acoustic Instrument Musical",
+                "estimated_value": 300,
+                "ebay_avg_price": 799.3333333333334
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59030755/Mele-Concert-Pineapple-Ukulele",
+            "title": "Mele Concert Pineapple Ukulele",
+            "lot_number": 1,
+            "current_bid": "$13.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59030755/Mele-Concert-Pineapple-Ukulele",
+            "pics": [
+                "590307551.jpg",
+                "590307552.jpg",
+                "590307553.jpg",
+                "590307554.jpg",
+                "590307555.jpg"
+            ]
+        },
+        "reasoning": "Mele is a reputable Hawaiian ukulele brand; Concert Pineapple models are sought after, commanding solid resale values in good condition. The estimated value reflects its brand recognition and style.",
+        "ebay_avg_price": 799.3333333333334,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Mele+Concert+Pineapple+Ukulele+Hawaiian+Acoustic+Instrument+Musical&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Pono MTD-CR Tenor Ukulele Acoustic Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 800,
+        "items": [
+            {
+                "item_name": "Pono MTD-CR Tenor Ukulele Acoustic Instrument",
+                "estimated_value": 800,
+                "ebay_avg_price": 734.022
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034492/Pono-MTDCR-Tenor-Ukulele",
+            "title": "Pono MTD-CR Tenor Ukulele",
+            "lot_number": 48,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034492/Pono-MTDCR-Tenor-Ukulele",
+            "pics": [
+                "590344921.jpg",
+                "590344922.jpg",
+                "590344923.jpg",
+                "590344924.jpg"
+            ]
+        },
+        "reasoning": "Pono ukuleles, particularly the MTD-CR solid mahogany tenor model, are highly regarded instruments with strong resale value. Market data indicates these models typically sell for $700-$900+ in good used condition.",
+        "ebay_avg_price": 734.022,
+        "ebay_confidence_score": 70,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Pono+MTD-CR+Tenor+Ukulele+Acoustic+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Fujifilm X100T 16.3MP Digital Camera Silver Fixed Lens APS-C",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 750,
+        "items": [
+            {
+                "item_name": "Fujifilm X100T 16.3MP Digital Camera Silver Fixed Lens APS-C",
+                "estimated_value": 750,
+                "ebay_avg_price": 709.55
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/60263890/Fujifilm-X100T-Digital-Camera",
+            "title": "Fujifilm X100T Digital Camera",
+            "lot_number": 103,
+            "current_bid": "$65.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/60263890/Fujifilm-X100T-Digital-Camera",
+            "pics": [
+                "602638901.jpg",
+                "602638902.jpg",
+                "602638903.jpg",
+                "602638904.jpg",
+                "602638905.jpg",
+                "602638906.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on current eBay sold listings for the Fujifilm X100T camera, which typically range from $700 to $850 depending on condition and included accessories. A value of $750 represents a fair estimate for a camera in good working order.",
+        "ebay_avg_price": 709.55,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Fujifilm+X100T+16.3MP+Digital+Camera+Silver+Fixed+Lens+APS-C&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Seagull Excursion Natural Grand SG Ukulele Acoustic Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 175,
+        "items": [
+            {
+                "item_name": "Seagull Excursion Natural Grand SG Ukulele Acoustic Instrument",
+                "estimated_value": 175,
+                "ebay_avg_price": 599.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037451/Seagull-Excursion-Natural-Grand-SG-Ukulele",
+            "title": "Seagull Excursion Natural Grand SG Ukulele",
+            "lot_number": 81,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037451/Seagull-Excursion-Natural-Grand-SG-Ukulele",
+            "pics": [
+                "590374511.jpg",
+                "590374512.jpg",
+                "590374513.jpg",
+                "590374514.jpg",
+                "590374515.jpg",
+                "590374516.jpg",
+                "590374517.jpg",
+                "590374518.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on typical used market prices for the Seagull Excursion Natural Grand SG Ukulele, which generally range from $150-$200 on secondary markets like Reverb and eBay.",
+        "ebay_avg_price": 599.0,
+        "ebay_confidence_score": 40,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Seagull+Excursion+Natural+Grand+SG+Ukulele+Acoustic+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Makai LK-80W Concert Ukulele Solid Acacia Wood Acoustic Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 150,
+        "items": [
+            {
+                "item_name": "Makai LK-80W Concert Ukulele Solid Acacia Wood Acoustic Instrument",
+                "estimated_value": 150,
+                "ebay_avg_price": 562.0500000000001
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037234/Makai-LK80W-Ukulele",
+            "title": "Makai LK-80W Ukulele",
+            "lot_number": 73,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037234/Makai-LK80W-Ukulele",
+            "pics": [
+                "590372341.jpg",
+                "590372342.jpg",
+                "590372343.jpg",
+                "590372344.jpg",
+                "590372345.jpg"
+            ]
+        },
+        "reasoning": "The Makai LK-80W is a solid acacia wood concert ukulele, which typically retails new for $200-$300. My valuation of $150 reflects the average secondary market resale value for a used instrument in good condition.",
+        "ebay_avg_price": 562.0500000000001,
+        "ebay_confidence_score": 45,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Makai+LK-80W+Concert+Ukulele+Solid+Acacia+Wood+Acoustic+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vox Ukelectric VEU-33C Electric Ukulele Acoustic-Electric Vintage Instrument",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 200,
+        "items": [
+            {
+                "item_name": "Vox Ukelectric VEU-33C Electric Ukulele Acoustic-Electric Vintage Instrument",
+                "estimated_value": 200,
+                "ebay_avg_price": 503.1422222222222
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034015/Vox-Ukelectric-Model-VEU33C-Electric-Ukulele",
+            "title": "Vox Ukelectric Model VEU-33C Electric Ukulele",
+            "lot_number": 28,
+            "current_bid": "$5.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034015/Vox-Ukelectric-Model-VEU33C-Electric-Ukulele",
+            "pics": [
+                "590340151.jpg",
+                "590340152.jpg",
+                "590340153.jpg",
+                "590340154.jpg",
+                "590340155.jpg"
+            ]
+        },
+        "reasoning": "Valuation is based on recent sold listings for this specific Vox Ukelectric model, which holds collector and player value due to its unique brand and electric functionality. Condition, while not specified, is assumed to be good and working for this estimate.",
+        "ebay_avg_price": 503.1422222222222,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vox+Ukelectric+VEU-33C+Electric+Ukulele+Acoustic-Electric+Vintage+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Sony E-Mount 18-135mm f/3.5-5.6 OSS Zoom Camera Lens SEL18135",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 300,
+        "items": [
+            {
+                "item_name": "Sony E-Mount 18-135mm f/3.5-5.6 OSS Zoom Camera Lens SEL18135",
+                "estimated_value": 300,
+                "ebay_avg_price": 481.77464285714285
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/60272659/Sony-Zoom-Lens-E-355618135-OSS",
+            "title": "Sony Zoom Lens E 3.5-5.6/18-135 OSS",
+            "lot_number": 106,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/60272659/Sony-Zoom-Lens-E-355618135-OSS",
+            "pics": [
+                "602726591.jpg",
+                "602726592.jpg",
+                "602726593.jpg",
+                "602726594.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on recent sold prices for used Sony E 18-135mm f/3.5-5.6 OSS lenses, which consistently sell in the $250-$350 range depending on condition. This is a versatile and popular E-mount zoom lens.",
+        "ebay_avg_price": 481.77464285714285,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Sony+E-Mount+18-135mm+f%2F3.5-5.6+OSS+Zoom+Camera+Lens+SEL18135&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Ohana VKC-70Roy Smeck Signature Vita Style Concert Ukulele Hawaiian Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 300,
+        "items": [
+            {
+                "item_name": "Ohana VKC-70Roy Smeck Signature Vita Style Concert Ukulele Hawaiian Instrument",
+                "estimated_value": 300,
+                "ebay_avg_price": 412.655
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59032290/Ohana-VKC70Roy-Smeck-Signature-Vita-Style-Concert-Ukulele",
+            "title": "Ohana VKC-70Roy Smeck Signature \u2018Vita Style\u2019 Concert Ukulele",
+            "lot_number": 4,
+            "current_bid": "$6.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59032290/Ohana-VKC70Roy-Smeck-Signature-Vita-Style-Concert-Ukulele",
+            "pics": [
+                "590322901.jpg",
+                "590322902.jpg",
+                "590322903.jpg",
+                "590322904.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on current secondary market sales data for the Ohana VKC-70Roy Smeck signature model ukulele. This specific model holds a steady resale value due to its brand reputation and unique 'Vita Style' design.",
+        "ebay_avg_price": 412.655,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Ohana+VKC-70Roy+Smeck+Signature+Vita+Style+Concert+Ukulele+Hawaiian+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Ohana SK-21A Sopranino Ukulele Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 120,
+        "items": [
+            {
+                "item_name": "Ohana SK-21A Sopranino Ukulele Musical Instrument",
+                "estimated_value": 120,
+                "ebay_avg_price": 400.99
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59032158/Ohana-SK21A-Sopranino-Ukulele",
+            "title": "Ohana SK-21A Sopranino Ukulele",
+            "lot_number": 2,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59032158/Ohana-SK21A-Sopranino-Ukulele",
+            "pics": [
+                "590321581.jpg",
+                "590321582.jpg",
+                "590321583.jpg",
+                "590321584.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on typical secondary market prices for a used Ohana SK-21A Sopranino Ukulele, which consistently resell for $100-$150 depending on condition and accessories.",
+        "ebay_avg_price": 400.99,
+        "ebay_confidence_score": 55,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Ohana+SK-21A+Sopranino+Ukulele+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Leho HUT-CF-E-T Tenor Ukulele Flamed Maple Acoustic Electric Uke",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 150,
+        "items": [
+            {
+                "item_name": "Leho HUT-CF-E-T Tenor Ukulele Flamed Maple Acoustic Electric Uke",
+                "estimated_value": 150,
+                "ebay_avg_price": 393.38
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037341/Leho-HUTCFET-Ukulele",
+            "title": "Leho HUT-CF-E-T Ukulele",
+            "lot_number": 76,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037341/Leho-HUTCFET-Ukulele",
+            "pics": [
+                "590373411.jpg",
+                "590373412.jpg",
+                "590373413.jpg",
+                "590373414.jpg",
+                "590373415.jpg"
+            ]
+        },
+        "reasoning": "Valuation is based on recent completed sales of Leho HUT-CF-E-T tenor ukuleles, which typically sell in the $100-$180 range depending on condition and included accessories.",
+        "ebay_avg_price": 393.38,
+        "ebay_confidence_score": 45,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Leho+HUT-CF-E-T+Tenor+Ukulele+Flamed+Maple+Acoustic+Electric+Uke&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Yamaha Brass Trumpet Musical Instrument Student Intermediate Model",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 250,
+        "items": [
+            {
+                "item_name": "Yamaha Brass Trumpet Musical Instrument Student Intermediate Model",
+                "estimated_value": 250,
+                "ebay_avg_price": 388.29
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034183/Yamaha-Trumpet",
+            "title": "Yamaha Trumpet?",
+            "lot_number": 34,
+            "current_bid": "$6.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034183/Yamaha-Trumpet",
+            "pics": [
+                "590341831.jpg",
+                "590341832.jpg",
+                "590341833.jpg",
+                "590341834.jpg",
+                "590341835.jpg"
+            ]
+        },
+        "reasoning": "Yamaha produces high-quality musical instruments, and a trumpet from this brand, even a student model, holds good resale value. The valuation assumes the instrument is in good, playable condition.",
+        "ebay_avg_price": 388.29,
+        "ebay_confidence_score": 88,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Yamaha+Brass+Trumpet+Musical+Instrument+Student+Intermediate+Model&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Martin & Co OX Bamboo Soprano Ukulele HPL Acoustic Uke Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 180,
+        "items": [
+            {
+                "item_name": "Martin & Co OX Bamboo Soprano Ukulele HPL Acoustic Uke Instrument",
+                "estimated_value": 180,
+                "ebay_avg_price": 361.995
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034602/Martin-Co-OX-Ukulele-Bamboo-Soprano-Ukulele",
+            "title": "Martin & Co OX Ukulele Bamboo Soprano Ukulele",
+            "lot_number": 53,
+            "current_bid": "$6.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034602/Martin-Co-OX-Ukulele-Bamboo-Soprano-Ukulele",
+            "pics": [
+                "590346021.jpg",
+                "590346022.jpg",
+                "590346023.jpg",
+                "590346024.jpg",
+                "590346025.jpg",
+                "590346026.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on the strong brand recognition of Martin & Co. and typical resale values for their HPL (high-pressure laminate) bamboo soprano ukuleles, which generally range from $150-$250 used depending on condition.",
+        "shipping_recommendation": "The ukulele should be carefully packed in a sturdy box with ample padding to prevent movement and damage during transit.",
+        "ebay_avg_price": 361.995,
+        "ebay_confidence_score": 45,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Martin+%26+Co+OX+Bamboo+Soprano+Ukulele+HPL+Acoustic+Uke+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Outdoor Moonshine Soprano Ukulele Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "Outdoor Moonshine Soprano Ukulele Musical Instrument",
+                "estimated_value": 60,
+                "ebay_avg_price": 359.79
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034382/Outdoor-Soprano-Moonshine-Ukulele",
+            "title": "Outdoor Soprano Moonshine Ukulele",
+            "lot_number": 43,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034382/Outdoor-Soprano-Moonshine-Ukulele",
+            "pics": [
+                "590343821.jpg",
+                "590343822.jpg",
+                "590343823.jpg",
+                "590343824.jpg",
+                "590343825.jpg"
+            ]
+        },
+        "reasoning": "The valuation reflects typical resale prices for a used Outdoor Moonshine Soprano Ukulele, which is an entry-level to mid-range instrument. Assuming good playable condition, it can fetch around $60.",
+        "ebay_avg_price": 359.79,
+        "ebay_confidence_score": 75,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Outdoor+Moonshine+Soprano+Ukulele+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Harmony Johnny Marvin Tenor Ukulele Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 250,
+        "items": [
+            {
+                "item_name": "Vintage Harmony Johnny Marvin Tenor Ukulele Musical Instrument",
+                "estimated_value": 250,
+                "ebay_avg_price": 347.5
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59032423/Harmony-Johnny-Marvin-Tenor-Ukulele",
+            "title": "Harmony Johnny Marvin Tenor Ukulele",
+            "lot_number": 5,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59032423/Harmony-Johnny-Marvin-Tenor-Ukulele",
+            "pics": [
+                "590324231.jpg",
+                "590324232.jpg",
+                "590324233.jpg",
+                "590324234.jpg",
+                "590324235.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on the collectible nature of vintage Harmony Johnny Marvin tenor ukuleles, which are sought after by collectors and players. Assuming the instrument is in good, playable condition, a market value of $250 is reasonable.",
+        "ebay_avg_price": 347.5,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Harmony+Johnny+Marvin+Tenor+Ukulele+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Magic Fluke Firefly Banjo Ukulele FBU Acoustic Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 280,
+        "items": [
+            {
+                "item_name": "Magic Fluke Firefly Banjo Ukulele FBU Acoustic Musical Instrument",
+                "estimated_value": 280,
+                "ebay_avg_price": 335.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59032557/Magic-Fluke-Firefly-Banjo-Ukulele",
+            "title": "Magic Fluke Firefly Banjo Ukulele",
+            "lot_number": 11,
+            "current_bid": "$14.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59032557/Magic-Fluke-Firefly-Banjo-Ukulele",
+            "pics": [
+                "590325571.jpg",
+                "590325572.jpg",
+                "590325573.jpg",
+                "590325574.jpg",
+                "590325575.jpg",
+                "590325576.jpg",
+                "590325577.jpg"
+            ]
+        },
+        "reasoning": "Magic Fluke Firefly Banjo Ukuleles are well-regarded and typically resell for $200-$350 used, depending on condition. The estimated value reflects a good condition instrument.",
+        "ebay_avg_price": 335.0,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Magic+Fluke+Firefly+Banjo+Ukulele+FBU+Acoustic+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Outdoor Carbon Fiber Tenor Ukulele Travel Instrument Waterproof",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 120,
+        "items": [
+            {
+                "item_name": "Outdoor Carbon Fiber Tenor Ukulele Travel Instrument Waterproof",
+                "estimated_value": 120,
+                "ebay_avg_price": 332.5
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034103/Outdoor-Carbon-Fiber-Tenor-Ukulele",
+            "title": "Outdoor Carbon Fiber Tenor Ukulele",
+            "lot_number": 32,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034103/Outdoor-Carbon-Fiber-Tenor-Ukulele",
+            "pics": [
+                "590341031.jpg",
+                "590341032.jpg",
+                "590341033.jpg",
+                "590341034.jpg",
+                "590341035.jpg",
+                "590341036.jpg"
+            ]
+        },
+        "reasoning": "The estimated value reflects the typical resale price for a used, unbranded outdoor carbon fiber tenor ukulele, which are popular for their durability and playability. These instruments often fetch between $70-$150 on the secondary market depending on condition and brand recognition.",
+        "ebay_avg_price": 332.5,
+        "ebay_confidence_score": 80,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Outdoor+Carbon+Fiber+Tenor+Ukulele+Travel+Instrument+Waterproof&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Lanikai Concert Ukulele Acoustic Musical Instrument",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "Lanikai Concert Ukulele Acoustic Musical Instrument",
+                "estimated_value": 100,
+                "ebay_avg_price": 331.34758620689655
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034448/Lanikai-Ukulele",
+            "title": "Lanikai Ukulele",
+            "lot_number": 46,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034448/Lanikai-Ukulele",
+            "pics": [
+                "590344481.jpg",
+                "590344482.jpg",
+                "590344483.jpg",
+                "590344484.jpg",
+                "590344485.jpg"
+            ]
+        },
+        "reasoning": "Valuation is based on the strong reputation of the Lanikai brand for quality entry-to-mid-level ukuleles and typical resale values for such instruments in good used condition. A concert size is assumed, which is a common and desirable size for a ukulele.",
+        "ebay_avg_price": 331.34758620689655,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Lanikai+Concert+Ukulele+Acoustic+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Ovation Applause UA20 Soprano Ukulele Acoustic Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "Ovation Applause UA20 Soprano Ukulele Acoustic Instrument",
+                "estimated_value": 100,
+                "ebay_avg_price": 322.025
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037146/Ovation-Applause-UA20-Soprano-Ukulele",
+            "title": "Ovation Applause UA20 Soprano Ukulele",
+            "lot_number": 69,
+            "current_bid": "$4.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037146/Ovation-Applause-UA20-Soprano-Ukulele",
+            "pics": [
+                "590371461.jpg",
+                "590371462.jpg",
+                "590371463.jpg",
+                "590371464.jpg",
+                "590371465.jpg",
+                "590371466.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on recent sold listings for the Ovation Applause UA20 Soprano Ukulele on platforms like eBay and Reverb, indicating an average resale value for a used model in good condition.",
+        "ebay_avg_price": 322.025,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Ovation+Applause+UA20+Soprano+Ukulele+Acoustic+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Sony E-Mount Camera Lens Mirrorless Alpha APS-C Full Frame",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 150,
+        "items": [
+            {
+                "item_name": "Sony E-Mount Camera Lens Mirrorless Alpha APS-C Full Frame",
+                "estimated_value": 150,
+                "ebay_avg_price": 320.1688888888889
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/60273372/Sony-E-Mount-Camera-Lens",
+            "title": "Sony E Mount Camera Lens",
+            "lot_number": 107,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/60273372/Sony-E-Mount-Camera-Lens",
+            "pics": [
+                "602733721.jpg",
+                "602733722.jpg",
+                "602733723.jpg",
+                "602733724.jpg",
+                "602733725.jpg"
+            ]
+        },
+        "reasoning": "Valuation is based on the assumption of a generic, moderately common Sony E-mount lens in good, functional condition, as specific model and detailed condition are absent from the listing. This value allows for profit after considering typical auction prices and shipping costs for similar items.",
+        "ebay_avg_price": 320.1688888888889,
+        "ebay_confidence_score": 85,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Sony+E-Mount+Camera+Lens+Mirrorless+Alpha+APS-C+Full+Frame&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Panasonic Lumix DC VARIO-ELMAR Digital Camera Compact Point Shoot",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 85,
+        "items": [
+            {
+                "item_name": "Panasonic Lumix DC VARIO-ELMAR Digital Camera Compact Point Shoot",
+                "estimated_value": 85,
+                "ebay_avg_price": 319.05206896551726
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/60264245/Panasonic-Lumix-DC-VARIOELMAR",
+            "title": "Panasonic Lumix DC VARIO-ELMAR",
+            "lot_number": 104,
+            "current_bid": "$9.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/60264245/Panasonic-Lumix-DC-VARIOELMAR",
+            "pics": [
+                "602642451.jpg",
+                "602642452.jpg",
+                "602642453.jpg",
+                "602642454.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on typical resale prices for a used Panasonic Lumix compact digital camera, accounting for its general lens type and assuming good working condition. Older digital cameras like this usually fetch modest prices unless they are rare or high-end models.",
+        "ebay_avg_price": 319.05206896551726,
+        "ebay_confidence_score": 92,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Panasonic+Lumix+DC+VARIO-ELMAR+Digital+Camera+Compact+Point+Shoot&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Green Magic Fluke M20 Tenor Ukulele Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 300,
+        "items": [
+            {
+                "item_name": "Green Magic Fluke M20 Tenor Ukulele Instrument",
+                "estimated_value": 300,
+                "ebay_avg_price": 297.59000000000003
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034558/Green-Magic-Fluke-Fluke-M20-Tenor-Ukulele",
+            "title": "Green Magic Fluke \u2018Fluke\u2019 M20 Tenor Ukulele",
+            "lot_number": 51,
+            "current_bid": "$6.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034558/Green-Magic-Fluke-Fluke-M20-Tenor-Ukulele",
+            "pics": [
+                "590345581.jpg",
+                "590345582.jpg",
+                "590345583.jpg",
+                "590345584.jpg",
+                "590345585.jpg",
+                "590345586.jpg"
+            ]
+        },
+        "reasoning": "Market research for similar Green Magic Fluke M20 Tenor Ukuleles indicates a strong resale market for this model due to its quality and brand reputation. The valuation reflects typical used prices for this specific instrument in good condition.",
+        "ebay_avg_price": 297.59000000000003,
+        "ebay_confidence_score": 55,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Green+Magic+Fluke+M20+Tenor+Ukulele+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Kala KA-STGE-C Solid Spruce Top Gloss Tenor Cutaway Ukulele Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 250,
+        "items": [
+            {
+                "item_name": "Kala KA-STGE-C Solid Spruce Top Gloss Tenor Cutaway Ukulele Instrument",
+                "estimated_value": 250,
+                "ebay_avg_price": 296.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59032642/Kala-KASTGEC-Solid-Spruce-Top-Gloss-Tenor-Cutaway-Ukulele",
+            "title": "Kala KA-STGE-C Solid Spruce Top Gloss Tenor Cutaway Ukulele",
+            "lot_number": 13,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59032642/Kala-KASTGEC-Solid-Spruce-Top-Gloss-Tenor-Cutaway-Ukulele",
+            "pics": [
+                "590326421.jpg",
+                "590326422.jpg",
+                "590326423.jpg",
+                "590326424.jpg",
+                "590326425.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on current secondary market prices for a Kala KA-STGE-C tenor ukulele in good used condition, which typically range from $200-$300. This model is a well-regarded instrument suitable for collection or play.",
+        "images": [
+            "590326421.jpg",
+            "590326422.jpg",
+            "590326423.jpg",
+            "590326424.jpg",
+            "590326425.jpg"
+        ],
+        "ebay_avg_price": 296.0,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Kala+KA-STGE-C+Solid+Spruce+Top+Gloss+Tenor+Cutaway+Ukulele+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Cordoba 25T Tenor Ukulele Solid Acacia Top Acoustic Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 220,
+        "items": [
+            {
+                "item_name": "Cordoba 25T Tenor Ukulele Solid Acacia Top Acoustic Instrument",
+                "estimated_value": 220,
+                "ebay_avg_price": 254.365
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59033817/Cordoba-25T-Tenor-Ukulele",
+            "title": "Cordoba 25T Tenor Ukulele",
+            "lot_number": 19,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59033817/Cordoba-25T-Tenor-Ukulele",
+            "pics": [
+                "590338171.jpg",
+                "590338172.jpg",
+                "590338173.jpg",
+                "590338174.jpg",
+                "590338175.jpg"
+            ]
+        },
+        "reasoning": "Valuation is based on recent sold listings for used Cordoba 25T tenor ukuleles in good condition on secondary markets like eBay and Reverb, typically ranging from $180-$250.",
+        "ebay_avg_price": 254.365,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Cordoba+25T+Tenor+Ukulele+Solid+Acacia+Top+Acoustic+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Bonanza Acoustic Ukulele Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Bonanza Acoustic Ukulele Musical Instrument",
+                "estimated_value": 50,
+                "ebay_avg_price": 250.38166666666666
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59038076/Bonanza-Ukulele",
+            "title": "Bonanza Ukulele",
+            "lot_number": 95,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59038076/Bonanza-Ukulele",
+            "pics": [
+                "590380761.jpg",
+                "590380762.jpg",
+                "590380763.jpg",
+                "590380764.jpg"
+            ]
+        },
+        "reasoning": "Bonanza ukuleles are generally entry-level or vintage novelty instruments. Based on typical sold listings for this brand, a fair resale value for a single unit in presumed good condition is around $50.",
+        "ebay_avg_price": 250.38166666666666,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Bonanza+Acoustic+Ukulele+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Lanikai ZR-CEC Ziricote Concert Acoustic Electric Ukulele Uke Pro Series",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 275,
+        "items": [
+            {
+                "item_name": "Lanikai ZR-CEC Ziricote Concert Acoustic Electric Ukulele Uke Pro Series",
+                "estimated_value": 275,
+                "ebay_avg_price": 249.495
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59038054/Lanikai-ZRCEC-Ziricote-Concert-AcousticElectric-Ukulele",
+            "title": "Lanikai ZR-CEC Ziricote Concert Acoustic-Electric Ukulele",
+            "lot_number": 94,
+            "current_bid": "$4.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59038054/Lanikai-ZRCEC-Ziricote-Concert-AcousticElectric-Ukulele",
+            "pics": [
+                "590380541.jpg",
+                "590380542.jpg",
+                "590380543.jpg",
+                "590380544.jpg",
+                "590380545.jpg",
+                "590380546.jpg"
+            ]
+        },
+        "reasoning": "The Lanikai ZR-CEC is a mid-to-high-end acoustic-electric concert ukulele known for its Ziricote wood and quality electronics. Its market value is estimated based on comparable completed sales of this model in good used condition.",
+        "ebay_avg_price": 249.495,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Lanikai+ZR-CEC+Ziricote+Concert+Acoustic+Electric+Ukulele+Uke+Pro+Series&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Ohana CK-28 Nunes Style Concert Ukulele Hawaiian Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 200,
+        "items": [
+            {
+                "item_name": "Ohana CK-28 Nunes Style Concert Ukulele Hawaiian Instrument",
+                "estimated_value": 200,
+                "ebay_avg_price": 249.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59038120/Ohana-CK28-Nunes-Style-Concert-Ukulele",
+            "title": "Ohana CK-28 Nunes Style Concert Ukulele",
+            "lot_number": 97,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59038120/Ohana-CK28-Nunes-Style-Concert-Ukulele",
+            "pics": [
+                "590381201.jpg",
+                "590381202.jpg",
+                "590381203.jpg",
+                "590381204.jpg",
+                "590381205.jpg"
+            ]
+        },
+        "reasoning": "Based on recent sales data for used Ohana CK-28 ukuleles in good condition, an estimated resale value of $200 is reasonable. These are well-regarded entry-level to mid-range instruments with consistent demand.",
+        "ebay_avg_price": 249.0,
+        "ebay_confidence_score": 45,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Ohana+CK-28+Nunes+Style+Concert+Ukulele+Hawaiian+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Nikon D3200 DSLR Digital Camera Body Kit w/ Lens & Accessories",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 200,
+        "items": [
+            {
+                "item_name": "Nikon D3200 DSLR Digital Camera Body Kit w/ Lens & Accessories",
+                "estimated_value": 200,
+                "ebay_avg_price": 240.0796551724138
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037693/Nikon-D3200-DSLR-Camera",
+            "title": "Nikon D3200 DSLR Camera",
+            "lot_number": 92,
+            "current_bid": "$45.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037693/Nikon-D3200-DSLR-Camera",
+            "pics": [
+                "590376931.jpg",
+                "590376932.jpg",
+                "590376933.jpg",
+                "590376934.jpg",
+                "590376935.jpg"
+            ]
+        },
+        "reasoning": "The Nikon D3200 is an entry-level DSLR; its market value is based on current secondary market prices for a used body with a standard 18-55mm kit lens and typical accessories, assuming good working condition.",
+        "ebay_avg_price": 240.0796551724138,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Nikon+D3200+DSLR+Digital+Camera+Body+Kit+w%2F+Lens+%26+Accessories&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Oscar Schmidt OU5 Concert Ukulele Acoustic Instrument Musical",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 140,
+        "items": [
+            {
+                "item_name": "Oscar Schmidt OU5 Concert Ukulele Acoustic Instrument Musical",
+                "estimated_value": 140,
+                "ebay_avg_price": 233.905
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59033773/Oscar-Schmidt-OU5-Concert-Ukulele",
+            "title": "Oscar Schmidt OU5 Concert Ukulele",
+            "lot_number": 17,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59033773/Oscar-Schmidt-OU5-Concert-Ukulele",
+            "pics": [
+                "590337731.jpg",
+                "590337732.jpg",
+                "590337733.jpg",
+                "590337734.jpg"
+            ]
+        },
+        "reasoning": "The Oscar Schmidt OU5 is a recognized concert ukulele model that typically holds good resale value in the used market, often selling for $100-$180 depending on condition. Our valuation reflects a reasonable estimate for a used instrument of this type.",
+        "ebay_avg_price": 233.905,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Oscar+Schmidt+OU5+Concert+Ukulele+Acoustic+Instrument+Musical&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Magic Fluke Flea Soprano Ukulele Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 180,
+        "items": [
+            {
+                "item_name": "Magic Fluke Flea Soprano Ukulele Musical Instrument",
+                "estimated_value": 180,
+                "ebay_avg_price": 229.33333333333334
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034624/Magic-Fluke-Flea-Ukulele",
+            "title": "Magic Fluke Flea Ukulele",
+            "lot_number": 54,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034624/Magic-Fluke-Flea-Ukulele",
+            "pics": [
+                "590346241.jpg",
+                "590346242.jpg",
+                "590346243.jpg",
+                "590346244.jpg",
+                "590346245.jpg"
+            ]
+        },
+        "reasoning": "Magic Fluke Flea ukuleles are well-regarded instruments known for their quality and unique design, typically reselling in the range of $150-$250 depending on condition. A conservative estimate of $180 reflects a reasonable used market value for this specific brand and model.",
+        "ebay_avg_price": 229.33333333333334,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Magic+Fluke+Flea+Soprano+Ukulele+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Cordoba 24B Baritone Ukulele Acoustic Instrument w/ Gig Bag",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 250,
+        "items": [
+            {
+                "item_name": "Cordoba 24B Baritone Ukulele Acoustic Instrument w/ Gig Bag",
+                "estimated_value": 250,
+                "ebay_avg_price": 225.54555555555555
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034316/Cordoba-24B-Baritone-Ukulele",
+            "title": "Cordoba 24B Baritone Ukulele",
+            "lot_number": 40,
+            "current_bid": "$6.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034316/Cordoba-24B-Baritone-Ukulele",
+            "pics": [
+                "590343161.jpg",
+                "590343162.jpg",
+                "590343163.jpg",
+                "590343164.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on typical secondary market prices for a used Cordoba 24B Baritone Ukulele, which often resell for $200-$280 depending on condition and inclusion of a gig bag. This model is well-regarded and holds its value.",
+        "ebay_avg_price": 225.54555555555555,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Cordoba+24B+Baritone+Ukulele+Acoustic+Instrument+w%2F+Gig+Bag&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Cordoba 22B Baritone Ukulele Acoustic Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 200,
+        "items": [
+            {
+                "item_name": "Cordoba 22B Baritone Ukulele Acoustic Musical Instrument",
+                "estimated_value": 200,
+                "ebay_avg_price": 225.54555555555555
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037429/Cordoba-22B-Baritone-Ukulele",
+            "title": "Cordoba 22B Baritone Ukulele",
+            "lot_number": 80,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037429/Cordoba-22B-Baritone-Ukulele",
+            "pics": [
+                "590374291.jpg",
+                "590374292.jpg",
+                "590374293.jpg",
+                "590374294.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on Cordoba's reputation for quality instruments and the typical resale value of this specific 22B Baritone model on secondary markets, assuming good used condition. Used models generally sell for $150-$250 depending on condition and accessories.",
+        "ebay_avg_price": 225.54555555555555,
+        "ebay_confidence_score": 65,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Cordoba+22B+Baritone+Ukulele+Acoustic+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Lanikai LU Series Tenor Ukulele Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "Lanikai LU Series Tenor Ukulele Instrument",
+                "estimated_value": 100,
+                "ebay_avg_price": 223.4618181818182
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037473/Lanikai-LU-Series-Tenor-Ukulele",
+            "title": "Lanikai LU Series Tenor Ukulele",
+            "lot_number": 82,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037473/Lanikai-LU-Series-Tenor-Ukulele",
+            "pics": [
+                "590374731.jpg",
+                "590374732.jpg",
+                "590374733.jpg"
+            ]
+        },
+        "reasoning": "The valuation reflects the typical resale price for a used Lanikai LU Series tenor ukulele, considering its brand recognition and common market value for this type of instrument.",
+        "ebay_avg_price": 223.4618181818182,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Lanikai+LU+Series+Tenor+Ukulele+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Kala KA-SPMT-TRI Solid Spruce Tri-Back Tenor Ukulele Guitar Hawaiian Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 220,
+        "items": [
+            {
+                "item_name": "Kala KA-SPMT-TRI Solid Spruce Tri-Back Tenor Ukulele Guitar Hawaiian Instrument",
+                "estimated_value": 220,
+                "ebay_avg_price": 220.99033333333333
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034514/Kala-KASPMTTRI-Solid-Spruce-TriBack-Tenor-Ukulele",
+            "title": "Kala KA-SPMT-TRI Solid Spruce Tri-Back Tenor Ukulele",
+            "lot_number": 49,
+            "current_bid": "$4.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034514/Kala-KASPMTTRI-Solid-Spruce-TriBack-Tenor-Ukulele",
+            "pics": [
+                "590345141.jpg",
+                "590345142.jpg",
+                "590345143.jpg",
+                "590345144.jpg",
+                "590345145.jpg",
+                "590345146.jpg"
+            ]
+        },
+        "reasoning": "Valuation is based on the brand (Kala) and model (KA-SPMT-TRI), a well-regarded tenor ukulele, with used market prices typically ranging from $180-$250 based on condition.",
+        "ebay_avg_price": 220.99033333333333,
+        "ebay_confidence_score": 80,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Kala+KA-SPMT-TRI+Solid+Spruce+Tri-Back+Tenor+Ukulele+Guitar+Hawaiian+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Cordoba 21T-CE Tenor Acoustic-Electric Ukulele Uke Acoustic Electric",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 190,
+        "items": [
+            {
+                "item_name": "Cordoba 21T-CE Tenor Acoustic-Electric Ukulele Uke Acoustic Electric",
+                "estimated_value": 190,
+                "ebay_avg_price": 211.82583333333332
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034712/Cordoba-21TCE-Tenor-AcousticElectric-Ukulele",
+            "title": "Cordoba 21T-CE Tenor Acoustic-Electric Ukulele",
+            "lot_number": 58,
+            "current_bid": "$4.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034712/Cordoba-21TCE-Tenor-AcousticElectric-Ukulele",
+            "pics": [
+                "590347121.jpg",
+                "590347122.jpg",
+                "590347123.jpg",
+                "590347124.jpg",
+                "590347125.jpg"
+            ]
+        },
+        "reasoning": "The Cordoba 21T-CE is a respected tenor acoustic-electric ukulele model that consistently sells for $150-$220 on the used market. My valuation reflects a solid estimate for an item in good, used condition.",
+        "ebay_avg_price": 211.82583333333332,
+        "ebay_confidence_score": 60,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Cordoba+21T-CE+Tenor+Acoustic-Electric+Ukulele+Uke+Acoustic+Electric&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Cordoba 24S Soprano Ukulele Acoustic Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 120,
+        "items": [
+            {
+                "item_name": "Cordoba 24S Soprano Ukulele Acoustic Musical Instrument",
+                "estimated_value": 120,
+                "ebay_avg_price": 209.99
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034668/Cordoba-24S-Ukulele",
+            "title": "Cordoba 24S Ukulele",
+            "lot_number": 56,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034668/Cordoba-24S-Ukulele",
+            "pics": [
+                "590346681.jpg",
+                "590346682.jpg",
+                "590346683.jpg",
+                "590346684.jpg",
+                "590346685.jpg"
+            ]
+        },
+        "reasoning": "The Cordoba 24S is a popular soprano ukulele model. The estimated value reflects current resale prices for this instrument in good used condition.",
+        "ebay_avg_price": 209.99,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Cordoba+24S+Soprano+Ukulele+Acoustic+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Outdoor Ukulele Soprano Concert Plastic Waterproof Travel Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 65,
+        "items": [
+            {
+                "item_name": "Outdoor Ukulele Soprano Concert Plastic Waterproof Travel Instrument",
+                "estimated_value": 65,
+                "ebay_avg_price": 206.42199999999997
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037168/Outdoor-Ukulele",
+            "title": "Outdoor Ukulele",
+            "lot_number": 70,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037168/Outdoor-Ukulele",
+            "pics": [
+                "590371681.jpg",
+                "590371682.jpg",
+                "590371683.jpg",
+                "590371684.jpg",
+                "590371685.jpg"
+            ]
+        },
+        "reasoning": "Valuation is based on typical resale prices for used 'Outdoor Ukuleles', which are known for their durable, waterproof construction and appeal as travel instruments, fetching between $50-$80.",
+        "ebay_avg_price": 206.42199999999997,
+        "ebay_confidence_score": 70,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Outdoor+Ukulele+Soprano+Concert+Plastic+Waterproof+Travel+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Enya EUC-X1 Tenor Ukulele HPL Acoustic Guitar w/ Gig Bag Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 90,
+        "items": [
+            {
+                "item_name": "Enya EUC-X1 Tenor Ukulele HPL Acoustic Guitar w/ Gig Bag Musical Instrument",
+                "estimated_value": 90,
+                "ebay_avg_price": 205.83
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034161/Enya-EUCX1-Tenor-Ukulele",
+            "title": "Enya EUC-X1 Tenor Ukulele",
+            "lot_number": 33,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034161/Enya-EUCX1-Tenor-Ukulele",
+            "pics": [
+                "590341611.jpg",
+                "590341612.jpg",
+                "590341613.jpg",
+                "590341614.jpg",
+                "590341615.jpg",
+                "590341616.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on typical resale prices for a used Enya EUC-X1 Tenor Ukulele, which commonly sells for $80-$100 depending on condition and included accessories like a gig bag. This model is a popular entry-level instrument with a steady resale market.",
+        "ebay_avg_price": 205.83,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Enya+EUC-X1+Tenor+Ukulele+HPL+Acoustic+Guitar+w%2F+Gig+Bag+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Enya EUB-X1 Concert Ukulele Kit Gig Bag Tuner Picks",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 95,
+        "items": [
+            {
+                "item_name": "Enya EUB-X1 Concert Ukulele Kit Gig Bag Tuner Picks",
+                "estimated_value": 95,
+                "ebay_avg_price": 202.67555555555555
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037058/Enya-EUBX1-Ukulele",
+            "title": "Enya EUB-X1 Ukulele",
+            "lot_number": 65,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037058/Enya-EUBX1-Ukulele",
+            "pics": [
+                "590370581.jpg",
+                "590370582.jpg",
+                "590370583.jpg",
+                "590370584.jpg",
+                "590370585.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on typical resale prices for a used Enya EUB-X1 Concert Ukulele, which often includes a gig bag and accessories, factoring in good condition.",
+        "ebay_avg_price": 202.67555555555555,
+        "ebay_confidence_score": 55,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Enya+EUB-X1+Concert+Ukulele+Kit+Gig+Bag+Tuner+Picks&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Luna Coral Solid Mahogany Concert Ukulele Acoustic Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 120,
+        "items": [
+            {
+                "item_name": "Luna Coral Solid Mahogany Concert Ukulele Acoustic Musical Instrument",
+                "estimated_value": 120,
+                "ebay_avg_price": 190.51
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037297/Luna-Coral-Solid-Mahogany-Concert-Ukulele",
+            "title": "Luna Coral Solid Mahogany Concert Ukulele",
+            "lot_number": 74,
+            "current_bid": "$5.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037297/Luna-Coral-Solid-Mahogany-Concert-Ukulele",
+            "pics": [
+                "590372971.jpg",
+                "590372972.jpg",
+                "590372973.jpg",
+                "590372974.jpg",
+                "590372975.jpg"
+            ]
+        },
+        "reasoning": "Valuation is based on researching recent sold listings for similar Luna Coral solid mahogany concert ukuleles in good used condition on secondary markets.",
+        "ebay_avg_price": 190.51,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Luna+Coral+Solid+Mahogany+Concert+Ukulele+Acoustic+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Oscar Schmidt OU8TLCE Spalted Maple Tenor Acoustic-Electric Ukulele Uke",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 175,
+        "items": [
+            {
+                "item_name": "Oscar Schmidt OU8TLCE Spalted Maple Tenor Acoustic-Electric Ukulele Uke",
+                "estimated_value": 175,
+                "ebay_avg_price": 189.99
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034580/Oscar-Schmidt-OU8TLCE-Spalted-Maple-Tenor-AcousticElectric-Ukulele",
+            "title": "Oscar Schmidt OU8TLCE Spalted Maple Tenor Acoustic/Electric Ukulele",
+            "lot_number": 52,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034580/Oscar-Schmidt-OU8TLCE-Spalted-Maple-Tenor-AcousticElectric-Ukulele",
+            "pics": [
+                "590345801.jpg",
+                "590345802.jpg",
+                "590345803.jpg",
+                "590345804.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on current resale prices for this specific Oscar Schmidt model, accounting for its unique spalted maple finish and acoustic/electric capabilities. This model typically resells for $150-$225 in good used condition.",
+        "ebay_avg_price": 189.99,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Oscar+Schmidt+OU8TLCE+Spalted+Maple+Tenor+Acoustic-Electric+Ukulele+Uke&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Oscar Schmidt OU800C Comfort Series Concert Ukulele Acoustic Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 150,
+        "items": [
+            {
+                "item_name": "Oscar Schmidt OU800C Comfort Series Concert Ukulele Acoustic Instrument",
+                "estimated_value": 150,
+                "ebay_avg_price": 189.305
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034536/Oscar-Schmidt-OU800C-Comfort-Series-Concert-Ukulele",
+            "title": "Oscar Schmidt OU800C Comfort Series Concert Ukulele",
+            "lot_number": 50,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034536/Oscar-Schmidt-OU800C-Comfort-Series-Concert-Ukulele",
+            "pics": [
+                "590345361.jpg",
+                "590345362.jpg",
+                "590345363.jpg",
+                "590345364.jpg"
+            ]
+        },
+        "reasoning": "The valuation of $150 reflects the typical used market price for an Oscar Schmidt OU800C Comfort Series Concert Ukulele, which is a well-regarded model.",
+        "shipping_recommendation": "The ukulele can be safely shipped in a well-padded box. Consider double-boxing for extra protection.",
+        "ebay_avg_price": 189.305,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Oscar+Schmidt+OU800C+Comfort+Series+Concert+Ukulele+Acoustic+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Kala Brand Ukulele Acoustic String Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 90,
+        "items": [
+            {
+                "item_name": "Kala Brand Ukulele Acoustic String Instrument",
+                "estimated_value": 90,
+                "ebay_avg_price": 183.33238095238096
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037190/Kala-Ukulele",
+            "title": "Kala Ukulele",
+            "lot_number": 71,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037190/Kala-Ukulele",
+            "pics": [
+                "590371901.jpg",
+                "590371902.jpg",
+                "590371903.jpg",
+                "590371904.jpg",
+                "590371905.jpg",
+                "590371906.jpg"
+            ]
+        },
+        "reasoning": "Kala is a well-regarded brand for ukuleles, and they generally hold good resale value in used condition. The valuation assumes a standard model in good, playable condition.",
+        "ebay_avg_price": 183.33238095238096,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Kala+Brand+Ukulele+Acoustic+String+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Islander Kanilea IS-4 Ukulele Acoustic Hawaiian Music Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 200,
+        "items": [
+            {
+                "item_name": "Islander Kanilea IS-4 Ukulele Acoustic Hawaiian Music Instrument",
+                "estimated_value": 200,
+                "ebay_avg_price": 181.57758620689654
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59032268/Islander-Kanilea-IS4-Ukulele",
+            "title": "Islander Kanile\u2019a IS-4 Ukulele",
+            "lot_number": 3,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59032268/Islander-Kanilea-IS4-Ukulele",
+            "pics": [
+                "590322681.jpg",
+                "590322682.jpg",
+                "590322683.jpg",
+                "590322684.jpg",
+                "590322685.jpg",
+                "590322686.jpg"
+            ]
+        },
+        "reasoning": "The Islander Kanile'a IS-4 Ukulele is a well-regarded instrument, typically reselling for $180-$250 in used condition based on its brand reputation and quality.",
+        "ebay_avg_price": 181.57758620689654,
+        "ebay_confidence_score": 85,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Islander+Kanilea+IS-4+Ukulele+Acoustic+Hawaiian+Music+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Enya EUT-MS Tenor Ukulele Solid Mahogany Wood Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 130,
+        "items": [
+            {
+                "item_name": "Enya EUT-MS Tenor Ukulele Solid Mahogany Wood Musical Instrument",
+                "estimated_value": 130,
+                "ebay_avg_price": 180.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59033971/Enya-EUTMS-Tenor-Ukulele",
+            "title": "Enya EUT-MS Tenor Ukulele",
+            "lot_number": 26,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59033971/Enya-EUTMS-Tenor-Ukulele",
+            "pics": [
+                "590339711.jpg",
+                "590339712.jpg",
+                "590339713.jpg",
+                "590339714.jpg",
+                "590339715.jpg",
+                "590339716.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on current online market prices for used Enya EUT-MS Tenor Ukuleles, which typically range from $100-$150 depending on condition and included accessories. An estimated value of $130 reflects a fair resale price for a good condition instrument.",
+        "ebay_avg_price": 180.0,
+        "ebay_confidence_score": 40,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Enya+EUT-MS+Tenor+Ukulele+Solid+Mahogany+Wood+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Islander Ukulele by Kanile'a Soprano Concert Tenor Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "Islander Ukulele by Kanile'a Soprano Concert Tenor Musical Instrument",
+                "estimated_value": 100,
+                "ebay_avg_price": 177.16379310344828
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037102/Islander-Ukulele",
+            "title": "Islander Ukulele",
+            "lot_number": 67,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037102/Islander-Ukulele",
+            "pics": [
+                "590371021.jpg",
+                "590371022.jpg",
+                "590371023.jpg",
+                "590371024.jpg",
+                "590371025.jpg"
+            ]
+        },
+        "reasoning": "Islander ukuleles, a sub-brand of Kanile'a, typically resell for $80-$150 in the used market depending on condition and specific model. A conservative estimate of $100 is applied assuming good, playable condition.",
+        "ebay_avg_price": 177.16379310344828,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Islander+Ukulele+by+Kanile%27a+Soprano+Concert+Tenor+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Nikon Coolpix B500 16MP 40x Optical Zoom Digital Camera",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 120,
+        "items": [
+            {
+                "item_name": "Nikon Coolpix B500 16MP 40x Optical Zoom Digital Camera",
+                "estimated_value": 120,
+                "ebay_avg_price": 174.14208333333332
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/60263215/Nikon-Coolpix-B500",
+            "title": "Nikon Coolpix B500",
+            "lot_number": 102,
+            "current_bid": "$10.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/60263215/Nikon-Coolpix-B500",
+            "pics": [
+                "602632151.jpg",
+                "602632152.jpg",
+                "602632153.jpg",
+                "602632154.jpg",
+                "602632155.jpg",
+                "602632156.jpg"
+            ]
+        },
+        "reasoning": "Valuation is based on recent sales data for used Nikon Coolpix B500 digital cameras in good working condition on secondary markets. The camera is a popular model with decent resale value.",
+        "ebay_avg_price": 174.14208333333332,
+        "ebay_confidence_score": 93,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Nikon+Coolpix+B500+16MP+40x+Optical+Zoom+Digital+Camera&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vorson FLPUK-2 FLPUK2 LP Style Electric Ukulele Guitar Shaped Single Cutaway",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 55,
+        "items": [
+            {
+                "item_name": "Vorson FLPUK-2 FLPUK2 LP Style Electric Ukulele Guitar Shaped Single Cutaway",
+                "estimated_value": 55,
+                "ebay_avg_price": 169.99
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034360/Vorson-FLPUK2-LP-Style-Electric-Ukulele",
+            "title": "Vorson FLPUK-2 LP Style Electric Ukulele",
+            "lot_number": 42,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034360/Vorson-FLPUK2-LP-Style-Electric-Ukulele",
+            "pics": [
+                "590343601.jpg",
+                "590343602.jpg",
+                "590343603.jpg",
+                "590343604.jpg",
+                "590343605.jpg"
+            ]
+        },
+        "reasoning": "The total market value is based on recent eBay sold listings for the Vorson FLPUK-2 electric ukulele in used condition, which typically range from $40-$70. We've chosen a mid-range estimate assuming good functional condition.",
+        "ebay_avg_price": 169.99,
+        "ebay_confidence_score": 45,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vorson+FLPUK-2+FLPUK2+LP+Style+Electric+Ukulele+Guitar+Shaped+Single+Cutaway&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Kala Spalted Mango Tenor Ukulele Uke Hawaiian Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 250,
+        "items": [
+            {
+                "item_name": "Kala Spalted Mango Tenor Ukulele Uke Hawaiian Instrument",
+                "estimated_value": 250,
+                "ebay_avg_price": 146.90714285714287
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034294/Kala-Spalted-Mango-Tenor-Ukulele",
+            "title": "Kala Spalted Mango Tenor Ukulele",
+            "lot_number": 39,
+            "current_bid": "$7.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034294/Kala-Spalted-Mango-Tenor-Ukulele",
+            "pics": [
+                "590342941.jpg",
+                "590342942.jpg",
+                "590342943.jpg",
+                "590342944.jpg",
+                "590342945.jpg"
+            ]
+        },
+        "reasoning": "This valuation considers Kala's reputation as a quality ukulele brand and the premium spalted mango wood, which commands a higher resale value for tenor-sized instruments in good used condition.",
+        "ebay_avg_price": 146.90714285714287,
+        "ebay_confidence_score": 65,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Kala+Spalted+Mango+Tenor+Ukulele+Uke+Hawaiian+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Manfrotto Element Traveller Small Camera Tripod Monopod Black",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "Manfrotto Element Traveller Small Camera Tripod Monopod Black",
+                "estimated_value": 75,
+                "ebay_avg_price": 146.5225
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034205/Manfrotto-Element-Traveller-Small-Tripod",
+            "title": "Manfrotto Element Traveller Small Tripod",
+            "lot_number": 35,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034205/Manfrotto-Element-Traveller-Small-Tripod",
+            "pics": [
+                "590342051.jpg",
+                "590342052.jpg"
+            ]
+        },
+        "reasoning": "The Manfrotto Element Traveller Small is a popular and well-regarded camera tripod. Its estimated value is based on typical used market prices for this specific model, assuming good condition.",
+        "ebay_avg_price": 146.5225,
+        "ebay_confidence_score": 85,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Manfrotto+Element+Traveller+Small+Camera+Tripod+Monopod+Black&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Oscar Schmidt Acoustic Ukulele Folk Music Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "Oscar Schmidt Acoustic Ukulele Folk Music Instrument",
+                "estimated_value": 75,
+                "ebay_avg_price": 146.3425
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034844/Oscar-Schmidt-Ukulele",
+            "title": "Oscar Schmidt Ukulele",
+            "lot_number": 64,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034844/Oscar-Schmidt-Ukulele",
+            "pics": [
+                "590348441.jpg",
+                "590348442.jpg",
+                "590348443.jpg",
+                "590348444.jpg",
+                "590348445.jpg",
+                "590348446.jpg"
+            ]
+        },
+        "reasoning": "Oscar Schmidt ukuleles are a recognized brand, with used models typically reselling for $50-$100 based on condition and specific model. An estimate of $75 reflects a good average resale value for a standalone instrument.",
+        "ebay_avg_price": 146.3425,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Oscar+Schmidt+Acoustic+Ukulele+Folk+Music+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Enya Nova U Carbon Fiber Acoustic-Electric Concert Ukulele Black",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "Enya Nova U Carbon Fiber Acoustic-Electric Concert Ukulele Black",
+                "estimated_value": 100,
+                "ebay_avg_price": 145.71499999999997
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59033795/Black-Enya-Nova-U-Ukulele",
+            "title": "Black Enya Nova U Ukulele",
+            "lot_number": 18,
+            "current_bid": "$6.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59033795/Black-Enya-Nova-U-Ukulele",
+            "pics": [
+                "590337951.jpg",
+                "590337952.jpg",
+                "590337953.jpg",
+                "590337954.jpg",
+                "590337955.jpg"
+            ]
+        },
+        "reasoning": "The Enya Nova U is a popular carbon fiber acoustic-electric ukulele model. Its value is based on typical used market prices for this instrument, which generally range from $80-$120 depending on condition.",
+        "ebay_avg_price": 145.71499999999997,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Enya+Nova+U+Carbon+Fiber+Acoustic-Electric+Concert+Ukulele+Black&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Enya EUP-X1 HPL Acoustic Electric Concert Ukulele with Gig Bag",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 95,
+        "items": [
+            {
+                "item_name": "Enya EUP-X1 HPL Acoustic Electric Concert Ukulele with Gig Bag",
+                "estimated_value": 95,
+                "ebay_avg_price": 142.2942857142857
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59038032/Enya-EUPX1-Ukulele",
+            "title": "Enya EUP-X1 Ukulele",
+            "lot_number": 93,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59038032/Enya-EUPX1-Ukulele",
+            "pics": [
+                "590380321.jpg",
+                "590380322.jpg",
+                "590380323.jpg",
+                "590380324.jpg",
+                "590380325.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on current secondary market prices for a used Enya EUP-X1 HPL acoustic-electric concert ukulele, typically sold with a gig bag. These instruments generally retail new for $120-$160, with used models often fetching $80-$120 depending on condition.",
+        "ebay_avg_price": 142.2942857142857,
+        "ebay_confidence_score": 50,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Enya+EUP-X1+HPL+Acoustic+Electric+Concert+Ukulele+with+Gig+Bag&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Oscar Schmidt Ukulele Acoustic Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "Oscar Schmidt Ukulele Acoustic Instrument",
+                "estimated_value": 100,
+                "ebay_avg_price": 141.42000000000002
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59038098/Oscar-Schmidt-Ukulele",
+            "title": "Oscar Schmidt Ukulele",
+            "lot_number": 96,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59038098/Oscar-Schmidt-Ukulele",
+            "pics": [
+                "590380981.jpg",
+                "590380982.jpg",
+                "590380983.jpg",
+                "590380984.jpg",
+                "590380985.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on typical secondary market prices for used Oscar Schmidt ukuleles, which commonly range from $80-$150 depending on the model and condition. A mid-range estimate of $100 is applied assuming a common model in good, playable condition.",
+        "ebay_avg_price": 141.42000000000002,
+        "ebay_confidence_score": 85,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Oscar+Schmidt+Ukulele+Acoustic+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Ohana SK-301 Soprano Ukulele Uke Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 85,
+        "items": [
+            {
+                "item_name": "Ohana SK-301 Soprano Ukulele Uke Instrument",
+                "estimated_value": 85,
+                "ebay_avg_price": 139.26277777777779
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59033949/Ohana-SK301-Ukulele",
+            "title": "Ohana SK-301 Ukulele",
+            "lot_number": 25,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59033949/Ohana-SK301-Ukulele",
+            "pics": [
+                "590339491.jpg",
+                "590339492.jpg",
+                "590339493.jpg",
+                "590339494.jpg",
+                "590339495.jpg"
+            ]
+        },
+        "reasoning": "The Ohana SK-301 is a respected entry-level soprano ukulele, fetching $60-$100 in the used market depending on condition. The valuation of $85 assumes good, playable condition.",
+        "ebay_avg_price": 139.26277777777779,
+        "ebay_confidence_score": 70,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Ohana+SK-301+Soprano+Ukulele+Uke+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Cordoba GP100 Soprano Ukulele Acoustic Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 65,
+        "items": [
+            {
+                "item_name": "Cordoba GP100 Soprano Ukulele Acoustic Musical Instrument",
+                "estimated_value": 65,
+                "ebay_avg_price": 137.60625
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034338/Cordoba-GP100-Ukulele",
+            "title": "Cordoba GP100 Ukulele",
+            "lot_number": 41,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034338/Cordoba-GP100-Ukulele",
+            "pics": [
+                "590343381.jpg",
+                "590343382.jpg",
+                "590343383.jpg",
+                "590343384.jpg"
+            ]
+        },
+        "reasoning": "Valuation is based on current market prices for used Cordoba entry-level ukuleles, which typically retain a moderate resale value due to the brand's reputation and quality.",
+        "internal_notes": "",
+        "ebay_avg_price": 137.60625,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Cordoba+GP100+Soprano+Ukulele+Acoustic+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Enya Nova U Pro Concert Ukulele Carbon Fiber w/ Case Bag Acoustic Electric",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 140,
+        "items": [
+            {
+                "item_name": "Enya Nova U Pro Concert Ukulele Carbon Fiber w/ Case Bag Acoustic Electric",
+                "estimated_value": 140,
+                "ebay_avg_price": 137.0922222222222
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59038142/Enya-Nova-U-Pro-Ukulele",
+            "title": "Enya Nova U Pro Ukulele",
+            "lot_number": 98,
+            "current_bid": "$4.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59038142/Enya-Nova-U-Pro-Ukulele",
+            "pics": [
+                "590381421.jpg",
+                "590381422.jpg",
+                "590381423.jpg",
+                "590381424.jpg"
+            ]
+        },
+        "reasoning": "The Enya Nova U Pro is a well-regarded carbon fiber ukulele known for its durability and tone. The valuation reflects typical used market prices for this model, considering its premium features and condition based on the listing title.",
+        "ebay_avg_price": 137.0922222222222,
+        "ebay_confidence_score": 75,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Enya+Nova+U+Pro+Concert+Ukulele+Carbon+Fiber+w%2F+Case+Bag+Acoustic+Electric&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Kala Concert Ukulele Musical Instrument Acoustic",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "Kala Concert Ukulele Musical Instrument Acoustic",
+                "estimated_value": 100,
+                "ebay_avg_price": 131.90333333333334
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59717076/Kala-Concert-Ukulele",
+            "title": "Kala Concert Ukulele",
+            "lot_number": 100,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59717076/Kala-Concert-Ukulele",
+            "pics": [
+                "597170761.jpg",
+                "597170762.jpg",
+                "597170763.jpg",
+                "597170764.jpg",
+                "597170765.jpg"
+            ]
+        },
+        "reasoning": "Kala is a reputable ukulele brand, and concert models typically retail for $120-$180 new. A used one in good condition usually fetches $80-$120 on the secondary market.",
+        "ebay_avg_price": 131.90333333333334,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Kala+Concert+Ukulele+Musical+Instrument+Acoustic&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Gretsch G9100 Ukulele Acoustic Instrument Guitar Musical Stringed",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "Gretsch G9100 Ukulele Acoustic Instrument Guitar Musical Stringed",
+                "estimated_value": 100,
+                "ebay_avg_price": 130.08800000000002
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59032686/Gretcsh-G9100-Ukulele",
+            "title": "Gretcsh G9100 Ukulele",
+            "lot_number": 15,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59032686/Gretcsh-G9100-Ukulele",
+            "pics": [
+                "590326861.jpg",
+                "590326862.jpg",
+                "590326863.jpg",
+                "590326864.jpg",
+                "590326865.jpg"
+            ]
+        },
+        "reasoning": "Valuation is based on recent sales data for used Gretsch G9100 ukuleles in good condition, which typically range from $80 to $120 on secondary markets.",
+        "ebay_avg_price": 130.08800000000002,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Gretsch+G9100+Ukulele+Acoustic+Instrument+Guitar+Musical+Stringed&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Eddy Finn TY15052801042 Travel Concert Ukulele Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 70,
+        "items": [
+            {
+                "item_name": "Eddy Finn TY15052801042 Travel Concert Ukulele Musical Instrument",
+                "estimated_value": 70,
+                "ebay_avg_price": 129.36615384615385
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034081/Eddy-Finn-Travel-Concert-Ukulele-TY15052801042",
+            "title": "Eddy Finn Travel Concert Ukulele TY15052801042",
+            "lot_number": 31,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034081/Eddy-Finn-Travel-Concert-Ukulele-TY15052801042",
+            "pics": [
+                "590340811.jpg",
+                "590340812.jpg",
+                "590340813.jpg",
+                "590340814.jpg",
+                "590340815.jpg"
+            ]
+        },
+        "reasoning": "Valuation is based on typical resale prices for used Eddy Finn travel concert ukuleles, which generally range from $50-$90 depending on condition and included accessories.",
+        "ebay_avg_price": 129.36615384615385,
+        "ebay_confidence_score": 60,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Eddy+Finn+TY15052801042+Travel+Concert+Ukulele+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Lanikai LU-21B Baritone Ukulele Acoustic Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 120,
+        "items": [
+            {
+                "item_name": "Lanikai LU-21B Baritone Ukulele Acoustic Musical Instrument",
+                "estimated_value": 120,
+                "ebay_avg_price": 124.95
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034690/Lanikai-LU21B-Baritone-Ukulele",
+            "title": "Lanikai LU-21B Baritone Ukulele",
+            "lot_number": 57,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034690/Lanikai-LU21B-Baritone-Ukulele",
+            "pics": [
+                "590346901.jpg",
+                "590346902.jpg",
+                "590346903.jpg",
+                "590346904.jpg",
+                "590346905.jpg",
+                "590346906.jpg"
+            ]
+        },
+        "reasoning": "Valuation is based on recent sold listings for used Lanikai LU-21B Baritone Ukuleles, which typically sell in the $100-$150 range depending on condition. This model is a popular entry-level baritone ukulele.",
+        "ebay_avg_price": 124.95,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Lanikai+LU-21B+Baritone+Ukulele+Acoustic+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Enya Nova U Carbon Fiber Ukulele Acoustic Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 65,
+        "items": [
+            {
+                "item_name": "Enya Nova U Carbon Fiber Ukulele Acoustic Musical Instrument",
+                "estimated_value": 65,
+                "ebay_avg_price": 119.0576923076923
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59032467/Enya-Nova-U-Ukulele",
+            "title": "Enya Nova U Ukulele",
+            "lot_number": 7,
+            "current_bid": "$4.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59032467/Enya-Nova-U-Ukulele",
+            "pics": [
+                "590324671.jpg",
+                "590324672.jpg",
+                "590324673.jpg",
+                "590324674.jpg"
+            ]
+        },
+        "reasoning": "The Enya Nova U is a popular carbon fiber ukulele known for its durability and sound. Resale values for a used Enya Nova U typically range from $50-$80 depending on condition and included accessories, hence an estimated value of $65.",
+        "ebay_avg_price": 119.0576923076923,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Enya+Nova+U+Carbon+Fiber+Ukulele+Acoustic+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Oscar Schmidt OU2P Pineapple Concert Ukulele Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 85,
+        "items": [
+            {
+                "item_name": "Oscar Schmidt OU2P Pineapple Concert Ukulele Musical Instrument",
+                "estimated_value": 85,
+                "ebay_avg_price": 115.94571428571429
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037319/Oscar-Schmidt-OU2P-Pineapple-Concert-Ukulele",
+            "title": "Oscar Schmidt OU2P Pineapple Concert Ukulele",
+            "lot_number": 75,
+            "current_bid": "$4.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037319/Oscar-Schmidt-OU2P-Pineapple-Concert-Ukulele",
+            "pics": [
+                "590373191.jpg",
+                "590373192.jpg",
+                "590373193.jpg",
+                "590373194.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on typical resale prices for used Oscar Schmidt OU2P Pineapple Concert Ukuleles, which generally range from $60-$100 depending on condition. $85 represents a good average market value for this instrument.",
+        "ebay_avg_price": 115.94571428571429,
+        "ebay_confidence_score": 55,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Oscar+Schmidt+OU2P+Pineapple+Concert+Ukulele+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Ohana Concert Ukulele Kit DIY Unfinished Wood Musical Instrument Project",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 90,
+        "items": [
+            {
+                "item_name": "Ohana Concert Ukulele Kit DIY Unfinished Wood Musical Instrument Project",
+                "estimated_value": 90,
+                "ebay_avg_price": 93.115
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034778/Ohana-DIY-Concert-Ukulele-Kit",
+            "title": "Ohana DIY Concert Ukulele Kit",
+            "lot_number": 61,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034778/Ohana-DIY-Concert-Ukulele-Kit",
+            "pics": [
+                "590347781.jpg",
+                "590347782.jpg",
+                "590347783.jpg",
+                "590347784.jpg",
+                "590347785.jpg"
+            ]
+        },
+        "reasoning": "Valuation is based on the new retail price of similar Ohana DIY concert ukulele kits, which typically sell in the $80-$100 range for an unassembled kit.",
+        "ebay_avg_price": 93.115,
+        "ebay_confidence_score": 55,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Ohana+Concert+Ukulele+Kit+DIY+Unfinished+Wood+Musical+Instrument+Project&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Fujifilm Instax Mini 12 Instant Film Camera Blue",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Fujifilm Instax Mini 12 Instant Film Camera Blue",
+                "estimated_value": 50,
+                "ebay_avg_price": 91.73866666666666
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037671/Fujifilm-Instax-Mini-12-Camera",
+            "title": "Fujifilm Instax Mini 12 Camera",
+            "lot_number": 91,
+            "current_bid": "$9.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037671/Fujifilm-Instax-Mini-12-Camera",
+            "pics": [
+                "590376711.jpg",
+                "590376712.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on the current used market price for a Fujifilm Instax Mini 12 camera in good condition, typically selling for $45-$60 without film or accessories.",
+        "ebay_avg_price": 91.73866666666666,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Fujifilm+Instax+Mini+12+Instant+Film+Camera+Blue&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Lot of Assorted Irish Folk Tin Whistles Flutes Musical Instruments Collection",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 120,
+        "items": [
+            {
+                "item_name": "Clarke Sweetone D Tin Whistle Flute Instrument",
+                "estimated_value": 25,
+                "ebay_avg_price": 23.5
+            },
+            {
+                "item_name": "Generation C Tin Whistle Irish Folk Musical Instrument",
+                "estimated_value": 20,
+                "ebay_avg_price": 14.95
+            },
+            {
+                "item_name": "Walton's Irish D Tin Whistle Instrument",
+                "estimated_value": 20,
+                "ebay_avg_price": 13.906363636363636
+            },
+            {
+                "item_name": "Vintage Metal Tin Whistle Flute Irish Musical Instrument",
+                "estimated_value": 30,
+                "ebay_avg_price": 19.162666666666667
+            },
+            {
+                "item_name": "Generic Beginner Tin Whistle Flute",
+                "estimated_value": 15,
+                "ebay_avg_price": 19.762999999999998
+            },
+            {
+                "item_name": "Small Assorted Tin Whistle Piccolo Type",
+                "estimated_value": 10,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037649/Assorted-Tin-Whistles",
+            "title": "Assorted Tin Whistles",
+            "lot_number": 90,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037649/Assorted-Tin-Whistles",
+            "pics": [
+                "590376491.jpg",
+                "590376492.jpg",
+                "590376493.jpg"
+            ]
+        },
+        "reasoning": "Valuation assumes a mix of common and potentially a vintage or higher-quality tin whistle, reflecting typical resale prices for such musical instrument lots. Items are easily shippable.",
+        "ebay_avg_price": 91.2820303030303,
+        "ebay_confidence_score": 77,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Lot+of+Assorted+Irish+Folk+Tin+Whistles+Flutes+Musical+Instruments+Collection&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Luna Tattoo Pineapple Soprano Ukulele Uke Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 90,
+        "items": [
+            {
+                "item_name": "Luna Tattoo Pineapple Soprano Ukulele Uke Musical Instrument",
+                "estimated_value": 90,
+                "ebay_avg_price": 82.15666666666667
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037363/Luna-Tattoo-Pineapple-Soprano-Ukulele",
+            "title": "Luna Tattoo Pineapple Soprano Ukulele",
+            "lot_number": 77,
+            "current_bid": "$6.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037363/Luna-Tattoo-Pineapple-Soprano-Ukulele",
+            "pics": [
+                "590373631.jpg",
+                "590373632.jpg",
+                "590373633.jpg"
+            ]
+        },
+        "reasoning": "The Luna Tattoo Pineapple Soprano Ukulele is a popular model known for its quality and distinctive design, consistently selling well on the secondary market.",
+        "ebay_avg_price": 82.15666666666667,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Luna+Tattoo+Pineapple+Soprano+Ukulele+Uke+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Makala MK-C Concert Ukulele",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 65,
+        "items": [
+            {
+                "item_name": "Makala MK-C Concert Ukulele",
+                "estimated_value": 65,
+                "ebay_avg_price": 79.994
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034756/Makala-MKC-Ukulele",
+            "title": "Makala MK-C Ukulele",
+            "lot_number": 60,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034756/Makala-MKC-Ukulele",
+            "pics": [
+                "590347561.jpg",
+                "590347562.jpg",
+                "590347563.jpg",
+                "590347564.jpg",
+                "590347565.jpg",
+                "590347566.jpg"
+            ]
+        },
+        "reasoning": "The Makala MK-C is a well-regarded entry-level to mid-range concert ukulele. Used examples typically resell for $50-$80, placing this one at a solid $65 based on typical market conditions.",
+        "ebay_avg_price": 79.994,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Makala+MK-C+Concert+Ukulele&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Kala KA-ASOV-S Solid Acacia Soprano Ukulele Uke with Gig Bag",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 200,
+        "items": [
+            {
+                "item_name": "Kala KA-ASOV-S Solid Acacia Soprano Ukulele Uke with Gig Bag",
+                "estimated_value": 200,
+                "ebay_avg_price": 78.995
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034800/Kala-KAASOVS-Ukulele",
+            "title": "Kala KA-ASOV-S Ukulele",
+            "lot_number": 62,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034800/Kala-KAASOVS-Ukulele",
+            "pics": [
+                "590348001.jpg",
+                "590348002.jpg",
+                "590348003.jpg",
+                "590348004.jpg",
+                "590348005.jpg",
+                "590348006.jpg"
+            ]
+        },
+        "reasoning": "The Kala KA-ASOV-S is a respected solid acacia soprano ukulele known for its quality sound and construction. Its estimated value reflects its strong resale performance in the used musical instrument market.",
+        "ebay_avg_price": 78.995,
+        "ebay_confidence_score": 45,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Kala+KA-ASOV-S+Solid+Acacia+Soprano+Ukulele+Uke+with+Gig+Bag&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Caramel Concert Ukulele Acoustic Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Caramel Concert Ukulele Acoustic Instrument",
+                "estimated_value": 50,
+                "ebay_avg_price": 76.084
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59033993/Caramel-Concert-Ukulele",
+            "title": "Caramel Concert Ukulele",
+            "lot_number": 27,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59033993/Caramel-Concert-Ukulele",
+            "pics": [
+                "590339931.jpg",
+                "590339932.jpg",
+                "590339933.jpg",
+                "590339934.jpg"
+            ]
+        },
+        "reasoning": "Valuation is based on the typical resale market for used Caramel Concert Ukuleles, considering their original price point as popular entry-level instruments and their common condition. These instruments generally sell for $30-$60 used, making $50 a reasonable estimate.",
+        "reasoning_more_detailed": "Caramel ukuleles are a budget-friendly brand commonly found on platforms like Amazon, often retailing new for $60-$100. Their value on the secondary market for a used concert model typically falls into the $30-$60 range, depending on condition and included accessories (case, tuner, etc.). For a standalone used ukulele of this brand, a mid-range estimate of $50 reflects its likely resale potential.",
+        "ebay_avg_price": 76.084,
+        "ebay_confidence_score": 85,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Caramel+Concert+Ukulele+Acoustic+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Kala The Waterman Concert Ukulele Clear Transparent Water-Resistant Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "Kala The Waterman Concert Ukulele Clear Transparent Water-Resistant Musical Instrument",
+                "estimated_value": 60,
+                "ebay_avg_price": 71.13133333333333
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59033839/Kala-The-Waterman-Concert-Ukulele",
+            "title": "Kala \u2018The Waterman\u2019 Concert Ukulele",
+            "lot_number": 20,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59033839/Kala-The-Waterman-Concert-Ukulele",
+            "pics": [
+                "590338391.jpg",
+                "590338392.jpg",
+                "590338393.jpg",
+                "590338394.jpg"
+            ]
+        },
+        "reasoning": "The Kala Waterman is a popular, durable, entry-level concert ukulele known for its water-resistant properties, ensuring a consistent resale market for used models.",
+        "ebay_avg_price": 71.13133333333333,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Kala+The+Waterman+Concert+Ukulele+Clear+Transparent+Water-Resistant+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Kala KA-SI7E-SIC Soprano Ukulele Acoustic Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "Kala KA-SI7E-SIC Soprano Ukulele Acoustic Instrument",
+                "estimated_value": 100,
+                "ebay_avg_price": 67.7364
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034822/Kala-KASI7ESIC-Ukulele",
+            "title": "Kala KA-SI7E-SIC Ukulele",
+            "lot_number": 63,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034822/Kala-KASI7ESIC-Ukulele",
+            "pics": [
+                "590348221.jpg",
+                "590348222.jpg",
+                "590348223.jpg",
+                "590348224.jpg",
+                "590348225.jpg"
+            ]
+        },
+        "reasoning": "Valuation is based on Kala's reputation as a quality ukulele brand; similar soprano models typically resell for $70-$150 depending on condition and specific features.",
+        "ebay_avg_price": 67.7364,
+        "ebay_confidence_score": 50,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Kala+KA-SI7E-SIC+Soprano+Ukulele+Acoustic+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Hawaiian Classic Gold Soprano Ukulele Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 45,
+        "items": [
+            {
+                "item_name": "Hawaiian Classic Gold Soprano Ukulele Musical Instrument",
+                "estimated_value": 45,
+                "ebay_avg_price": 60.50375
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037495/Hawaiian-Classic-Gold-Ukulele",
+            "title": "Hawaiian Classic Gold Ukulele",
+            "lot_number": 83,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037495/Hawaiian-Classic-Gold-Ukulele",
+            "pics": [
+                "590374951.jpg",
+                "590374952.jpg",
+                "590374953.jpg",
+                "590374954.jpg"
+            ]
+        },
+        "reasoning": "Valuation is based on the item being a decorative or entry-level soprano ukulele, with similar novelty or beginner models typically reselling in this price range.",
+        "ebay_avg_price": 60.50375,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Hawaiian+Classic+Gold+Soprano+Ukulele+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Makala Dolphin Soprano Ukulele MK-SD Musical Instrument Kala",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Makala Dolphin Soprano Ukulele MK-SD Musical Instrument Kala",
+                "estimated_value": 40,
+                "ebay_avg_price": 59.037777777777784
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59032664/Makala-Dolphin-Soprano-Ukulele",
+            "title": "Makala Dolphin Soprano Ukulele",
+            "lot_number": 14,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59032664/Makala-Dolphin-Soprano-Ukulele",
+            "pics": [
+                "590326641.jpg",
+                "590326642.jpg",
+                "590326643.jpg",
+                "590326644.jpg"
+            ]
+        },
+        "reasoning": "Makala Dolphin ukuleles are popular entry-level instruments with a consistent resale market, typically fetching $30-50 for a used soprano model. The $40 valuation reflects its likely condition and brand recognition.",
+        "ebay_avg_price": 59.037777777777784,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Makala+Dolphin+Soprano+Ukulele+MK-SD+Musical+Instrument+Kala&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Makala Dolphin Soprano Ukulele Musical Instrument",
+        "category": "Miscellaneous",
+        "is_shippable": true,
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Makala Dolphin Soprano Ukulele Musical Instrument",
+                "estimated_value": 40,
+                "ebay_avg_price": 58.45466666666666
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59032708/Makala-Dolphin-Soprano-Ukulele",
+            "title": "Makala Dolphin Soprano Ukulele",
+            "lot_number": 16,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59032708/Makala-Dolphin-Soprano-Ukulele",
+            "pics": [
+                "590327081.jpg",
+                "590327082.jpg",
+                "590327083.jpg",
+                "590327084.jpg",
+                "590327085.jpg"
+            ]
+        },
+        "reasoning": "The valuation reflects the typical resale price for a used Makala Dolphin Soprano Ukulele, which is a popular entry-level model. This value assumes the instrument is in good, playable condition.",
+        "ebay_avg_price": 58.45466666666666,
+        "ebay_confidence_score": 98,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Makala+Dolphin+Soprano+Ukulele+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Kala Outdoor Soprano Moonshine Ukulele Acoustic Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "Kala Outdoor Soprano Moonshine Ukulele Acoustic Instrument",
+                "estimated_value": 75,
+                "ebay_avg_price": 55.95117647058823
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034059/Outdoor-Soprano-Moonshine-Ukulele",
+            "title": "Outdoor Soprano Moonshine Ukulele",
+            "lot_number": 30,
+            "current_bid": "$4.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034059/Outdoor-Soprano-Moonshine-Ukulele",
+            "pics": [
+                "590340591.jpg",
+                "590340592.jpg",
+                "590340593.jpg",
+                "590340594.jpg",
+                "590340595.jpg"
+            ]
+        },
+        "reasoning": "Valuation is based on the known reputation of Kala for their durable Outdoor Ukuleles, with Soprano Moonshine models typically retailing for $100-150 new and holding good resale value.",
+        "ebay_avg_price": 55.95117647058823,
+        "ebay_confidence_score": 80,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Kala+Outdoor+Soprano+Moonshine+Ukulele+Acoustic+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Brownsville Acoustic Ukulele String Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Brownsville Acoustic Ukulele String Instrument",
+                "estimated_value": 40,
+                "ebay_avg_price": 52.5
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59033927/Brownsville-Ukulele",
+            "title": "Brownsville Ukulele",
+            "lot_number": 24,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59033927/Brownsville-Ukulele",
+            "pics": [
+                "590339271.jpg",
+                "590339272.jpg",
+                "590339273.jpg",
+                "590339274.jpg",
+                "590339275.jpg"
+            ]
+        },
+        "reasoning": "Brownsville ukuleles are entry-level instruments, typically reselling for $25-$50 in good used condition. The estimated value reflects a reasonable resale price for such a brand.",
+        "ebay_avg_price": 52.5,
+        "ebay_confidence_score": 45,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Brownsville+Acoustic+Ukulele+String+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Carlo Robelli Soprano Ukulele Uke Starter Music Instrument",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 35,
+        "items": [
+            {
+                "item_name": "Carlo Robelli Soprano Ukulele Uke Starter Music Instrument",
+                "estimated_value": 35,
+                "ebay_avg_price": 51.944
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59033905/Carlo-Robelli-Soprano-Ukulele",
+            "title": "Carlo Robelli Soprano Ukulele",
+            "lot_number": 23,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59033905/Carlo-Robelli-Soprano-Ukulele",
+            "pics": [
+                "590339051.jpg",
+                "590339052.jpg",
+                "590339053.jpg",
+                "590339054.jpg"
+            ]
+        },
+        "reasoning": "Carlo Robelli ukuleles are entry-level instruments, and a used soprano model typically resells for $20-$50 depending on condition. An estimated value of $35 reflects a good condition used item in the current market.",
+        "ebay_avg_price": 51.944,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Carlo+Robelli+Soprano+Ukulele+Uke+Starter+Music+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Makala Dolphin Red Soprano Ukulele Musical Instrument Beginner",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 35,
+        "items": [
+            {
+                "item_name": "Makala Dolphin Red Soprano Ukulele Musical Instrument Beginner",
+                "estimated_value": 35,
+                "ebay_avg_price": 49.99333333333333
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037212/Red-Makala-Dolphin-Soprano-Ukulele",
+            "title": "Red Makala Dolphin Soprano Ukulele",
+            "lot_number": 72,
+            "current_bid": "$5.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037212/Red-Makala-Dolphin-Soprano-Ukulele",
+            "pics": [
+                "590372121.jpg",
+                "590372122.jpg",
+                "590372123.jpg",
+                "590372124.jpg"
+            ]
+        },
+        "reasoning": "The Makala Dolphin is a popular entry-level ukulele; its new retail price is around $50-60. Used models typically sell for $30-45, warranting a $35 estimate assuming good, used condition.",
+        "ebay_avg_price": 49.99333333333333,
+        "ebay_confidence_score": 80,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Makala+Dolphin+Red+Soprano+Ukulele+Musical+Instrument+Beginner&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Makala Dolphin MK-SD Red Soprano Ukulele Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Makala Dolphin MK-SD Red Soprano Ukulele Musical Instrument",
+                "estimated_value": 40,
+                "ebay_avg_price": 45.330000000000005
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59032513/Red-Makala-Dolphin-Soprano-Ukulele",
+            "title": "Red Makala Dolphin Soprano Ukulele",
+            "lot_number": 9,
+            "current_bid": "$7.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59032513/Red-Makala-Dolphin-Soprano-Ukulele",
+            "pics": [
+                "590325131.jpg",
+                "590325132.jpg",
+                "590325133.jpg",
+                "590325134.jpg",
+                "590325135.jpg"
+            ]
+        },
+        "reasoning": "Valuation is based on current used market prices for Makala Dolphin soprano ukuleles (MK-SD model), which typically sell for $30-$50 depending on condition.",
+        "ebay_avg_price": 45.330000000000005,
+        "ebay_confidence_score": 85,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Makala+Dolphin+MK-SD+Red+Soprano+Ukulele+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Pentax Optio S60 6.0MP Digital Camera Silver Point & Shoot",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 35,
+        "items": [
+            {
+                "item_name": "Pentax Optio S60 6.0MP Digital Camera Silver Point & Shoot",
+                "estimated_value": 35,
+                "ebay_avg_price": 42.495000000000005
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/60264886/Pentax-Optic-S60-Digital-Camera",
+            "title": "Pentax Optic S60 Digital Camera",
+            "lot_number": 105,
+            "current_bid": "$4.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/60264886/Pentax-Optic-S60-Digital-Camera",
+            "pics": [
+                "602648861.jpg",
+                "602648862.jpg",
+                "602648863.jpg"
+            ]
+        },
+        "reasoning": "The Pentax Optio S60 is an older point-and-shoot digital camera; its value is moderate due to some nostalgic appeal and functionality, selling typically between $25-$50 on secondary markets.",
+        "ebay_avg_price": 42.495000000000005,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Pentax+Optio+S60+6.0MP+Digital+Camera+Silver+Point+%26+Shoot&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Pentax Zx-30 35mm SLR Film Camera Body Vintage Working",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 30,
+        "items": [
+            {
+                "item_name": "Pentax Zx-30 35mm SLR Film Camera Body Vintage Working",
+                "estimated_value": 30,
+                "ebay_avg_price": 35.24185185185185
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037583/Pentax-Zx30-35mm-SLR-Film-Camera",
+            "title": "Pentax Zx-30 35mm SLR Film Camera",
+            "lot_number": 87,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037583/Pentax-Zx30-35mm-SLR-Film-Camera",
+            "pics": [
+                "590375831.jpg",
+                "590375832.jpg",
+                "590375833.jpg",
+                "590375834.jpg",
+                "590375835.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on current eBay sold listings for a Pentax Zx-30 SLR camera body, which typically sell in the $20-$40 range depending on condition and whether a lens is included, assuming body-only for this listing.",
+        "ebay_avg_price": 35.24185185185185,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Pentax+Zx-30+35mm+SLR+Film+Camera+Body+Vintage+Working&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Lowepro Camera Gear Backpack Shoulder Bag Case Photography Equipment",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "Lowepro Camera Gear Backpack Shoulder Bag Case Photography Equipment",
+                "estimated_value": 60,
+                "ebay_avg_price": 35.06793103448276
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037605/LowePro-Camera-Bag",
+            "title": "LowePro Camera Bag",
+            "lot_number": 88,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037605/LowePro-Camera-Bag",
+            "pics": [
+                "590376051.jpg",
+                "590376052.jpg"
+            ]
+        },
+        "reasoning": "Valuation is based on the strong reputation of the Lowepro brand for quality camera bags, which maintain good resale value on the used market. The estimate assumes the bag is in good, usable condition, without significant damage.",
+        "ebay_avg_price": 35.06793103448276,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Lowepro+Camera+Gear+Backpack+Shoulder+Bag+Case+Photography+Equipment&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Hilo Baritone Model 2655 Ukulele Vintage Acoustic Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 85,
+        "items": [
+            {
+                "item_name": "Hilo Baritone Model 2655 Ukulele Vintage Acoustic Musical Instrument",
+                "estimated_value": 85,
+                "ebay_avg_price": 35.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037124/Hilo-Bartione-Model-2655-Ukulele",
+            "title": "Hilo Bartione Model 2655 Ukulele",
+            "lot_number": 68,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037124/Hilo-Bartione-Model-2655-Ukulele",
+            "pics": [
+                "590371241.jpg",
+                "590371242.jpg",
+                "590371243.jpg",
+                "590371244.jpg",
+                "590371245.jpg",
+                "590371246.jpg",
+                "590371247.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on typical resale prices for Hilo Baritone Model 2655 ukuleles in used condition, often found in the $60-$120 range on secondary markets. The item is shippable and falls under collectibles due to its nature as a musical instrument.",
+        "ebay_avg_price": 35.0,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Hilo+Baritone+Model+2655+Ukulele+Vintage+Acoustic+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Enya Music CD Vinyl Album Lot Collection Discography",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "Enya Watermark CD Album",
+                "estimated_value": 15,
+                "ebay_avg_price": 6.291538461538462
+            },
+            {
+                "item_name": "Enya Shepherd Moons CD Album",
+                "estimated_value": 15,
+                "ebay_avg_price": 5.865555555555556
+            },
+            {
+                "item_name": "Enya The Memory of Trees CD Album",
+                "estimated_value": 15,
+                "ebay_avg_price": 7.5424999999999995
+            },
+            {
+                "item_name": "Enya A Day Without Rain CD Album",
+                "estimated_value": 15,
+                "ebay_avg_price": 6.390357142857143
+            },
+            {
+                "item_name": "Enya Amarantine CD Album",
+                "estimated_value": 15,
+                "ebay_avg_price": 8.425652173913043
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037627/Enya-Lot",
+            "title": "Enya Lot",
+            "lot_number": 89,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037627/Enya-Lot",
+            "pics": [
+                "590376271.jpg",
+                "590376272.jpg",
+                "590376273.jpg"
+            ]
+        },
+        "reasoning": "Valuation is based on an assumed collection of 5-7 popular Enya music albums (CDs or common vinyl) given the generic 'Enya Lot' title. Each album is estimated at typical used resale values for the artist's discography.",
+        "ebay_avg_price": 34.515603333864206,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Enya+Music+CD+Vinyl+Album+Lot+Collection+Discography&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vivitar Series 1 DF-186 Bounce Swivel Speedlite DSLR Camera Flash",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 30,
+        "items": [
+            {
+                "item_name": "Vivitar Series 1 DF-186 Bounce Swivel Speedlite DSLR Camera Flash",
+                "estimated_value": 30,
+                "ebay_avg_price": 32.478500000000004
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037517/Vivitar-Series-1-Bounce-Swivel-DF186-Speedlite-DSLR-Flash",
+            "title": "Vivitar Series 1 Bounce Swivel DF-186 Speedlite DSLR Flash",
+            "lot_number": 84,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037517/Vivitar-Series-1-Bounce-Swivel-DF186-Speedlite-DSLR-Flash",
+            "pics": [
+                "590375171.jpg",
+                "590375172.jpg",
+                "590375173.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on current resale prices for used Vivitar Series 1 DF-186 Speedlite flashes on platforms like eBay, which typically range from $25-$40 depending on condition and completeness. A conservative estimate of $30 accounts for a standard used unit.",
+        "ebay_avg_price": 32.478500000000004,
+        "ebay_confidence_score": 75,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vivitar+Series+1+DF-186+Bounce+Swivel+Speedlite+DSLR+Camera+Flash&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Kmise Ukulele Acoustic Instrument Used",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Kmise Ukulele Acoustic Instrument Used",
+                "estimated_value": 40,
+                "ebay_avg_price": 29.895263157894735
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59033883/Kmise-Ukulele",
+            "title": "Kmise Ukulele",
+            "lot_number": 22,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59033883/Kmise-Ukulele",
+            "pics": [
+                "590338831.jpg",
+                "590338832.jpg",
+                "590338833.jpg",
+                "590338834.jpg"
+            ]
+        },
+        "reasoning": "Kmise ukuleles are entry-level to mid-range instruments. A typical used model in good condition usually sells for $30-$50 on the secondary market.",
+        "ebay_avg_price": 29.895263157894735,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Kmise+Ukulele+Acoustic+Instrument+Used&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Kmise M12377 Concert Soprano Ukulele Acoustic Guitar Instrument Beginner",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Kmise M12377 Concert Soprano Ukulele Acoustic Guitar Instrument Beginner",
+                "estimated_value": 40,
+                "ebay_avg_price": 22.996666666666666
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59717049/Kmise-Ukulele-model-M12377",
+            "title": "Kmise Ukulele model M12377",
+            "lot_number": 99,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59717049/Kmise-Ukulele-model-M12377",
+            "pics": [
+                "597170491.jpg",
+                "597170492.jpg",
+                "597170493.jpg",
+                "597170494.jpg",
+                "597170495.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on current market prices for new and used Kmise M12377 concert ukuleles, which typically retail new for $45-$60, placing a used estimate around $40 assuming good condition. This model is a popular beginner-level instrument.",
+        "ebay_avg_price": 22.996666666666666,
+        "ebay_confidence_score": 40,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Kmise+M12377+Concert+Soprano+Ukulele+Acoustic+Guitar+Instrument+Beginner&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Enya Music CD Album Lot Collection - Pop New Age Celtic Artist Media",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 20,
+        "items": [
+            {
+                "item_name": "Enya Studio Album Music CD",
+                "estimated_value": 5,
+                "ebay_avg_price": 4.8100000000000005
+            },
+            {
+                "item_name": "Enya Studio Album Music CD",
+                "estimated_value": 5,
+                "ebay_avg_price": 4.8100000000000005
+            },
+            {
+                "item_name": "Enya Studio Album Music CD",
+                "estimated_value": 5,
+                "ebay_avg_price": 4.8100000000000005
+            },
+            {
+                "item_name": "Enya Studio Album Music CD",
+                "estimated_value": 5,
+                "ebay_avg_price": 4.8100000000000005
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59717103/Enya-Lot",
+            "title": "Enya Lot",
+            "lot_number": 101,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59717103/Enya-Lot",
+            "pics": []
+        },
+        "reasoning": "Valuation is based on the assumption of a small lot (e.g., 4 items) of common Enya studio album CDs, as no specific items or images were provided. Individual CD values are estimated conservatively at $5 each due to a competitive resale market.",
+        "ebay_avg_price": 19.240000000000002,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Enya+Music+CD+Album+Lot+Collection+-+Pop+New+Age+Celtic+Artist+Media&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "On-Stage Stands SM7122BB Compact Folding Sheet Music Stand Black Portable",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 18,
+        "items": [
+            {
+                "item_name": "On-Stage Stands SM7122BB Compact Folding Sheet Music Stand Black Portable",
+                "estimated_value": 18,
+                "ebay_avg_price": 15.815862068965517
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034037/Onstage-Stands-SM7122BB-Compact-Sheet-Music-Stand",
+            "title": "On-stage Stands SM7122BB Compact Sheet Music Stand",
+            "lot_number": 29,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034037/Onstage-Stands-SM7122BB-Compact-Sheet-Music-Stand",
+            "pics": []
+        },
+        "reasoning": "The valuation is based on typical resale prices for a used On-Stage Stands SM7122BB compact music stand, which generally fetch $15-$25 depending on condition. A mid-range estimate of $18 is appropriate for a standard used model.",
+        "ebay_avg_price": 15.815862068965517,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=On-Stage+Stands+SM7122BB+Compact+Folding+Sheet+Music+Stand+Black+Portable&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vivitar 0.43x Professional HD Wide Angle Lens Macro Conversion Digital Camera Accessory",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 25,
+        "items": [
+            {
+                "item_name": "Vivitar 0.43x Professional HD Wide Angle Lens Macro Conversion Digital Camera Accessory",
+                "estimated_value": 25,
+                "ebay_avg_price": 15.5975
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037539/Vivitar-043x-Professional-Wide-Angle-Lens",
+            "title": "Vivitar 0.43x Professional Wide Angle Lens",
+            "lot_number": 85,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037539/Vivitar-043x-Professional-Wide-Angle-Lens",
+            "pics": [
+                "590375391.jpg",
+                "590375392.jpg",
+                "590375393.jpg"
+            ]
+        },
+        "reasoning": "This is a common, entry-level wide-angle conversion lens, not a standalone prime lens. Its value is limited to hobbyist photographers or those looking for an inexpensive accessory.",
+        "ebay_avg_price": 15.5975,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vivitar+0.43x+Professional+HD+Wide+Angle+Lens+Macro+Conversion+Digital+Camera+Accessory&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Enya CD Album Lot Music Collection Pop New Age Music CDs",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "Enya CD Album Lot Music Collection Pop New Age Music CDs",
+                "estimated_value": 60,
+                "ebay_avg_price": 15.577142857142857
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037561/Enya-Lot",
+            "title": "Enya Lot",
+            "lot_number": 86,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037561/Enya-Lot",
+            "pics": []
+        },
+        "reasoning": "Valuation assumes a lot of 5-7 common Enya music CDs in good condition, as specific item details or images were not provided. The estimated value reflects a typical resale price for a collection of this artist's popular works.",
+        "ebay_avg_price": 15.577142857142857,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Enya+CD+Album+Lot+Music+Collection+Pop+New+Age+Music+CDs&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Seagull M4 Merlin Dulcimer Ukulele Acoustic Folk String Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 130,
+        "items": [
+            {
+                "item_name": "Seagull M4 Merlin Dulcimer Ukulele Acoustic Folk String Instrument",
+                "estimated_value": 130,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59032445/Seagull-M4-Merlin-DulcimerUkulele",
+            "title": "Seagull M4 Merlin Dulcimer/Ukulele",
+            "lot_number": 6,
+            "current_bid": "$4.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59032445/Seagull-M4-Merlin-DulcimerUkulele",
+            "pics": [
+                "590324451.jpg",
+                "590324452.jpg",
+                "590324453.jpg",
+                "590324454.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on current secondary market prices for a used Seagull M4 Merlin, which typically resell in the $100-$150 range depending on condition. A conservative estimate of $130 assumes the instrument is in good, playable condition.",
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Seagull+M4+Merlin+Dulcimer+Ukulele+Acoustic+Folk+String+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "BugsGear Blue Travel Ukulele Soprano Concert Gig Bag Uke Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 55,
+        "items": [
+            {
+                "item_name": "BugsGear Blue Travel Ukulele Soprano Concert Gig Bag Uke Instrument",
+                "estimated_value": 55,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59032489/Blue-BugsGear-Travel-Ukulele",
+            "title": "Blue BugsGear Travel Ukulele",
+            "lot_number": 8,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59032489/Blue-BugsGear-Travel-Ukulele",
+            "pics": [
+                "590324891.jpg",
+                "590324892.jpg",
+                "590324893.jpg",
+                "590324894.jpg",
+                "590324895.jpg",
+                "590324896.jpg"
+            ]
+        },
+        "reasoning": "A BugsGear travel ukulele, even used, holds decent resale value due to its portability and brand recognition. The estimated value reflects typical secondary market prices for a single instrument of this type and condition.",
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=BugsGear+Blue+Travel+Ukulele+Soprano+Concert+Gig+Bag+Uke+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Kala KA-BFC Bocote Concert Ukulele Acoustic Instrument Gig Bag",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 125,
+        "items": [
+            {
+                "item_name": "Kala KA-BFC Bocote Concert Ukulele Acoustic Instrument Gig Bag",
+                "estimated_value": 125,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59032535/Kala-KABFC-Bocote-Concert-Ukulele",
+            "title": "Kala KA-BFC Bocote Concert Ukulele",
+            "lot_number": 10,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59032535/Kala-KABFC-Bocote-Concert-Ukulele",
+            "pics": [
+                "590325351.jpg",
+                "590325352.jpg",
+                "590325353.jpg",
+                "590325354.jpg",
+                "590325355.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on current secondary market prices for a used Kala KA-BFC Bocote Concert Ukulele, which typically range from $100-$150 depending on condition and inclusion of accessories like a gig bag. A conservative average estimate was chosen for resale value.",
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Kala+KA-BFC+Bocote+Concert+Ukulele+Acoustic+Instrument+Gig+Bag&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Bottle Shaped Concert Acoustic Ukulele Musical Instrument Unique Design",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "Bottle Shaped Concert Acoustic Ukulele Musical Instrument Unique Design",
+                "estimated_value": 100,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59032579/Bottleshaped-Concert-Acoustic-Ukulele",
+            "title": "Bottle-shaped Concert Acoustic Ukulele",
+            "lot_number": 12,
+            "current_bid": "$12.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59032579/Bottleshaped-Concert-Acoustic-Ukulele",
+            "pics": [
+                "590325791.jpg",
+                "590325792.jpg",
+                "590325793.jpg",
+                "590325794.jpg",
+                "590325795.jpg",
+                "590325796.jpg",
+                "590325797.jpg"
+            ]
+        },
+        "reasoning": "The valuation reflects the unique bottle shape which adds novelty appeal, combined with the general market value for a concert acoustic ukulele. This item can be easily shipped, expanding its potential buyer base.",
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Bottle+Shaped+Concert+Acoustic+Ukulele+Musical+Instrument+Unique+Design&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Magic Fluke Cricket 5-String Violin Ukulele Hybrid Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 400,
+        "items": [
+            {
+                "item_name": "Magic Fluke Cricket 5-String Violin Ukulele Hybrid Musical Instrument",
+                "estimated_value": 400,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59033861/Magic-Fluke-Cricket-ViolinUkulele",
+            "title": "Magic Fluke Cricket Violin/Ukulele",
+            "lot_number": 21,
+            "current_bid": "$3.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59033861/Magic-Fluke-Cricket-ViolinUkulele",
+            "pics": [
+                "590338611.jpg",
+                "590338612.jpg",
+                "590338613.jpg",
+                "590338614.jpg",
+                "590338615.jpg"
+            ]
+        },
+        "reasoning": "The Magic Fluke Cricket is a unique, niche instrument from a respected builder known for quality. Its rarity and specialized nature typically command strong resale values, estimated around $300-$500+ in the used market depending on condition.",
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Magic+Fluke+Cricket+5-String+Violin+Ukulele+Hybrid+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Polam Model TA-11 Camera Tripod Aluminum Collapsible Photography Stand",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 30,
+        "items": [
+            {
+                "item_name": "Vintage Polam Model TA-11 Camera Tripod Aluminum Collapsible Photography Stand",
+                "estimated_value": 30,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034228/Polam-Model-TA11-Camera-Tripod",
+            "title": "Polam Model TA-11 Camera Tripod",
+            "lot_number": 36,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034228/Polam-Model-TA11-Camera-Tripod",
+            "pics": [
+                "590342281.jpg",
+                "590342282.jpg"
+            ]
+        },
+        "reasoning": "This is a functional vintage tripod from a lesser-known brand. Its value reflects its utility and vintage appeal rather than high collectibility, placing it in a modest resale bracket.",
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Polam+Model+TA-11+Camera+Tripod+Aluminum+Collapsible+Photography+Stand&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Koolehaoda YT-288 Camera Monopod Stand Selfie Stick",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 18,
+        "items": [
+            {
+                "item_name": "Koolehaoda YT-288 Camera Monopod Stand Selfie Stick",
+                "estimated_value": 18,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034250/Koolehaoda-YT288-Camera-Monopod",
+            "title": "Koolehaoda YT-288 Camera Monopod",
+            "lot_number": 37,
+            "current_bid": "$1.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034250/Koolehaoda-YT288-Camera-Monopod",
+            "pics": [
+                "590342501.jpg",
+                "590342502.jpg",
+                "590342503.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on current market rates for used Koolehaoda YT-288 monopods, which typically retail for around $15-$25 depending on condition and accessories. This item is easily shippable and falls under electronics.",
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Koolehaoda+YT-288+Camera+Monopod+Stand+Selfie+Stick&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Lot of 3 Vintage Tin Whistles Flutes Irish Pennywhistles Musical Instruments",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "Tin Whistle Pennywhistle Irish Flute Musical Instrument (2 of 3)",
+                "estimated_value": 25,
+                "ebay_avg_price": 0.0
+            },
+            {
+                "item_name": "Tin Whistle Pennywhistle Irish Flute Musical Instrument (3 of 3)",
+                "estimated_value": 25,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034272/Set-of-3-Tin-Whistles",
+            "title": "Set of 3 Tin Whistles",
+            "lot_number": 38,
+            "current_bid": "$5.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034272/Set-of-3-Tin-Whistles",
+            "pics": [
+                "590342721.jpg",
+                "590342722.jpg",
+                "590342723.jpg",
+                "590342724.jpg"
+            ]
+        },
+        "reasoning": "A set of three tin whistles, even generic ones, typically holds a market value of $20-$30 each, making the lot worth approximately $75. They are commonly sought after by musicians and collectors.",
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Lot+of+3+Vintage+Tin+Whistles+Flutes+Irish+Pennywhistles+Musical+Instruments&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Supernylgut Kiwi Sidekick Banjo Ukulele Musical Instrument",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 225,
+        "items": [
+            {
+                "item_name": "Supernylgut Kiwi Sidekick Banjo Ukulele Musical Instrument",
+                "estimated_value": 225,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59034646/Supernylgut-Kiwi-Sidekick-Banjo-Ukulele",
+            "title": "Supernylgut Kiwi Sidekick Banjo Ukulele",
+            "lot_number": 55,
+            "current_bid": "$12.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59034646/Supernylgut-Kiwi-Sidekick-Banjo-Ukulele",
+            "pics": [
+                "590346461.jpg",
+                "590346462.jpg",
+                "590346463.jpg",
+                "590346464.jpg",
+                "590346465.jpg",
+                "590346466.jpg",
+                "590346467.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on typical resale prices for a used banjo ukulele of this described model, which has a solid market among players and collectors. Assuming good functional and cosmetic condition, it would fetch a reasonable price.",
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Supernylgut+Kiwi+Sidekick+Banjo+Ukulele+Musical+Instrument&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Enya X1 HPL Concert Ukulele Acoustic Musical Instrument with Gig Bag",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 80,
+        "items": [
+            {
+                "item_name": "Enya X1 HPL Concert Ukulele Acoustic Musical Instrument with Gig Bag",
+                "estimated_value": 80,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/59037385/Enya-X1-Ukulele",
+            "title": "Enya X1 Ukulele",
+            "lot_number": 78,
+            "current_bid": "$2.00",
+            "url": "https://greatfindsauction.com/Event/LotDetails/59037385/Enya-X1-Ukulele",
+            "pics": [
+                "590373851.jpg",
+                "590373852.jpg",
+                "590373853.jpg",
+                "590373854.jpg",
+                "590373855.jpg"
+            ]
+        },
+        "reasoning": "The valuation is based on typical secondary market prices for Enya X1 HPL ukuleles, which often sell for $60-$90 used, generally including a gig bag, given their solid reputation as entry-level instruments.",
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Enya+X1+HPL+Concert+Ukulele+Acoustic+Musical+Instrument+with+Gig+Bag&_sacat=0&LH_Complete=1&LH_Sold=1"
+    }
+]
+</script>
+
+<script>
+    const fullJsonData = JSON.parse(document.getElementById('auctionData').textContent);
+    let currentFilteredData = [...fullJsonData];
+    
+    const tableBody = document.getElementById('data-table-body');
+    const headers = document.querySelectorAll('thead th[data-column]');
+    const hideFurnitureCheckbox = document.getElementById('hideFurniture');
+    const hideMedicalCheckbox = document.getElementById('hideMedical');
+
+    let currentSort = { column: 'ebay_price', isAscending: false };
+
+    function applyFiltersAndRepopulate() {
+        const hideFurniture = hideFurnitureCheckbox.checked;
+        const hideMedical = hideMedicalCheckbox.checked;
+
+        currentFilteredData = fullJsonData.filter(lot => {
+            const category = (lot.category || '').toLowerCase();
+            if (hideFurniture && category === 'large furniture') {
+                return false;
+            }
+            if (hideMedical && category === 'medical devices') {
+                return false;
+            }
+            return true;
+        });
+
+        sortData(currentSort.column, true);
+    }
+
+    function populateTable() {
+        tableBody.innerHTML = '';
+        const formatCurrency = (value) => (value || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 });
+        const sanitizeText = (text) => (text || 'No reasoning provided.');
+
+        currentFilteredData.forEach(lot => {
+            const hasReasoning = lot.reasoning && lot.reasoning.trim() !== '';
+            
+            const mainRow = document.createElement('tr');
+            mainRow.className = 'lot-main' + (hasReasoning ? ' expandable' : '');
+            
+            const encodedSearch = encodeURIComponent(lot.ebay_search_title || '');
+            
+            mainRow.innerHTML = `
+                <td>${lot.lot_number > 0 ? lot.lot_number : ''}</td>
+                <td><a href="${lot.original_listing.url}" target="_blank" title="${lot.original_listing.title}">${lot.ebay_search_title || 'N/A'}</a></td>
+                <td>${lot.category || 'Miscellaneous'}</td>
+                <td style="text-align: right;">${formatCurrency(lot.total_market_value)}</td>
+                <td style="text-align: right;">${lot.ebay_avg_price > 0 ? formatCurrency(lot.ebay_avg_price) : 'N/A'}</td>
+                <td style="text-align: right;">${lot.ebay_confidence_score > 0 ? lot.ebay_confidence_score + '%' : 'N/A'}</td>
+                <td style="text-align: center;"><a href="${lot.ebay_search_url || '#'}" target="_blank">eBay</a></td>
+                <td style="text-align: center;"><a href="https://www.google.com/search?q=${encodedSearch}" target="_blank">Google</a></td>
+            `;
+            
+            tableBody.appendChild(mainRow);
+            
+            if (hasReasoning) {
+                const reasoningRow = document.createElement('tr');
+                reasoningRow.className = 'reasoning-row';
+                reasoningRow.innerHTML = `<td colspan="8">${sanitizeText(lot.reasoning)}</td>`;
+                tableBody.appendChild(reasoningRow);
+
+                mainRow.addEventListener('click', () => {
+                    reasoningRow.classList.toggle('visible');
+                });
+            }
+
+            if (lot.items && lot.items.length > 1) {
+                lot.items.forEach(subItem => {
+                    const subRow = document.createElement('tr');
+                    subRow.className = 'lot-sub-item';
+                    
+                    const subAvgPrice = subItem.ebay_avg_price || 0;
+                    const subEncodedSearch = encodeURIComponent(subItem.item_name || '');
+                    const subEbayUrl = `https://www.ebay.com/sch/i.html?_from=R40&_nkw=${subEncodedSearch}&_sacat=0&LH_Complete=1&LH_Sold=1`;
+                    const subGoogleUrl = `https://www.google.com/search?q=${subEncodedSearch}`;
+
+                    subRow.innerHTML = `
+                        <td></td>
+                        <td style="padding-left: 35px;">${subItem.item_name || 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: right;">${formatCurrency(subItem.estimated_value)}</td>
+                        <td style="text-align: right;">${subAvgPrice > 0 ? formatCurrency(subAvgPrice) : 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: center;"><a href="${subEbayUrl}" target="_blank">eBay</a></td>
+                        <td style="text-align: center;"><a href="${subGoogleUrl}" target="_blank">Google</a></td>
+                    `;
+                    tableBody.appendChild(subRow);
+                });
+            }
+        });
+    }
+
+    function sortData(column, keepDirection = false) {
+        const isNumeric = ['price', 'ebay_price', 'lot_number', 'confidence'].includes(column);
+
+        if (!keepDirection) {
+            if (currentSort.column === column) {
+                currentSort.isAscending = !currentSort.isAscending;
+            } else {
+                currentSort.column = column;
+                currentSort.isAscending = !isNumeric;
+            }
+        } else if (currentSort.column !== column) {
+             currentSort.column = column;
+             currentSort.isAscending = !isNumeric;
+        }
+
+        currentFilteredData.sort((a, b) => {
+            let valA, valB;
+            switch (column) {
+                case 'price': valA = a.total_market_value || 0; valB = b.total_market_value || 0; break;
+                case 'ebay_price': valA = a.ebay_avg_price || 0; valB = b.ebay_avg_price || 0; break;
+                case 'confidence': valA = a.ebay_confidence_score || 0; valB = b.ebay_confidence_score || 0; break;
+                case 'lot_number': valA = a.lot_number || 0; valB = b.lot_number || 0; break;
+                case 'name': valA = (a.ebay_search_title || '').toLowerCase(); valB = (b.ebay_search_title || '').toLowerCase(); break;
+                case 'category': valA = (a.category || '').toLowerCase(); valB = (b.category || '').toLowerCase(); break;
+                default: return 0;
+            }
+            let comparison = 0;
+            if (valA > valB) { comparison = 1; }
+            else if (valA < valB) { comparison = -1; }
+            return currentSort.isAscending ? comparison : comparison * -1;
+        });
+        updateSortIndicators();
+        populateTable();
+    }
+
+    function updateSortIndicators() {
+        headers.forEach(header => {
+            const indicator = header.querySelector('.sort-indicator');
+            if (header.dataset.column === currentSort.column) {
+                indicator.textContent = currentSort.isAscending ? ' ▲' : ' ▼';
+            } else { indicator.textContent = ''; }
+        });
+    }
+
+    headers.forEach(header => { header.addEventListener('click', () => { sortData(header.dataset.column); }); });
+    hideFurnitureCheckbox.addEventListener('change', applyFiltersAndRepopulate);
+    hideMedicalCheckbox.addEventListener('change', applyFiltersAndRepopulate);
+
+    sortData('ebay_price');
+</script>
+
+    <div style="text-align: center; margin-top: 2rem; font-size: 0.8em; color: #888;">
+        <p>Analysis powered by:</p>
+        <p><strong>Auction Analysis Model:</strong> Gemini Batch API</p>
+        <p><strong>eBay Cleaning Model(s):</strong> gemini-flash-latest (Gemini), openai/gpt-oss-120b (Groq)</p>
+    </div>
+
+</body>
+</html>
