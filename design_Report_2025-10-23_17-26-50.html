@@ -1,0 +1,1135 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Item Analysis</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a; --table-bg-color: #2c2c2c; --header-bg-color: #3a3a3a;
+            --header-hover-bg-color: #4a4a4a; --row-even-bg-color: #333333; --row-odd-bg-color: #2c2c2c;
+            --border-color: #444444; --text-color: #e0e0e0; --link-color: #4a90e2;
+            --link-hover-color: #81b5f5; --sort-indicator-color: #81b5f5;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 2rem; line-height: 1.6; }
+        h1 { text-align: center; color: #ffffff; font-weight: 300; margin-bottom: 2rem; }
+        .controls-container { max-width: 1600px; margin: auto; margin-bottom: 1rem; }
+        .filter-container { text-align: left; padding: 10px 15px; background-color: var(--table-bg-color); border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        .filter-container label { margin-right: 20px; font-size: 0.9em; cursor: pointer; user-select: none; }
+        .filter-container input { vertical-align: middle; margin-right: 5px; }
+        .table-container { max-width: 1600px; margin: auto; overflow-x: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        table { width: 100%; border-collapse: collapse; background-color: var(--table-bg-color); border-spacing: 0; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        thead th { background-color: var(--header-bg-color); color: #ffffff; font-weight: 600; position: sticky; top: 0; z-index: 10; }
+        thead th[data-column] { cursor: pointer; transition: background-color 0.2s ease-in-out; user-select: none; }
+        thead th[data-column]:hover { background-color: var(--header-hover-bg-color); }
+        tbody tr:not(.reasoning-row):hover { background-color: var(--header-hover-bg-color); }
+        td { font-size: 0.95em; }
+        td:nth-child(4), td:nth-child(5), td:nth-child(6) { font-family: 'Courier New', Courier, monospace; text-align: right; white-space: nowrap; }
+        td:nth-child(7), td:nth-child(8) { text-align: center; }
+        a { color: var(--link-color); text-decoration: none; transition: color 0.2s ease-in-out; }
+        a:hover { color: var(--link-hover-color); text-decoration: underline; }
+        .sort-indicator { color: var(--sort-indicator-color); font-size: 0.8em; margin-left: 8px; display: inline-block; width: 10px; }
+        .lot-main td { font-weight: bold; }
+        .lot-main.expandable { cursor: pointer; }
+        .lot-main:nth-child(4n+1), .lot-main:nth-child(4n+2) { background-color: var(--row-odd-bg-color); }
+        .lot-main:nth-child(4n+3), .lot-main:nth-child(4n) { background-color: var(--row-even-bg-color); }
+        .lot-sub-item { background-color: rgba(0,0,0,0.15) !important; }
+        .lot-sub-item td { font-size: 0.9em; color: #c0c0c0; border-color: #383838; }
+        .lot-sub-item td:nth-child(2) { padding-left: 35px; }
+        .reasoning-row { display: none; background-color: #222 !important; }
+        .reasoning-row.visible { display: table-row; }
+        .reasoning-row td {
+            padding: 10px 20px 10px 40px;
+            font-style: italic;
+            color: #b0b0b0;
+            border-top: 1px dashed #555;
+            white-space: normal;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Auction Item Analysis</h1>
+    <div class="controls-container">
+        <div class="filter-container">
+            <label><input type="checkbox" id="hideFurniture"> Hide Large Furniture</label>
+            <label><input type="checkbox" id="hideMedical"> Hide Medical Devices</label>
+        </div>
+    </div>
+    <div class="table-container"><table><thead><tr><th data-column="lot_number">Lot # <span class="sort-indicator"></span></th><th data-column="name">Item Name <span class="sort-indicator"></span></th><th data-column="category">Category <span class="sort-indicator"></span></th><th data-column="price">AI Market Value <span class="sort-indicator"></span></th><th data-column="ebay_price">eBay Avg. Sold <span class="sort-indicator"></span></th><th data-column="confidence">Confidence <span class="sort-indicator"></span></th><th>eBay Search</th><th>Google Search</th></tr></thead><tbody id="data-table-body"></tbody></table></div>
+
+<script type="application/json" id="auctionData">
+    [
+    {
+        "ebay_search_title": "MIT Magnum M1.3 Gen 3 Bi-Wire Speaker Cables 51x Multipole 2C3D",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 1300,
+        "items": [
+            {
+                "item_name": "MIT Magnum M1.3 Gen 3 Bi-Wire Speaker Cables 51x Multipole 2C3D",
+                "estimated_value": 1300,
+                "ebay_avg_price": 2749.5
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89144282/MIT-Magnum-M13-Gen-3-BiWired-Speaker-Cables",
+            "title": "MIT Magnum M1.3 Gen 3 Bi-Wired Speaker Cables",
+            "lot_number": 7,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89144282/MIT-Magnum-M13-Gen-3-BiWired-Speaker-Cables",
+            "pics": [
+                "89144282_1.jpg",
+                "89144282_2.jpg",
+                "89144282_3.jpg",
+                "89144282_4.jpg",
+                "89144282_5.jpg",
+                "89144282_6.jpg"
+            ],
+            "site_key": "transitional"
+        },
+        "reasoning": "High-end audiophile pair identified in photos as MIT Magnum M1.3 Gen 3 with 2C3D and 51x Multipole networks, CVT Coupler, and spade terminations. Recent used comps for M1.3 speaker cables typically land around $1,000\u2013$1,600 depending on length and condition; I priced at $1,300 assuming standard 8\u201310 ft length and clean condition as shown. Value can increase if original box, length verification, and continuity tests are provided; also include photos of both network labels and connector close-ups and note spade size. Tip: indicate exact cable length, polarity labels, and that network boxes function (no rattles), and mention bi-wire high/low-pass posts\u2014these details boost buyer confidence. Analyzed 6 images.",
+        "ebay_avg_price": 2749.5,
+        "ebay_confidence_score": 60,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=MIT+Magnum+M1.3+Gen+3+Bi-Wire+Speaker+Cables+51x+Multipole+2C3D&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "MIT Magnum M1.3 XLR Balanced Interconnect Cables Pair",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 650,
+        "items": [
+            {
+                "item_name": "MIT Magnum M1.3 XLR Balanced Interconnect Cables Pair",
+                "estimated_value": 650,
+                "ebay_avg_price": 1639.995
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89499241/MIT-Magnum-M13-Interconnect-Cables",
+            "title": "MIT Magnum M1.3 Interconnect Cables",
+            "lot_number": 27,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89499241/MIT-Magnum-M13-Interconnect-Cables",
+            "pics": [
+                "89499241_1.jpg",
+                "89499241_2.jpg",
+                "89499241_3.jpg",
+                "89499241_4.jpg"
+            ],
+            "site_key": "transitional"
+        },
+        "reasoning": "Photos show a pair of MIT Magnum M1.3 Gen 3 Proline interconnects with 20x Multipole network boxes, adjustable impedance switches, and XLR male/female connectors. MIT Magnum M1.3 balanced pairs typically resell used in the ~$500\u2013$800 range depending on length and condition; these appear clean with intact shells and labels, so I valued the pair at $650. Reseller tips: measure and list the exact cable length and show close-ups of the XLR pins and impedance switch settings; include keywords like '2C3D' and '20x Multipole.' Test continuity and channel matching; original packaging adds value. I analyzed 4 images.",
+        "ebay_avg_price": 1639.995,
+        "ebay_confidence_score": 55,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=MIT+Magnum+M1.3+XLR+Balanced+Interconnect+Cables+Pair&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Krell KPE Phono Preamplifier MM/MC Phono Stage",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 400,
+        "items": [
+            {
+                "item_name": "Krell KPE Phono Preamplifier MM/MC Phono Stage",
+                "estimated_value": 400,
+                "ebay_avg_price": 1047.5
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89230164/KRELL-KPE-Phono-Preamplifier",
+            "title": "KRELL KPE Phono Preamplifier",
+            "lot_number": 12,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89230164/KRELL-KPE-Phono-Preamplifier",
+            "pics": [
+                "89230164_1.jpg",
+                "89230164_2.jpg",
+                "89230164_3.jpg",
+                "89230164_4.jpg"
+            ],
+            "site_key": "transitional"
+        },
+        "reasoning": "Krell\u2019s KPE is a sought-after high-end phono stage. Complete units with the matching external power supply typically sell around $900\u2013$1,300, while the KPE Reference fetches more. This listing shows only the KPE chassis with DC cable and no power supply, so value is reduced to the $300\u2013$450 range; I estimated $400 based on recent sales for units missing the PSU but otherwise clean. Expert tip: sourcing the proper Krell KPE/KBL/KRC-compatible DC power supply and confirming MM/MC loading options can increase resale by several hundred dollars. Note the serial on the rear and include internal photos and gain/loading details in any resale listing. I analyzed 4 images.",
+        "ebay_avg_price": 1047.5,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Krell+KPE+Phono+Preamplifier+MM%2FMC+Phono+Stage&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "MIT Shotgun S3 Interconnect Cables Pair",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 275,
+        "items": [
+            {
+                "item_name": "MIT Shotgun S3 Interconnect Cables Pair",
+                "estimated_value": 275,
+                "ebay_avg_price": 603.79
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89500929/MIT-Shotgun-S3-Interconnect-Cables",
+            "title": "MIT Shotgun S3 Interconnect Cables",
+            "lot_number": 30,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89500929/MIT-Shotgun-S3-Interconnect-Cables",
+            "pics": [],
+            "site_key": "transitional"
+        },
+        "reasoning": "MIT Shotgun S3 interconnects are well-regarded audiophile cables with strong resale demand. Without images, connector type (RCA vs XLR) and length are unknown, so pricing is conservative for a typical 1m pair. Clean examples with original network boxes and clear model labels often sell ~$200\u2013$350 for RCA and higher for XLR/longer lengths. To maximize value, specify exact length, connector type, and show close-ups of the network modules and model markings; include continuity test results and note directionality arrows. Adding original packaging or documentation can add a premium. Images analyzed: 0.",
+        "ebay_avg_price": 603.79,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=MIT+Shotgun+S3+Interconnect+Cables+Pair&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Magnum Dynalab FT-101A Analog FM Stereo Tuner",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 450,
+        "items": [
+            {
+                "item_name": "Magnum Dynalab FT-101A Analog FM Stereo Tuner",
+                "estimated_value": 450,
+                "ebay_avg_price": 553.3325
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89146702/MAGNUM-Dynalab-FT101A-Analog-FM-Tuner",
+            "title": "MAGNUM Dynalab FT-101A Analog FM Tuner",
+            "lot_number": 11,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89146702/MAGNUM-Dynalab-FT101A-Analog-FM-Tuner",
+            "pics": [
+                "89146702_1.jpg",
+                "89146702_2.jpg",
+                "89146702_3.jpg",
+                "89146702_4.jpg",
+                "89146702_5.jpg",
+                "89146702_6.jpg",
+                "89146702_7.jpg",
+                "89146702_8.jpg",
+                "89146702_9.jpg"
+            ],
+            "site_key": "transitional"
+        },
+        "reasoning": "This is a high-end audiophile FM tuner; photos show power-on with illuminated meters and frequency display, which supports mid-to-upper resale. Typical sold prices for clean, working FT-101A units land around $400\u2013600; assuming unverified operation but powering up, a conservative estimate is $450. Value can increase after alignment/recap by a qualified tech and with original manual/box. Use a quality 75\u03a9 antenna and include proof of stereo lock in testing to maximize price. Double-box with dense foam around the faceplate and meters. Analyzed 9 images.",
+        "ebay_avg_price": 553.3325,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Magnum+Dynalab+FT-101A+Analog+FM+Stereo+Tuner&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "MIT MI-330 Plus RCA Interconnect Cables Pair",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 160,
+        "items": [
+            {
+                "item_name": "MIT MI-330 Plus RCA Interconnect Cables Pair",
+                "estimated_value": 160,
+                "ebay_avg_price": 372.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89498868/MIT-MI330-Interconnect-Cables",
+            "title": "MIT MI-330 Interconnect Cables",
+            "lot_number": 8,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89498868/MIT-MI330-Interconnect-Cables",
+            "pics": [
+                "89498868_1.jpg",
+                "89498868_2.jpg",
+                "89498868_3.jpg",
+                "89498868_4.jpg",
+                "89498868_5.jpg"
+            ],
+            "site_key": "transitional"
+        },
+        "reasoning": "MIT (Music Interface Technologies) MI-330 Plus networked RCA interconnects are desirable audiophile cables. Comparable sold listings for MI-330 Plus RCA pairs typically land around $140\u2013$220 depending on length, condition, and proof of testing. Visible jacket discoloration and unknown length suggest a conservative $160 valuation. Reseller tips: measure and list exact length, note the signal direction arrows, clean the gold contacts (e.g., DeoxIT), and confirm continuity/functional test\u2014these details can lift the final price. Ship in a small box with gentle coils to protect the network modules. Analyzed 5 images.",
+        "ebay_avg_price": 372.0,
+        "ebay_confidence_score": 70,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=MIT+MI-330+Plus+RCA+Interconnect+Cables+Pair&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "MIT Z-Cord II Audiophile AC Power Cable",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 85,
+        "items": [
+            {
+                "item_name": "MIT Z-Cord II Audiophile AC Power Cable",
+                "estimated_value": 85,
+                "ebay_avg_price": 237.23444444444445
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89500571/MIT-ZCord-II-AC-Power-Cord",
+            "title": "MIT Z-Cord II AC Power Cord",
+            "lot_number": 18,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89500571/MIT-ZCord-II-AC-Power-Cord",
+            "pics": [],
+            "site_key": "transitional"
+        },
+        "reasoning": "MIT (Music Interface Technologies) Z-Cord II power cables are known audiophile upgrades that typically resell in the $70\u2013120 range depending on length, condition, and plug type. With no photos or length specified, I priced conservatively at $85. Value increases with verified length (2m sells higher), clean tight blades, and clear photos of both ends (NEMA 5-15P to IEC C13) plus cable markings. Pro tip: measure exact length and show close-ups of the plug/IEC, any ferrites, and model printing; wipe contacts with DeoxIT and coil loosely for photos. Include weight and flexibility notes. I analyzed 0 images for this lot.",
+        "ebay_avg_price": 237.23444444444445,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=MIT+Z-Cord+II+Audiophile+AC+Power+Cable&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "MIT Z-Cord II Audiophile AC Power Cable",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 80,
+        "items": [
+            {
+                "item_name": "MIT Z-Cord II Audiophile AC Power Cable",
+                "estimated_value": 80,
+                "ebay_avg_price": 237.23444444444445
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89500174/MIT-ZCord-II-AC-Power-Cord",
+            "title": "MIT Z-Cord II AC Power Cord",
+            "lot_number": 20,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89500174/MIT-ZCord-II-AC-Power-Cord",
+            "pics": [],
+            "site_key": "transitional"
+        },
+        "reasoning": "MIT's Z-Cord II is a known audiophile power cable that typically sells used in the $60\u2013120 range depending on length and condition. With no photos or length disclosed, I priced it conservatively at $80. Tips: measure and list exact length (6ft vs 2m matters); include close-ups of the plug/IEC ends and MIT branding; clean the blades and check continuity; note if original sleeve or packaging is included. Longer lengths and pristine condition can push value higher. Images analyzed: 0.",
+        "ebay_avg_price": 237.23444444444445,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=MIT+Z-Cord+II+Audiophile+AC+Power+Cable&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "MIT Z-Cord II Audiophile AC Power Cable",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 80,
+        "items": [
+            {
+                "item_name": "MIT Z-Cord II Audiophile AC Power Cable",
+                "estimated_value": 80,
+                "ebay_avg_price": 237.23444444444445
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89500235/MIT-ZCord-II-AC-Power-Cord",
+            "title": "MIT Z-Cord II AC Power Cord",
+            "lot_number": 22,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89500235/MIT-ZCord-II-AC-Power-Cord",
+            "pics": [],
+            "site_key": "transitional"
+        },
+        "reasoning": "MIT (Music Interface Technologies) Z-Cord II power cables are respected entry-to-mid level audiophile cords. Recent sold comps generally range $60\u2013100 depending on length (6\u20138 ft tends to fetch more), plug condition, and whether factory packaging is included. With no images or length specified, I valued it at a conservative mid-point of $80. Reseller tip: measure and list the exact length, show close-ups of both plug ends, note if the plug is hospital grade or features polished blades, and test for continuity; including original box or documentation can add a premium. Images analyzed: 0.",
+        "ebay_avg_price": 237.23444444444445,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=MIT+Z-Cord+II+Audiophile+AC+Power+Cable&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "MIT Z-Cord II Audiophile AC Power Cable",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 85,
+        "items": [
+            {
+                "item_name": "MIT Z-Cord II Audiophile AC Power Cable",
+                "estimated_value": 85,
+                "ebay_avg_price": 237.23444444444445
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89500311/MIT-ZCord-II-AC-Power-Cord",
+            "title": "MIT Z-Cord II AC Power Cord",
+            "lot_number": 24,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89500311/MIT-ZCord-II-AC-Power-Cord",
+            "pics": [],
+            "site_key": "transitional"
+        },
+        "reasoning": "MIT (Music Interface Technologies) Z-Cord II is a recognized high-end hi-fi power cable. Recent sold comps typically range about $70\u2013110 depending on length, condition, and included packaging; with no photos or length provided, a conservative midpoint of $85 is reasonable. This item is small and easily shipped. Reseller tips: measure and list the exact length and connector types (NEMA plug to IEC, likely C13), photograph prongs and jacket markings, and note any ferrite filters or original packaging\u2014these details can add value and reduce returns. Test for continuity and clean blade contacts before sale. Images analyzed: 0.",
+        "ebay_avg_price": 237.23444444444445,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=MIT+Z-Cord+II+Audiophile+AC+Power+Cable&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "MIT Z-Cord II Audiophile AC Power Cord",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 80,
+        "items": [
+            {
+                "item_name": "MIT Z-Cord II Audiophile AC Power Cord",
+                "estimated_value": 80,
+                "ebay_avg_price": 237.23444444444445
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89500377/MIT-ZCord-II-AC-Power-Cord",
+            "title": "MIT Z-Cord II AC Power Cord",
+            "lot_number": 26,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89500377/MIT-ZCord-II-AC-Power-Cord",
+            "pics": [],
+            "site_key": "transitional"
+        },
+        "reasoning": "MIT (Music Interface Technologies) power cords are sought after by audiophiles. Recent sold comps for the Z-Cord II typically land around $60\u2013100 depending on length (most common ~6 ft), condition, and whether the plug is hospital-grade. With no photos and unspecified length, I priced mid-market at $80. Reseller tip: include the exact length, plug types (NEMA 5-15P to IEC C13), and note if the wall plug is hospital grade\u2014those variants command a premium. Clean contacts with DeoxIT and show continuity readings. Original bag/labels and confirming it\u2019s the II version (not Z-Cord or Z-Cord III) will also improve sell-through. Images analyzed: 0.",
+        "ebay_avg_price": 237.23444444444445,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=MIT+Z-Cord+II+Audiophile+AC+Power+Cord&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "MIT Z-Cord II Audiophile AC Power Cable",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 80,
+        "items": [
+            {
+                "item_name": "MIT Z-Cord II Audiophile AC Power Cable",
+                "estimated_value": 80,
+                "ebay_avg_price": 237.23444444444445
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89500441/MIT-ZCord-II-AC-Power-Cord",
+            "title": "MIT Z-Cord II AC Power Cord",
+            "lot_number": 28,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89500441/MIT-ZCord-II-AC-Power-Cord",
+            "pics": [],
+            "site_key": "transitional"
+        },
+        "reasoning": "MIT Z-Cord II is a known audiophile power cable with consistent resale demand; typical sold comps land roughly in the $60\u2013100 range depending on condition and length. With no photos or length specified, I used a conservative mid-range estimate of $80. To maximize value, measure the exact length, note plug type (likely NEMA 5-15), and show clean, undamaged terminations; cleaning contacts (e.g., DeoxIT) and confirming continuity can help. Original packaging or documentation can add a small premium. Images analyzed: 0.",
+        "ebay_avg_price": 237.23444444444445,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=MIT+Z-Cord+II+Audiophile+AC+Power+Cable&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "MIT Z-Cord II Audiophile AC Power Cable",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "MIT Z-Cord II Audiophile AC Power Cable",
+                "estimated_value": 100,
+                "ebay_avg_price": 237.23444444444445
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89500505/MIT-ZCord-II-AC-Power-Cord",
+            "title": "MIT Z-Cord II AC Power Cord",
+            "lot_number": 29,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89500505/MIT-ZCord-II-AC-Power-Cord",
+            "pics": [],
+            "site_key": "transitional"
+        },
+        "reasoning": "MIT (Music Interface Technologies) cables have steady demand among audiophiles. Used MIT Z-Cord II power cables typically sell in the $80\u2013130 range depending on length and condition; with no length or photos provided, a conservative $100 estimate is reasonable. Shippable and straightforward to pack. Pro tip: measure and list the exact length and plug types (likely NEMA 5-15P to IEC C13) and show clean, untarnished blades; including original packaging or test results for continuity can add value. Images analyzed: 0.",
+        "ebay_avg_price": 237.23444444444445,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=MIT+Z-Cord+II+Audiophile+AC+Power+Cable&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "SUMO Charlie 700 FM Synthesized Stereo Tuner",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 350,
+        "items": [
+            {
+                "item_name": "SUMO Charlie 700 FM Synthesized Stereo Tuner",
+                "estimated_value": 350,
+                "ebay_avg_price": 236.33
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89147429/SUMO-Charlie-700-FM-Synthesized-Stereo-Tuner",
+            "title": "SUMO Charlie 700 FM Synthesized Stereo Tuner",
+            "lot_number": 14,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89147429/SUMO-Charlie-700-FM-Synthesized-Stereo-Tuner",
+            "pics": [
+                "89147429_1.jpg",
+                "89147429_2.jpg",
+                "89147429_3.jpg",
+                "89147429_4.jpg",
+                "89147429_5.jpg",
+                "89147429_6.jpg",
+                "89147429_7.jpg",
+                "89147429_8.jpg"
+            ],
+            "site_key": "transitional"
+        },
+        "reasoning": "Vintage SUMO tuners have a niche audiophile following and the 700 (rack-mount, Japan) is desirable. Photos show it powers on and is complete with 75/300\u03a9 antenna inputs and RCA outputs; cosmetic wear is modest. Recent sales for comparable high-end FM tuners from this era typically fall in the $300\u2013500 range; without proof of full testing/servicing I priced it conservatively at $350. Tip: replace the memory backup battery pack and verify alignment/sensitivity\u2014documentation of a clean bill of health or recap can add $100\u2013200. Ship double-boxed with protection around the rack ears and knob switches. Analyzed 8 images.",
+        "ebay_avg_price": 236.33,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=SUMO+Charlie+700+FM+Synthesized+Stereo+Tuner&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Krell KRC-2 Balanced Stereo Preamplifier w/ Remote Control",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 1600,
+        "items": [
+            {
+                "item_name": "Krell KRC-2 high-end balanced stereo preamplifier (XLR/RCA, serial 29-01839)",
+                "estimated_value": 1400,
+                "ebay_avg_price": 0.0
+            },
+            {
+                "item_name": "Krell metal remote control for KRC series preamps",
+                "estimated_value": 200,
+                "ebay_avg_price": 35.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89221297/KRELL-KRC2-Preamplifier",
+            "title": "KRELL KRC-2 Preamplifier",
+            "lot_number": 4,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89221297/KRELL-KRC2-Preamplifier",
+            "pics": [
+                "89221297_1.jpg",
+                "89221297_2.jpg",
+                "89221297_3.jpg",
+                "89221297_4.jpg",
+                "89221297_5.jpg",
+                "89221297_6.jpg",
+                "89221297_7.jpg",
+                "89221297_8.jpg",
+                "89221297_9.jpg",
+                "89221297_10.jpg"
+            ],
+            "site_key": "transitional"
+        },
+        "reasoning": "Krell\u2019s KRC-2 is a sought-after 1990s reference preamp with both balanced XLR and unbalanced RCA I/O. Recent used sales typically land around $1.4k\u2013$2.0k depending on condition and inclusion of the original metal remote. The photos show the unit in decent cosmetic shape and include the Krell remote, which adds ~$150\u2013$250 in value. I valued the preamp at $1,400 and the remote at $200 for a conservative total of $1,600. Reseller tip: mention and photograph the XLR I/O, serial number, and remote close-ups; if available, add an IEC power cord and note any recap/service history\u2014documentation can raise the price. Ship double-boxed with foam blocking around the front knobs and side heatsinks to avoid faceplate damage. An operational video (showing all inputs/outputs and volume/mute) can also boost buyer confidence. Analyzed 10 images.",
+        "ebay_avg_price": 35.0,
+        "ebay_confidence_score": 42,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Krell+KRC-2+Balanced+Stereo+Preamplifier+w%2F+Remote+Control&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Bowers & Wilkins 802 Diamond Floorstanding Speakers Pair Rosenut",
+        "category": "Electronics",
+        "is_shippable": false,
+        "total_market_value": 8000,
+        "items": [
+            {
+                "item_name": "Bowers & Wilkins 802 Diamond floorstanding speakers (pair, Rosenut finish)",
+                "estimated_value": 8000
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89052833/BOWERS-WILKINS-802-Diamond-Rosenut-Tower-Speakers",
+            "title": "BOWERS & WILKINS 802 Diamond (Rosenut) Tower Speakers",
+            "lot_number": 1,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89052833/BOWERS-WILKINS-802-Diamond-Rosenut-Tower-Speakers",
+            "pics": [
+                "89052833_1.jpg",
+                "89052833_2.jpg",
+                "89052833_3.jpg",
+                "89052833_4.jpg",
+                "89052833_5.jpg",
+                "89052833_6.jpg",
+                "89052833_7.jpg",
+                "89052833_8.jpg",
+                "89052833_9.jpg",
+                "89052833_10.jpg",
+                "89052833_11.jpg",
+                "89052833_12.jpg",
+                "89052833_13.jpg",
+                "89052833_14.jpg",
+                "89052833_15.jpg",
+                "89052833_16.jpg",
+                "89052833_17.jpg",
+                "89052833_18.jpg",
+                "89052833_19.jpg",
+                "89052833_20.jpg",
+                "89052833_21.jpg",
+                "89052833_22.jpg",
+                "89052833_23.jpg",
+                "89052833_24.jpg",
+                "89052833_25.jpg"
+            ],
+            "site_key": "transitional"
+        },
+        "reasoning": "These are high-end Bowers & Wilkins 802 Diamond floorstanders in Rosenut, shown in very clean cosmetic condition with grilles and binding posts intact. Recent sold comps for 802 Diamond (pre-D3 generations) in similar condition commonly land in the $6,500\u2013$9,500 range; I priced this pair at $8,000 to reflect strong condition but without confirmation of factory crates/accessories or recent service. Shipping requires palletized freight; local pickup boosts buyer confidence. Reseller tips: verify both serial numbers are consecutive and that the diamond tweeters are chip-free; include original jumpers/spikes and, if available, factory crates\u2014original packaging can add $500\u2013$1,000 in realized value because it enables safer freight. Offering in-home audition or detailed sweep tests (e.g., REW) helps maximize price. I analyzed 10 images for this assessment.",
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Bowers+%26+Wilkins+802+Diamond+Floorstanding+Speakers+Pair+Rosenut&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Krell KSA-300S Stereo Power Amplifier",
+        "category": "Electronics",
+        "is_shippable": false,
+        "total_market_value": 4500,
+        "items": [
+            {
+                "item_name": "Krell KSA-300S Stereo Power Amplifier (300W/ch, balanced & RCA inputs)",
+                "estimated_value": 4500
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89215100/KRELL-KSA300S-Stereo-Power-Amplifier",
+            "title": "KRELL KSA-300S Stereo Power Amplifier",
+            "lot_number": 2,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89215100/KRELL-KSA300S-Stereo-Power-Amplifier",
+            "pics": [
+                "89215100_1.jpg",
+                "89215100_2.jpg",
+                "89215100_3.jpg",
+                "89215100_4.jpg",
+                "89215100_5.jpg",
+                "89215100_6.jpg"
+            ],
+            "site_key": "transitional"
+        },
+        "reasoning": "This is a single high-end audiophile amp. The KSA-300S is well-known and heavy (well over 150 lb) so it typically requires freight shipment, thus not reasonably shippable by standard parcel. Recent comps for functioning units generally fall in the $3,000\u2013$6,000 range depending on service history and cosmetics. Based on visible average wear and no accessories, I set a mid-market estimate of $4,500. Advice: these command a premium if recently serviced/recapped and with proof of bias adjustment; adding original manual, factory double boxes, and showing clean output on a bench test can boost price and buyer confidence. Analyzed 6 images.",
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Krell+KSA-300S+Stereo+Power+Amplifier&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "MIT Oracle MA Digital XLR Interconnect Cable AES/EBU",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 600,
+        "items": [
+            {
+                "item_name": "MIT Oracle MA Digital XLR Interconnect Cable AES/EBU",
+                "estimated_value": 600,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89496896/MIT-Oracle-MA-Digital-Interconnect-Cable",
+            "title": "MIT Oracle MA Digital Interconnect Cable",
+            "lot_number": 3,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89496896/MIT-Oracle-MA-Digital-Interconnect-Cable",
+            "pics": [
+                "89496896_1.jpg",
+                "89496896_2.jpg",
+                "89496896_3.jpg",
+                "89496896_4.jpg",
+                "89496896_5.jpg"
+            ],
+            "site_key": "transitional"
+        },
+        "reasoning": "High-end audiophile digital interconnect from MIT with network box and Articulation Selector; XLR 3-pin ends indicate AES/EBU 110\u03a9 use between transport and DAC. Visual condition appears clean with no obvious damage in photos. Recent market comps for MIT Oracle MA Digital XLR (approx. 1m) commonly sell in the $500\u2013800 range depending on length, condition, and inclusion of original packaging; priced at a conservative mid-point of $600. Reseller tips: measure and list exact length and impedance (AES/EBU 110\u03a9), photograph the direction arrows and serial labels if present, and note tested continuity/functional use to boost buyer confidence. Ship in a well-padded box protecting the network module and XLR tips; original case or pouch adds value. Analyzed 5 images.",
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=MIT+Oracle+MA+Digital+XLR+Interconnect+Cable+AES%2FEBU&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Thiel CS3.6 Coherent Source Floorstanding Speakers Pair - Amberwood",
+        "category": "Electronics",
+        "is_shippable": false,
+        "total_market_value": 1700,
+        "items": [
+            {
+                "item_name": "Thiel CS3.6 Coherent Source floorstanding speakers (pair), Amberwood finish, with original cartons",
+                "estimated_value": 1700
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89054853/THIEL-CS36-Coherent-Source-Loudspeakers-Amberwood-Finish",
+            "title": "THIEL CS3.6 Coherent Source Loudspeakers / Amberwood Finish",
+            "lot_number": 5,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89054853/THIEL-CS36-Coherent-Source-Loudspeakers-Amberwood-Finish",
+            "pics": [
+                "89054853_1.jpg",
+                "89054853_2.jpg",
+                "89054853_3.jpg",
+                "89054853_4.jpg",
+                "89054853_5.jpg",
+                "89054853_6.jpg",
+                "89054853_7.jpg",
+                "89054853_8.jpg",
+                "89054853_9.jpg",
+                "89054853_10.jpg",
+                "89054853_11.jpg",
+                "89054853_12.jpg",
+                "89054853_13.jpg",
+                "89054853_14.jpg"
+            ],
+            "site_key": "transitional"
+        },
+        "reasoning": "This is a matched pair of Thiel CS3.6 floorstanding speakers in Amberwood with original cartons shown. Market comps for working pairs typically land around $1,200\u2013$2,000 depending on cosmetics, drivers, and presence of boxes; these appear clean with grills and boxes, so I estimate $1,700. The large solid disc is the passive radiator\u2014minor scuffs there are common and not performance-critical. Shipping requires pallet/freight due to size/weight, so marked not shippable. Reseller tips: confirm both coax tweeters are operational and that binding posts are tight; include spikes/feet and jumper plates if present to boost value; note matching serial numbers and provide impedance/sensitivity (4\u03a9, ~86dB) in the listing to attract audiophile buyers. Analyzed 14 images.",
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Thiel+CS3.6+Coherent+Source+Floorstanding+Speakers+Pair+-+Amberwood&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Krell KSA-250 Class A Stereo Power Amplifier",
+        "category": "Electronics",
+        "is_shippable": false,
+        "total_market_value": 4200,
+        "items": [
+            {
+                "item_name": "Krell KSA-250 Class A 250W Stereo Power Amplifier",
+                "estimated_value": 4200
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89141908/KRELL-KSA250-Stereo-Power-Amplifier",
+            "title": "KRELL KSA-250 Stereo Power Amplifier",
+            "lot_number": 6,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89141908/KRELL-KSA250-Stereo-Power-Amplifier",
+            "pics": [
+                "89141908_1.jpg",
+                "89141908_2.jpg",
+                "89141908_3.jpg",
+                "89141908_4.jpg",
+                "89141908_5.jpg",
+                "89141908_6.jpg",
+                "89141908_7.jpg",
+                "89141908_8.jpg",
+                "89141908_9.jpg"
+            ],
+            "site_key": "transitional"
+        },
+        "reasoning": "This lot is a single high-end Krell KSA-250 stereo power amplifier. Recent market comps for working units typically fall in the $3.5k\u2013$6k range depending on service history and cosmetics; unknown/untested examples trend lower. Based on the clean visuals and no explicit proof of recent service, I estimated $4,200. These weigh roughly 150 lb and run hot (pure Class A), so freight shipping is needed\u2014thus not shippable by standard parcel. Reseller tip: documented recap/restoration (caps, bias/offset set, fan/thermals inspected) and proof of proper operation at idle will significantly increase value; include photos of the serial tag, inside boards, and show both RCA and XLR inputs working to maximize price. I analyzed 9 images.",
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Krell+KSA-250+Class+A+Stereo+Power+Amplifier&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Berkeley Audio Design Alpha DAC Series 2 Digital-to-Analog Converter",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 1250,
+        "items": [
+            {
+                "item_name": "Berkeley Audio Design Alpha DAC Series 2 digital-to-analog converter (AES/SPDIF/Toslink inputs, XLR/RCA outputs)",
+                "estimated_value": 1200,
+                "ebay_avg_price": 0.0
+            },
+            {
+                "item_name": "Berkeley Alpha DAC original remote control",
+                "estimated_value": 50,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89145789/BERKELEY-ALPHA-DAC-Series-2",
+            "title": "BERKELEY ALPHA DAC Series 2",
+            "lot_number": 9,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89145789/BERKELEY-ALPHA-DAC-Series-2",
+            "pics": [
+                "89145789_1.jpg",
+                "89145789_2.jpg",
+                "89145789_3.jpg",
+                "89145789_4.jpg",
+                "89145789_5.jpg",
+                "89145789_6.jpg",
+                "89145789_7.jpg",
+                "89145789_8.jpg",
+                "89145789_9.jpg",
+                "89145789_10.jpg"
+            ],
+            "site_key": "transitional"
+        },
+        "reasoning": "This is a high-end Berkeley Audio Design Alpha DAC Series 2 with original remote. Recent sales for the Series 2 (non-Reference) typically land around $1,100\u2013$1,500 depending on condition, inclusion of remote, and proof of functionality. Visible cosmetic wear is light and the unit appears complete but no power cord or testing evidence is shown, so I priced toward the conservative middle. The remote alone sells ~$40\u2013$80. Pro tip: mention firmware revision and provide photos of it powered on; also include a standard IEC power cord and a 75\u03a9 BNC-to-RCA adapter for the SPDIF input\u2014those two small adds can meaningfully improve sell-through. Note that buyers value the balanced XLR outputs and AES input; highlighting those in the listing helps visibility. Analyzed 10 images.",
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Berkeley+Audio+Design+Alpha+DAC+Series+2+Digital-to-Analog+Converter&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Krell KRC-HR Reference Preamplifier w/ External Power Supply",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 1700,
+        "items": [
+            {
+                "item_name": "Krell KRC-HR Reference Stereo Preamplifier (main unit)",
+                "estimated_value": 1300,
+                "ebay_avg_price": 0.0
+            },
+            {
+                "item_name": "Krell KRC-HR External Power Supply with umbilical cable",
+                "estimated_value": 400,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89229624/KRELL-KRCHR-Preamplifier-wPower-Supply",
+            "title": "KRELL KRC-HR Preamplifier w/Power Supply",
+            "lot_number": 10,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89229624/KRELL-KRCHR-Preamplifier-wPower-Supply",
+            "pics": [
+                "89229624_1.jpg",
+                "89229624_2.jpg",
+                "89229624_3.jpg",
+                "89229624_4.jpg",
+                "89229624_5.jpg",
+                "89229624_6.jpg",
+                "89229624_7.jpg",
+                "89229624_8.jpg"
+            ],
+            "site_key": "transitional"
+        },
+        "reasoning": "Krell\u2019s KRC-HR is a sought-after 1990s reference preamp; clean working examples with the dedicated outboard PSU typically sell in the $1.6k\u2013$2.2k range depending on condition, inclusion of the proprietary umbilical, and remote. Photos show the PSU and umbilical present and the unit powered, but no remote is pictured, so value estimated conservatively at $1,700 total ($1,300 preamp + $400 PSU). Reseller tip: the proprietary Krell umbilical is critical\u2014missing it can cut value by 50%+. Including the original remote and factory box/foam can add $150\u2013$300. Recapping/service records from a reputable tech also boost confidence and price. I analyzed 8 images.",
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Krell+KRC-HR+Reference+Preamplifier+w%2F+External+Power+Supply&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "4-Shelf AV Component Rack Media Stand - Black Metal",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "4-Shelf Audio/Video Component Rack Media Stand, Black Metal Frame",
+                "estimated_value": 40
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89115661/Stereo-Component-Rack",
+            "title": "Stereo Component Rack",
+            "lot_number": 13,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89115661/Stereo-Component-Rack",
+            "pics": [
+                "89115661_1.jpg",
+                "89115661_2.jpg",
+                "89115661_3.jpg",
+                "89115661_4.jpg"
+            ],
+            "site_key": "transitional"
+        },
+        "reasoning": "Unbranded 4-shelf AV/media rack with noticeable wear on lower shelf. Generic racks of this type typically sell locally for $30\u201360 depending on condition; priced at $40 due to cosmetic wear and no brand/model. Not shippable as it is furniture and generic. Tip: a thorough cleaning, touch-up paint, added cable-management clips, or casters can increase appeal and sale price. An accurate height/width/depth measurement in the listing will also help. Analyzed 4 images.",
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=4-Shelf+AV+Component+Rack+Media+Stand+-+Black+Metal&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Berkeley Audio Design Alpha USB to AES/EBU SPDIF Digital Interface",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 650,
+        "items": [
+            {
+                "item_name": "Berkeley Audio Design Alpha USB to AES/EBU SPDIF Digital Interface",
+                "estimated_value": 650,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89169884/BERKELEY-ALPHA-USB",
+            "title": "BERKELEY ALPHA USB",
+            "lot_number": 15,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89169884/BERKELEY-ALPHA-USB",
+            "pics": [
+                "89169884_1.jpg",
+                "89169884_2.jpg",
+                "89169884_3.jpg",
+                "89169884_4.jpg",
+                "89169884_5.jpg"
+            ],
+            "site_key": "transitional"
+        },
+        "reasoning": "This is a single high-end audiophile USB-to-digital interface from Berkeley Audio Design (Alpha USB) with AES/EBU and SPDIF outputs. Unit appears clean with normal cosmetic wear; no cables are pictured (standard IEC power cord and USB-B cable are inexpensive to add). Recent used comps for working units typically land in the $550\u2013$800 range; given unknown test status and missing accessories, I estimated $650. To maximize resale, include an IEC power cord and a quality USB A-to-B cable, note sample-rate support (up to 24/192), and show the unit powering on. Serial number visible helps buyer confidence. Analyzed 5 images.",
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Berkeley+Audio+Design+Alpha+USB+to+AES%2FEBU+SPDIF+Digital+Interface&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "MIT Terminator 2 Proline XLR Interconnect Cables Pair",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 220,
+        "items": [
+            {
+                "item_name": "MIT Terminator 2 Proline XLR Interconnect Cables Pair",
+                "estimated_value": 220,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89170318/MIT-Terminator-2-Interconnect-Cables",
+            "title": "MIT Terminator 2 Interconnect Cables",
+            "lot_number": 16,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89170318/MIT-Terminator-2-Interconnect-Cables",
+            "pics": [
+                "89170318_1.jpg",
+                "89170318_2.jpg",
+                "89170318_3.jpg",
+                "89170318_4.jpg"
+            ],
+            "site_key": "transitional"
+        },
+        "reasoning": "Photos show a pair of MIT Terminator 2 Proline balanced XLR interconnects with inline network boxes and Neutrik-style 3-pin connectors. Comparable eBay sales for used MIT Terminator 2 Proline XLR pairs typically range $180\u2013260 depending on length and condition; I priced this set at $220 assuming typical 1m length and good working condition. Reseller tips: measure and list exact length and show continuity tests; clean the XLR pins with isopropyl and include close-ups of the network boxes and connector markings\u2014original packaging and verified length can add 10\u201320% value. Analyzed 4 images.",
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 10,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=MIT+Terminator+2+Proline+XLR+Interconnect+Cables+Pair&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "MIT Magnum M1.3 Proline XLR Interconnect Cables Pair",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 700,
+        "items": [
+            {
+                "item_name": "MIT Magnum M1.3 Proline XLR Interconnect Cables Pair",
+                "estimated_value": 700,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89230523/MIT-Magnum-M13-Interconnect-Cables",
+            "title": "MIT Magnum M1.3 Interconnect Cables",
+            "lot_number": 17,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89230523/MIT-Magnum-M13-Interconnect-Cables",
+            "pics": [
+                "89230523_1.jpg",
+                "89230523_2.jpg",
+                "89230523_3.jpg",
+                "89230523_4.jpg"
+            ],
+            "site_key": "transitional"
+        },
+        "reasoning": "High-end audiophile balanced interconnects with network boxes and adjustable impedance (Low/Mid/High), XLR male/female ends visible. MIT Magnum M-series cables have strong resale; typical used prices for M1.3 Proline XLR pairs range roughly $600\u2013900 depending on length and condition. Without stated length or original packaging, I valued the pair at $700 in tested/working condition. Tips: measure and list exact length, show both ends and the impedance switches, and note channel labels (red/blue). Include continuity test results; original box and documentation can add 5\u201310%. I analyzed 4 images.",
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=MIT+Magnum+M1.3+Proline+XLR+Interconnect+Cables+Pair&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "MIT Terminator 2 Proline XLR Interconnect Cable Pair",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 180,
+        "items": [
+            {
+                "item_name": "MIT Terminator 2 Proline XLR Interconnect Cable Pair",
+                "estimated_value": 180,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89499055/MIT-Terminator-2-Interconnect-Cables",
+            "title": "MIT Terminator 2 Interconnect Cables",
+            "lot_number": 19,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89499055/MIT-Terminator-2-Interconnect-Cables",
+            "pics": [
+                "89499055_1.jpg",
+                "89499055_2.jpg",
+                "89499055_3.jpg",
+                "89499055_4.jpg"
+            ],
+            "site_key": "transitional"
+        },
+        "reasoning": "Photos show a single pair of MIT Terminator 2 Proline balanced interconnects with 3\u2011pin XLR male/female ends and MIT inline network modules. MIT is a known audiophile brand; the Terminator series is entry/mid-level but sought after. Typical used sales for similar pairs range roughly $130\u2013220 depending on length and condition; these appear clean with Neutrik-style connectors, so I estimated $180. Reseller tip: list exact length, confirm both channels and continuity, and clean contacts with DeoxIT; including 'balanced XLR' and 'Proline' in the title improves search visibility. Analyzed 4 images.",
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 10,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=MIT+Terminator+2+Proline+XLR+Interconnect+Cable+Pair&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "MIT Shotgun S3.3 Speaker Cables Pair",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 350,
+        "items": [
+            {
+                "item_name": "MIT Shotgun S3.3 Speaker Cables Pair",
+                "estimated_value": 350,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89500695/MIT-Shotgun-S33-Speaker-Cables",
+            "title": "MIT Shotgun S3.3 Speaker Cables",
+            "lot_number": 21,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89500695/MIT-Shotgun-S33-Speaker-Cables",
+            "pics": [],
+            "site_key": "transitional"
+        },
+        "reasoning": "MIT Shotgun S3.3 are desirable networked speaker cables; the S3.3 sits lower in the Shotgun lineup but still commands strong resale. Typical used prices vary significantly by length (e.g., 8\u201310 ft pairs fetch more) and termination (spade vs. banana) and condition of the network boxes. With no photos, length, or termination provided, I priced conservatively at $350 for a working, standard-length pair. Pro tip: add exact length tip-to-tip, termination type, close-ups of the network modules/labels, and continuity test results; also clarify whether the model is S3.3 or S33 as both appear in the listing. Including original packaging or pouches can add value and buyer confidence. Images analyzed: 0.",
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=MIT+Shotgun+S3.3+Speaker+Cables+Pair&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "MIT Magnum AC1 Audiophile Power Cable",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 300,
+        "items": [
+            {
+                "item_name": "MIT Magnum AC1 Audiophile Power Cable",
+                "estimated_value": 300,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89500796/MIT-Magnum-AC1-Power-Cord",
+            "title": "MIT Magnum AC1 Power Cord",
+            "lot_number": 23,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89500796/MIT-Magnum-AC1-Power-Cord",
+            "pics": [],
+            "site_key": "transitional"
+        },
+        "reasoning": "MIT\u2019s Magnum AC1 is a sought-after high-end audiophile power cable with consistent resale demand; comparable sales typically land in the $250\u2013$350 range depending on length and condition, so $300 is a conservative midpoint given no photos or length specified. Value hinges on cable length, plug type (NEMA/IEC C13 vs C19), and presence/condition of any network/filter box. Pro tip: include exact length, plug/IEC types, close-ups of terminations, and any original packaging\u2014these details can add 10\u201320% to realized price. Clean contacts with DeoxIT and test for continuity to reassure buyers. Images analyzed: 0.",
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=MIT+Magnum+AC1+Audiophile+Power+Cable&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "WyWires Platinum Series USB A to B Audiophile Cable",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 350,
+        "items": [
+            {
+                "item_name": "WyWires Platinum Series USB A to B Audiophile Cable",
+                "estimated_value": 350,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89499862/WYWIRES-Platinum-Series-USB-Cable",
+            "title": "WYWIRES Platinum Series USB Cable",
+            "lot_number": 25,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89499862/WYWIRES-Platinum-Series-USB-Cable",
+            "pics": [
+                "89499862_1.jpg",
+                "89499862_2.jpg",
+                "89499862_3.jpg"
+            ],
+            "site_key": "transitional"
+        },
+        "reasoning": "WyWires\u2019 Platinum USB is a high-end audiophile cable commonly used between a computer/streamer and a DAC (typically USB A to USB-B). Used market comps for similar boutique audiophile USB cables from WyWires and peers generally land in the $300\u2013450 range depending on length and condition; this example appears clean with intact connectors, so $350 is a realistic resale target. Tips: measure and list exact length and connector types clearly, include close-ups of the terminations, and note any original pouch/certificate\u2014these details can add 10\u201320% to sale price. Clean the contacts lightly with DeoxIT for better presentation and functionality. Analyzed 3 images.",
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=WyWires+Platinum+Series+USB+A+to+B+Audiophile+Cable&_sacat=0&LH_Complete=1&LH_Sold=1"
+    }
+]
+</script>
+
+<script>
+    const fullJsonData = JSON.parse(document.getElementById('auctionData').textContent);
+    let currentFilteredData = [...fullJsonData];
+    
+    const tableBody = document.getElementById('data-table-body');
+    const headers = document.querySelectorAll('thead th[data-column]');
+    const hideFurnitureCheckbox = document.getElementById('hideFurniture');
+    const hideMedicalCheckbox = document.getElementById('hideMedical');
+
+    let currentSort = { column: 'ebay_price', isAscending: false };
+
+    function applyFiltersAndRepopulate() {
+        const hideFurniture = hideFurnitureCheckbox.checked;
+        const hideMedical = hideMedicalCheckbox.checked;
+
+        currentFilteredData = fullJsonData.filter(lot => {
+            const category = (lot.category || '').toLowerCase();
+            if (hideFurniture && category === 'large furniture') {
+                return false;
+            }
+            if (hideMedical && category === 'medical devices') {
+                return false;
+            }
+            return true;
+        });
+
+        sortData(currentSort.column, true);
+    }
+
+    function populateTable() {
+        tableBody.innerHTML = '';
+        const formatCurrency = (value) => (value || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 });
+        const sanitizeText = (text) => (text || 'No reasoning provided.');
+
+        currentFilteredData.forEach(lot => {
+            const hasReasoning = lot.reasoning && lot.reasoning.trim() !== '';
+            
+            const mainRow = document.createElement('tr');
+            mainRow.className = 'lot-main' + (hasReasoning ? ' expandable' : '');
+            
+            const encodedSearch = encodeURIComponent(lot.ebay_search_title || '');
+            
+            mainRow.innerHTML = `
+                <td>${lot.lot_number > 0 ? lot.lot_number : ''}</td>
+                <td><a href="${lot.original_listing.url}" target="_blank" title="${lot.original_listing.title}">${lot.ebay_search_title || 'N/A'}</a></td>
+                <td>${lot.category || 'Miscellaneous'}</td>
+                <td style="text-align: right;">${formatCurrency(lot.total_market_value)}</td>
+                <td style="text-align: right;">${lot.ebay_avg_price > 0 ? formatCurrency(lot.ebay_avg_price) : 'N/A'}</td>
+                <td style="text-align: right;">${lot.ebay_confidence_score > 0 ? lot.ebay_confidence_score + '%' : 'N/A'}</td>
+                <td style="text-align: center;"><a href="${lot.ebay_search_url || '#'}" target="_blank">eBay</a></td>
+                <td style="text-align: center;"><a href="https://www.google.com/search?q=${encodedSearch}" target="_blank">Google</a></td>
+            `;
+            
+            tableBody.appendChild(mainRow);
+            
+            if (hasReasoning) {
+                const reasoningRow = document.createElement('tr');
+                reasoningRow.className = 'reasoning-row';
+                reasoningRow.innerHTML = `<td colspan="8">${sanitizeText(lot.reasoning)}</td>`;
+                tableBody.appendChild(reasoningRow);
+
+                mainRow.addEventListener('click', () => {
+                    reasoningRow.classList.toggle('visible');
+                });
+            }
+
+            if (lot.items && lot.items.length > 1) {
+                lot.items.forEach(subItem => {
+                    const subRow = document.createElement('tr');
+                    subRow.className = 'lot-sub-item';
+                    
+                    const subAvgPrice = subItem.ebay_avg_price || 0;
+                    const subEncodedSearch = encodeURIComponent(subItem.item_name || '');
+                    const subEbayUrl = `https://www.ebay.com/sch/i.html?_from=R40&_nkw=${subEncodedSearch}&_sacat=0&LH_Complete=1&LH_Sold=1`;
+                    const subGoogleUrl = `https://www.google.com/search?q=${subEncodedSearch}`;
+
+                    subRow.innerHTML = `
+                        <td></td>
+                        <td style="padding-left: 35px;">${subItem.item_name || 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: right;">${formatCurrency(subItem.estimated_value)}</td>
+                        <td style="text-align: right;">${subAvgPrice > 0 ? formatCurrency(subAvgPrice) : 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: center;"><a href="${subEbayUrl}" target="_blank">eBay</a></td>
+                        <td style="text-align: center;"><a href="${subGoogleUrl}" target="_blank">Google</a></td>
+                    `;
+                    tableBody.appendChild(subRow);
+                });
+            }
+        });
+    }
+
+    function sortData(column, keepDirection = false) {
+        const isNumeric = ['price', 'ebay_price', 'lot_number', 'confidence'].includes(column);
+
+        if (!keepDirection) {
+            if (currentSort.column === column) {
+                currentSort.isAscending = !currentSort.isAscending;
+            } else {
+                currentSort.column = column;
+                currentSort.isAscending = !isNumeric;
+            }
+        } else if (currentSort.column !== column) {
+             currentSort.column = column;
+             currentSort.isAscending = !isNumeric;
+        }
+
+        currentFilteredData.sort((a, b) => {
+            let valA, valB;
+            switch (column) {
+                case 'price': valA = a.total_market_value || 0; valB = b.total_market_value || 0; break;
+                case 'ebay_price': valA = a.ebay_avg_price || 0; valB = b.ebay_avg_price || 0; break;
+                case 'confidence': valA = a.ebay_confidence_score || 0; valB = b.ebay_confidence_score || 0; break;
+                case 'lot_number': valA = a.lot_number || 0; valB = b.lot_number || 0; break;
+                case 'name': valA = (a.ebay_search_title || '').toLowerCase(); valB = (b.ebay_search_title || '').toLowerCase(); break;
+                case 'category': valA = (a.category || '').toLowerCase(); valB = (b.category || '').toLowerCase(); break;
+                default: return 0;
+            }
+            let comparison = 0;
+            if (valA > valB) { comparison = 1; }
+            else if (valA < valB) { comparison = -1; }
+            return currentSort.isAscending ? comparison : comparison * -1;
+        });
+        updateSortIndicators();
+        populateTable();
+    }
+
+    function updateSortIndicators() {
+        headers.forEach(header => {
+            const indicator = header.querySelector('.sort-indicator');
+            if (header.dataset.column === currentSort.column) {
+                indicator.textContent = currentSort.isAscending ? ' ▲' : ' ▼';
+            } else { indicator.textContent = ''; }
+        });
+    }
+
+    headers.forEach(header => { header.addEventListener('click', () => { sortData(header.dataset.column); }); });
+    hideFurnitureCheckbox.addEventListener('change', applyFiltersAndRepopulate);
+    hideMedicalCheckbox.addEventListener('change', applyFiltersAndRepopulate);
+
+    sortData('ebay_price');
+</script>
+
+    <div style="text-align: center; margin-top: 2rem; font-size: 0.8em; color: #888;">
+        <p>Analysis powered by:</p>
+        <p><strong>Auction Analysis Model:</strong> Batch API</p>
+        <p><strong>eBay Cleaning Model(s):</strong> gemini-flash-latest (Gemini)</p>
+    </div>
+
+</body>
+</html>

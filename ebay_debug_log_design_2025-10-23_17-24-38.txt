@@ -1,0 +1,609 @@
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'MIT Oracle MA Digital XLR Interconnect Cable AES/EBU' (Lot #None) ---
+
+--- RAW ---
+
+--- CLEANED ---
+
+--- REASONING ---
+No search results were available for this specific, high-end cable model.
+-> AVG: $0.00 | CONF: 0%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'Krell KRC-2 high-end balanced stereo preamplifier (XLR/RCA, serial 29-01839)' (Lot #None) ---
+
+--- RAW ---
+
+--- CLEANED ---
+
+--- REASONING ---
+No search results were available for this specific Krell preamplifier model.
+-> AVG: $0.00 | CONF: 0%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'Krell metal remote control for KRC series preamps' (Lot #None) ---
+
+--- RAW ---
+- $  35.00 | Krell Remote Control NEW 
+
+--- CLEANED ---
+- $  35.00 | Krell Remote Control NEW 
+
+--- REASONING ---
+The single result is a direct match for a Krell remote control, which is the specific accessory being valued.
+-> AVG: $35.00 | CONF: 85%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'MIT Magnum M1.3 Gen 3 Bi-Wire Speaker Cables 51x Multipole 2C3D' (Lot #None) ---
+
+--- RAW ---
+- $3499.00 | MIT Shotgun MA bi-wire speaker cables 9 ft
+- $ 425.00 | MIT MH 750 Output Terminator BiWire Speaker Cables
+- $2000.00 | MIT Shotgun S1 Bi-Wire Speaker Cables 8 ft
+
+--- CLEANED ---
+- $3499.00 | MIT Shotgun MA bi-wire speaker cables 9 ft
+- $2000.00 | MIT Shotgun S1 Bi-Wire Speaker Cables 8 ft
+
+--- REASONING ---
+Kept only similar MIT high-end bi-wire speaker cables from related lines (Shotgun) since no exact model match was available.
+-> AVG: $2,749.50 | CONF: 60%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'MIT MI-330 Plus RCA Interconnect Cables Pair' (Lot #None) ---
+
+--- RAW ---
+- $  41.94 | MIT EXp Component Video Interconnects RGB OUT OF PACKAGE NEAR MINT
+- $  52.44 | MIT EXp RCA Audio Video Interconnects Level 4 IN PACKAGE NEAR MINT
+- $  65.00 | MIT AVT3 DIGITAL OPTICAL INTERCONNECT, 2 meter / 6.6 ft NEW
+- $  90.00 | MIT CABLES AVT SERIES 3 DIGITAL INTERCONNECT  2m / 6.6 ft
+- $ 299.00 | MIT MI-330 PLUS Series2 S2 1.0M 2-piece pair RCA cable
+- $ 780.00 | MIT MAGNUM M3 ic Interconnect Rca. 5ft Pair.
+- $ 559.00 | MIT MI-350 CVTerminator RCA Cables; 1m Pair Interconnects
+- $  90.00 | MIT AVTi3 Interconnect Cable in 1.0 Meters, from RCA to RCA
+- $  60.00 | pair of two  mit zap1 interconnect rca cable 5ft
+- $ 379.95 | MIT StyleLine SL3 Audio Interconnects (SL3IC) RCA 4 Meters Pair In The Box
+- $  79.33 | MIT Cables AVT Level 3 Digital Interconnect  2m / 6.6 ft RCA connection AVTD3-2
+- $  74.00 | MIT EXPi1 Interconnect cable (Length: 2.0 meters), RCA to RCA
+- $  78.49 | MIT AVt Series RCA Interconnect Cable 10′ (3 m) High‑End Audio Grade
+- $ 100.00 | MIT AVT2  DIGITAL OPTICAL INTERCONNECT, 2 meter / 6.6 ft NEW
+- $  69.00 | MIT EXPi1 Interconnect cable (Length: 1.5 meters), RCA to RCA
+- $ 445.00 | MIT 330e CVT rca Interconnect pair
+- $  95.00 | MIT AVTi3 Interconnect Cable in 1.5 Meters, from RCA to RCA
+- $ 105.00 | MIT AVTi3 Interconnect Cable in 2.0 Meters, from RCA to RCA
+- $  80.00 | MIT CABLES AVT SERIES 3 DIGITAL INTERCONNECT  1 m  / 3.3ft
+- $  55.00 | MIT AVT3 DIGITAL OPTICAL INTERCONNECT, 2 meter / 6.6 ft OPEN BOX
+- $ 750.00 | MIT AVT Ma ( Maximum Articulation ) Analog Interconnect 22 Ft Pair. Audiophile. 
+- $  95.00 | MIT CABLES EXP / AVT SERIES 3 DIGITAL INTERCONNECT  1 m  / 3.3ft, NEW
+- $  45.95 | MIT AVT Composite Video Interconnect LVL 3 10ft/3m
+- $  52.44 | MIT AVt Series Composite Video Interconnect Level 3 Cable IN BOX NEAR MINT
+- $ 199.00 | MIT AVT 1 Interconnect. 2m.
+- $  52.44 | MIT EXp Component Video Interconnects RGB IN PACKAGE NEAR MINT
+- $ 125.00 | MIT AVT2  DIGITAL OPTICAL INTERCONNECT, 3 meter / 10 ft NEW
+- $ 250.00 | Audio Cable MIT AV3 8 Ft
+- $ 119.99 | MIT Terminator 3 interconnects RCA  1 Meter Pair
+
+--- CLEANED ---
+- $ 299.00 | MIT MI-330 PLUS Series2 S2 1.0M 2-piece pair RCA cable
+- $ 445.00 | MIT 330e CVT rca Interconnect pair
+
+--- REASONING ---
+Filtered strictly, keeping only the MI-330 and closely related 330e Series 2 RCA cables and excluding all other MIT product lines and digital/video cables.
+-> AVG: $372.00 | CONF: 70%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'Berkeley Audio Design Alpha DAC Series 2 digital-to-analog converter (AES/SPDIF/Toslink inputs, XLR/RCA outputs)' (Lot #None) ---
+
+--- RAW ---
+
+--- CLEANED ---
+
+--- REASONING ---
+No search results were available for the specific Berkeley Audio Design Alpha DAC Series 2 model.
+-> AVG: $0.00 | CONF: 0%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'Berkeley Alpha DAC original remote control' (Lot #None) ---
+
+--- RAW ---
+
+--- CLEANED ---
+
+--- REASONING ---
+No search results were available for the specific Berkeley Alpha DAC remote control.
+-> AVG: $0.00 | CONF: 0%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'Krell KRC-HR Reference Stereo Preamplifier (main unit)' (Lot #None) ---
+
+--- RAW ---
+
+--- CLEANED ---
+
+--- REASONING ---
+No search results were available for the specific Krell KRC-HR Reference Stereo Preamplifier.
+-> AVG: $0.00 | CONF: 0%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'Krell KRC-HR External Power Supply with umbilical cable' (Lot #None) ---
+
+--- RAW ---
+
+--- CLEANED ---
+
+--- REASONING ---
+No search results were available for the specific Krell KRC-HR External Power Supply.
+-> AVG: $0.00 | CONF: 0%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'Magnum Dynalab FT-101A Analog FM Stereo Tuner' (Lot #None) ---
+
+--- RAW ---
+- $ 475.00 | Magnum Dynalab FT-101 Analog FM Tuner
+- $ 400.00 | Magnum Dynalab FT-101A Analog FM Tuner
+- $ 800.00 | Magnum Dynalab FT-101A FM Standard Reference Analog Stereo Tuner,XLNT
+- $ 399.00 | Magnum Dynalab Etude FT 101A analog FM Tuner
+- $ 275.00 | Magnum Dynalab FT-101A Audiophile Analog FM Band Tuner
+- $ 550.00 | Magnum Dynalab FT101A Analog FM Tuner 220VAC
+- $ 888.00 | Magnum Dynalab FT-101A Etude - Audiophile Hifi Stereo Analog FM Radio Tuner 220V
+- $ 545.00 | MAGNUM DYNALAB FT 101A ETUDE Audiophile Reference Analog FM tuner Excellent
+- $ 769.99 | Magnum Dynalab ETUDE Audiophile Reference Analog FM tuner. FT 101A
+- $ 766.50 | MAGNUM DYNALAB MD 100 STEREO TUNER
+- $ 475.00 | Magnum Dynalab FT-101A Audiophile Analog FM Band Tuner with Original box
+- $ 328.00 | Magnum Dynalab FT-11 Analog FM Tuner 220 VAC
+- $ 475.00 | Vintage Magnum Dynalab Analog Tuner  (FT - 101)
+- $ 588.00 | Magnum Dynalab FT101A Analog FM Tuner 220VAC
+- $ 449.00 | Magnum Dynalab MD 90 Analog Stereo FM Tuner (FOR PARTS OR REPAIR)
+- $ 245.00 | Magnum Dynalab FT-11 FM Tuner Vintage
+
+--- CLEANED ---
+- $ 475.00 | Magnum Dynalab FT-101 Analog FM Tuner
+- $ 400.00 | Magnum Dynalab FT-101A Analog FM Tuner
+- $ 800.00 | Magnum Dynalab FT-101A FM Standard Reference Analog Stereo Tuner,XLNT
+- $ 399.00 | Magnum Dynalab Etude FT 101A analog FM Tuner
+- $ 275.00 | Magnum Dynalab FT-101A Audiophile Analog FM Band Tuner
+- $ 550.00 | Magnum Dynalab FT101A Analog FM Tuner 220VAC
+- $ 888.00 | Magnum Dynalab FT-101A Etude - Audiophile Hifi Stereo Analog FM Radio Tuner 220V
+- $ 545.00 | MAGNUM DYNALAB FT 101A ETUDE Audiophile Reference Analog FM tuner Excellent
+- $ 769.99 | Magnum Dynalab ETUDE Audiophile Reference Analog FM tuner. FT 101A
+- $ 475.00 | Magnum Dynalab FT-101A Audiophile Analog FM Band Tuner with Original box
+- $ 475.00 | Vintage Magnum Dynalab Analog Tuner  (FT - 101)
+- $ 588.00 | Magnum Dynalab FT101A Analog FM Tuner 220VAC
+
+--- REASONING ---
+Kept all exact matches (FT-101A) and the highly similar FT-101 model while excluding completely different Magnum Dynalab tuner models.
+-> AVG: $553.33 | CONF: 95%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'Krell KPE Phono Preamplifier MM/MC Phono Stage' (Lot #None) ---
+
+--- RAW ---
+- $ 999.00 | Krell KPA MM / MC Phono Preamplifier; AS-IS (Non-Functional) (1/1)
+- $ 800.00 | Krell KPE Phono Stage MM/MC - Preamp w/ Power Supply, Cable, Original Box
+- $1295.00 | Krell KPE Phono Section w/ Separate Power Supply, All Cables, Manual, Orig Box
+- $1999.00 | Krell KSP-7B Pre-amp w/ Phono Stage 
+- $ 999.00 | KRELL KSL Line-Stage Stereo Preamplifier
+- $1800.00 | Krell KSL Preamplifier - Restored/Recapped
+- $1100.00 | Krell KSP-7B Pre-amp w/ Phono Stage  Untested Missing Power Supply Read Descr
+- $ 999.00 | Krell KPA MM / MC Phono Preamplifier; AS-IS (Non-Functional)
+- $ 860.00 | KRELL KSL PREAMPLIFIER, Excellent Condition. Free Shipping.
+- $1600.00 | KRELL KSL PREAMPLIFIER WITH MC PHONO STAGE, Excellent Condition. Free Shipping.
+- $3717.00 | Krell Illusion II Stereo Preamplifier (1/3)
+- $5495.00 | Krell KRS-1A. Classic Reference Audiophile 4 Piece Dual Mono Design Preamp.
+- $4200.00 | Krell 300p Phono Preamplifier. List price $6500
+- $2148.00 | KRELL KSL Line Control Pre Amplifier Vintage, Tested
+- $4754.00 | Krell Illusion II Stereo Preamplifier (1/5)
+- $3125.00 | Krell Illusion II Preamplfier- Dual Mono design- Original Owner- Excellent!
+- $8799.00 | Krell KRS Balanced preamplifier-  RARE
+- $4950.00 | Krell KRS-1A reference four chassis preamplifier
+- $7500.00 | Krell Illusion II - Dual Mono Balanced Preamplifier
+- $3000.00 | KRELL PAM-1 DUAL MONO PREAMP W/PHONO AND DUAL OUTBOARD POWER SUPPLIES
+
+--- CLEANED ---
+- $ 800.00 | Krell KPE Phono Stage MM/MC - Preamp w/ Power Supply, Cable, Original Box
+- $1295.00 | Krell KPE Phono Section w/ Separate Power Supply, All Cables, Manual, Orig Box
+
+--- REASONING ---
+Kept only the listings that specifically match the Krell KPE dedicated phono preamplifier model, excluding all other Krell preamplifiers and non-functional units.
+-> AVG: $1,047.50 | CONF: 95%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'SUMO Charlie 700 FM Synthesized Stereo Tuner' (Lot #None) ---
+
+--- RAW ---
+- $ 260.00 | Vintage Sumo Charlie FM Synthesized stereo Tuner Mod 700 
+- $ 249.99 | Vintage Sumo Charlie FM Synthesized stereo Tuner Mod 700 Japan W/ Antenna Manual
+- $ 199.00 | Sumo Charlie Model 700 FM Stereo Tuner
+
+--- CLEANED ---
+- $ 260.00 | Vintage Sumo Charlie FM Synthesized stereo Tuner Mod 700 
+- $ 249.99 | Vintage Sumo Charlie FM Synthesized stereo Tuner Mod 700 Japan W/ Antenna Manual
+- $ 199.00 | Sumo Charlie Model 700 FM Stereo Tuner
+
+--- REASONING ---
+All three results were kept as they are exact matches for the SUMO Charlie Model 700 synthesized stereo tuner.
+-> AVG: $236.33 | CONF: 100%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'Berkeley Audio Design Alpha USB to AES/EBU SPDIF Digital Interface' (Lot #None) ---
+
+--- RAW ---
+
+--- CLEANED ---
+
+--- REASONING ---
+No raw eBay results were provided for this search query, resulting in zero comparable items.
+-> AVG: $0.00 | CONF: 0%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'MIT Terminator 2 Proline XLR Interconnect Cables Pair' (Lot #None) ---
+
+--- RAW ---
+- $ 231.99 | MIT EXP PROLINE 1.0 XLR cable
+- $ 496.95 | 1m Pair MIT MI-330 Terminator Proline Balanced XLR Audio Interconnect Cables
+- $ 189.00 | MIT AVT Proline XLR Cables; 1m Pair Balanced Interconnects
+- $ 169.99 | MIT MI-330 Terminator ProLine Balanced XLR 15'  Audio Cable AUTHORIZED-DEALER
+- $ 652.00 | MIT MI-350 CVTerminator XLR Cables; 1m Pair Balanced Interconnects
+- $ 249.00 | MIT Terminator 3 Pair of  1M Interconnect RCA  Cable
+- $ 300.00 | MIT Terminator 3 Speaker Cables – 8 ft Pair – Excellent Performance
+- $ 380.00 | MIT Terminator 330e cvt RCA Interconnect Cables 5 ft 
+- $ 350.00 | MIT Terminator 2 Speaker Cables - Pair of 3 meters
+- $ 275.00 | MIT TERMINATOR 2 (2.5m) SPEAKER CABLES
+- $ 899.95 | MIT SL3 Special Order XLR Subwoofer Cable - 20 Meters Long
+- $ 350.00 | PAIR OF 12 FT. MIT TERMINATOR 5 SPEAKER CABLES
+- $ 119.99 | MIT Terminator 3 interconnects RCA  1 Meter Pair
+
+--- CLEANED ---
+
+--- REASONING ---
+All listings were excluded because none were the required Terminator 2 XLR interconnect cables; all T2 results found were speaker cables.
+-> AVG: $0.00 | CONF: 10%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'MIT Magnum M1.3 Proline XLR Interconnect Cables Pair' (Lot #None) ---
+
+--- RAW ---
+- $ 250.00 | MIT Cables SHOTGUN S3 Proline XLR 1.5m I/Cs
+- $  90.00 | MIT CABLES AVT SERIES 3 DIGITAL INTERCONNECT  2m / 6.6 ft
+- $  95.00 | MIT CABLES EXP / AVT SERIES 3 DIGITAL INTERCONNECT  1 m  / 3.3ft, NEW
+- $ 231.99 | MIT EXP PROLINE 1.0 XLR cable
+- $ 496.95 | 1m Pair MIT MI-330 Terminator Proline Balanced XLR Audio Interconnect Cables
+- $ 780.00 | MIT MAGNUM M3 ic Interconnect Rca. 5ft Pair.
+- $ 189.00 | MIT AVT Proline XLR Cables; 1m Pair Balanced Interconnects
+- $ 652.00 | MIT MI-350 CVTerminator XLR Cables; 1m Pair Balanced Interconnects
+- $ 169.99 | MIT MI-330 Terminator ProLine Balanced XLR 15'  Audio Cable AUTHORIZED-DEALER
+- $2499.00 | MIT Shotgun MA XLR interconnects-2m
+- $ 899.95 | MIT SL3 Special Order XLR Subwoofer Cable - 20 Meters Long
+- $ 598.00 | MIT MI-330TERMINATOR PROLINE  XLR Cable 2.0m
+
+--- CLEANED ---
+
+--- REASONING ---
+All results were excluded as none matched the required MIT Magnum M1.3 XLR model or even closely related cables within the Magnum series.
+-> AVG: $0.00 | CONF: 0%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'MIT Z-Cord II Audiophile AC Power Cable' (Lot #None) ---
+
+--- RAW ---
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 210.00 | MIT Z-CORD II Power cable.2m.
+- $ 159.00 | MIT Z-Cord II Power Cable; 2m AC Cord
+- $ 175.00 | MIT Z II Cord POWER CORD 2M
+- $ 149.00 | MIT Z-Cord  II 6.5 FT Power Cable
+- $ 269.00 | MIT Z CORD II POWER CABLE - 3 METERS
+- $ 169.99 | RARE AUDIOPHILE USED MIT CABLE Z CORD POWERCORD 2 METER LONG FREE SHIPPING USA
+- $ 270.00 | MIT (Music Interface Technologies) Z Cord 2 Power Cord - 2m
+
+--- CLEANED ---
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 210.00 | MIT Z-CORD II Power cable.2m.
+- $ 159.00 | MIT Z-Cord II Power Cable; 2m AC Cord
+- $ 175.00 | MIT Z II Cord POWER CORD 2M
+- $ 149.00 | MIT Z-Cord  II 6.5 FT Power Cable
+- $ 269.00 | MIT Z CORD II POWER CABLE - 3 METERS
+- $ 169.99 | RARE AUDIOPHILE USED MIT CABLE Z CORD POWERCORD 2 METER LONG FREE SHIPPING USA
+- $ 270.00 | MIT (Music Interface Technologies) Z Cord 2 Power Cord - 2m
+
+--- REASONING ---
+Kept all results as they are direct, exact matches for the specific MIT Z-Cord II power cable model.
+-> AVG: $237.23 | CONF: 100%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'MIT Terminator 2 Proline XLR Interconnect Cable Pair' (Lot #None) ---
+
+--- RAW ---
+- $ 231.99 | MIT EXP PROLINE 1.0 XLR cable
+- $ 496.95 | 1m Pair MIT MI-330 Terminator Proline Balanced XLR Audio Interconnect Cables
+- $ 189.00 | MIT AVT Proline XLR Cables; 1m Pair Balanced Interconnects
+- $ 169.99 | MIT MI-330 Terminator ProLine Balanced XLR 15'  Audio Cable AUTHORIZED-DEALER
+- $ 652.00 | MIT MI-350 CVTerminator XLR Cables; 1m Pair Balanced Interconnects
+- $ 249.00 | MIT Terminator 3 Pair of  1M Interconnect RCA  Cable
+- $ 380.00 | MIT Terminator 330e cvt RCA Interconnect Cables 5 ft 
+- $ 350.00 | MIT Terminator 2 Speaker Cables - Pair of 3 meters
+- $ 300.00 | MIT Terminator 3 Speaker Cables – 8 ft Pair – Excellent Performance
+- $ 899.95 | MIT SL3 Special Order XLR Subwoofer Cable - 20 Meters Long
+- $ 275.00 | MIT TERMINATOR 2 (2.5m) SPEAKER CABLES
+- $ 350.00 | PAIR OF 12 FT. MIT TERMINATOR 5 SPEAKER CABLES
+- $ 119.99 | MIT Terminator 3 interconnects RCA  1 Meter Pair
+
+--- CLEANED ---
+
+--- REASONING ---
+All listings were excluded because they were either the wrong cable type (speaker cables) or different models with incorrect connector types (RCA).
+-> AVG: $0.00 | CONF: 10%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'MIT Z-Cord II Audiophile AC Power Cable' (Lot #None) ---
+
+--- RAW ---
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 210.00 | MIT Z-CORD II Power cable.2m.
+- $ 159.00 | MIT Z-Cord II Power Cable; 2m AC Cord
+- $ 175.00 | MIT Z II Cord POWER CORD 2M
+- $ 149.00 | MIT Z-Cord  II 6.5 FT Power Cable
+- $ 269.00 | MIT Z CORD II POWER CABLE - 3 METERS
+- $ 169.99 | RARE AUDIOPHILE USED MIT CABLE Z CORD POWERCORD 2 METER LONG FREE SHIPPING USA
+- $ 270.00 | MIT (Music Interface Technologies) Z Cord 2 Power Cord - 2m
+
+--- CLEANED ---
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 210.00 | MIT Z-CORD II Power cable.2m.
+- $ 159.00 | MIT Z-Cord II Power Cable; 2m AC Cord
+- $ 175.00 | MIT Z II Cord POWER CORD 2M
+- $ 149.00 | MIT Z-Cord  II 6.5 FT Power Cable
+- $ 269.00 | MIT Z CORD II POWER CABLE - 3 METERS
+- $ 169.99 | RARE AUDIOPHILE USED MIT CABLE Z CORD POWERCORD 2 METER LONG FREE SHIPPING USA
+- $ 270.00 | MIT (Music Interface Technologies) Z Cord 2 Power Cord - 2m
+
+--- REASONING ---
+Kept all results as they are direct, exact matches for the specific MIT Z-Cord II power cable model.
+-> AVG: $237.23 | CONF: 100%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'MIT Shotgun S3.3 Speaker Cables Pair' (Lot #None) ---
+
+--- RAW ---
+- $ 269.86 | MIT EXP-S1 Speaker Cable 2.4 in Pair with Original Box, Used
+- $ 250.00 | MIT Cables SHOTGUN S3 Proline XLR 1.5m I/Cs
+- $ 475.88 | MIT AVt3 Speaker Cable Pair 2.8m, Audio Speaker Wire, Used
+- $  80.00 | MIT CABLES AVT SERIES 3 DIGITAL INTERCONNECT  1 m  / 3.3ft
+- $1050.00 | MIT Shotgun S1 Speaker Cables 12 Feet/pair. Excellent. 
+- $1250.00 | MIT Shotgun S1 10 ft Single Bi-Wire Speaker Cable (NEW)
+- $ 375.00 | Mit AVt2 speaker cable 12 Feet Long Pair
+- $2000.00 | MIT Shotgun S1 Bi-Wire Speaker Cables 8 ft
+- $3499.00 | MIT Shotgun MA bi-wire speaker cables 9 ft
+- $ 280.10 | Buy it now MIT EXP-S1 speaker cable 2.4m pair with original box
+- $  90.00 | MIT CABLES AVT SERIES 3 DIGITAL INTERCONNECT  2m / 6.6 ft
+- $2240.14 | MIT Speaker Cable MH-750 CVT SERIES TWO approx. 118.1 inches pair
+- $ 300.00 | 3 MIT Miterminator 5 Speaker Cable 12 Foot
+- $  95.00 | MIT CABLES EXP / AVT SERIES 3 DIGITAL INTERCONNECT  1 m  / 3.3ft, NEW
+- $1500.00 | MIT Avt 2 Speaker Cable 50ft 2 pairs 
+- $ 375.00 | MIT SHOTGUN S3 39 inches long BALANCE CABLE 
+- $ 447.99 | Buy it now MIT AVt3 speaker cable 2.8m pair
+- $ 599.95 | MIT S3ic Balanced Interconnects (Shotgun Proline Series) - 1 Meter
+- $ 495.00 | MIT SHOTGUN S3 RCA CABLE 78 inches 
+- $1299.00 | MIT Shotgun S1 RCA interconnect cables adjustable impedence system-2m
+- $9000.00 | MIT M1 20 Ft. Custom Audiophile Speaker Cables
+- $ 199.00 | MIT AVT 1 Interconnect. 2m.
+- $ 999.99 | RARE AUDIOPHILE MIT MI-330 SHOTGUN CABLE 1 METER PAIR RCA JACKS 
+- $1620.00 | MIT (Music Interface Technology) MHT-750 Series Two Speaker Cables - 15 Feet
+- $1138.00 | MIT SHOTGUN MA RCA Cable 2.0m
+
+--- CLEANED ---
+
+--- REASONING ---
+All listings were excluded because they were either the wrong product line (S1, MA, AVt), or the wrong cable type (XLR/RCA interconnects), leaving zero comparable speaker cables.
+-> AVG: $0.00 | CONF: 0%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'MIT Z-Cord II Audiophile AC Power Cable' (Lot #None) ---
+
+--- RAW ---
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 210.00 | MIT Z-CORD II Power cable.2m.
+- $ 159.00 | MIT Z-Cord II Power Cable; 2m AC Cord
+- $ 175.00 | MIT Z II Cord POWER CORD 2M
+- $ 149.00 | MIT Z-Cord  II 6.5 FT Power Cable
+- $ 269.00 | MIT Z CORD II POWER CABLE - 3 METERS
+- $ 169.99 | RARE AUDIOPHILE USED MIT CABLE Z CORD POWERCORD 2 METER LONG FREE SHIPPING USA
+- $ 270.00 | MIT (Music Interface Technologies) Z Cord 2 Power Cord - 2m
+
+--- CLEANED ---
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 210.00 | MIT Z-CORD II Power cable.2m.
+- $ 159.00 | MIT Z-Cord II Power Cable; 2m AC Cord
+- $ 175.00 | MIT Z II Cord POWER CORD 2M
+- $ 149.00 | MIT Z-Cord  II 6.5 FT Power Cable
+- $ 269.00 | MIT Z CORD II POWER CABLE - 3 METERS
+- $ 169.99 | RARE AUDIOPHILE USED MIT CABLE Z CORD POWERCORD 2 METER LONG FREE SHIPPING USA
+- $ 270.00 | MIT (Music Interface Technologies) Z Cord 2 Power Cord - 2m
+
+--- REASONING ---
+Kept all results as they are direct, exact matches for the specific MIT Z-Cord II power cable model.
+-> AVG: $237.23 | CONF: 100%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'MIT Magnum AC1 Audiophile Power Cable' (Lot #None) ---
+
+--- RAW ---
+
+--- CLEANED ---
+
+--- REASONING ---
+No raw results were provided for this specific, branded power cable.
+-> AVG: $0.00 | CONF: 0%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'MIT Z-Cord II Audiophile AC Power Cable' (Lot #None) ---
+
+--- RAW ---
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 210.00 | MIT Z-CORD II Power cable.2m.
+- $ 159.00 | MIT Z-Cord II Power Cable; 2m AC Cord
+- $ 175.00 | MIT Z II Cord POWER CORD 2M
+- $ 149.00 | MIT Z-Cord  II 6.5 FT Power Cable
+- $ 269.00 | MIT Z CORD II POWER CABLE - 3 METERS
+- $ 169.99 | RARE AUDIOPHILE USED MIT CABLE Z CORD POWERCORD 2 METER LONG FREE SHIPPING USA
+- $ 270.00 | MIT (Music Interface Technologies) Z Cord 2 Power Cord - 2m
+
+--- CLEANED ---
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 210.00 | MIT Z-CORD II Power cable.2m.
+- $ 159.00 | MIT Z-Cord II Power Cable; 2m AC Cord
+- $ 175.00 | MIT Z II Cord POWER CORD 2M
+- $ 149.00 | MIT Z-Cord  II 6.5 FT Power Cable
+- $ 269.00 | MIT Z CORD II POWER CABLE - 3 METERS
+- $ 169.99 | RARE AUDIOPHILE USED MIT CABLE Z CORD POWERCORD 2 METER LONG FREE SHIPPING USA
+- $ 270.00 | MIT (Music Interface Technologies) Z Cord 2 Power Cord - 2m
+
+--- REASONING ---
+Kept all results as they are direct, exact matches for the specific MIT Z-Cord II power cable model.
+-> AVG: $237.23 | CONF: 100%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'WyWires Platinum Series USB A to B Audiophile Cable' (Lot #None) ---
+
+--- RAW ---
+
+--- CLEANED ---
+
+--- REASONING ---
+No raw results were provided for this specific, branded interconnect cable.
+-> AVG: $0.00 | CONF: 0%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'MIT Z-Cord II Audiophile AC Power Cord' (Lot #None) ---
+
+--- RAW ---
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 159.00 | MIT Z-Cord II Power Cable; 2m AC Cord
+- $ 210.00 | MIT Z-CORD II Power cable.2m.
+- $ 175.00 | MIT Z II Cord POWER CORD 2M
+- $ 269.00 | MIT Z CORD II POWER CABLE - 3 METERS
+- $ 149.00 | MIT Z-Cord  II 6.5 FT Power Cable
+- $ 169.99 | RARE AUDIOPHILE USED MIT CABLE Z CORD POWERCORD 2 METER LONG FREE SHIPPING USA
+- $ 270.00 | MIT (Music Interface Technologies) Z Cord 2 Power Cord - 2m
+
+--- CLEANED ---
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 159.00 | MIT Z-Cord II Power Cable; 2m AC Cord
+- $ 210.00 | MIT Z-CORD II Power cable.2m.
+- $ 175.00 | MIT Z II Cord POWER CORD 2M
+- $ 269.00 | MIT Z CORD II POWER CABLE - 3 METERS
+- $ 149.00 | MIT Z-Cord  II 6.5 FT Power Cable
+- $ 169.99 | RARE AUDIOPHILE USED MIT CABLE Z CORD POWERCORD 2 METER LONG FREE SHIPPING USA
+- $ 270.00 | MIT (Music Interface Technologies) Z Cord 2 Power Cord - 2m
+
+--- REASONING ---
+Kept all results as they are direct, exact matches for the specific MIT Z-Cord II power cable model.
+-> AVG: $237.23 | CONF: 100%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'MIT Magnum M1.3 XLR Balanced Interconnect Cables Pair' (Lot #None) ---
+
+--- RAW ---
+- $ 250.00 | MIT Cables SHOTGUN S3 Proline XLR 1.5m I/Cs
+- $  90.00 | MIT CABLES AVT SERIES 3 DIGITAL INTERCONNECT  2m / 6.6 ft
+- $ 231.99 | MIT EXP PROLINE 1.0 XLR cable
+- $ 496.95 | 1m Pair MIT MI-330 Terminator Proline Balanced XLR Audio Interconnect Cables
+- $ 780.00 | MIT MAGNUM M3 ic Interconnect Rca. 5ft Pair.
+- $ 652.00 | MIT MI-350 CVTerminator XLR Cables; 1m Pair Balanced Interconnects
+- $ 189.00 | MIT AVT Proline XLR Cables; 1m Pair Balanced Interconnects
+- $ 169.99 | MIT MI-330 Terminator ProLine Balanced XLR 15'  Audio Cable AUTHORIZED-DEALER
+- $ 669.99 | MIT SL6 Balanced Audio Interconnect
+- $2499.00 | MIT Shotgun MA XLR interconnects-2m
+- $ 899.95 | MIT SL3 Special Order XLR Subwoofer Cable - 20 Meters Long
+- $2499.99 | AUDIOPHILE MIT CABLE MAGNUM MA 1 METER BALANCED XLR PAIR FOR TRANSPARENT SOUND
+- $ 598.00 | MIT MI-330TERMINATOR PROLINE  XLR Cable 2.0m
+
+--- CLEANED ---
+- $ 780.00 | MIT MAGNUM M3 ic Interconnect Rca. 5ft Pair.
+- $2499.99 | AUDIOPHILE MIT CABLE MAGNUM MA 1 METER BALANCED XLR PAIR FOR TRANSPARENT SOUND
+
+--- REASONING ---
+Removed all non-Magnum cables and kept only two similar items from the high-end MIT Magnum product line (M3 RCA and MA XLR) to serve as relevant, though non-exact, comparables.
+-> AVG: $1,639.99 | CONF: 55%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'MIT Z-Cord II Audiophile AC Power Cable' (Lot #None) ---
+
+--- RAW ---
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 210.00 | MIT Z-CORD II Power cable.2m.
+- $ 159.00 | MIT Z-Cord II Power Cable; 2m AC Cord
+- $ 175.00 | MIT Z II Cord POWER CORD 2M
+- $ 149.00 | MIT Z-Cord  II 6.5 FT Power Cable
+- $ 269.00 | MIT Z CORD II POWER CABLE - 3 METERS
+- $ 169.99 | RARE AUDIOPHILE USED MIT CABLE Z CORD POWERCORD 2 METER LONG FREE SHIPPING USA
+- $ 270.00 | MIT (Music Interface Technologies) Z Cord 2 Power Cord - 2m
+
+--- CLEANED ---
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 210.00 | MIT Z-CORD II Power cable.2m.
+- $ 159.00 | MIT Z-Cord II Power Cable; 2m AC Cord
+- $ 175.00 | MIT Z II Cord POWER CORD 2M
+- $ 149.00 | MIT Z-Cord  II 6.5 FT Power Cable
+- $ 269.00 | MIT Z CORD II POWER CABLE - 3 METERS
+- $ 169.99 | RARE AUDIOPHILE USED MIT CABLE Z CORD POWERCORD 2 METER LONG FREE SHIPPING USA
+- $ 270.00 | MIT (Music Interface Technologies) Z Cord 2 Power Cord - 2m
+
+--- REASONING ---
+Kept all results as they are direct, exact matches for the specific MIT Z-Cord II power cable model.
+-> AVG: $237.23 | CONF: 100%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'MIT Z-Cord II Audiophile AC Power Cable' (Lot #None) ---
+
+--- RAW ---
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 210.00 | MIT Z-CORD II Power cable.2m.
+- $ 159.00 | MIT Z-Cord II Power Cable; 2m AC Cord
+- $ 175.00 | MIT Z II Cord POWER CORD 2M
+- $ 149.00 | MIT Z-Cord  II 6.5 FT Power Cable
+- $ 269.00 | MIT Z CORD II POWER CABLE - 3 METERS
+- $ 169.99 | RARE AUDIOPHILE USED MIT CABLE Z CORD POWERCORD 2 METER LONG FREE SHIPPING USA
+- $ 270.00 | MIT (Music Interface Technologies) Z Cord 2 Power Cord - 2m
+
+--- CLEANED ---
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 366.56 | MIT Z-CORDII 2.0m Power cable used Operation confirmed
+- $ 210.00 | MIT Z-CORD II Power cable.2m.
+- $ 159.00 | MIT Z-Cord II Power Cable; 2m AC Cord
+- $ 175.00 | MIT Z II Cord POWER CORD 2M
+- $ 149.00 | MIT Z-Cord  II 6.5 FT Power Cable
+- $ 269.00 | MIT Z CORD II POWER CABLE - 3 METERS
+- $ 169.99 | RARE AUDIOPHILE USED MIT CABLE Z CORD POWERCORD 2 METER LONG FREE SHIPPING USA
+- $ 270.00 | MIT (Music Interface Technologies) Z Cord 2 Power Cord - 2m
+
+--- REASONING ---
+Kept all results as they are direct, exact matches for the specific MIT Z-Cord II power cable model.
+-> AVG: $237.23 | CONF: 100%
+
+--- [2025-10-23 17:26:50] eBay Analysis for 'MIT Shotgun S3 Interconnect Cables Pair' (Lot #None) ---
+
+--- RAW ---
+- $ 250.00 | MIT Cables SHOTGUN S3 Proline XLR 1.5m I/Cs
+- $  90.00 | MIT CABLES AVT SERIES 3 DIGITAL INTERCONNECT  2m / 6.6 ft
+- $  80.00 | MIT CABLES AVT SERIES 3 DIGITAL INTERCONNECT  1 m  / 3.3ft
+- $  95.00 | MIT CABLES EXP / AVT SERIES 3 DIGITAL INTERCONNECT  1 m  / 3.3ft, NEW
+- $1050.00 | MIT Shotgun S1 Speaker Cables 12 Feet/pair. Excellent. 
+- $ 780.00 | MIT MAGNUM M3 ic Interconnect Rca. 5ft Pair.
+- $ 559.00 | MIT MI-350 CVTerminator RCA Cables; 1m Pair Interconnects
+- $1250.00 | MIT Shotgun S1 10 ft Single Bi-Wire Speaker Cable (NEW)
+- $1299.00 | MIT Shotgun S1 RCA interconnect cables adjustable impedence system-2m
+- $2000.00 | MIT Shotgun S1 Bi-Wire Speaker Cables 8 ft
+- $ 599.95 | MIT S3ic Balanced Interconnects (Shotgun Proline Series) - 1 Meter
+- $2499.00 | MIT Shotgun MA XLR interconnects-2m
+- $3499.00 | MIT Shotgun MA bi-wire speaker cables 9 ft
+- $  65.00 | MIT AVT3 DIGITAL OPTICAL INTERCONNECT, 2 meter / 6.6 ft NEW
+- $ 100.00 | MIT AVT2  DIGITAL OPTICAL INTERCONNECT, 2 meter / 6.6 ft NEW
+- $ 375.00 | MIT SHOTGUN S3 39 inches long BALANCE CABLE 
+- $ 495.00 | MIT SHOTGUN S3 RCA CABLE 78 inches 
+- $  55.00 | MIT AVT3 DIGITAL OPTICAL INTERCONNECT, 2 meter / 6.6 ft OPEN BOX
+- $ 750.00 | MIT AVT Ma ( Maximum Articulation ) Analog Interconnect 22 Ft Pair. Audiophile. 
+- $  52.44 | MIT AVt Series Composite Video Interconnect Level 3 Cable IN BOX NEAR MINT
+- $  45.95 | MIT AVT Composite Video Interconnect LVL 3 10ft/3m
+- $ 199.00 | MIT AVT 1 Interconnect. 2m.
+- $ 999.99 | RARE AUDIOPHILE MIT MI-330 SHOTGUN CABLE 1 METER PAIR RCA JACKS 
+- $ 125.00 | MIT AVT2  DIGITAL OPTICAL INTERCONNECT, 3 meter / 10 ft NEW
+- $ 599.99 | MIT Mi-330 Proline Shotgun System Balanced Component Interface XLR
+- $1138.00 | MIT SHOTGUN MA RCA Cable 2.0m
+
+--- CLEANED ---
+- $ 250.00 | MIT Cables SHOTGUN S3 Proline XLR 1.5m I/Cs
+- $1299.00 | MIT Shotgun S1 RCA interconnect cables adjustable impedence system-2m
+- $ 599.95 | MIT S3ic Balanced Interconnects (Shotgun Proline Series) - 1 Meter
+- $ 375.00 | MIT SHOTGUN S3 39 inches long BALANCE CABLE 
+- $ 495.00 | MIT SHOTGUN S3 RCA CABLE 78 inches 
+
+--- REASONING ---
+Kept only exact MIT Shotgun S3 interconnects, along with one related Shotgun S1 interconnect, while excluding all speaker cables and other AVT/Magnum series models.
+-> AVG: $603.79 | CONF: 90%
