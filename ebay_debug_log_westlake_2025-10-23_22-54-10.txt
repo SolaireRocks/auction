@@ -1,0 +1,171 @@
+
+--- [2025-10-23 23:07:26] eBay Analysis for 'Family Wooden Birthday Reminder Calendar Board' (Lot #5) ---
+
+--- RAW ---
+- $  96.95 | Family Birthday Reminder Calendar Board with Tags,Diy Wooden Birthday Calendar
+- $  13.99 | Family Birthday Board Reminder Calendar Plaque DIY Hanging Wooden Christmas Gift
+- $  12.99 | Family Birthday Board Plaque DIY Hanging Wooden Wedding Reminder Calendar Gifts
+- $  44.99 | TOARTi Wooden Family Birthday Reminder Calendar Board (15.8''x4.8'' with 100p
+- $  23.94 | Wooden Family Birthday Reminder Calendar Board Wall Hanging
+- $  22.99 | Wooden Family Birthday Reminder Calendar Board Decorative Birthday Tracker Plaqu
+- $  31.48 | DIY Wooden Family Birthday Reminder Calendar Board with 100 Wood Tags Plaque
+- $  26.00 | Joy-Leo Wooden Family Birthday Reminder Calendar Board with 100 Wood Tags
+- $  14.19 | OYEFLY Gifts for Moms Dads,Wooden Family Birthday Reminder Calendar Board
+- $  19.34 | 1 Set Wooden Family Birthday Reminder Calendar Board Prussian Blue Friend Fam...
+- $  21.53 | Wooden Family Birthday Reminder Calendar Board Wall Hanging - DIY Decorative
+- $  15.99 | Family Birthday Reminder Calendar Board with Tags,Diy Wooden Birthday Calendar W
+- $   9.99 | Joy-Leo Wooden Family Birthday Reminder Calendar Board with 100 Wood Tags
+- $  20.92 | Wooden Family Birthday Reminder Calendar Board Wall Hanging - DIY Decorative ...
+- $  13.99 | Wooden DIY Hanging Calendar Birthday Family&Friends Reminder Board Plaque Decor
+- $  14.99 | Family Birthday Board Plaque DIY Hanging Wooden Birthday Reminder Calendar Gifts
+- $  22.55 | 1 Set Wooden Family Birthday Reminder Calendar Board Days to Remember Board W...
+- $  18.73 | Family Birthday Board DIY Wooden Calendar Wall Hanging Birthday Reminder 
+- $  23.82 | Wooden Family Birthday Reminder Calendar Board Wall Hanging - DIY Decorative ...
+- $  22.99 | Wooden Family Birthday Reminder Calendar Board with DIY Tags 12x40cm
+- $  10.80 | Wooden Family Birthday Reminder Calendar Board 4.7x15.7in DIY Family Birthday...
+- $  18.60 | Wooden Family Friends Birthday Reminder Calendar Board DIY Plaque Sign
+- $  37.80 | Wooden Family Birthday Reminder Calendar Plaque with 100 Tags Tracker Board
+- $  21.82 | Buecasa Wooden Family Birthday Reminder Calendar Board Wall nature-family 
+- $  24.59 | Family Birthday Calendar Hanging DIY Reminder Board Wooden Tags Home Decor
+- $  24.69 | 1 Set Wooden Family Birthday Reminder Calendar Board Birthday Gift Board With...
+- $  13.83 | Birthday Reminder Board Plaque DIY Hanging Wooden Calendar 
+- $  29.31 | Family Tree Birthday Board Wooden Calendar Wall Hanging Plaque with Name Tags
+- $  31.58 | DIY Wooden Family Birthday Reminder Calendar Board with 100 Wood Tags Plaque
+- $  16.53 | Family Birthday Board DIY Wooden Calendar Wall Hanging Birthday Reminder
+
+--- CLEANED ---
+- $  96.95 | Family Birthday Reminder Calendar Board with Tags,Diy Wooden Birthday Calendar
+- $  13.99 | Family Birthday Board Reminder Calendar Plaque DIY Hanging Wooden Christmas Gift
+- $  12.99 | Family Birthday Board Plaque DIY Hanging Wooden Wedding Reminder Calendar Gifts
+- $  44.99 | TOARTi Wooden Family Birthday Reminder Calendar Board (15.8''x4.8'' with 100p
+- $  23.94 | Wooden Family Birthday Reminder Calendar Board Wall Hanging
+- $  22.99 | Wooden Family Birthday Reminder Calendar Board Decorative Birthday Tracker Plaqu
+- $  31.48 | DIY Wooden Family Birthday Reminder Calendar Board with 100 Wood Tags Plaque
+- $  26.00 | Joy-Leo Wooden Family Birthday Reminder Calendar Board with 100 Wood Tags
+- $  14.19 | OYEFLY Gifts for Moms Dads,Wooden Family Birthday Reminder Calendar Board
+- $  19.34 | 1 Set Wooden Family Birthday Reminder Calendar Board Prussian Blue Friend Fam...
+- $  21.53 | Wooden Family Birthday Reminder Calendar Board Wall Hanging - DIY Decorative
+- $  15.99 | Family Birthday Reminder Calendar Board with Tags,Diy Wooden Birthday Calendar W
+- $   9.99 | Joy-Leo Wooden Family Birthday Reminder Calendar Board with 100 Wood Tags
+- $  20.92 | Wooden Family Birthday Reminder Calendar Board Wall Hanging - DIY Decorative ...
+- $  13.99 | Wooden DIY Hanging Calendar Birthday Family&Friends Reminder Board Plaque Decor
+- $  14.99 | Family Birthday Board Plaque DIY Hanging Wooden Birthday Reminder Calendar Gifts
+- $  22.55 | 1 Set Wooden Family Birthday Reminder Calendar Board Days to Remember Board W...
+- $  18.73 | Family Birthday Board DIY Wooden Calendar Wall Hanging Birthday Reminder 
+- $  23.82 | Wooden Family Birthday Reminder Calendar Board Wall Hanging - DIY Decorative ...
+- $  22.99 | Wooden Family Birthday Reminder Calendar Board with DIY Tags 12x40cm
+- $  10.80 | Wooden Family Birthday Reminder Calendar Board 4.7x15.7in DIY Family Birthday...
+- $  18.60 | Wooden Family Friends Birthday Reminder Calendar Board DIY Plaque Sign
+- $  37.80 | Wooden Family Birthday Reminder Calendar Plaque with 100 Tags Tracker Board
+- $  21.82 | Buecasa Wooden Family Birthday Reminder Calendar Board Wall nature-family 
+- $  24.59 | Family Birthday Calendar Hanging DIY Reminder Board Wooden Tags Home Decor
+- $  24.69 | 1 Set Wooden Family Birthday Reminder Calendar Board Birthday Gift Board With...
+- $  13.83 | Birthday Reminder Board Plaque DIY Hanging Wooden Calendar 
+- $  29.31 | Family Tree Birthday Board Wooden Calendar Wall Hanging Plaque with Name Tags
+- $  31.58 | DIY Wooden Family Birthday Reminder Calendar Board with 100 Wood Tags Plaque
+- $  16.53 | Family Birthday Board DIY Wooden Calendar Wall Hanging Birthday Reminder
+
+--- REASONING ---
+Kept all items as they match the generic wooden family birthday reminder calendar board description.
+-> AVG: $20.71 | CONF: 92%
+
+--- [2025-10-23 23:07:26] eBay Analysis for 'DreamShore 5x7 Acrylic Magnetic Picture Frame 3-Pack' (Lot #6) ---
+
+--- RAW ---
+- $  43.85 | Magnetic Acrylic Picture Photo Frame 5x7 inches (3 Pack), Clear Glass Like, D...
+- $  19.82 | ACRYLIC MAGNETIC PHOTOE FRAMES 4 X 6 & 5 X 5 4 PCS
+- $   7.99 | New Sealed Package Acrylic Magnetic Photo Frames 4 X 6" Set Of 3
+- $  15.00 | 8 New Sealed Package Acrylic Magnetic Photo Frames 5 4 X 6" &3 3 1/2×5 Total 8
+
+--- CLEANED ---
+
+--- REASONING ---
+Removed all items because none were the DreamShore brand or exact model.
+-> AVG: $0.00 | CONF: 0%
+
+--- [2025-10-23 23:07:26] eBay Analysis for '12 Pcs Baseball Bag Hooks with Acrylic Board' (Lot #7) ---
+
+--- RAW ---
+- $  34.19 | 12PCS Softball Bag Fence Hooks, Metal Backpack Hooks with Writable Acrylic Board
+- $   9.98 | Metal Hooks with Nylon Buckles for Baseball Bag
+
+--- CLEANED ---
+- $  34.19 | 12PCS Softball Bag Fence Hooks, Metal Backpack Hooks with Writable Acrylic Board
+
+--- REASONING ---
+Kept the closest matching item with 12 pieces and an acrylic board, despite the softball reference.
+-> AVG: $34.19 | CONF: 70%
+
+--- [2025-10-23 23:07:26] eBay Analysis for 'VPSAE Water Resistant Foldable Travel Duffel Bag' (Lot #8) ---
+
+--- RAW ---
+- $  28.77 | Large Capacity Travel Bag, Expandable Duffel Bag-Water-Resistant Foldable Car...
+- $  24.99 | Extra Large Foldable Water Resistant Travel Luggage Duffel  Unisex Gym Bag 
+- $  15.07 | Travel Duffle Bag Foldable Luggage Gym Camping Travelling Water Tear Resistant
+- $  27.28 | 65L Travel Duffel Bag Shoes Compartment Water Resistant Foldable Weekend Gym Bag
+- $  22.78 | Foldable Duffel Bag 30 inch 75L Large Lightweight Luggage for Travel Camping ...
+- $  11.25 | Foldable Duffel Bag 30" 75L Lightweight Water Resistant Travel Red packable  
+- $  13.00 | Foldable Duffel Bag 30" 75L Lightweight Water Resistant Travel Black packable  
+- $   7.59 | FOLDABLE TRAVEL DUFFEL BAG LIGHTWEIGHT WATER RESISTANT FOR TRAVEL GYM SPORTS
+- $  32.69 | Foldable Travel Duffel Bag for Women, Water Resistant Personal Pink 
+- $   8.19 | Travel Duffel Bag Lightweight Foldable Travel Bag for Women and Men Waterproof T
+- $  14.12 | Duffle Bag for Travel - 120L Extra Large Duffel Bag for Men Foldable Camping ...
+- $  40.64 | 120L Foldable Collapsible Waterproof Travel Duffel Bag for Men and Women with...
+- $  13.37 | Foldable Duffel Bag 25 inch 65L Large Lightweight Luggage for Travel Camping
+- $  22.50 | Foldable Travel Duffel Bag Sports Gym Tote Water Resistant Carry on Luggage b...
+- $  16.99 | Travel Duffel Bag Carry-On Weekender Overnight Foldable Gym Bag Water Resistant
+- $  28.01 | Foldable Duffel Bag, 30 / 75L, Pink, Lightweight, Water Resistant, Travel
+- $  24.12 | Large Capacity Travel Bag, Expandable Duffel Bag-Water-Resistant Foldable Carry-
+- $  29.00 | Foldable Duffel Bag 30" / 75L Lightweight with Water Resistant for Travel~New ~
+- $  14.65 | 2 Pcs Foldable Travel Duffel Bags, Waterproof Lightweight Carry-on Bags, Suitabl
+- $  20.67 | Extra Large Duffle Bag,96L Lightweight Travel Bag, Foldable Waterproof... 
+- $  20.90 | Extra Large Duffle Bag Lightweight, 96L Travel Duffel Bag Foldable for Men Wo...
+- $  28.00 | Light Weight Travel Duffle Bag Foldable
+- $  19.99 | NEW Travel Duffel Bag Large Foldable Waterproof Overnight Gym Purple 60L
+- $  17.54 | 30 Liter, 17 Inch Canvas Duffle Bags for Men and Women – Travel Weekender Ove...
+- $  13.99 | 75L Foldable Duffel Bag Large Size Lightweight 25" Black 75L
+- $  36.74 | 32L Black Lightweight Travel Duffel Bag Water-Resistant Foldable Weekender
+- $  37.50 | Travel Duffel Bag Carry-on Collapses Black Water Resistant 
+- $  21.96 | Expandable Large Capacity Water-Resistant Foldable Carry-On Travel Duffel Bag
+- $  25.04 | 100L Extra Large Duffle Bag, Water Resistant Lightweight Foldable Duffel Bag ...
+- $  21.57 | Travel Duffel Bag Women 80L Lightweight Water Resistant Foldable Beige
+
+--- CLEANED ---
+
+--- REASONING ---
+Removed all items as none were the VPSAE brand.
+-> AVG: $0.00 | CONF: 0%
+
+--- [2025-10-23 23:07:26] eBay Analysis for 'VPSAE Travel Wallet or Pouch' (Lot #8) ---
+
+--- RAW ---
+
+--- CLEANED ---
+
+--- REASONING ---
+No items were found for the specified VPSAE travel wallet or pouch.
+-> AVG: $0.00 | CONF: 0%
+
+--- [2025-10-23 23:07:26] eBay Analysis for 'Fixic Blister Bandages for Feet - Pack of 10' (Lot #132) ---
+
+--- RAW ---
+- $   8.10 | 2 Roll Blister Bandages for Feet Blister Prevention Blister Pads for Feet
+- $  14.61 | Lotfancy Blister Bandages for Feet, 24 Blister Pads and 12 Acne Patches, 8 Size 
+- $  20.27 | Gel Blister Bandages for Feet - 21ct Blister Cushion for Heel, Toe - Water-Re...
+- $  19.26 | 40 PCS Gel Blister Bandages,Foot Blister Protection Waterproof Adhesive Bandages
+- $  18.99 | Pre-Cut Blister Bandages for feet | Blister Prevention 1.2in x 3.5in,Black,40pcs
+- $  18.33 | Blister Bandages for Feet, 16pcs Invisible Blister Pads, 2 Size, Hydrocolloid...
+- $  18.61 | LotFancy Blister Bandages for Feet 24 Blister Pads and 12 Acne Patches 8 Size...
+- $  14.99 | Blister Bandages for Feet, 16pcs Invisible Blister Pads, 2 Size, Hydrocolloid...
+- $  14.30 | Blister Bandages for Feet, 24 Blister Pads and 12 Acne Patches, 8 Size Hydroc...
+- $  19.34 | Gel Blister Bandages for Feet - 21ct Blister Cushion for Heel, Toe - Water-Re...
+- $  12.55 | 30 Pieces Blister Bandages for Feet, Transparent Invisible Blister Prevention...
+- $  36.46 | 21 Pcs Gel Blister Bandages Multi-Size Waterproof Cushioning for Feet & Heels
+- $  10.03 | 10pcs Blister Bandages Hydrogel Anti Friction Heel Blister Protection Slim C L2S
+
+--- CLEANED ---
+- $  10.03 | 10pcs Blister Bandages Hydrogel Anti Friction Heel Blister Protection Slim C L2S
+
+--- REASONING ---
+Kept only the item with a similar quantity, but no exact brand match was found.
+-> AVG: $10.03 | CONF: 40%
