@@ -1,0 +1,285 @@
+
+--- [2025-10-23 22:51:31] eBay Analysis for 'KitchenAid Artisan Mixer KSM150PSWW' (Lot #2) ---
+
+--- RAW ---
+- $ 250.00 | KitchenAid Artisan KSM150PSJP,  5 Quart Tilt-Head Stand Mixer Juniper - NEW
+- $ 280.00 | KitchenAid Artisan Tilt-Head 5 QT Stand Mixer Almond Cream (KSM150PSAC)
+- $ 297.00 | KitchenAid Artisan 5qt Mixer KSM150PSAC (Almond Cream) Factory Sealed!
+- $ 249.95 | KitchenAid KSM150PSBK Artisan Tilt Head 5-Qt. Stand Mixer Black Matte NEW
+- $ 199.99 | KitchenAid Artisan 325W Tilt-Head Stand Mixer White on White KSM150PSWW - Video
+- $ 349.99 | KitchenAid Artisan 5-qt. Tilt-Head Stand Mixer With Pouring Shield KSM150PS New
+- $ 294.75 | KitchenAid Artisan 5qt Mixer KSM150PSAC (Almond Cream) Factory Sealed🔥‼️✅
+- $ 340.00 | KitchenAid Stand Mixer Tilt 5 Quart KSM150PSTG Artisan 10-sp Tangerine Orange
+- $ 289.99 | NEW Kitchenaid KSM150PSER Empire Red 5 Qt Tilt Head Artisan Stand Mixer
+- $ 349.99 | KitchenAid Artisan Series 5 Quart Tilt Head Stand Mixer KSM150PS Mineral Water
+- $ 279.99 | KitchenAid KSM150PSMC Artisan Series 5-Quart Stand Mixer - Metallic Chrome New
+- $ 299.75 | KitchenAid KSM150PSJP Artisan Series 5 Quart Tilt Head Stand Mixer Juniper ‼️✅🔥
+- $ 224.99 | KitchenAid Refurbished Artisan Series 5 Quart Tilt-Head Stand Mixer, RRK150
+- $ 169.99 | Kitchen Aid KSM150PSMC Artisan 10 Speed Stand Mixer Silver + Accessory
+- $ 275.00 | KitchenAid KSM150PSPK Artisan 5 Qt Mixer Limited Edition Breast Cancer Awareness
+- $ 299.99 | KitchenAid 5-Quart Artisan Tilt-Head Stand Mixer - Black Matte - Read Desc.
+- $ 175.00 | KitchenAid Artisan Tilt-Head 5 Qt Stand Mixer Pistachio Green w/ Beater No Bowl
+- $ 189.95 | KITCHENAID MIXER - TILT HEAD - MODEL KSM150PSER - RED - ARTISAN - 325 WATT
+- $ 169.99 | KITCHEN AID ARTISAN COUNTERTOP WHITE MIXER WITH ACCESSORIES MODEL KSM150PSWW
+- $ 399.00 | KitchenAid Artisan 5 Qt Mixer KSM150PS
+- $ 310.00 | KitchenAid MIXER Tilt-Head Stand Mixer Artisan Series 5-Quart MODEL KSM150PSBM *
+- $ 289.99 | KitchenAid KSM150PSAC 325W Stand Mixer Almond Cream
+- $ 199.00 | KitchenAid Artisan Series 5 Quart Tilt-Head Stand Mixer KSM150 Silver/gray Mint
+- $ 169.69 | Kitchenaid Artisan 5qt 325 Watts Tilted Head Stand Mixer KSM150PSWW 
+- $ 251.85 | NEW KitchenAid KSM150 Artisan Series 5 Quart Tilt-Head Stand Mixer - Empire Red
+- $ 310.00 | KitchenAid Artisan 5qt Mixer KSM150PSAC (Almond Cream) Factory Sealed🔥‼️✅
+- $ 263.99 | KITCHENAID KSM150FBER ARTISAN SERIES 5-QUART TILT-HEAD STAND MIXER (EPJ029498)
+- $ 245.00 | KitchenAid Artisan KSM150P - 10 Speed Stand Mixer & Attachments Bundle TESTED
+- $ 175.00 | KitchenAid 5 Quart Artisan Stand Mixer KSM150PSWH White w/ Cover SS Accessories
+- $ 125.00 | KitchenAid Artisan 325W Tilt-Head Stand Mixer White KSM150PSWW (Mixer Only)
+
+--- CLEANED ---
+- $ 125.00 | KitchenAid Artisan 325W Tilt-Head Stand Mixer White KSM150PSWW (Mixer Only)
+- $ 169.69 | Kitchenaid Artisan 5qt 325 Watts Tilted Head Stand Mixer KSM150PSWW
+- $ 169.99 | KITCHEN AID ARTISAN COUNTERTOP WHITE MIXER WITH ACCESSORIES MODEL KSM150PSWW
+- $ 199.99 | KitchenAid Artisan 5-qt. Tilt-Head Stand Mixer White on White KSM150PSWW - Video
+
+--- REASONING ---
+Kept only exact KSM150PSWW white mixer listings, excluded other colors and accessories.
+-> AVG: $166.17 | CONF: 95%
+
+--- [2025-10-23 22:51:31] eBay Analysis for 'Extra Bowls and Paddles' (Lot #2) ---
+
+--- RAW ---
+- $  55.00 | Brand New Cuisinart 1.5-Quart Ice Cream and Sorbet Maker – White W/ EXTRA BOWL
+- $  45.45 | Kenwood Mixer Stainless Steel Replacement Bowl Made in England #17551 Vintage
+- $  16.00 | Paddle Bowl
+- $  88.98 | Sunbeam Mixmaster Heritage Series Stand Mixer Model 2350 2 Bowls 4 Attach Works 
+
+--- CLEANED ---
+- $  45.45 | Kenwood Mixer Stainless Steel Replacement Bowl Made in England #17551 Vintage
+- $  88.98 | Sunbeam Mixmaster Heritage Series Stand Mixer Model 2350 2 Bowls 4 Attach Works
+- $  16.00 | Paddle Bowl
+
+--- REASONING ---
+Retained listings that are extra mixer bowls or paddles regardless of brand, omitted unrelated ice‑cream maker bowl.
+-> AVG: $50.14 | CONF: 65%
+
+--- [2025-10-23 22:51:31] eBay Analysis for 'Sifter Accessory' (Lot #2) ---
+
+--- RAW ---
+- $ 265.19 | Column Lock L3-N1 Advantech MFG Sonic Sifter Accessories 
+- $  89.99 | CKG Sand Scoop for Metal Detecting Sand Sifter Scoop Stainless Steel, 11x7 Model
+- $  89.99 | CKG Sand Scoop for Metal Detecting Sand Sifter for Beach Stainles Steel 304, 9x6
+- $  44.99 | ASR Outdoor 7 Piece Complete Gold Panning Kit | Sifters Classifiers Accessories
+- $  15.00 | Vintage Flour Sifter 1970s Orange Rubbermaid Plastic Retro Kitchen Accessory
+- $   1.95 | dollhouse/miniature assorted kitchen/dining & food  accessories
+- $  12.66 | Vintage Metal Flour Sifter Hand Held Manual Kitchen Accessory Tool Handle
+- $  10.00 | Vintage Pyrex Accessories Plastic 1 Cup Hand Sifter #6016384 W6
+- $  19.99 | Metal Detector Accessories Sand Sifter Beach Shovel & Sand Scoop Tool Black
+- $  12.99 | Tovolo Brand Rolling Flour Duster Baking Accessory Alternative Flour Sifter
+- $  12.99 | Vintage Pyrex Accessories 1 Cup Flour Sifter USA Plastic Original Sticker NEW!
+- $   9.95 | PYREX ACCESSORIES PLASTIC SQUEEZE HANDLE SIFTER WITH BOTTOM PLATE
+- $  19.95 | Skat Blast Abrasive Sand Blast Sand Sifter Screen, Made in USA #1360-16
+- $  51.99 | Stainless Steel Sand Sifter Shovel for Metal Detecting Beach & Underwater Tre...
+- $  55.95 | Lightweight and Efficient Sand Sifter - Essential Tool for Underwater Searches
+- $ 110.99 | KitchenAid® Sifter & Scale Attachment
+- $  16.69 | 24/45/70 Screen Sieve Accessory Extractor Herbal Pollen Sifter Stackable
+- $  28.00 | Sea-sift floating sand sifter: Beach hunt accessory - Shark teeth, Seashell etc.
+- $  27.62 | Turbo "Super Sifter" Media Separator, NEW! # 7631316
+- $   3.59 | Tupperware sifter strainer gold kitchen accessory part 879-5 yellow piece 
+- $  59.99 | KitchenAid Sifter Scale Attachment 4 Cup READ DETAILS
+- $  14.99 | Vintage Pyrex Sifter Accessories White Plastic Flour/Powdered Sugar One Handed
+- $  14.00 | HLI Vintage Battery Powered Sifter w/ Lid Accessory
+- $  17.99 | Vintage Pyrex Sifter Accessories White Plastic Flour/Powdered Sugar One Handed
+- $  34.88 | LYMAN Turbo Tumbler Accessory Bowl with Handy Sifter Lid NEW!  # 7631323
+- $   6.99 | Pick up and Dust Flour Sifter Loose Tea Strainer Infuser NEW
+- $  45.00 | Shark Tooth Ocean Sifter - Floating Sieve Sifter Sand Flea Rake Accessory 
+- $  34.88 | LYMAN Turbo Tumbler Accessory Bowl with Handy Sifter Lid NEW!  # 7631323
+- $ 130.19 | Top Cone L3-N2 Advantech MFG Sonic Sifter Accessories Lot of 4
+- $  52.25 | HANH Soil Sifter for Rocks, Wooden Hand Held Garden Dirt Sifter with Sifting ...
+
+--- CLEANED ---
+- $  15.00 | Vintage Flour Sifter 1970s Orange Rubbermaid Plastic Retro Kitchen Accessory
+- $  12.66 | Vintage Metal Flour Sifter Hand Held Manual Kitchen Accessory Tool Handle
+- $  10.00 | Vintage Pyrex Accessories Plastic 1 Cup Hand Sifter #6016384 W6
+- $ 110.99 | KitchenAid® Sifter & Scale Attachment
+- $  59.99 | KitchenAid Sifter Scale Attachment 4 Cup READ DETAILS
+- $  12.99 | Tovolo Brand Rolling Flour Duster Baking Accessory Alternative Flour Sifter
+- $  12.99 | Vintage Pyrex Sifter Accessories White Plastic Flour/Powdered Sugar One Handed
+- $  14.99 | Vintage Pyrex Sifter Accessories White Plastic Flour/Powdered Sugar One Handed
+- $   9.95 | PYREX ACCESSORIES PLASTIC SQUEEZE HANDLE SIFTER WITH BOTTOM PLATE
+- $  14.00 | HLI Vintage Battery Powered Sifter w/ Lid Accessory
+- $   6.99 | Pick up and Dust Flour Sifter Loose Tea Strainer Infuser NEW
+- $  12.99 | Vintage Pyrex Sifter Accessories 1 Cup Flour Sifter USA Plastic Original Sticker NEW!
+- $  17.99 | Vintage Pyrex Sifter Accessories White Plastic Flour/Powdered Sugar One Handed
+
+--- REASONING ---
+Filtered to keep only kitchen flour‑sifter accessories, discarding sand‑detector and unrelated kits.
+-> AVG: $13.36 | CONF: 85%
+
+--- [2025-10-23 22:51:31] eBay Analysis for 'Additional Attachments and Utensils' (Lot #2) ---
+
+--- RAW ---
+- $  47.99 | MECO ACCESSSORIES  RIB RACK FITS ALL GRILLS AND WATER SMOKERS 1310 NEW OLD STOCK
+- $  29.06 | Drip Tray Liner - Traeger Pro 34 Series Wood Pellet Grill Light And Disposable
+
+--- CLEANED ---
+- $  47.99 | MECO ACCESSSORIES  RIB RACK FITS ALL GRILLS AND WATER SMOKERS 1310 NEW OLD STOCK
+- $  29.06 | Drip Tray Liner - Traeger Pro 34 Series Wood Pellet Grill Light And Disposable
+
+--- REASONING ---
+Both listings are grill attachments/utensils matching the generic query.
+-> AVG: $38.52 | CONF: 90%
+
+--- [2025-10-23 22:51:31] eBay Analysis for 'Pyrex 4 qt Butterfly Gold Mixing Bowl' (Lot #3) ---
+
+--- RAW ---
+- $  36.99 | Pyrex 404 4QT Mixing Bowl White Gold Butterfly Baking Cooking Vintage Glass
+- $  63.70 | Vintage Pyrex 4qt Large Round Mixing Bowl Butterfly Gold Pattern #404 USA
+- $  19.99 | Vintage Pyrex Large Nesting Mixing Bowl Butterfly Gold 2.5 QT 8 3/4" #403
+- $  40.00 | Vintage Pyrex Butterfly Gold Cinderella Nesting Mixing Bowl #444 4 Qt.
+- $  19.00 | Vintage Pyrex Large Nesting Mixing Bowl Butterfly Gold 2.5 QT 8 3/4" #403
+- $  19.99 | #403 Pyrex Butterfly Gold  2 1/2 Qt. Mixing Nesting Bowl 1972-1978
+- $  30.00 | Vintage~ PYREX 2.5 Qt Cinderella Mixing Bowl Butterfly Gold #443
+- $  20.70 | Vintage Pyrex Butterfly Gold 444  4 Qt Cinderella Mixing Nesting Bowl Used
+- $ 148.75 | Pyrex Butterfly Gold Cinderella Nesting Mixing Bowl 4 Piece Set Butterscotch
+- $  24.50 | Vintage Pyrex Mixing Nesting Bowl 444 Butterfly Gold  Cinderella 4 Qt 
+- $  19.99 | Vintage BUTTERFLY GOLD 2-1/2 QT PYREX #403 MIXING BOWL - VERY NICE - CLEAN
+- $  22.98 | Pyrex Butterfly Gold Cinderella Handle Mixing Bowl 2.5 qt 443 Vintage 1979-1981
+- $  15.00 | Vintage Pyrex Large Nesting Mixing Bowl Butterfly Gold 2.5 QT 8 3/4" #403
+- $ 139.99 | Pyrex Mixing Bowl Set Butterfly Gold Cinderella  441, 442, 443, 444
+- $  37.95 | Vintage Pyrex Butterfly Gold 404 Mixing Bowl 4 Qt #404 – 1970s Orange Floral
+- $  13.46 | Pyrex VTG Butterfly Gold Pattern 4 Qt. Bowl Mix Serving Handles 13x10 #444 Read
+- $  29.95 | VINTAGE PYREX BUTTERFLY GOLD CINDERELLA MIXING BOWL #444  4 qt. EUC
+- $  29.00 | Vintage Pyrex Butterfly Gold Cinderella 4 qt Mixing Bowl #444
+- $  40.00 | Vintage Pyrex Butterfly Gold 4qt. Mixing Bowl-No.444-Kitchen-Cooking--(c)
+- $  15.00 | VINTAGE PYREX 4 QT BUTTERFLY GOLD CINDERELLA MIXING BOWL 1970'S #444
+- $  18.99 | Vintage 1970’s PYREX “Butterfly Gold”  2-1/2 Qt Mixing Bowl #403
+- $  16.99 | Pyrex Butterfly Gold 443 Cinderella Bowl 2 1/2 Qt - Pretty - Read!
+- $  19.50 | Pyrex Butterfly Gold Cinderella Mixing Bowl 444 4qt Vintage 1970s VGC
+- $  19.99 | Vintage Pyrex Butterfly Gold #442 Cinderella Mixing Bowl 1.5 Qt – Mid Century
+- $  17.00 | Vintage Pyrex Cinderella Butterfly Gold 2.5 Qt mixing bowl #443
+- $  19.99 | Vintage 70’s Pyrex Butterfly Gold White Flowers Mixing Bowl #403 2 1/2 QT
+- $  15.00 | Vintage~ PYREX 2.5 Qt Cinderella Mixing Bowl Butterfly Gold #443
+- $  99.99 | 4 Vintage Pyrex Butterfly Gold Mixing Bowl Yellow White Flowers 401 402 403
+- $  25.00 | Vintage Pyrex Large Nesting Mixing Bowl Butterfly Gold 2.5 QT 8 3/4" #403
+- $  15.99 | Vintage Pyrex “Butterfly Gold” Mixing Bowl #401 — 1.5 Pt (3/4 Qt) — 1970s USA
+
+--- CLEANED ---
+- $  36.99 | Pyrex 404 4QT Mixing Bowl White Gold Butterfly Baking Cooking Vintage Glass
+- $  63.70 | Vintage Pyrex 4qt Large Round Mixing Bowl Butterfly Gold Pattern #404 USA
+- $  40.00 | Vintage Pyrex Butterfly Gold Cinderella Nesting Mixing Bowl #444 4 Qt.
+- $  29.00 | Vintage Pyrex Butterfly Gold Cinderella Mixing Bowl #444
+- $  40.00 | Vintage Pyrex Butterfly Gold 4qt Mixing Bowl-No.444-Kitchen-Cooking--(c)
+- $  15.00 | VINTAGE PYREX 4 QT BUTTERFLY GOLD CINDERELLA MIXING BOWL 1970'S #444
+- $  37.95 | Vintage Pyrex Butterfly Gold 404 Mixing Bowl 4 Qt #404 – 1970s Orange Floral
+- $  13.46 | Pyrex VTG Butterfly Gold Pattern 4 Qt. Bowl Mix Serving Handles 13x10 #444 Read
+- $  19.50 | Pyrex Butterfly Gold Cinderella Mixing Bowl 444 4qt Vintage 1970s VGC
+
+--- REASONING ---
+Kept only 4‑quart Butterfly Gold Pyrex bowls, removed other sizes and non‑butterfly items.
+-> AVG: $32.84 | CONF: 95%
+
+--- [2025-10-23 22:51:31] eBay Analysis for 'Keurig K-Mini Single Serve Coffee Maker' (Lot #4) ---
+
+--- RAW ---
+- $  49.95 | Keurig K-Mini Single Serve K-Cup Pod Coffee Maker - Choice of Color
+- $  24.99 | Keurig K-Mini Single Serve Coffee Maker Green – Tested Working!
+- $  38.46 | Keurig K-Mini Plus Single Serve Coffee Maker with K-Cup Pod - see pics for inclu
+- $  49.95 | Keurig K Mini Single Serve Coffee Maker with 6 to 12 oz Cup Sizes Black
+- $  46.88 | Keurig K-Mini Single Serve K-Cup Pod Coffee Maker 6 to 12oz Brew Size -Open Box
+- $  54.99 | Keurig K-Mini Single Serve K-Cup Pod Coffee Maker 6 - 12oz Portable Camping Gray
+- $  59.99 | Keurig K-Mini Single Serve K-Cup Pod Coffee Maker - Studio Gray *NEW SEALED*
+- $  24.99 | Keurig , K Mini Single Serve Oasis Coffee Maker w/6 to 12Oz Cup Sizes
+- $  45.95 | Keurig K Mini Single Serve Dusty Rose Coffee Maker with 6 to 12Oz Cup Sizes
+- $  36.99 | Keurig K-Mini Single Serve K-Cup Pod Coffee Maker, 6 to 12oz Brew size, with
+- $  49.95 | Keurig K Mini Single Serve Evergreen Coffee Maker with 6 to 12Oz Cup Sizes
+- $  34.99 | Keurig - K-Mini Single Serve K-Cup Pod Coffee Maker - Matte Black
+- $  34.95 | Keurig K-Mini Single Serve Espresso Machine K-Cup Pod Coffee Maker Evergreen
+- $  23.95 | Keurig Mini Single Serve Coffee Maker K Cup Pod 6-12oz Cord Storage Black 
+- $  30.78 | KEURIG K-Mini Single Serve K-Cup Coffee Maker BLACK - New(Opened To Verify)
+- $  52.00 | KEURIG K• Mini Mate Single Serve K-Cup Pod Coffee Maker, Deep Blue Sea
+- $  30.00 | Keurig K-Mini Matte Black Single Serve Coffee Maker
+- $  24.99 | Keurig Model K Mini Plus Single Serve K Cup Pod Coffee Maker Grey Gray PREOWNED
+- $  59.99 | Keurig K-Mini Single Cup Coffee Maker - Matte Black
+- $  29.99 | Keurig K Mini Single Serve Dusty Rose Coffee Maker.
+- $  25.99 | *READ* Keurig K-Mini Single Serve K-Cup Pod Coffee Maker, 6 to 12oz Brew size
+- $  70.00 | Keurig K-Mini Go Single-Serve K-Cup Pod Coffee Maker (Totally Grey)
+- $  19.50 | Keurig K‑Mini Single Serve Coffee Maker Tested Works Black Compact Brewer
+- $  40.00 | Keurig K-Mini Coffee Maker, Single Serve, Fast & Fresh Brew
+- $  24.99 | Keurig K-mini K10 Single Serve K-cup Pod Coffee Maker Pink - Tested
+- $  44.99 | Keurig K-Mini Mate Single Serve K-Cup Pod Coffee Maker - Matte Black - New -E
+- $  28.99 | Keurig K-mini Single Serve K-cup Pod Coffee Maker, 6 To 12oz Brew Size, With
+- $  48.88 | Keurig K-Mini Single Serve Coffee Maker, Black
+- $  64.99 | Keurig K-Mini Plus Single Serve Coffee Maker - Studio Gray
+- $  49.95 | Keurig K Mini Single Serve Stone Coffee Maker with 6 to 12Oz Cup Sizes
+
+--- CLEANED ---
+- $  49.95 | Keurig K-Mini Single Serve K-Cup Pod Coffee Maker - Choice of Color
+- $  24.99 | Keurig K-Mini Single Serve Coffee Maker Green – Tested Working!
+- $  49.95 | Keurig K Mini Single Serve Coffee Maker with 6 to 12 oz Cup Sizes Black
+- $  46.88 | Keurig K-Mini Single Serve K-Cup Pod Coffee Maker 6 to 12oz Brew Size -Open Box
+- $  54.99 | Keurig K-Mini Single Serve K-Cup Pod Coffee Maker 6 - 12oz Portable Camping Gray
+- $  59.99 | Keurig K-Mini Single Serve K-Cup Pod Coffee Maker - Studio Gray *NEW SEALED*
+- $  24.99 | Keurig , K Mini Single Serve Oasis Coffee Maker w/6 to 12Oz Cup Sizes
+- $  45.95 | Keurig K Mini Single Serve Dusty Rose Coffee Maker with 6 to 12Oz Cup Sizes
+- $  36.99 | Keurig K-Mini Single Serve K-Cup Pod Coffee Maker, 6 to 12oz Brew size, with
+- $  49.95 | Keurig K Mini Single Serve Evergreen Coffee Maker with 6 to 12Oz Cup Sizes
+- $  34.99 | Keurig - K-Mini Single Serve K-Cup Pod Coffee Maker - Matte Black
+- $  34.95 | Keurig K-Mini Single Serve Espresso Machine K-Cup Pod Coffee Maker Evergreen
+- $  23.95 | Keurig Mini Single Serve Coffee Maker K Cup Pod 6-12oz Cord Storage Black 
+- $  30.78 | KEURIG K-Mini Single Serve K-Cup Coffee Maker BLACK - New(Opened To Verify)
+- $  52.00 | KEURIG K• Mini Mate Single Serve K-Cup Pod Coffee Maker, Deep Blue Sea
+- $  30.00 | Keurig K-Mini Matte Black Single Serve Coffee Maker
+- $  59.99 | Keurig K-Mini Single Cup Coffee Maker - Matte Black
+- $  29.99 | Keurig K Mini Single Serve Dusty Rose Coffee Maker.
+- $  25.99 | *READ* Keurig K-Mini Single Serve K-Cup Pod Coffee Maker, 6 to 12oz Brew size
+- $  70.00 | Keurig K-Mini Go Single-Serve K-Cup Pod Coffee Maker (Totally Grey)
+- $  19.50 | Keurig K‑Mini Single Serve Coffee Maker Tested Works Black Compact Brewer
+- $  40.00 | Keurig K-Mini Coffee Maker, Single Serve, Fast & Fresh Brew
+- $  24.99 | Keurig K-mini K10 Single Serve K-cup Pod Coffee Maker Pink - Tested
+- $  44.99 | Keurig K-Mini Mate Single Serve K-Cup Pod Coffee Maker - Matte Black - New -E
+- $  28.99 | Keurig K-mini Single Serve K-cup Pod Coffee Maker, 6 To 12oz Brew Size, With
+- $  48.88 | Keurig K-Mini Single Serve Coffee Maker, Black
+- $  49.95 | Keurig K Mini Single Serve Stone Coffee Maker with 6 to 12Oz Cup Sizes
+
+--- REASONING ---
+Kept only Keurig K-Mini single-serve coffee makers, excluding accessories and different models.
+-> AVG: $40.54 | CONF: 95%
+
+--- [2025-10-23 22:51:31] eBay Analysis for 'Keurig K-Mini Travel Mug' (Lot #4) ---
+
+--- RAW ---
+- $  45.99 | Coffee Maker Travel Bag Compatible with Keurig K-Mini & Others
+- $  98.99 | Keurig K Mini Single Serve Evergreen Coffee Maker with 6 to 12Oz Cup Sizes
+- $  37.99 | Coffee Maker Travel Bag Compatible with Keurig K-Mini,Single Serve Coffee Brewer
+- $  47.82 | Coffee Maker Travel Bag Compatible with Keurig K-Mini or K-Mini Plus, Single ...
+- $ 151.51 | K-Mini Plus Single Serve Coffee Maker, 6-12oz Brew, 9 Pod Storage, Travel Mug...
+- $  76.00 | Keurig K-Mini Plus Single Serve K-Cup Pod Coffee Maker, with 6 to 12oz Brew Size
+- $  18.70 | KEURIG K22 Go Single Serve K-Cup POD Coffee Maker Machine Base Only No Tank/Tray
+- $  46.37 | Coffee Maker Travel Bag Compatible with Keurig K-Mini or K-Mini Plus, Single Ser
+- $  53.99 | Coffee Maker Travel Bag Compatible with Keurig K-Mini, K-Mini Plus, Keurig K-Exp
+- $  49.95 | KEURIG K-Mini Single Serve K-Cup POD Coffee Maker Machine - BLACK
+- $  59.39 | Aluminum Lined Travel Carrying Case for Keurig K-Mini Plus with Multiple Pockets
+- $  53.00 | Coffee Maker Travel Bag with Keurig K-Mini or K-Mini Plus, Single Serve Coffe...
+- $  66.79 | Coffee Maker Travel Bag Compatible with Keurig K-Mini or K-Mini Plus, Single ...
+- $  44.95 | PREOWNED KEURIG K-Mini Single Serve K-cup POD Coffee Maker Machine -BLACK
+- $  73.47 | K-Mini Single Serve Coffee Maker with 6-12Oz Cup Sizes, Quick Brewing, and Re...
+- $ 149.92 | Coffee Maker Espresso Machine Portable K-Cup Pod Brewer 6 12oz Capacity
+- $  72.79 | Coffee Maker Travel Bag Compatible with Keurig K-Mini, K-Mini Plus or Other A...
+- $  82.86 | K-Mini plus Single Serve K-Cup Pod Coffee Maker, 6-12oz Brew, Fits Travel Mug
+- $  45.00 | Keurig K-Mini Single Serve K-Cup Pod Coffee Maker Black orGrey NEW Retail 90
+- $  19.95 | 12oz Stainless Steel Insulated Coffee Travel Mug Fits Under Any Keurig K Cup
+- $  53.99 | Coffee Maker Travel Bag Compatible with Keurig K-Mini, K-Mini Plus, Keurig K-Exp
+- $  72.79 | Coffee Maker Travel Bag Compatible with Keurig K-Mini, K-Mini Plus or Other A...
+- $  61.00 | Coffee Maker Travel Bag Compatible with Keurig K-Mini or K-Mini Plus, Single ...
+- $  46.99 | Coffee Maker Travel Bag Compatible with Keurig K-Mini, K-Mini Plus, Keurig K-Exp
+- $  73.00 | K-Mini Single Serve Coffee Maker - Energy Efficient & Perfect For Travel Mugs
+- $  26.99 | KEURIG K-Mini Go Single Serve K-Cup POD Coffee Maker Machine -GRAY
+- $  47.99 | Coffee Maker Travel Bag Compatible with Keurig K-Mini, K-Mini Plus, Keurig K-Exp
+- $  72.79 | Coffee Maker Travel Bag Compatible with Keurig K-Mini, K-Mini Plus, Nespresso...
+- $  84.92 | Coffee Maker Small Space Single Serve Compact Drip Machine 12oz
+- $ 124.99 | K-Mini plus Single Serve K-Cup Pod Coffee Maker, with 6 to 12Oz Brew Size, Store
+
+--- CLEANED ---
+- $  19.95 | 12oz Stainless Steel Insulated Coffee Travel Mug Fits Under Any Keurig K Cup
+
+--- REASONING ---
+Removed all non-mug listings (bags, cases, coffee makers) and kept only the travel mug.
+-> AVG: $19.95 | CONF: 30%
