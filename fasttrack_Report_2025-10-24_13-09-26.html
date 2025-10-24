@@ -1,0 +1,1637 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Item Analysis</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a; --table-bg-color: #2c2c2c; --header-bg-color: #3a3a3a;
+            --header-hover-bg-color: #4a4a4a; --row-even-bg-color: #333333; --row-odd-bg-color: #2c2c2c;
+            --border-color: #444444; --text-color: #e0e0e0; --link-color: #4a90e2;
+            --link-hover-color: #81b5f5; --sort-indicator-color: #81b5f5;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 2rem; line-height: 1.6; }
+        h1 { text-align: center; color: #ffffff; font-weight: 300; margin-bottom: 2rem; }
+        .controls-container { max-width: 1600px; margin: auto; margin-bottom: 1rem; }
+        .filter-container { text-align: left; padding: 10px 15px; background-color: var(--table-bg-color); border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        .filter-container label { margin-right: 20px; font-size: 0.9em; cursor: pointer; user-select: none; }
+        .filter-container input { vertical-align: middle; margin-right: 5px; }
+        .table-container { max-width: 1600px; margin: auto; overflow-x: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        table { width: 100%; border-collapse: collapse; background-color: var(--table-bg-color); border-spacing: 0; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        thead th { background-color: var(--header-bg-color); color: #ffffff; font-weight: 600; position: sticky; top: 0; z-index: 10; }
+        thead th[data-column] { cursor: pointer; transition: background-color 0.2s ease-in-out; user-select: none; }
+        thead th[data-column]:hover { background-color: var(--header-hover-bg-color); }
+        tbody tr:not(.reasoning-row):hover { background-color: var(--header-hover-bg-color); }
+        td { font-size: 0.95em; }
+        td:nth-child(4), td:nth-child(5), td:nth-child(6) { font-family: 'Courier New', Courier, monospace; text-align: right; white-space: nowrap; }
+        td:nth-child(7), td:nth-child(8) { text-align: center; }
+        a { color: var(--link-color); text-decoration: none; transition: color 0.2s ease-in-out; }
+        a:hover { color: var(--link-hover-color); text-decoration: underline; }
+        .sort-indicator { color: var(--sort-indicator-color); font-size: 0.8em; margin-left: 8px; display: inline-block; width: 10px; }
+        .lot-main td { font-weight: bold; }
+        .lot-main.expandable { cursor: pointer; }
+        .lot-main:nth-child(4n+1), .lot-main:nth-child(4n+2) { background-color: var(--row-odd-bg-color); }
+        .lot-main:nth-child(4n+3), .lot-main:nth-child(4n) { background-color: var(--row-even-bg-color); }
+        .lot-sub-item { background-color: rgba(0,0,0,0.15) !important; }
+        .lot-sub-item td { font-size: 0.9em; color: #c0c0c0; border-color: #383838; }
+        .lot-sub-item td:nth-child(2) { padding-left: 35px; }
+        .reasoning-row { display: none; background-color: #222 !important; }
+        .reasoning-row.visible { display: table-row; }
+        .reasoning-row td {
+            padding: 10px 20px 10px 40px;
+            font-style: italic;
+            color: #b0b0b0;
+            border-top: 1px dashed #555;
+            white-space: normal;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Auction Item Analysis</h1>
+    <div class="controls-container">
+        <div class="filter-container">
+            <label><input type="checkbox" id="hideFurniture"> Hide Large Furniture</label>
+            <label><input type="checkbox" id="hideMedical"> Hide Medical Devices</label>
+        </div>
+    </div>
+    <div class="table-container"><table><thead><tr><th data-column="lot_number">Lot # <span class="sort-indicator"></span></th><th data-column="name">Item Name <span class="sort-indicator"></span></th><th data-column="category">Category <span class="sort-indicator"></span></th><th data-column="price">AI Market Value <span class="sort-indicator"></span></th><th data-column="ebay_price">eBay Avg. Sold <span class="sort-indicator"></span></th><th data-column="confidence">Confidence <span class="sort-indicator"></span></th><th>eBay Search</th><th>Google Search</th></tr></thead><tbody id="data-table-body"></tbody></table></div>
+
+<script type="application/json" id="auctionData">
+    [
+    {
+        "ebay_search_title": "Aquasana Smartflow Reverse Osmosis System Model AQ-SFRO2-NF",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 250,
+        "items": [
+            {
+                "item_name": "Aquasana Smartflow Reverse Osmosis System Model AQ-SFRO2-NF",
+                "estimated_value": 150,
+                "ebay_avg_price": 178.53125
+            },
+            {
+                "item_name": "Aquasana Replacement Filters for AQ-SFRO2-NF",
+                "estimated_value": 100,
+                "ebay_avg_price": 33.69625
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=BifMwfiImlANcvDw%2bCckNA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Smartflow | Smartflow Reverse Osmosis no faucet Model AQ-SFRO2-NF, Good Condition, Retails",
+            "lot_number": 46,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=BifMwfiImlANcvDw%2bCckNA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "BifMwfiImlANcvDwCckNA_1.jpg",
+                "BifMwfiImlANcvDwCckNA_2.jpg",
+                "BifMwfiImlANcvDwCckNA_3.jpg",
+                "BifMwfiImlANcvDwCckNA_4.jpg",
+                "BifMwfiImlANcvDwCckNA_5.jpg"
+            ]
+        },
+        "reasoning": "The lot includes an Aquasana Smartflow Reverse Osmosis System Model AQ-SFRO2-NF and replacement filters. The system is in good condition and retails for a significant amount. Replacement filters for such systems are typically priced around $50-$100 each. The total market value is estimated at $250, considering the condition and the retail price of similar systems and filters. Expert resellers can increase value by highlighting the system's quality and the availability of replacement filters. Year 2018. 5 Pics analyzed",
+        "lot_number": 46,
+        "ebay_avg_price": 212.2275,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Aquasana+Smartflow+Reverse+Osmosis+System+Model+AQ-SFRO2-NF&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "VEVOR Electric Lifting Bed Backrest Adjustable 4-68\u00b0 300 lbs Capacity Medical Aid",
+        "category": "Medical Devices",
+        "is_shippable": true,
+        "total_market_value": 150,
+        "items": [
+            {
+                "item_name": "VEVOR Electric Lifting Bed Backrest Adjustable 4-68\u00b0 300 lbs Capacity Medical Aid",
+                "estimated_value": 150,
+                "ebay_avg_price": 182.52714285714288
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=TDdaV3HxyFe5x%2fEFZxKlMw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Vevor | VEVOR Electric Lifting Backrest for Bed, 300 lbs. Capacity, 4-68\u00b0 Adjustable Lifting Bed Backrest, with Collapse Rails for Pregnant Women Elderly Patient Handicap, Good Condition, Retails",
+            "lot_number": 7,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=TDdaV3HxyFe5x%2fEFZxKlMw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "TDdaV3HxyFe5xEFZxKlMw_1.jpg",
+                "TDdaV3HxyFe5xEFZxKlMw_2.jpg",
+                "TDdaV3HxyFe5xEFZxKlMw_3.jpg",
+                "TDdaV3HxyFe5xEFZxKlMw_4.jpg",
+                "TDdaV3HxyFe5xEFZxKlMw_5.jpg",
+                "TDdaV3HxyFe5xEFZxKlMw_6.jpg"
+            ]
+        },
+        "reasoning": "This is a specialized piece of equipment (retail $250-$350). Electric medical aids are highly sought after in the secondary market. Since it is described as being in 'Good Condition' and likely works (given the complexity of the item), the value is placed around 50% of retail. It is bulky but designed to be collapsible and shippable. Year 2023. 6 Pics analyzed",
+        "lot_number": 7,
+        "ebay_avg_price": 182.52714285714288,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=VEVOR+Electric+Lifting+Bed+Backrest+Adjustable+4-68%C2%B0+300+lbs+Capacity+Medical+Aid&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "VIVOHOME 660W 10 Speed 6 Quart Tilt-Head Electric Kitchen Stand Mixer Gray",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 65,
+        "items": [
+            {
+                "item_name": "VIVOHOME 660W 10 Speed 6 Quart Tilt-Head Electric Kitchen Stand Mixer Gray",
+                "estimated_value": 65,
+                "ebay_avg_price": 134.50285714285715
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=uoHjJf%2bywohgTSVIgLVKzA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "VivoHome | VIVOHOME Stand Mixer, 660W 10 Speed 6 Quart Tilt-Head Kitchen Electric Food Mixer, Gray, Appears New, Retails",
+            "lot_number": 10,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=uoHjJf%2bywohgTSVIgLVKzA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "uoHjJfywohgTSVIgLVKzA_1.jpg",
+                "uoHjJfywohgTSVIgLVKzA_2.jpg",
+                "uoHjJfywohgTSVIgLVKzA_3.jpg"
+            ]
+        },
+        "reasoning": "This VIVOHOME mixer (retail $100-$130) is a functional appliance, though it is a budget brand compared to KitchenAid. Since it 'Appears New' and is complete with accessories (as suggested by the plastic packaging), it is valued at roughly 50-60% of retail. It is easily shippable in its original box. Year 2023. 3 Pics analyzed",
+        "lot_number": 10,
+        "ebay_avg_price": 134.50285714285715,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=VIVOHOME+660W+10+Speed+6+Quart+Tilt-Head+Electric+Kitchen+Stand+Mixer+Gray&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Kitchen Utensils and Baking Supplies Lot",
+        "category": "Miscellaneous",
+        "is_shippable": true,
+        "total_market_value": 25,
+        "items": [
+            {
+                "item_name": "Red Rubberized Rolling Pin",
+                "estimated_value": 5,
+                "ebay_avg_price": 40.23
+            },
+            {
+                "item_name": "Gold Toned Metal Serving Tray",
+                "estimated_value": 10,
+                "ebay_avg_price": 24.948400000000003
+            },
+            {
+                "item_name": "Glass Canning Jars (2)",
+                "estimated_value": 5,
+                "ebay_avg_price": 21.75176470588235
+            },
+            {
+                "item_name": "Red Silicone Baking Dish",
+                "estimated_value": 3,
+                "ebay_avg_price": 17.05857142857143
+            },
+            {
+                "item_name": "Wooden Cutting Board",
+                "estimated_value": 2,
+                "ebay_avg_price": 25.618846153846157
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=n2Wti1%2f6awuaIjacoEBQaQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Misc Lot | Misc Lot All One Bid",
+            "lot_number": 38,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=n2Wti1%2f6awuaIjacoEBQaQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "n2Wti16awuaIjacoEBQaQ_1.jpg",
+                "n2Wti16awuaIjacoEBQaQ_2.jpg"
+            ]
+        },
+        "reasoning": "The lot contains a variety of kitchen utensils and baking supplies, including a rolling pin, serving tray, canning jars, baking dish, and cutting board. The total market value is estimated to be $25. The items are all relatively common and can be found on eBay or other online marketplaces. The lot is shippable as the items are not excessively large or heavy. Expert reseller advice: Consider listing the items separately to maximize profit, and be sure to accurately describe the condition of each item. Year 2010. 2 Pics analyzed",
+        "lot_number": 38,
+        "ebay_avg_price": 129.60758228829994,
+        "ebay_confidence_score": 85,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Kitchen+Utensils+and+Baking+Supplies+Lot&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Electric Lunch Box Gray",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Electric Lunch Box Gray with Utensils",
+                "estimated_value": 25,
+                "ebay_avg_price": 38.36115384615385
+            },
+            {
+                "item_name": "Lunch Box Carrying Bag",
+                "estimated_value": 10,
+                "ebay_avg_price": 19.61391304347826
+            },
+            {
+                "item_name": "Extra Lunch Box Bag in Plastic",
+                "estimated_value": 5,
+                "ebay_avg_price": 45.32608695652174
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=LymNQsrmk4U%2flhi4b4lz3w%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Carslot | Electric Lunch Box, Gray, Appears New, Retails",
+            "lot_number": 23,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=LymNQsrmk4U%2flhi4b4lz3w%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "LymNQsrmk4Ulhi4b4lz3w_1.jpg",
+                "LymNQsrmk4Ulhi4b4lz3w_2.jpg",
+                "LymNQsrmk4Ulhi4b4lz3w_3.jpg"
+            ]
+        },
+        "reasoning": "The lot includes an electric lunch box with utensils, a carrying bag, and an extra bag. The electric lunch box is the primary item and has a significant value. The bags add additional value. Electric lunch boxes are in demand for their convenience. Year 2020. 3 Pics analyzed",
+        "lot_number": 23,
+        "ebay_avg_price": 103.30115384615385,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Electric+Lunch+Box+Gray&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "12 Pack Sublimation Glass Mug Can Jars with Bamboo Lids & Stainless Steel Straws",
+        "category": "Glassware",
+        "is_shippable": true,
+        "total_market_value": 45,
+        "items": [
+            {
+                "item_name": "12 Pack Sublimation Glass Mug Can Jars with Bamboo Lids & Stainless Steel Straws",
+                "estimated_value": 45,
+                "ebay_avg_price": 102.24923076923076
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=m7T6eg9xd4CbfjdSAIVMag%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Sublimination | 12 pack Of Glass Mugs With Stainless Straws, Appears New, Retails",
+            "lot_number": 14,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=m7T6eg9xd4CbfjdSAIVMag%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "m7T6eg9xd4CbfjdSAIVMag_1.jpg",
+                "m7T6eg9xd4CbfjdSAIVMag_2.jpg"
+            ]
+        },
+        "reasoning": "This is a bulk lot of 12 glass mugs with accessories, highly valued by the DIY sublimation and crafting community (as indicated by the listing title). The value is slightly higher than generic glassware due to its specific use as a blank commodity. Resale for new 12-packs is around $45-$55. Expert Advice: Ensure robust packaging for shipping glass, as breakages dramatically reduce profit. Year 2023. 2 Pics analyzed",
+        "lot_number": 14,
+        "ebay_avg_price": 102.24923076923076,
+        "ebay_confidence_score": 85,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=12+Pack+Sublimation+Glass+Mug+Can+Jars+with+Bamboo+Lids+%26+Stainless+Steel+Straws&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "OXO Brew 8-Cup Coffee Maker Thermal Carafe Stainless Steel Open Box",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "OXO Brew 8-Cup Coffee Maker Thermal Carafe Stainless Steel Open Box",
+                "estimated_value": 100,
+                "ebay_avg_price": 100.145
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=7YdAETx3ZXzDTbrmNIBj8g%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "OXO Brew | OXO Brew 8-Cup Coffee Maker - Single-Serve & Carafe, Thermal Stainless Steel, Open Box Return, As Is, Retails",
+            "lot_number": 17,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=7YdAETx3ZXzDTbrmNIBj8g%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "7YdAETx3ZXzDTbrmNIBj8g_1.jpg",
+                "7YdAETx3ZXzDTbrmNIBj8g_2.jpg",
+                "7YdAETx3ZXzDTbrmNIBj8g_3.jpg"
+            ]
+        },
+        "reasoning": "The OXO Brew 8-Cup Coffee Maker is a high-end appliance known for quality, commanding a new retail price over $200. Even sold 'Open Box Return, As Is,' this unit retains strong value because the brand is trusted. Resale is estimated conservatively at 50% of retail or slightly below, assuming it is functional. Year 2019. 3 Pics analyzed",
+        "lot_number": 17,
+        "ebay_avg_price": 100.145,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=OXO+Brew+8-Cup+Coffee+Maker+Thermal+Carafe+Stainless+Steel+Open+Box&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Rotating Kitchen Storage Rack Organizer",
+        "category": "Small Furniture",
+        "is_shippable": true,
+        "total_market_value": 15,
+        "items": [
+            {
+                "item_name": "Rotating Kitchen Storage Rack",
+                "estimated_value": 10,
+                "ebay_avg_price": 72.75464285714285
+            },
+            {
+                "item_name": "Stainless Steel Tray",
+                "estimated_value": 5,
+                "ebay_avg_price": 24.397307692307695
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=H7bEJvuhfEip8x0LuCsXoA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Rorpoir | 1Pc Rotating Storage Rack for Seasoning Bottles Cosmetic Holder Food Storage Tray and Fruit Container for Kitchen Pantry Cabinet Countertop Organization, Appears New, Retails",
+            "lot_number": 24,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=H7bEJvuhfEip8x0LuCsXoA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "H7bEJvuhfEip8x0LuCsXoA_1.jpg",
+                "H7bEJvuhfEip8x0LuCsXoA_2.jpg"
+            ]
+        },
+        "reasoning": "The lot includes a rotating kitchen storage rack and a stainless steel tray. The storage rack is made of premium material and is durable and practical. The estimated value is based on the average price of similar products on eBay. To increase value, consider adding more images showcasing the product's features and including a detailed description. Year 2020. 2 Pics analyzed",
+        "lot_number": 24,
+        "ebay_avg_price": 97.15195054945055,
+        "ebay_confidence_score": 92,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Rotating+Kitchen+Storage+Rack+Organizer&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Chicco KeyFit Caddy Lightweight Infant Car Seat Frame Stroller Black",
+        "category": "Toys/Games",
+        "is_shippable": true,
+        "total_market_value": 70,
+        "items": [
+            {
+                "item_name": "Chicco KeyFit Caddy Lightweight Infant Car Seat Frame Stroller Black",
+                "estimated_value": 70,
+                "ebay_avg_price": 96.75333333333333
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=xhsJsu4zR0GMrkr8oEbiGg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Chicco | Chicco Key Fit Caddy Frame Stroller, Accepts All Chicco Infant Car Seats, Adjustable Handle, Parent Tray | Black/Black, Appears New, Retails",
+            "lot_number": 12,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=xhsJsu4zR0GMrkr8oEbiGg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "xhsJsu4zR0GMrkr8oEbiGg_1.jpg",
+                "xhsJsu4zR0GMrkr8oEbiGg_2.jpg",
+                "xhsJsu4zR0GMrkr8oEbiGg_3.jpg",
+                "xhsJsu4zR0GMrkr8oEbiGg_4.jpg"
+            ]
+        },
+        "reasoning": "The Chicco KeyFit Caddy is a desirable, high-demand item due to its compatibility with Chicco car seats and its lightweight design. Since it appears new and is in its original packaging, the estimated resale value is $70, reflecting a discount from the $100+ retail price for open-box baby gear. Year 2020. 4 Pics analyzed",
+        "lot_number": 12,
+        "ebay_avg_price": 96.75333333333333,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Chicco+KeyFit+Caddy+Lightweight+Infant+Car+Seat+Frame+Stroller+Black&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "VEVOR 2-in-1 Folding Walker with Armrests Height Adjustable Aluminum Mobility Aid 5\" Wheels",
+        "category": "Medical Devices",
+        "is_shippable": true,
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "VEVOR 2-in-1 Folding Walker with Armrests Height Adjustable Aluminum Mobility Aid 5\" Wheels",
+                "estimated_value": 60,
+                "ebay_avg_price": 92.22625
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=8F%2b8KCLpNY9iRDvVHR1GqA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Vevor | VEVOR 2 in 1 Folding Walker & Removable Armrests, Height Adjustable Foldable Walker with 5\" Solid Wheels, Lightweight Aluminum | Front Wheeled Mobility Aid for Elderly, Open Box Return, As Is, Retails",
+            "lot_number": 6,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=8F%2b8KCLpNY9iRDvVHR1GqA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "8F8KCLpNY9iRDvVHR1GqA_1.jpg",
+                "8F8KCLpNY9iRDvVHR1GqA_2.jpg"
+            ]
+        },
+        "reasoning": "This VEVOR walker (retail ~$100-$130) features removable armrests and wheels, increasing its versatility. As an open-box return, it retains good value and is easily shippable via standard services. Valued conservatively to reflect the VEVOR brand relative to established medical suppliers. Year 2023. 2 Pics analyzed",
+        "lot_number": 6,
+        "ebay_avg_price": 92.22625,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=VEVOR+2-in-1+Folding+Walker+with+Armrests+Height+Adjustable+Aluminum+Mobility+Aid+5%22+Wheels&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Sorbus Acrylic Storage Bins",
+        "category": "Small Furniture",
+        "is_shippable": true,
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Sorbus Clear Acrylic Storage Organizer",
+                "estimated_value": 20,
+                "ebay_avg_price": 42.9124
+            },
+            {
+                "item_name": "Sorbus Clear Acrylic Drawer Organizer",
+                "estimated_value": 20,
+                "ebay_avg_price": 44.91576923076923
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=Y8%2budaIdLyD%2ft9tJXIvpfg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Sorbus | Misc Lot of Acrylic Storage Bins, See Addl Pics, Retails",
+            "lot_number": 36,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=Y8%2budaIdLyD%2ft9tJXIvpfg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "Y8udaIdLyDt9tJXIvpfg_1.jpg",
+                "Y8udaIdLyDt9tJXIvpfg_2.jpg"
+            ]
+        },
+        "reasoning": "The lot includes multiple acrylic storage bins from Sorbus, which are highly sought after for their quality and functionality. The first image shows a stylish and organized storage solution for cosmetics and accessories, while the second image reveals more storage bins in their original packaging. The presence of multiple units suggests a potential for resale in bulk or individually. Pricing is competitive with similar products on eBay. Expert reseller tip: Consider listing these items as a lot or individually, highlighting their brand and condition. Year 2020. 2 Pics analyzed",
+        "lot_number": 36,
+        "ebay_avg_price": 87.82816923076922,
+        "ebay_confidence_score": 92,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Sorbus+Acrylic+Storage+Bins&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "WICHEMI Commercial Stainless Steel Popsicle Ice Pop Molds 20 Cavity Maker 85g",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 85,
+        "items": [
+            {
+                "item_name": "WICHEMI Commercial Stainless Steel Popsicle Ice Pop Molds 20 Cavity Maker 85g",
+                "estimated_value": 85,
+                "ebay_avg_price": 76.8790909090909
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=UQvOMG5w96wn3S04P5OXDw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Wichemi | WICHEMI Commercial Popsicle Molds Stainless Steel Ice Pop Molds 20PCS Metal Ice Lolly Popsicle Mold Ice Cream Maker Mold Stick Holder with Lid Single Cup Capacity 85g, Appears New, Retails",
+            "lot_number": 11,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=UQvOMG5w96wn3S04P5OXDw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "UQvOMG5w96wn3S04P5OXDw_1.jpg",
+                "UQvOMG5w96wn3S04P5OXDw_2.jpg"
+            ]
+        },
+        "reasoning": "This is a commercial-grade, 20-cavity stainless steel popsicle mold system, likely intended for small businesses or serious production. The 'appears new' condition supports a strong resale value. Comparable new units sell consistently in the $80-$100 range. Year 2023. 2 Pics analyzed",
+        "lot_number": 11,
+        "ebay_avg_price": 76.8790909090909,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=WICHEMI+Commercial+Stainless+Steel+Popsicle+Ice+Pop+Molds+20+Cavity+Maker+85g&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Glass Measuring Beakers and Cylinders Set",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Borosilicate Glass Measuring Beaker",
+                "estimated_value": 5,
+                "ebay_avg_price": 14.985999999999999
+            },
+            {
+                "item_name": "Graduated Glass Measuring Cylinder",
+                "estimated_value": 5,
+                "ebay_avg_price": 18.236296296296295
+            },
+            {
+                "item_name": "Glass Measuring Beakers and Cylinders Set",
+                "estimated_value": 40,
+                "ebay_avg_price": 42.305
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=3bo2FRUoqEVjRRnE7Li1Mw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Feekon | Feekoon 10 Pieces Glass Measuring Beaker and Graduated Measuring Cylinder, Appears New, Retails",
+            "lot_number": 34,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=3bo2FRUoqEVjRRnE7Li1Mw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "3bo2FRUoqEVjRRnE7Li1Mw_1.jpg",
+                "3bo2FRUoqEVjRRnE7Li1Mw_2.jpg",
+                "3bo2FRUoqEVjRRnE7Li1Mw_3.jpg"
+            ]
+        },
+        "reasoning": "The lot contains a set of 10 glass measuring beakers and graduated cylinders, which are laboratory equipment. The items appear to be new and are still wrapped in their original packaging. The total market value is estimated to be $50, considering the quality and brand of the items. To increase the value, it's recommended to highlight the borosilicate glass material and the set's completeness. Year 2020. 3 Pics analyzed",
+        "lot_number": 34,
+        "ebay_avg_price": 75.5272962962963,
+        "ebay_confidence_score": 91,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Glass+Measuring+Beakers+and+Cylinders+Set&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Medline Basic 4-Wheeled Rollator Walker 8 Inch Wheels 300 lbs Capacity MDS86830EBL",
+        "category": "Medical Devices",
+        "is_shippable": true,
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Medline Basic 4-Wheeled Rollator Walker 8 Inch Wheels 300 lbs Capacity MDS86830EBL",
+                "estimated_value": 50,
+                "ebay_avg_price": 72.19
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=WbadgwLtLE%2bYzGgwTzjwKg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Medline | Medline Basic Rollator with 8in Wheels 300lbs Black, Open Box Return, As Is, Retails",
+            "lot_number": 5,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=WbadgwLtLE%2bYzGgwTzjwKg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "WbadgwLtLEYzGgwTzjwKg_1.jpg",
+                "WbadgwLtLEYzGgwTzjwKg_2.jpg",
+                "WbadgwLtLEYzGgwTzjwKg_3.jpg"
+            ]
+        },
+        "reasoning": "This is a common, standard rollator model. Retail price is typically $70-$100. As an open box return, and given the consistent demand for mobility aids, it is valued at around 50% of retail. It is shippable as it folds down compactly into a manageable box. Year 2023. 3 Pics analyzed",
+        "lot_number": 5,
+        "ebay_avg_price": 72.19,
+        "ebay_confidence_score": 70,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Medline+Basic+4-Wheeled+Rollator+Walker+8+Inch+Wheels+300+lbs+Capacity+MDS86830EBL&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Universal Center Console Organizer",
+        "category": "Miscellaneous",
+        "is_shippable": true,
+        "total_market_value": 15,
+        "items": [
+            {
+                "item_name": "Universal Center Console Organizer",
+                "estimated_value": 15,
+                "ebay_avg_price": 71.19724137931034
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=8jMWPRnvk8ax15YqZnLx9A%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Universal | Center console organizer, Appears New, Retails",
+            "lot_number": 27,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=8jMWPRnvk8ax15YqZnLx9A%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "8jMWPRnvk8ax15YqZnLx9A_1.jpg",
+                "8jMWPRnvk8ax15YqZnLx9A_2.jpg"
+            ]
+        },
+        "reasoning": "The item is a universal center console organizer that appears new. It's a practical product that fits into most cars, providing storage and organization for the center console area. The images show the product's features, including a clipboard on the lid and removable rubber mats. The product is likely to be in demand among car owners looking to keep their vehicles organized. I priced it at $15, which is a reasonable estimate considering its condition and functionality. Resellers can capitalize on this product by listing it on platforms like eBay or Amazon, targeting keywords like 'universal center console organizer' or 'car storage organizer'. Year 2020. 2 Pics analyzed",
+        "lot_number": 27,
+        "ebay_avg_price": 71.19724137931034,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Universal+Center+Console+Organizer&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Rolling Mesh Metal File Folder Storage Cart Office Organizer Black",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 25,
+        "items": [
+            {
+                "item_name": "Rolling Mesh Metal File Folder Storage Cart Office Organizer Black",
+                "estimated_value": 25,
+                "ebay_avg_price": 71.08
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=FdJAk42bLa5OnjALoLj3ew%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "File Folder | Rolling File Folder, Appears New, Retails",
+            "lot_number": 15,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=FdJAk42bLa5OnjALoLj3ew%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "FdJAk42bLa5OnjALoLj3ew_1.jpg",
+                "FdJAk42bLa5OnjALoLj3ew_2.jpg",
+                "FdJAk42bLa5OnjALoLj3ew_3.jpg"
+            ]
+        },
+        "reasoning": "This is a generic mesh metal rolling storage cart. Since there is no identifiable premium brand, the value is based on general utility office furniture. Resale value for a new, boxed unit is estimated at $25, which reflects competitive pricing for similar items online. Year 2022. 3 Pics analyzed",
+        "lot_number": 15,
+        "ebay_avg_price": 71.08,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Rolling+Mesh+Metal+File+Folder+Storage+Cart+Office+Organizer+Black&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "RaceGT Wireless Typewriter Keyboard and Mouse Combo Pink",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 25,
+        "items": [
+            {
+                "item_name": "RaceGT Wireless Typewriter Keyboard",
+                "estimated_value": 20,
+                "ebay_avg_price": 40.486666666666665
+            },
+            {
+                "item_name": "RaceGT Wireless Mouse",
+                "estimated_value": 5,
+                "ebay_avg_price": 27.527931034482762
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=UbkXjY%2bKSEwpT%2fVMPataKg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "RaceGT | RaceGT Wireless Typewriter Keyboard and Silent Mouse Combo - Cute Pink Keyboard with Phone Holder, 2.4G USB Computer Keyboard and Mouse Set for Windows Laptop/Desktop/PC, Appears New, Retails",
+            "lot_number": 42,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=UbkXjY%2bKSEwpT%2fVMPataKg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "UbkXjYKSEwpTVMPataKg_1.jpg",
+                "UbkXjYKSEwpTVMPataKg_2.jpg",
+                "UbkXjYKSEwpTVMPataKg_3.jpg"
+            ]
+        },
+        "reasoning": "The lot includes a RaceGT Wireless Typewriter Keyboard and Mouse Combo, which is a unique and relatively rare item. The keyboard has a distinctive design and is in good condition. The mouse is a standard wireless mouse. The total market value is estimated to be $25, with the keyboard accounting for $20 and the mouse $5. To increase the value, consider highlighting the keyboard's unique features, such as its typewriter-style keys and phone holder. Year 2020. 3 Pics analyzed",
+        "lot_number": 42,
+        "ebay_avg_price": 68.01459770114943,
+        "ebay_confidence_score": 97,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=RaceGT+Wireless+Typewriter+Keyboard+and+Mouse+Combo+Pink&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Amazon Basics 2 Pound Non-Stick Bread Making Machine",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Amazon Basics 2 Pound Non-Stick Bread Making Machine",
+                "estimated_value": 40,
+                "ebay_avg_price": 66.85222222222222
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=38BZVmqme3TwR5o2%2fhlFng%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Amazon Basics | amazon basics 2 Pound non stick Bread Making Machine, Open Box, As Is, Retails",
+            "lot_number": 37,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=38BZVmqme3TwR5o2%2fhlFng%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "38BZVmqme3TwR5o2hlFng_1.jpg",
+                "38BZVmqme3TwR5o2hlFng_2.jpg",
+                "38BZVmqme3TwR5o2hlFng_3.jpg"
+            ]
+        },
+        "reasoning": "The Amazon Basics 2 Pound Non-Stick Bread Making Machine is a relatively affordable kitchen appliance. The listing indicates it's open box and 'As Is', but the images suggest it's in good condition with original packaging and instructions. The estimated value is based on the price of similar models on eBay and Amazon. To increase value, ensure it's in working condition and consider including any missing accessories or documentation. Year 2020. 3 Pics analyzed",
+        "lot_number": 37,
+        "ebay_avg_price": 66.85222222222222,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Amazon+Basics+2+Pound+Non-Stick+Bread+Making+Machine&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Manual Meat Grinder Set",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 80,
+        "items": [
+            {
+                "item_name": "Manual Meat Grinder",
+                "estimated_value": 40,
+                "ebay_avg_price": 21.0948
+            },
+            {
+                "item_name": "Meat Grinder Attachments",
+                "estimated_value": 40,
+                "ebay_avg_price": 40.10588235294117
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=46Jx9SVbg%2b41m%2fUYEVLgTQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Us Grind | Lot of 2 Table Top Meat Grinders, Retails",
+            "lot_number": 40,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=46Jx9SVbg%2b41m%2fUYEVLgTQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "46Jx9SVbg41mUYEVLgTQ_1.jpg",
+                "46Jx9SVbg41mUYEVLgTQ_2.jpg"
+            ]
+        },
+        "reasoning": "The lot includes two manual meat grinders with attachments, likely from the US Grind brand. These are practical kitchen tools that can be valuable to enthusiasts. The condition appears to be new or lightly used, judging by the packaging and the quality of the items shown in the images. The total market value is estimated at $80, with each grinder and its attachments valued at $40. To increase value, sellers could include additional accessories like sausage stuffing tubes or cleaning brushes. Year 2010. 2 Pics analyzed",
+        "lot_number": 40,
+        "ebay_avg_price": 61.20068235294117,
+        "ebay_confidence_score": 92,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Manual+Meat+Grinder+Set&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Sunfuny Cordless Electric Food Processor Chopper Meat Grinder 1.2L Glass Bowl Pink",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 25,
+        "items": [
+            {
+                "item_name": "Sunfuny Cordless Electric Food Processor Chopper Meat Grinder 1.2L Glass Bowl Pink",
+                "estimated_value": 25,
+                "ebay_avg_price": 55.23
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=KZ0relQ9flbEuElthJfqVA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "sunfuny | Sunfuny Electric Food Processor for Iftar Home Cooking,Glass Vegetable Chopper Meat Grinder, Rechargeable Portable Mincer Blender with 1.2L Glass Bowl,4 Sharp Removable Blades, Open Box Return, As Is, Retails",
+            "lot_number": 19,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=KZ0relQ9flbEuElthJfqVA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "KZ0relQ9flbEuElthJfqVA_1.jpg",
+                "KZ0relQ9flbEuElthJfqVA_2.jpg",
+                "KZ0relQ9flbEuElthJfqVA_3.jpg"
+            ]
+        },
+        "reasoning": "This is a generic, cordless small kitchen electronic appliance from an unestablished brand ('Sunfuny'). Despite the 1.2L glass bowl feature, the 'open box/as is' status combined with low brand recognition keeps the resale value low, estimated at $25. Year 2023. 3 Pics analyzed",
+        "lot_number": 19,
+        "ebay_avg_price": 55.23,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Sunfuny+Cordless+Electric+Food+Processor+Chopper+Meat+Grinder+1.2L+Glass+Bowl+Pink&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Hushee 4 Pcs Commercial Stainless Steel Toilet Seat Cover Dispenser Wall Mounted",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "Hushee 4 Pcs Commercial Stainless Steel Toilet Seat Cover Dispenser Wall Mounted",
+                "estimated_value": 60,
+                "ebay_avg_price": 52.922799999999995
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=hkFIDfUCJ2ip04sjaR2HxA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Hushee | Hushee 4 Pcs Stainless Steel Toilet seat Cover Dispenser Toilet Seat Cover Holder Wall Mounted Commercial for Bathroom (Silver), Appears New, Retails",
+            "lot_number": 18,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=hkFIDfUCJ2ip04sjaR2HxA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "hkFIDfUCJ2ip04sjaR2HxA_1.jpg",
+                "hkFIDfUCJ2ip04sjaR2HxA_2.jpg"
+            ]
+        },
+        "reasoning": "This is a lot of 4 commercial-grade stainless steel toilet seat cover dispensers. The value is derived from the bulk quantity, targeting B2B buyers like facility managers or restaurant owners. Resale is approximately $15 per unit in new condition. Year 2023. 2 Pics analyzed",
+        "lot_number": 18,
+        "ebay_avg_price": 52.922799999999995,
+        "ebay_confidence_score": 85,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Hushee+4+Pcs+Commercial+Stainless+Steel+Toilet+Seat+Cover+Dispenser+Wall+Mounted&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Schumann Arzberg Fruit Pattern China Set",
+        "category": "Pottery/China",
+        "is_shippable": true,
+        "total_market_value": 240,
+        "items": [
+            {
+                "item_name": "Schumann Arzberg Fruit Pattern Tea Cup",
+                "estimated_value": 20,
+                "ebay_avg_price": 21.20888888888889
+            },
+            {
+                "item_name": "Schumann Arzberg Fruit Pattern Saucer",
+                "estimated_value": 20,
+                "ebay_avg_price": 30.762857142857143
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=nwwjNkVvQ%2bjkfQ0MIkCQDg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Schumann Arzberg | Schumann Arzberg Fruit Plate And Cups, 6 of each, Appears Like New, Retails",
+            "lot_number": 35,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=nwwjNkVvQ%2bjkfQ0MIkCQDg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "nwwjNkVvQjkfQ0MIkCQDg_1.jpg",
+                "nwwjNkVvQjkfQ0MIkCQDg_2.jpg",
+                "nwwjNkVvQjkfQ0MIkCQDg_3.jpg",
+                "nwwjNkVvQjkfQ0MIkCQDg_4.jpg"
+            ]
+        },
+        "reasoning": "The lot appears to be a set of 6 Schumann Arzberg fruit pattern tea cups and saucers. The condition is described as 'Appears Like New', suggesting minimal wear. Schumann Arzberg is a well-known German porcelain manufacturer, and their products are highly collectible. The fruit pattern is a classic and popular design. Research indicates that similar sets can sell for around $20-40 per piece. Therefore, the estimated total market value for the set of 12 pieces is $240. To increase value, consider verifying the authenticity and condition, and providing detailed photos. Year 1970s. 4 Pics analyzed",
+        "lot_number": 35,
+        "ebay_avg_price": 51.97174603174604,
+        "ebay_confidence_score": 92,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Schumann+Arzberg+Fruit+Pattern+China+Set&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Laglint 6 Piece Dinner Plates Set Moonlight White Stackable Ceramic Dinnerware",
+        "category": "Pottery/China",
+        "is_shippable": true,
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Laglint 6 Piece Dinner Plates Set Moonlight White Stackable Ceramic Dinnerware",
+                "estimated_value": 40,
+                "ebay_avg_price": 43.49
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=EQNOIjBoaAGYrcIXw2VeNw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Laglint | Dinner Plate 6pc Moonlight White, Appears New, Retails",
+            "lot_number": 16,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=EQNOIjBoaAGYrcIXw2VeNw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "EQNOIjBoaAGYrcIXw2VeNw_1.jpg",
+                "EQNOIjBoaAGYrcIXw2VeNw_2.jpg",
+                "EQNOIjBoaAGYrcIXw2VeNw_3.jpg"
+            ]
+        },
+        "reasoning": "This set of 6 dinner plates from Laglint appears to be new/open-box. The 'Moonlight White' style indicates modern, space-saving design. While Laglint is not a major luxury brand, $40 is a fair resale value for a complete, new set of six modern ceramic dinner plates. Year 2023. 3 Pics analyzed",
+        "lot_number": 16,
+        "ebay_avg_price": 43.49,
+        "ebay_confidence_score": 55,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Laglint+6+Piece+Dinner+Plates+Set+Moonlight+White+Stackable+Ceramic+Dinnerware&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "BTaT Porcelain Floral Dessert Plates Set of 6",
+        "category": "Pottery/China",
+        "is_shippable": true,
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "BTaT Porcelain Floral Dessert Plates Set of 6",
+                "estimated_value": 10,
+                "ebay_avg_price": 42.559000000000005
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=Z%2bv%2bKmjedi%2beLkBfjwLkuw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "BTaT | BTaT- Porcelain Floral Dessert Plates, 8 inch, Set of 6, Deep Plates, Porcelain Bone China, Appetizer Plates, Small Dishes, Appears New, Retails",
+            "lot_number": 21,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=Z%2bv%2bKmjedi%2beLkBfjwLkuw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "ZvKmjedieLkBfjwLkuw_1.jpg",
+                "ZvKmjedieLkBfjwLkuw_2.jpg",
+                "ZvKmjedieLkBfjwLkuw_3.jpg"
+            ]
+        },
+        "reasoning": "The lot consists of a set of 6 BTaT Porcelain Floral Dessert Plates. The plates appear to be new and are made of high-quality porcelain bone china. The set is valued at $60, with each plate estimated to be worth $10. The brand 'BTaT' is likely a manufacturer or designer of tableware, and the 'Brew To A Tea' logo suggests a theme related to tea or dining. To increase value, consider pairing these plates with other complementary items from the same brand or collection. Year 2010. 3 Pics analyzed",
+        "lot_number": 21,
+        "ebay_avg_price": 42.559000000000005,
+        "ebay_confidence_score": 98,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=BTaT+Porcelain+Floral+Dessert+Plates+Set+of+6&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Strawberry Shortcake 5.5\" Fashion Doll with Cat",
+        "category": "Toys/Games",
+        "is_shippable": true,
+        "total_market_value": 20,
+        "items": [
+            {
+                "item_name": "Strawberry Shortcake 5.5\" Fashion Doll",
+                "estimated_value": 15,
+                "ebay_avg_price": 22.209285714285716
+            },
+            {
+                "item_name": "Strawberry Shortcake Cat",
+                "estimated_value": 5,
+                "ebay_avg_price": 19.160476190476192
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=cWGNBSHRGVKA9RQoTm1zpA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "TLS Toy | STRAWBERRY SHORTCAKE 5.5\" Strawberry Shortcake Fashion Doll, Open Box, Retails",
+            "lot_number": 43,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=cWGNBSHRGVKA9RQoTm1zpA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "cWGNBSHRGVKA9RQoTm1zpA_1.jpg",
+                "cWGNBSHRGVKA9RQoTm1zpA_2.jpg"
+            ]
+        },
+        "reasoning": "The Strawberry Shortcake doll and cat are likely from the early 2000s, given the style and packaging. The doll is still in its original packaging, although the box is open, and the items appear to be in good condition. The estimated value is based on similar items sold on eBay. To increase value, consider including any original accessories or packaging. Year 2002. 2 Pics analyzed",
+        "lot_number": 43,
+        "ebay_avg_price": 41.36976190476191,
+        "ebay_confidence_score": 94,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Strawberry+Shortcake+5.5%22+Fashion+Doll+with+Cat&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Merrell J60826 Women's JUNGLE MOC Slip-On Shoes Black Suede",
+        "category": "Miscellaneous",
+        "is_shippable": true,
+        "total_market_value": 80,
+        "items": [
+            {
+                "item_name": "Merrell J60826 Women's JUNGLE MOC Slip-On Shoes Black Suede",
+                "estimated_value": 80,
+                "ebay_avg_price": 40.02307692307692
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=lde2QJO0Zztlp%2fOayupwvg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Merrell | Merrell J60826 Women's JUNGLE MOC Slip-On Shoes Black Suede, Size 6 Appears New, Retails",
+            "lot_number": 28,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=lde2QJO0Zztlp%2fOayupwvg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "lde2QJO0ZztlpOayupwvg_1.jpg",
+                "lde2QJO0ZztlpOayupwvg_2.jpg",
+                "lde2QJO0ZztlpOayupwvg_3.jpg"
+            ]
+        },
+        "reasoning": "The listing is for a pair of Merrell J60826 Women's JUNGLE MOC Slip-On Shoes in black suede, size 6. The shoes appear to be new and are still in their original box with tissue paper. Merrell is a reputable brand known for its high-quality footwear. The shoes are likely to be in demand due to their comfort and durability. The estimated value is based on the average price of similar shoes on eBay and other online marketplaces. To increase the value, consider adding more photos, including a clear shot of the size label, and providing a detailed description of the materials and condition. Year 201X. 3 Pics analyzed",
+        "lot_number": 28,
+        "ebay_avg_price": 40.02307692307692,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Merrell+J60826+Women%27s+JUNGLE+MOC+Slip-On+Shoes+Black+Suede&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Dezin 1.2L Electric Hot Pot",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 25,
+        "items": [
+            {
+                "item_name": "Dezin 1.2L Electric Hot Pot",
+                "estimated_value": 25,
+                "ebay_avg_price": 35.08266666666667
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=fzTqRIf7CJldCFqnzDi3kQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Dezin | Dezin Hot Pot Electric 1.2L, Appears New, Retails",
+            "lot_number": 22,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=fzTqRIf7CJldCFqnzDi3kQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "fzTqRIf7CJldCFqnzDi3kQ_1.jpg",
+                "fzTqRIf7CJldCFqnzDi3kQ_2.jpg",
+                "fzTqRIf7CJldCFqnzDi3kQ_3.jpg"
+            ]
+        },
+        "reasoning": "The Dezin 1.2L Electric Hot Pot appears to be new and in its original packaging. The item is a compact electric hot pot, which is a popular kitchen appliance. The market value for such items can vary based on brand, condition, and features. Given its new condition and the presence of original packaging, it's reasonable to estimate its value based on similar products. A typical electric hot pot of this capacity can retail between $20-$30. Therefore, estimating its value at $25 is reasonable. Expert reseller advice: To increase the value, consider including additional accessories like recipe books or extra cooking utensils. Year 2020. 3 Pics analyzed",
+        "lot_number": 22,
+        "ebay_avg_price": 35.08266666666667,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Dezin+1.2L+Electric+Hot+Pot&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Kraus KDR-3 Stainless Steel Dish Drying Rack 17\" x 9\" Sink Mat",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 35,
+        "items": [
+            {
+                "item_name": "Kraus KDR-3 Stainless Steel Dish Drying Rack 17\" x 9\" Sink Mat",
+                "estimated_value": 35,
+                "ebay_avg_price": 30.85
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=gDR4HMNsuckDk4EH36kntQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Kraus | Kraus Dish drying Rack, Appears New, Retails",
+            "lot_number": 20,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=gDR4HMNsuckDk4EH36kntQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "gDR4HMNsuckDk4EH36kntQ_1.jpg",
+                "gDR4HMNsuckDk4EH36kntQ_2.jpg",
+                "gDR4HMNsuckDk4EH36kntQ_3.jpg",
+                "gDR4HMNsuckDk4EH36kntQ_4.jpg"
+            ]
+        },
+        "reasoning": "Kraus is a well-regarded brand known for high-quality kitchen and bath fixtures. This stainless steel dish rack (Model KDR-3) is a durable, premium accessory. Resale value for this specific brand and type is typically $35-$40 when new/open box. Year 2022. 4 Pics analyzed",
+        "lot_number": 20,
+        "ebay_avg_price": 30.85,
+        "ebay_confidence_score": 15,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Kraus+KDR-3+Stainless+Steel+Dish+Drying+Rack+17%22+x+9%22+Sink+Mat&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Deer Valley White Ceramic Undermount Bathroom Vanity Sink 22\"x16\" New",
+        "category": "Miscellaneous",
+        "is_shippable": true,
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "Deer Valley White Ceramic Undermount Bathroom Vanity Sink 22\"x16\" New",
+                "estimated_value": 75,
+                "ebay_avg_price": 30.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=1RjMKEMktzUcSfq%2fi7JElA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Deer Valley | Undermount Bathroom Sink, White 22x16x7, Appears New, Retails",
+            "lot_number": 9,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=1RjMKEMktzUcSfq%2fi7JElA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "1RjMKEMktzUcSfqi7JElA_1.jpg",
+                "1RjMKEMktzUcSfqi7JElA_2.jpg",
+                "1RjMKEMktzUcSfqi7JElA_3.jpg",
+                "1RjMKEMktzUcSfqi7JElA_4.jpg"
+            ]
+        },
+        "reasoning": "This is a new, standard-sized ceramic undermount bathroom sink (retail $100-$150). Sinks are routinely shipped, although care must be taken with packaging. The dimensions (22x16) are standard, ensuring wide applicability. Value set at a slight discount for being an auction item. Year 2023. 4 Pics analyzed",
+        "lot_number": 9,
+        "ebay_avg_price": 30.0,
+        "ebay_confidence_score": 50,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Deer+Valley+White+Ceramic+Undermount+Bathroom+Vanity+Sink+22%22x16%22+New&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Nuptio Purple Artificial Peony Flowers",
+        "category": "Decor/Lighting",
+        "is_shippable": true,
+        "total_market_value": 20,
+        "items": [
+            {
+                "item_name": "Nuptio Purple Artificial Peony Flowers for Centerpieces",
+                "estimated_value": 10,
+                "ebay_avg_price": 14.923333333333332
+            },
+            {
+                "item_name": "Nuptio Purple Artificial Peony Flowers for Centerpieces",
+                "estimated_value": 10,
+                "ebay_avg_price": 14.923333333333332
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=B66B4h6Zsh7Qj7F7VrkxmQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Nuputio | Peony Artificial Flowers for Centerpieces: 2 Pcs 9.4 inch Diam Purple Faux Peony Flowers Fake Flower, New, Retails",
+            "lot_number": 26,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=B66B4h6Zsh7Qj7F7VrkxmQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "B66B4h6Zsh7Qj7F7VrkxmQ_1.jpg",
+                "B66B4h6Zsh7Qj7F7VrkxmQ_2.jpg"
+            ]
+        },
+        "reasoning": "The lot contains 2 pieces of Nuptio brand artificial peony flowers, which are new and still wrapped in plastic. The flowers are of high quality and can be used for centerpieces or other decorative purposes. The total market value is estimated to be $20. To increase the value, consider listing them as a set or bundle with other related items, such as decorative vases or candle holders. Year 2020. 2 Pics analyzed",
+        "lot_number": 26,
+        "ebay_avg_price": 29.846666666666664,
+        "ebay_confidence_score": 60,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Nuptio+Purple+Artificial+Peony+Flowers&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Tornado Scrub Cordless Power Scrubber",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 20,
+        "items": [
+            {
+                "item_name": "Tornado Scrub Cordless Power Scrubber",
+                "estimated_value": 20,
+                "ebay_avg_price": 25.551111111111112
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=s61YQDLF4ZnQsEb8jMXc3Q%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Tornado Scrub | Cordless Power Scrubber, Appears New, Retails",
+            "lot_number": 45,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=s61YQDLF4ZnQsEb8jMXc3Q%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "s61YQDLF4ZnQsEb8jMXc3Q_1.jpg",
+                "s61YQDLF4ZnQsEb8jMXc3Q_2.jpg",
+                "s61YQDLF4ZnQsEb8jMXc3Q_3.jpg",
+                "s61YQDLF4ZnQsEb8jMXc3Q_4.jpg"
+            ]
+        },
+        "reasoning": "The Tornado Scrub Cordless Power Scrubber appears to be a new, unused item with various attachments included. The images show the product in its original packaging with all the accessories. The estimated value is based on similar products available on online marketplaces. To increase its value, consider including a detailed description of the product's features and benefits, as well as high-quality images showcasing its condition. Year 2020. 4 Pics analyzed",
+        "lot_number": 45,
+        "ebay_avg_price": 25.551111111111112,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Tornado+Scrub+Cordless+Power+Scrubber&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Woven Rattan Storage Bin",
+        "category": "Small Furniture",
+        "is_shippable": true,
+        "total_market_value": 30,
+        "items": [
+            {
+                "item_name": "Woven Rattan Storage Bin",
+                "estimated_value": 30,
+                "ebay_avg_price": 25.279090909090908
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=ujYUS4U35QnPvnIqD0%2fQbA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Rattan | Rattan Magazine Storage Bin, Appears New, Retails",
+            "lot_number": 44,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=ujYUS4U35QnPvnIqD0%2fQbA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "ujYUS4U35QnPvnIqD0QbA_1.jpg",
+                "ujYUS4U35QnPvnIqD0QbA_2.jpg",
+                "ujYUS4U35QnPvnIqD0QbA_3.jpg"
+            ]
+        },
+        "reasoning": "The lot contains a single woven rattan storage bin. The item appears to be in good condition and is likely to be useful for storage purposes. The value of such items typically ranges from $20 to $50, depending on the size and quality. Given the description 'Appears New, Retails', it's reasonable to estimate its value at $30. Expert reseller advice: Adding a few decorative items like ribbons or plants inside the basket can increase its appeal to potential buyers. Year 2010s. 3 Pics analyzed",
+        "lot_number": 44,
+        "ebay_avg_price": 25.279090909090908,
+        "ebay_confidence_score": 92,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Woven+Rattan+Storage+Bin&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Riding Route 66 by Henry Cole Hardcover Book",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 20,
+        "items": [
+            {
+                "item_name": "Riding Route 66 by Henry Cole Hardcover Book",
+                "estimated_value": 20,
+                "ebay_avg_price": 23.375555555555554
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=Z2LC6x8fi8PfjTfvxERXFA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Riding Route 66 | Riding Route 66: Finding Myself on America\u2019s Mother Road Hard back, Appears New, Retails",
+            "lot_number": 25,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=Z2LC6x8fi8PfjTfvxERXFA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "Z2LC6x8fi8PfjTfvxERXFA_1.jpg",
+                "Z2LC6x8fi8PfjTfvxERXFA_2.jpg"
+            ]
+        },
+        "reasoning": "The lot contains a single hardcover book titled 'Riding Route 66: Finding Myself on America's Mother Road' by Henry Cole. The book appears to be in new condition. The estimated value is based on the average price of similar books on the market. To increase value, consider providing a signed copy or including additional related items. Year 2015. 2 Pics analyzed",
+        "lot_number": 25,
+        "ebay_avg_price": 23.375555555555554,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Riding+Route+66+by+Henry+Cole+Hardcover+Book&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Dash 16oz Mini Rice Cooker",
+        "category": "Small Furniture",
+        "is_shippable": true,
+        "total_market_value": 25,
+        "items": [
+            {
+                "item_name": "Dash 16oz Mini Rice Cooker",
+                "estimated_value": 20,
+                "ebay_avg_price": 22.962222222222223
+            },
+            {
+                "item_name": "Replacement Lid for Dash Mini Rice Cooker",
+                "estimated_value": 5,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=TzqKCk3yVRJT5%2fRdvwymnw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Dash | Mini Rice Cooker 16oz, Appears New, Retails",
+            "lot_number": 29,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=TzqKCk3yVRJT5%2fRdvwymnw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "TzqKCk3yVRJT5Rdvwymnw_1.jpg",
+                "TzqKCk3yVRJT5Rdvwymnw_2.jpg",
+                "TzqKCk3yVRJT5Rdvwymnw_3.jpg"
+            ]
+        },
+        "reasoning": "The Dash 16oz Mini Rice Cooker appears to be new and in its original packaging. The replacement lid is a useful accessory. The total market value is estimated to be $25. Expert reseller advice: Consider listing the rice cooker with its original packaging and the replacement lid as a bundle to attract buyers. Year 2020. 3 Pics analyzed",
+        "lot_number": 29,
+        "ebay_avg_price": 22.962222222222223,
+        "ebay_confidence_score": 47,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Dash+16oz+Mini+Rice+Cooker&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "4 Pack of 5in Ring Binders",
+        "category": "Miscellaneous",
+        "is_shippable": true,
+        "total_market_value": 20,
+        "items": [
+            {
+                "item_name": "4 Pack of 5in Ring Binders",
+                "estimated_value": 5,
+                "ebay_avg_price": 20.79
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=VoT7CNTVdIdVMKuUr7I0QA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Binders | 4 Pack of 5in Ring Binders, Appears New, Retails",
+            "lot_number": 30,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=VoT7CNTVdIdVMKuUr7I0QA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "VoT7CNTVdIdVMKuUr7I0QA_1.jpg",
+                "VoT7CNTVdIdVMKuUr7I0QA_2.jpg"
+            ]
+        },
+        "reasoning": "The lot consists of 4 packs of 5in Ring Binders, appearing new. The market value for such office supplies is generally low. Assuming the binders are of standard quality and unused, a reasonable estimate for the total market value would be around $20. To increase the value, consider adding branded or high-quality inserts. Year 2020. 2 Pics analyzed",
+        "lot_number": 30,
+        "ebay_avg_price": 20.79,
+        "ebay_confidence_score": 35,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=4+Pack+of+5in+Ring+Binders&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Targus Midsize Multi-Device Bluetooth Keyboard",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 25,
+        "items": [
+            {
+                "item_name": "Targus Midsize Multi-Device Bluetooth Keyboard",
+                "estimated_value": 25,
+                "ebay_avg_price": 20.385714285714283
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=%2bCv4yg2mH8ojfg27B72fig%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Targus | Targus Midsize Multi-Device Bluetooth Keyboard - Compatible with Chrome OS, Windows, macOS, iOS, and Android (AKB863US), Appears New, Retails",
+            "lot_number": 41,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=%2bCv4yg2mH8ojfg27B72fig%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "Cv4yg2mH8ojfg27B72fig_1.jpg",
+                "Cv4yg2mH8ojfg27B72fig_2.jpg"
+            ]
+        },
+        "reasoning": "The Targus Midsize Multi-Device Bluetooth Keyboard is a new, unopened item as indicated by the sealed packaging in the images. The keyboard is compatible with multiple devices and operating systems, making it a versatile accessory. The market value for this item is estimated to be around $25, based on its brand, model, and condition. Expert reseller advice: Including the original packaging and any additional accessories can increase the item's value. Year 2020. 2 Pics analyzed",
+        "lot_number": 41,
+        "ebay_avg_price": 20.385714285714283,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Targus+Midsize+Multi-Device+Bluetooth+Keyboard&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "2-in-1 Car Cup Holder and Phone Mount",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 15,
+        "items": [
+            {
+                "item_name": "2-in-1 Car Cup Holder and Phone Mount",
+                "estimated_value": 15,
+                "ebay_avg_price": 15.4475
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=UCO1%2fsNGuJWT%2fyOGL%2bjmeA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Oenhop | 2in 1 Car Cupholder and Phone Mount, Open Box return, Retails",
+            "lot_number": 31,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=UCO1%2fsNGuJWT%2fyOGL%2bjmeA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "UCO1sNGuJWTyOGLjmeA_1.jpg",
+                "UCO1sNGuJWTyOGLjmeA_2.jpg",
+                "UCO1sNGuJWTyOGLjmeA_3.jpg"
+            ]
+        },
+        "reasoning": "The lot contains a 2-in-1 car cup holder and phone mount, which is a practical and useful accessory for drivers. The item appears to be in good condition and is likely to be in demand. I priced it at $15, which is a reasonable estimate based on similar products available online. To increase its value, consider including additional accessories like extra phone holders or cup holders. Year 2020. 3 Pics analyzed",
+        "lot_number": 31,
+        "ebay_avg_price": 15.4475,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=2-in-1+Car+Cup+Holder+and+Phone+Mount&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "BEDSLIDE 1000 CLASSIC 78x48 Truck Bed Slide Extender Tray 10-7848-CLS Silverado Sierra",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "total_market_value": 800,
+        "items": [
+            {
+                "item_name": "BEDSLIDE 1000 CLASSIC 78\" x 48\" Truck Bed Extender Model 10-7848-CLS",
+                "estimated_value": 800
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=EZHzJAOKyeNm6LUb7iUcNg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Bedslide | BEDSLIDE 1000 CLASSIC 78\" X 48\" Model 10-7848-CLS, Appears New-25 Silverado/Sierra",
+            "lot_number": 1,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=EZHzJAOKyeNm6LUb7iUcNg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "EZHzJAOKyeNm6LUb7iUcNg_1.jpg",
+                "EZHzJAOKyeNm6LUb7iUcNg_2.jpg",
+                "EZHzJAOKyeNm6LUb7iUcNg_3.jpg",
+                "EZHzJAOKyeNm6LUb7iUcNg_4.jpg",
+                "EZHzJAOKyeNm6LUb7iUcNg_5.jpg",
+                "EZHzJAOKyeNm6LUb7iUcNg_6.jpg",
+                "EZHzJAOKyeNm6LUb7iUcNg_7.jpg"
+            ]
+        },
+        "reasoning": "This is a large, high-value automotive accessory. Given the dimensions (78\" x 48\") and the fact it appears new in the box, the resale value is strong. However, its massive size and weight necessitate freight shipping or local pickup, severely limiting the buyer pool and leading to a conservative valuation of roughly 50-60% of new retail ($1300-$1600). Expert Reseller Advice: Always verify compatibility (78x48 typically fits 8-foot beds on heavy-duty trucks like the Silverado/Sierra 2500/3500) and market specifically to that niche. Year 2023. 7 Pics analyzed",
+        "lot_number": 1,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=BEDSLIDE+1000+CLASSIC+78x48+Truck+Bed+Slide+Extender+Tray+10-7848-CLS+Silverado+Sierra&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "VEVOR ZX-20D Commercial Electric Dough Divider 20-Piece Dough Rounder 120V",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "total_market_value": 900,
+        "items": [
+            {
+                "item_name": "VEVOR ZX-20D Electric Commercial Dough Divider & Rounder 120V",
+                "estimated_value": 900
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=nD%2bouqvH0zsn2UPlcp67FA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Vevor | Vevor Model ZX-20D Electric Dough Divider, Powers On And Working, Great Condition! Retails",
+            "lot_number": 2,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=nD%2bouqvH0zsn2UPlcp67FA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "nDouqvH0zsn2UPlcp67FA_1.jpg",
+                "nDouqvH0zsn2UPlcp67FA_2.jpg",
+                "nDouqvH0zsn2UPlcp67FA_3.jpg",
+                "nDouqvH0zsn2UPlcp67FA_4.jpg",
+                "nDouqvH0zsn2UPlcp67FA_5.jpg"
+            ]
+        },
+        "reasoning": "This is a heavy, commercial-grade electric dough divider (Model ZX-20D). New retail is $1400-$1800. Since it powers on and is described as being in 'Great Condition,' a significant portion of its value is retained. It is marked as non-shippable due to its size and probable weight (commercial dividers typically require freight shipping). The valuation reflects a strong local pickup price. Year 2022. 5 Pics analyzed",
+        "lot_number": 2,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=VEVOR+ZX-20D+Commercial+Electric+Dough+Divider+20-Piece+Dough+Rounder+120V&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "GarveeHome XRJ4LX2 Commercial Slushy Margarita Machine 2x4L Twin Tank",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "total_market_value": 350,
+        "items": [
+            {
+                "item_name": "GarveeHome XRJ4LX2 Commercial 2x4L Slushy Drink Machine (Open Box, Missing Parts)",
+                "estimated_value": 350
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=iwiARY10OInbT87yMTJtIQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Garvee Home | GarveeHome Model XRJ4LX2 Slushy Machine, 2.1 gal Margarita Machine, Commercial Slushy Machine 4 L*2 Tank for Frozen Drinks Beverages, Automatic Clean, Slushy Machine for Home, Supermarkets Cafes Restaurants, White, Open Box Return, Missing A Few Pieces, Powers On, As Is, Retails",
+            "lot_number": 3,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=iwiARY10OInbT87yMTJtIQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "iwiARY10OInbT87yMTJtIQ_1.jpg",
+                "iwiARY10OInbT87yMTJtIQ_2.jpg",
+                "iwiARY10OInbT87yMTJtIQ_3.jpg",
+                "iwiARY10OInbT87yMTJtIQ_4.jpg",
+                "iwiARY10OInbT87yMTJtIQ_5.jpg"
+            ]
+        },
+        "reasoning": "This is a commercial slushy/margarita machine (retail around $700-$900). It is marked as non-shippable due to size, weight, and fragility of the cooling components. Since it is an 'Open Box Return,' powers on, but is 'Missing A Few Pieces,' the value is heavily discounted (50% of typical used value) because finding replacement parts for budget commercial machinery can be challenging and expensive. Year 2022. 5 Pics analyzed",
+        "lot_number": 3,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=GarveeHome+XRJ4LX2+Commercial+Slushy+Margarita+Machine+2x4L+Twin+Tank&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "17 Stories Industrial Wood Metal Storage Cabinet Apothecary File Drawers",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "total_market_value": 180,
+        "items": [
+            {
+                "item_name": "17 Stories Black Metal & Wood Multi-Drawer Storage Cabinet (Industrial Style)",
+                "estimated_value": 180
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=i%2bJ0STwbJ9JzwjIvWmbo4g%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "17 Stories | Wood And Metal Storage Cabinet, Has Some Damage, As Is, Retails",
+            "lot_number": 4,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=i%2bJ0STwbJ9JzwjIvWmbo4g%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "iJ0STwbJ9JzwjIvWmbo4g_1.jpg",
+                "iJ0STwbJ9JzwjIvWmbo4g_2.jpg",
+                "iJ0STwbJ9JzwjIvWmbo4g_3.jpg"
+            ]
+        },
+        "reasoning": "This is a large storage cabinet, classified as Large Furniture, requiring local pickup or specialized freight. New retail for this style (industrial/apothecary) is usually $300-$500. Since it has 'Some Damage' and shipping is impractical, the value is set for the local secondary market at under 50% of retail. Expert Reseller Advice: Highlighting the industrial/apothecary style appeals to niche decorators and restorers who might overlook minor damage. Year 2021. 3 Pics analyzed",
+        "lot_number": 4,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=17+Stories+Industrial+Wood+Metal+Storage+Cabinet+Apothecary+File+Drawers&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Graco Simple Sway Baby Swing Bouncer Infant Seat (Appears New Open Box)",
+        "category": "Toys/Games",
+        "is_shippable": true,
+        "total_market_value": 70,
+        "items": [
+            {
+                "item_name": "Graco Simple Sway Baby Swing Bouncer Infant Seat (Appears New Open Box)",
+                "estimated_value": 70,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=j0HumP%2fj88KfDeus4ce9FA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Graco | Graco Simple Sway Baby Swing Columpio, Appears New, Retails",
+            "lot_number": 8,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=j0HumP%2fj88KfDeus4ce9FA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "j0HumPj88KfDeus4ce9FA_1.jpg",
+                "j0HumPj88KfDeus4ce9FA_2.jpg",
+                "j0HumPj88KfDeus4ce9FA_3.jpg",
+                "j0HumPj88KfDeus4ce9FA_4.jpg"
+            ]
+        },
+        "reasoning": "Graco is a recognizable brand in the baby gear market. Retail is usually $90-$120. Since it 'Appears New' and is packaged for shipping, the resale value is strong, reflecting a slight discount from retail for the open-box status. Expert Reseller Advice: Always disclose the manufacturing date and check for recalls, as baby swings and safety equipment are regulated and subject to strict safety standards. Year 2023. 4 Pics analyzed",
+        "lot_number": 8,
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Graco+Simple+Sway+Baby+Swing+Bouncer+Infant+Seat+%28Appears+New+Open+Box%29&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Cuisinart Gourmet Outdoor Grilling Condiment & Topping Station Stainless Steel",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 35,
+        "items": [
+            {
+                "item_name": "Cuisinart Gourmet Outdoor Grilling Condiment & Topping Station Stainless Steel",
+                "estimated_value": 35,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=VRb51YJgQ3UgV%2b4esCtmig%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Cuisinart | Condiment & Topping Station, Appears New, Retails",
+            "lot_number": 13,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=VRb51YJgQ3UgV%2b4esCtmig%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "VRb51YJgQ3UgV4esCtmig_1.jpg",
+                "VRb51YJgQ3UgV4esCtmig_2.jpg",
+                "VRb51YJgQ3UgV4esCtmig_3.jpg"
+            ]
+        },
+        "reasoning": "Cuisinart is a reliable brand, and this condiment/topping station is useful for hosting, picnics, and outdoor grilling. The stainless steel construction ensures durability. Resale value for new units typically falls between $30 and $40. Year 2021. 3 Pics analyzed",
+        "lot_number": 13,
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Cuisinart+Gourmet+Outdoor+Grilling+Condiment+%26+Topping+Station+Stainless+Steel&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Ecoshire 8 Inch Insulated Cake Carrier Lot of 2",
+        "category": "Miscellaneous",
+        "is_shippable": true,
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Ecoshire 8 Inch Insulated Cake Carrier",
+                "estimated_value": 20,
+                "ebay_avg_price": 0.0
+            },
+            {
+                "item_name": "Ecoshire 8 Inch Insulated Cake Carrier",
+                "estimated_value": 20,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=r85w0NqC8QSejAPe%2b4Gwhg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Ecoshire | Round Insulated 8 Inch Cake Carrier for Hot or Cold Food - Thermal Delivery Bag for Parties, Picnic, Camping and Cookouts Trips, Birthday, Reusable Cooler Bag with Carrying Handles lot of 2, Appears New, Retails",
+            "lot_number": 32,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=r85w0NqC8QSejAPe%2b4Gwhg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "r85w0NqC8QSejAPe4Gwhg_1.jpg",
+                "r85w0NqC8QSejAPe4Gwhg_2.jpg",
+                "r85w0NqC8QSejAPe4Gwhg_3.jpg"
+            ]
+        },
+        "reasoning": "The lot consists of two Ecoshire 8-inch insulated cake carriers. They appear to be new and are likely to be in demand for parties and events. The total market value is estimated to be $40, with each carrier valued at $20. To increase the value, consider providing additional photos showing the product's features and condition. Year 2020. 3 Pics analyzed",
+        "lot_number": 32,
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Ecoshire+8+Inch+Insulated+Cake+Carrier+Lot+of+2&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Harmon Home Black Woven Storage Basket with Lid",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "Harmon Home Black Woven Storage Basket with Lid",
+                "estimated_value": 20
+            },
+            {
+                "item_name": "Harmon Home Black Woven Storage Basket with Lid and Contents",
+                "estimated_value": 20
+            },
+            {
+                "item_name": "Harmon Home Black Woven Storage Basket",
+                "estimated_value": 20
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=b6ex%2b6cW6BOqcQZkak0G1Q%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Harmon Home | Black Woven Storage With Lid, Appears New, Retails",
+            "lot_number": 33,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=b6ex%2b6cW6BOqcQZkak0G1Q%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "b6ex6cW6BOqcQZkak0G1Q_1.jpg",
+                "b6ex6cW6BOqcQZkak0G1Q_2.jpg",
+                "b6ex6cW6BOqcQZkak0G1Q_3.jpg"
+            ]
+        },
+        "reasoning": "The lot contains three black woven storage baskets with lids, likely from Harmon Home. Two baskets are shown in the first image, one with contents, and the other two are shown in the second and third images. The baskets appear to be in good condition, with one appearing new. The total market value is estimated to be $60, with each basket valued at $20. To increase the value, consider adding more items to the baskets or showcasing their versatility. Year 2020. 3 Pics analyzed",
+        "lot_number": 33,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Harmon+Home+Black+Woven+Storage+Basket+with+Lid&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Pure Green Natural Latex Mattress Topper Full Size",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "Pure Green Natural Latex Mattress Topper Full Size 3 Inch Soft",
+                "estimated_value": 100
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=p1KaBOCej7wKABUV4isKAw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Pure Green | Pure Green Natural Latex Mattress Topper - Soft - 3 Inch - Full Size, Open Box, As Is, Retails",
+            "lot_number": 39,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Uz6Rc0E3Zn70n0YrKSSRXQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=p1KaBOCej7wKABUV4isKAw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "p1KaBOCej7wKABUV4isKAw_1.jpg",
+                "p1KaBOCej7wKABUV4isKAw_2.jpg",
+                "p1KaBOCej7wKABUV4isKAw_3.jpg"
+            ]
+        },
+        "reasoning": "The item is a mattress topper made of natural latex, which is a valuable material. The fact that it's open box and 'As Is' may affect its price, but it still retains value due to its quality and material. The estimated value is $100. Expert resellers should note that natural latex products are in demand for their eco-friendliness and health benefits. Adding a certificate of authenticity or highlighting the eco-friendly aspects could increase its value. Year 2020. 3 Pics analyzed",
+        "lot_number": 39,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Pure+Green+Natural+Latex+Mattress+Topper+Full+Size&_sacat=0&LH_Complete=1&LH_Sold=1"
+    }
+]
+</script>
+
+<script>
+    const fullJsonData = JSON.parse(document.getElementById('auctionData').textContent);
+    let currentFilteredData = [...fullJsonData];
+    
+    const tableBody = document.getElementById('data-table-body');
+    const headers = document.querySelectorAll('thead th[data-column]');
+    const hideFurnitureCheckbox = document.getElementById('hideFurniture');
+    const hideMedicalCheckbox = document.getElementById('hideMedical');
+
+    let currentSort = { column: 'ebay_price', isAscending: false };
+
+    function applyFiltersAndRepopulate() {
+        const hideFurniture = hideFurnitureCheckbox.checked;
+        const hideMedical = hideMedicalCheckbox.checked;
+
+        currentFilteredData = fullJsonData.filter(lot => {
+            const category = (lot.category || '').toLowerCase();
+            if (hideFurniture && category === 'large furniture') {
+                return false;
+            }
+            if (hideMedical && category === 'medical devices') {
+                return false;
+            }
+            return true;
+        });
+
+        sortData(currentSort.column, true);
+    }
+
+    function populateTable() {
+        tableBody.innerHTML = '';
+        const formatCurrency = (value) => (value || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 });
+        const sanitizeText = (text) => (text || 'No reasoning provided.');
+
+        currentFilteredData.forEach(lot => {
+            const hasReasoning = lot.reasoning && lot.reasoning.trim() !== '';
+            
+            const mainRow = document.createElement('tr');
+            mainRow.className = 'lot-main' + (hasReasoning ? ' expandable' : '');
+            
+            const encodedSearch = encodeURIComponent(lot.ebay_search_title || '');
+            
+            mainRow.innerHTML = `
+                <td>${lot.lot_number > 0 ? lot.lot_number : ''}</td>
+                <td><a href="${lot.original_listing.url}" target="_blank" title="${lot.original_listing.title}">${lot.ebay_search_title || 'N/A'}</a></td>
+                <td>${lot.category || 'Miscellaneous'}</td>
+                <td style="text-align: right;">${formatCurrency(lot.total_market_value)}</td>
+                <td style="text-align: right;">${lot.ebay_avg_price > 0 ? formatCurrency(lot.ebay_avg_price) : 'N/A'}</td>
+                <td style="text-align: right;">${lot.ebay_confidence_score > 0 ? lot.ebay_confidence_score + '%' : 'N/A'}</td>
+                <td style="text-align: center;"><a href="${lot.ebay_search_url || '#'}" target="_blank">eBay</a></td>
+                <td style="text-align: center;"><a href="https://www.google.com/search?q=${encodedSearch}" target="_blank">Google</a></td>
+            `;
+            
+            tableBody.appendChild(mainRow);
+            
+            if (hasReasoning) {
+                const reasoningRow = document.createElement('tr');
+                reasoningRow.className = 'reasoning-row';
+                reasoningRow.innerHTML = `<td colspan="8">${sanitizeText(lot.reasoning)}</td>`;
+                tableBody.appendChild(reasoningRow);
+
+                mainRow.addEventListener('click', () => {
+                    reasoningRow.classList.toggle('visible');
+                });
+            }
+
+            if (lot.items && lot.items.length > 1) {
+                lot.items.forEach(subItem => {
+                    const subRow = document.createElement('tr');
+                    subRow.className = 'lot-sub-item';
+                    
+                    const subAvgPrice = subItem.ebay_avg_price || 0;
+                    const subEncodedSearch = encodeURIComponent(subItem.item_name || '');
+                    const subEbayUrl = `https://www.ebay.com/sch/i.html?_from=R40&_nkw=${subEncodedSearch}&_sacat=0&LH_Complete=1&LH_Sold=1`;
+                    const subGoogleUrl = `https://www.google.com/search?q=${subEncodedSearch}`;
+
+                    subRow.innerHTML = `
+                        <td></td>
+                        <td style="padding-left: 35px;">${subItem.item_name || 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: right;">${formatCurrency(subItem.estimated_value)}</td>
+                        <td style="text-align: right;">${subAvgPrice > 0 ? formatCurrency(subAvgPrice) : 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: center;"><a href="${subEbayUrl}" target="_blank">eBay</a></td>
+                        <td style="text-align: center;"><a href="${subGoogleUrl}" target="_blank">Google</a></td>
+                    `;
+                    tableBody.appendChild(subRow);
+                });
+            }
+        });
+    }
+
+    function sortData(column, keepDirection = false) {
+        const isNumeric = ['price', 'ebay_price', 'lot_number', 'confidence'].includes(column);
+
+        if (!keepDirection) {
+            if (currentSort.column === column) {
+                currentSort.isAscending = !currentSort.isAscending;
+            } else {
+                currentSort.column = column;
+                currentSort.isAscending = !isNumeric;
+            }
+        } else if (currentSort.column !== column) {
+             currentSort.column = column;
+             currentSort.isAscending = !isNumeric;
+        }
+
+        currentFilteredData.sort((a, b) => {
+            let valA, valB;
+            switch (column) {
+                case 'price': valA = a.total_market_value || 0; valB = b.total_market_value || 0; break;
+                case 'ebay_price': valA = a.ebay_avg_price || 0; valB = b.ebay_avg_price || 0; break;
+                case 'confidence': valA = a.ebay_confidence_score || 0; valB = b.ebay_confidence_score || 0; break;
+                case 'lot_number': valA = a.lot_number || 0; valB = b.lot_number || 0; break;
+                case 'name': valA = (a.ebay_search_title || '').toLowerCase(); valB = (b.ebay_search_title || '').toLowerCase(); break;
+                case 'category': valA = (a.category || '').toLowerCase(); valB = (b.category || '').toLowerCase(); break;
+                default: return 0;
+            }
+            let comparison = 0;
+            if (valA > valB) { comparison = 1; }
+            else if (valA < valB) { comparison = -1; }
+            return currentSort.isAscending ? comparison : comparison * -1;
+        });
+        updateSortIndicators();
+        populateTable();
+    }
+
+    function updateSortIndicators() {
+        headers.forEach(header => {
+            const indicator = header.querySelector('.sort-indicator');
+            if (header.dataset.column === currentSort.column) {
+                indicator.textContent = currentSort.isAscending ? ' ▲' : ' ▼';
+            } else { indicator.textContent = ''; }
+        });
+    }
+
+    headers.forEach(header => { header.addEventListener('click', () => { sortData(header.dataset.column); }); });
+    hideFurnitureCheckbox.addEventListener('change', applyFiltersAndRepopulate);
+    hideMedicalCheckbox.addEventListener('change', applyFiltersAndRepopulate);
+
+    sortData('ebay_price');
+</script>
+
+    <div style="text-align: center; margin-top: 2rem; font-size: 0.8em; color: #888;">
+        <p>Analysis powered by:</p>
+        <p><strong>Auction Analysis Model:</strong> meta-llama/llama-4-maverick-17b-128e-instruct (Groq)</p>
+        <p><strong>eBay Cleaning Model(s):</strong> gemini-flash-latest (Gemini)</p>
+    </div>
+
+</body>
+</html>
