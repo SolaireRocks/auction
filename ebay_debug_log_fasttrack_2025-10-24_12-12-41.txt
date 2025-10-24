@@ -1,0 +1,41 @@
+
+--- [2025-10-24 12:12:48] eBay Analysis for 'Biro Pro 9 HD Sir Steak Meat Tenderizer' (Lot #3) ---
+
+--- RAW ---
+- $ 499.99 | TA3130 Complete Cradle Assembly Kit Fit Biro Tenderizer Pro 9 Sir Steak PRO-9SD
+- $ 775.00 | Biro Sir Steak PRO-9 HD  Meat Tenderizer (motor Is No Good) G3D
+- $ 587.99 | TA3130 Complete Cradle Assembly Kit Fit Biro Tenderizer Pro 9 Sir Steak PRO-9SD
+- $ 587.99 | BIRO TENDERIZER Cradle Assembly Lift Out Unit for PRO 9 SIR Steak TA3130 W/Cover
+- $ 587.99 | BIRO TENDERIZER Cradle Assembly Lift Out Unit for PRO 9 SIR Steak TA3130 W/Cover
+- $ 588.50 | For BIRO TENDERIZER Cradle Assembly Lift Out Unit TA3130 for PRO 9 SIR Steak
+- $ 587.99 | BIRO TENDERIZER Cradle Assembly Lift Out Unit for PRO 9 SIR Steak TA3130 W/Cover
+- $ 587.99 | TA3130 Complete Cradle Assembly Kit Fit Biro Tenderizer Pro 9 Sir Steak PRO-9SD
+- $ 588.50 | TA3130 Cradle Assembly Kit For Biro Tenderizer Pro 9 Sir Steak PRO-9SD, PRO-9HD
+- $ 588.99 | TA3130 Cradle Assembly With Safety Cover for Biro Tenderizer Pro 9 Sir Steak
+- $ 588.00 | TA3130 Complete Cradle Assembly Kit Fit Biro Tenderizer Pro 9 Sir Steak PRO-9SD
+- $ 610.64 | For Biro Tenderizer Pro 9 Sir Steak Complete Cradle Assembly With Safety Cover
+- $ 588.89 | TA3130 Complete Cradle Assembly Kit Fit Biro Tenderizer Pro 9 Sir Steak PRO-9SD
+- $ 588.88 | For Biro Tenderizers TA3130 Cradle Assembly & Cover, PRO-9 Tenderizers Sir Steak
+- $ 499.99 | TA3130 Tenderizer Complete Cradle Assembly for Biro Tenderizer Pro 9, Sir Steak
+- $ 587.99 | For Biro Tenderizers TA3130 Cradle Assembly W/ Cover PRO-9 Tenderizers Sir Steak
+- $ 588.08 | Replacement For TA3130 Biro Tenderizer Pro 9 Sir Steak Complete Cradle Assembly
+- $ 587.99 | For Biro Tenderizer Pro 9 Sir Steak Cradle Assembly With Safety Cover TA3130
+- $ 587.99 | Lift Out Cradle With Blades & Combs for Biro Tenderizer Pro 9 Sir Steak TA3130
+- $ 588.01 | Complete Cradle Assembly Lift Out Unit for Biro Sir Steak Pro9 Tenderizer TA3130
+- $ 587.99 | For Biro Tenderizers TA3130 Cradle Assembly & Cover, PRO-9 Tenderizers Sir Steak
+- $ 589.99 | Cradle Assembly With Safety Cover for Biro Tenderizer Pro 9 Sir Steak TA3130
+- $ 589.19 | TA3130 Complete Cradle Assembly w/ Cover Fit for Biro Tenderizer Pro 9 Sir Steak
+- $ 587.99 | TA3130 Tenderizer Complete Cradle Assembly for Biro Tenderizer Pro 9, Sir Steak
+- $ 588.49 | TA3130 Complete Cradle Assembly Kit Fit Biro Tenderizer Pro 9 Sir Steak PRO-9SD
+- $ 610.64 | TA3130 Cradle Assembly Kit with Cover Fit For Biro Tenderizer Pro 9, Sir Steak
+- $ 588.49 | Complete Cradle Assembly with Cover TA3130 for Biro Tenderizer Pro 9 Sir Steak
+- $ 588.99 | TA3130 Tenderizer Scoring Roller Blade Cradle for Biro PRO-9 Serie, Sir Steak
+- $ 589.99 | TA3130 Cradle Assembly w/ Cover & Handle Fit for Biro Tenderizer Pro 9 Sir Steak
+- $ 589.80 | For Biro Tenderizers TA3130 Cradle Assembly & Cover PRO-9 Tenderizers Sir Steak
+
+--- CLEANED ---
+- $ 775.00 | Biro Sir Steak PRO-9 HD  Meat Tenderizer (motor Is No Good) G3D
+
+--- REASONING ---
+Kept the single listing for the main tenderizer unit, even though it was listed as non-functional/parts, and excluded all listings for replacement cradle assemblies (TA3130).
+-> AVG: $775.00 | CONF: 30%
