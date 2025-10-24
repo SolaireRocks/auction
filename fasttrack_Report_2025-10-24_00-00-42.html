@@ -1,0 +1,463 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Item Analysis</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a; --table-bg-color: #2c2c2c; --header-bg-color: #3a3a3a;
+            --header-hover-bg-color: #4a4a4a; --row-even-bg-color: #333333; --row-odd-bg-color: #2c2c2c;
+            --border-color: #444444; --text-color: #e0e0e0; --link-color: #4a90e2;
+            --link-hover-color: #81b5f5; --sort-indicator-color: #81b5f5;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 2rem; line-height: 1.6; }
+        h1 { text-align: center; color: #ffffff; font-weight: 300; margin-bottom: 2rem; }
+        .controls-container { max-width: 1600px; margin: auto; margin-bottom: 1rem; }
+        .filter-container { text-align: left; padding: 10px 15px; background-color: var(--table-bg-color); border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        .filter-container label { margin-right: 20px; font-size: 0.9em; cursor: pointer; user-select: none; }
+        .filter-container input { vertical-align: middle; margin-right: 5px; }
+        .table-container { max-width: 1600px; margin: auto; overflow-x: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        table { width: 100%; border-collapse: collapse; background-color: var(--table-bg-color); border-spacing: 0; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        thead th { background-color: var(--header-bg-color); color: #ffffff; font-weight: 600; position: sticky; top: 0; z-index: 10; }
+        thead th[data-column] { cursor: pointer; transition: background-color 0.2s ease-in-out; user-select: none; }
+        thead th[data-column]:hover { background-color: var(--header-hover-bg-color); }
+        tbody tr:not(.reasoning-row):hover { background-color: var(--header-hover-bg-color); }
+        td { font-size: 0.95em; }
+        td:nth-child(4), td:nth-child(5), td:nth-child(6) { font-family: 'Courier New', Courier, monospace; text-align: right; white-space: nowrap; }
+        td:nth-child(7), td:nth-child(8) { text-align: center; }
+        a { color: var(--link-color); text-decoration: none; transition: color 0.2s ease-in-out; }
+        a:hover { color: var(--link-hover-color); text-decoration: underline; }
+        .sort-indicator { color: var(--sort-indicator-color); font-size: 0.8em; margin-left: 8px; display: inline-block; width: 10px; }
+        .lot-main td { font-weight: bold; }
+        .lot-main.expandable { cursor: pointer; }
+        .lot-main:nth-child(4n+1), .lot-main:nth-child(4n+2) { background-color: var(--row-odd-bg-color); }
+        .lot-main:nth-child(4n+3), .lot-main:nth-child(4n) { background-color: var(--row-even-bg-color); }
+        .lot-sub-item { background-color: rgba(0,0,0,0.15) !important; }
+        .lot-sub-item td { font-size: 0.9em; color: #c0c0c0; border-color: #383838; }
+        .lot-sub-item td:nth-child(2) { padding-left: 35px; }
+        .reasoning-row { display: none; background-color: #222 !important; }
+        .reasoning-row.visible { display: table-row; }
+        .reasoning-row td {
+            padding: 10px 20px 10px 40px;
+            font-style: italic;
+            color: #b0b0b0;
+            border-top: 1px dashed #555;
+            white-space: normal;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Auction Item Analysis</h1>
+    <div class="controls-container">
+        <div class="filter-container">
+            <label><input type="checkbox" id="hideFurniture"> Hide Large Furniture</label>
+            <label><input type="checkbox" id="hideMedical"> Hide Medical Devices</label>
+        </div>
+    </div>
+    <div class="table-container"><table><thead><tr><th data-column="lot_number">Lot # <span class="sort-indicator"></span></th><th data-column="name">Item Name <span class="sort-indicator"></span></th><th data-column="category">Category <span class="sort-indicator"></span></th><th data-column="price">AI Market Value <span class="sort-indicator"></span></th><th data-column="ebay_price">eBay Avg. Sold <span class="sort-indicator"></span></th><th data-column="confidence">Confidence <span class="sort-indicator"></span></th><th>eBay Search</th><th>Google Search</th></tr></thead><tbody id="data-table-body"></tbody></table></div>
+
+<script type="application/json" id="auctionData">
+    [
+    {
+        "ebay_search_title": "Table Craft 4 Burner Induction Cooker",
+        "category": "Electronics",
+        "is_shippable": true,
+        "total_market_value": 150,
+        "items": [
+            {
+                "item_name": "Table Craft 4 Burner Induction Cooker",
+                "estimated_value": 150,
+                "ebay_avg_price": 177.59333333333333
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=IOKcygcRkLTWOrPA72whsQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=zH2Br8fR63aaYBITHrhG0w%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Table Craft | Table Craft Drop In Or Stand Alone Counter Top 4 Burner Induction/Hot pot Cooker, Powers on And Working!",
+            "lot_number": 8,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=IOKcygcRkLTWOrPA72whsQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=zH2Br8fR63aaYBITHrhG0w%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "zH2Br8fR63aaYBITHrhG0w_1.jpg",
+                "zH2Br8fR63aaYBITHrhG0w_2.jpg",
+                "zH2Br8fR63aaYBITHrhG0w_3.jpg",
+                "zH2Br8fR63aaYBITHrhG0w_4.jpg",
+                "zH2Br8fR63aaYBITHrhG0w_5.jpg",
+                "zH2Br8fR63aaYBITHrhG0w_6.jpg"
+            ]
+        },
+        "reasoning": "The item is a Table Craft 4 Burner Induction Cooker that is functional. The estimated value is based on the average price of similar induction cookers on eBay and other online marketplaces. The cooker appears to be in good condition, with some minor damage to the glass surface. The device is relatively compact and can be shipped via parcel post. Expert reseller advice: Consider highlighting the product's features, such as its induction technology and multiple burners, to attract buyers. Additionally, be transparent about the minor damage to the glass surface to build trust with potential buyers. I analyzed 6 images for this item.",
+        "lot_number": 8,
+        "ebay_avg_price": 177.59333333333333,
+        "ebay_confidence_score": 60,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Table+Craft+4+Burner+Induction+Cooker&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Beverage Air Horizon Series 3 Door Stainless Steel Commercial Reach-In Freezer",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "total_market_value": 2500,
+        "items": [
+            {
+                "item_name": "Beverage Air Horizon Series 3 Door Stainless Steel Commercial Reach-In Freezer",
+                "estimated_value": 2500
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=IOKcygcRkLTWOrPA72whsQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=nQBstZ2ZVghkRevVq6tT0w%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Beverage Air | Beverage Air Horizon Series 3 Door Stainless Steel Commerical Reach In Freezer On Casters, Great Working Condition, Very Clean!",
+            "lot_number": 1,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=IOKcygcRkLTWOrPA72whsQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=nQBstZ2ZVghkRevVq6tT0w%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "nQBstZ2ZVghkRevVq6tT0w_1.jpg",
+                "nQBstZ2ZVghkRevVq6tT0w_2.jpg",
+                "nQBstZ2ZVghkRevVq6tT0w_3.jpg",
+                "nQBstZ2ZVghkRevVq6tT0w_4.jpg",
+                "nQBstZ2ZVghkRevVq6tT0w_5.jpg",
+                "nQBstZ2ZVghkRevVq6tT0w_6.jpg",
+                "nQBstZ2ZVghkRevVq6tT0w_7.jpg",
+                "nQBstZ2ZVghkRevVq6tT0w_8.jpg",
+                "nQBstZ2ZVghkRevVq6tT0w_9.jpg",
+                "nQBstZ2ZVghkRevVq6tT0w_10.jpg",
+                "nQBstZ2ZVghkRevVq6tT0w_11.jpg"
+            ]
+        },
+        "reasoning": "The item is a commercial-grade stainless steel reach-in freezer from Beverage Air's Horizon Series, known for its durability and quality. The condition is described as 'Great Working Condition, Very Clean!' and the images provided show a well-maintained unit. The market value for such equipment can range widely based on size, condition, and brand. Given its commercial grade and stainless steel construction, this freezer retains significant value. I analyzed 11 images for this item, which showed the freezer's overall condition, its branding, and functional details like the control panel and compressor unit. For resellers, highlighting the 'Made in USA' aspect and the model's specifics (Horizon Series, 3-door) can attract buyers looking for reliable commercial equipment. The estimated value of $2500 reflects its condition, brand reputation, and the demand for commercial refrigeration units.",
+        "lot_number": 1,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Beverage+Air+Horizon+Series+3+Door+Stainless+Steel+Commercial+Reach-In+Freezer&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Beverage-Air Horizon Series 3-Door Stainless Steel Refrigerator",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "total_market_value": 2500,
+        "items": [
+            {
+                "item_name": "Beverage-Air Horizon Series 3-Door Stainless Steel Reach-In Refrigerator",
+                "estimated_value": 2500
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=IOKcygcRkLTWOrPA72whsQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=ybYMwt%2fNZFKvKi8CGv%2fOyA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Beverage Air | Beverage-Air Horizon Series 3 Door Stainless Steel Reach In Refrigerator On Casters, Powers On Great Working Condition, Very Clean!",
+            "lot_number": 2,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=IOKcygcRkLTWOrPA72whsQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=ybYMwt%2fNZFKvKi8CGv%2fOyA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "ybYMwtNZFKvKi8CGvOyA_1.jpg",
+                "ybYMwtNZFKvKi8CGvOyA_2.jpg",
+                "ybYMwtNZFKvKi8CGvOyA_3.jpg",
+                "ybYMwtNZFKvKi8CGvOyA_4.jpg",
+                "ybYMwtNZFKvKi8CGvOyA_5.jpg",
+                "ybYMwtNZFKvKi8CGvOyA_6.jpg",
+                "ybYMwtNZFKvKi8CGvOyA_7.jpg",
+                "ybYMwtNZFKvKi8CGvOyA_8.jpg",
+                "ybYMwtNZFKvKi8CGvOyA_9.jpg",
+                "ybYMwtNZFKvKi8CGvOyA_10.jpg"
+            ]
+        },
+        "reasoning": "The item is a commercial-grade, stainless steel refrigerator from Beverage-Air's Horizon Series. It is a high-quality, 3-door reach-in refrigerator on casters, in great working condition and very clean. The images show the unit's stainless steel construction, digital temperature display, and the 'Horizon Series' and 'Beverage-Air' branding. Commercial refrigeration equipment like this is typically durable and has a long lifespan, making it valuable to businesses. The estimated value is $2500, which is reasonable for a used commercial refrigerator of this caliber. Expert reseller advice: Highlight the unit's stainless steel construction, ENERGY STAR certification, and the fact that it is on casters for easy mobility. Ensure to mention its great working condition and cleanliness. I analyzed 5 images for this item.",
+        "lot_number": 2,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Beverage-Air+Horizon+Series+3-Door+Stainless+Steel+Refrigerator&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Randell FX Series 48in Refrigerated Chef Base",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "total_market_value": 800,
+        "items": [
+            {
+                "item_name": "Randell FX Series 48in Refrigerated Chef Base With Pull Out Drawer",
+                "estimated_value": 800
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=IOKcygcRkLTWOrPA72whsQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=3x%2bY1C1GFKOnKr%2b12cc3rw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Randell | Randell FX Series 48in Refrigerated Chef Base With Pull Out Drawer On Casters, Powers On Great Working Condition!",
+            "lot_number": 3,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=IOKcygcRkLTWOrPA72whsQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=3x%2bY1C1GFKOnKr%2b12cc3rw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "3xY1C1GFKOnKr12cc3rw_1.jpg",
+                "3xY1C1GFKOnKr12cc3rw_2.jpg",
+                "3xY1C1GFKOnKr12cc3rw_3.jpg",
+                "3xY1C1GFKOnKr12cc3rw_4.jpg",
+                "3xY1C1GFKOnKr12cc3rw_5.jpg",
+                "3xY1C1GFKOnKr12cc3rw_6.jpg"
+            ]
+        },
+        "reasoning": "The Randell FX Series 48in Refrigerated Chef Base is a commercial-grade appliance in good working condition. Its stainless steel construction and refrigerated capabilities make it valuable for restaurant or kitchen use. The item is not shippable due to its size and weight. I analyzed 6 images for this item. Expert reseller advice: Highlight the appliance's features, such as its stainless steel construction, digital temperature display, and casters for mobility, to attract potential buyers. Consider including additional photos of the appliance in operation to demonstrate its functionality.",
+        "lot_number": 3,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Randell+FX+Series+48in+Refrigerated+Chef+Base&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vulcan VACB36-101 36in Radiant Natural Gas Charbroiler",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "total_market_value": 1200,
+        "items": [
+            {
+                "item_name": "Vulcan VACB36-101 36in Radiant Natural Gas Charbroiler With Front Shelf",
+                "estimated_value": 1200
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=IOKcygcRkLTWOrPA72whsQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=vuBq2bOWzVY5MQ9uh5%2f4ow%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Vulcan | Vulcan 36in Radiant Natural Gas Charbroiler With Front Shelf, Good Condition!",
+            "lot_number": 4,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=IOKcygcRkLTWOrPA72whsQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=vuBq2bOWzVY5MQ9uh5%2f4ow%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "vuBq2bOWzVY5MQ9uh54ow_1.jpg",
+                "vuBq2bOWzVY5MQ9uh54ow_2.jpg",
+                "vuBq2bOWzVY5MQ9uh54ow_3.jpg",
+                "vuBq2bOWzVY5MQ9uh54ow_4.jpg",
+                "vuBq2bOWzVY5MQ9uh54ow_5.jpg",
+                "vuBq2bOWzVY5MQ9uh54ow_6.jpg",
+                "vuBq2bOWzVY5MQ9uh54ow_7.jpg"
+            ]
+        },
+        "reasoning": "The Vulcan VACB36-101 36in Radiant Natural Gas Charbroiler is a commercial-grade appliance, typically used in restaurants and food service establishments. Its value lies in its durability, performance, and brand reputation. The images show the unit in good condition, with a clean and functional design. The presence of a front shelf adds to its value. The estimated market value of $1200 is based on the assumption that it is in working condition and has been well-maintained. Potential buyers should inspect the unit thoroughly before bidding. I analyzed 7 images for this item.",
+        "lot_number": 4,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vulcan+VACB36-101+36in+Radiant+Natural+Gas+Charbroiler&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Randell 48\" Mega Top Sandwich/Salad Prep Table",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "total_market_value": 1200,
+        "items": [
+            {
+                "item_name": "Randell 9030K-7 Refrigerated Sandwich Prep Table",
+                "estimated_value": 1200
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=IOKcygcRkLTWOrPA72whsQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=QG1LfDBb0Ftozy%2bxT6WWJA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Randell | Randell 48\" Mega Top Sandwich/Salad Prep Table w/ Refrigerated Base On Casters, Powers On Great Working Condition!",
+            "lot_number": 5,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=IOKcygcRkLTWOrPA72whsQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=QG1LfDBb0Ftozy%2bxT6WWJA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "QG1LfDBb0FtozyxT6WWJA_1.jpg",
+                "QG1LfDBb0FtozyxT6WWJA_2.jpg",
+                "QG1LfDBb0FtozyxT6WWJA_3.jpg",
+                "QG1LfDBb0FtozyxT6WWJA_4.jpg",
+                "QG1LfDBb0FtozyxT6WWJA_5.jpg"
+            ]
+        },
+        "reasoning": "The Randell 48\" Mega Top Sandwich/Salad Prep Table is a commercial-grade refrigerated preparation table. The images show the unit in good condition, with a stainless steel construction and functioning refrigeration. The model number (9030K-7) and brand (Randell) are clearly visible on the label, indicating a high-quality product. The total market value is estimated at $1200, considering its commercial use and condition. Expert reseller advice: Check for any additional features like adjustable shelving or specific certifications (e.g., NSF) that could increase its value. The presence of casters makes it easily movable, adding to its functionality. I analyzed 5 images for this item.",
+        "lot_number": 5,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Randell+48%22+Mega+Top+Sandwich%2FSalad+Prep+Table&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Oliver Hydraulic Commercial Dough Divider",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "total_market_value": 800,
+        "items": [
+            {
+                "item_name": "Oliver Hydraulic Commercial Dough Divider",
+                "estimated_value": 800
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=IOKcygcRkLTWOrPA72whsQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=7RbPuRJfG3iYvwLzODz%2bNw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Oliver | Oliver Hydraulic Commercial Dough Divider, Removed From Working Grocery Store",
+            "lot_number": 6,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=IOKcygcRkLTWOrPA72whsQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=7RbPuRJfG3iYvwLzODz%2bNw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "7RbPuRJfG3iYvwLzODzNw_1.jpg",
+                "7RbPuRJfG3iYvwLzODzNw_2.jpg",
+                "7RbPuRJfG3iYvwLzODzNw_3.jpg",
+                "7RbPuRJfG3iYvwLzODzNw_4.jpg",
+                "7RbPuRJfG3iYvwLzODzNw_5.jpg",
+                "7RbPuRJfG3iYvwLzODzNw_6.jpg"
+            ]
+        },
+        "reasoning": "The Oliver Hydraulic Commercial Dough Divider is a used commercial bakery equipment. The images show the unit from multiple angles, including the exterior, interior, and mechanical components. The device appears to be in fair condition, with some signs of wear. As a commercial-grade equipment, it is likely to be valuable to bakery owners or professionals. The estimated value is $800, considering its condition and potential for resale. Expert reseller advice: verify the functionality and test the equipment before resale. Potential buyers may be willing to pay a premium if the unit is in good working condition. I analyzed 6 images for this item.",
+        "lot_number": 6,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Oliver+Hydraulic+Commercial+Dough+Divider&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "TurboChef Countertop Rapid Cook Convection Oven",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "total_market_value": 800,
+        "items": [
+            {
+                "item_name": "TurboChef Countertop Rapid Cook Convection Oven",
+                "estimated_value": 800
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=IOKcygcRkLTWOrPA72whsQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=Aiyu%2fBWHNAiVm0BIqvSxrg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "TurboChef | TurboChef Countertop Rapid Cook Convection Oven, Removed From Working Grocery Store",
+            "lot_number": 7,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=IOKcygcRkLTWOrPA72whsQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=Aiyu%2fBWHNAiVm0BIqvSxrg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "AiyuBWHNAiVm0BIqvSxrg_1.jpg",
+                "AiyuBWHNAiVm0BIqvSxrg_2.jpg",
+                "AiyuBWHNAiVm0BIqvSxrg_3.jpg",
+                "AiyuBWHNAiVm0BIqvSxrg_4.jpg",
+                "AiyuBWHNAiVm0BIqvSxrg_5.jpg",
+                "AiyuBWHNAiVm0BIqvSxrg_6.jpg",
+                "AiyuBWHNAiVm0BIqvSxrg_7.jpg"
+            ]
+        },
+        "reasoning": "The TurboChef Countertop Rapid Cook Convection Oven is a commercial-grade appliance, likely to be valuable due to its brand reputation and functionality. The images show the oven in a used condition with some signs of wear, but it was removed from a working grocery store, suggesting it was in operational condition. The oven's condition and the fact that it's a well-known brand like TurboChef justify its estimated value. Potential buyers might be commercial kitchens or resellers looking for high-quality used equipment. I analyzed 7 images for this item, which provided a comprehensive view of the oven's condition and features.",
+        "lot_number": 7,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=TurboChef+Countertop+Rapid+Cook+Convection+Oven&_sacat=0&LH_Complete=1&LH_Sold=1"
+    }
+]
+</script>
+
+<script>
+    const fullJsonData = JSON.parse(document.getElementById('auctionData').textContent);
+    let currentFilteredData = [...fullJsonData];
+    
+    const tableBody = document.getElementById('data-table-body');
+    const headers = document.querySelectorAll('thead th[data-column]');
+    const hideFurnitureCheckbox = document.getElementById('hideFurniture');
+    const hideMedicalCheckbox = document.getElementById('hideMedical');
+
+    let currentSort = { column: 'ebay_price', isAscending: false };
+
+    function applyFiltersAndRepopulate() {
+        const hideFurniture = hideFurnitureCheckbox.checked;
+        const hideMedical = hideMedicalCheckbox.checked;
+
+        currentFilteredData = fullJsonData.filter(lot => {
+            const category = (lot.category || '').toLowerCase();
+            if (hideFurniture && category === 'large furniture') {
+                return false;
+            }
+            if (hideMedical && category === 'medical devices') {
+                return false;
+            }
+            return true;
+        });
+
+        sortData(currentSort.column, true);
+    }
+
+    function populateTable() {
+        tableBody.innerHTML = '';
+        const formatCurrency = (value) => (value || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 });
+        const sanitizeText = (text) => (text || 'No reasoning provided.');
+
+        currentFilteredData.forEach(lot => {
+            const hasReasoning = lot.reasoning && lot.reasoning.trim() !== '';
+            
+            const mainRow = document.createElement('tr');
+            mainRow.className = 'lot-main' + (hasReasoning ? ' expandable' : '');
+            
+            const encodedSearch = encodeURIComponent(lot.ebay_search_title || '');
+            
+            mainRow.innerHTML = `
+                <td>${lot.lot_number > 0 ? lot.lot_number : ''}</td>
+                <td><a href="${lot.original_listing.url}" target="_blank" title="${lot.original_listing.title}">${lot.ebay_search_title || 'N/A'}</a></td>
+                <td>${lot.category || 'Miscellaneous'}</td>
+                <td style="text-align: right;">${formatCurrency(lot.total_market_value)}</td>
+                <td style="text-align: right;">${lot.ebay_avg_price > 0 ? formatCurrency(lot.ebay_avg_price) : 'N/A'}</td>
+                <td style="text-align: right;">${lot.ebay_confidence_score > 0 ? lot.ebay_confidence_score + '%' : 'N/A'}</td>
+                <td style="text-align: center;"><a href="${lot.ebay_search_url || '#'}" target="_blank">eBay</a></td>
+                <td style="text-align: center;"><a href="https://www.google.com/search?q=${encodedSearch}" target="_blank">Google</a></td>
+            `;
+            
+            tableBody.appendChild(mainRow);
+            
+            if (hasReasoning) {
+                const reasoningRow = document.createElement('tr');
+                reasoningRow.className = 'reasoning-row';
+                reasoningRow.innerHTML = `<td colspan="8">${sanitizeText(lot.reasoning)}</td>`;
+                tableBody.appendChild(reasoningRow);
+
+                mainRow.addEventListener('click', () => {
+                    reasoningRow.classList.toggle('visible');
+                });
+            }
+
+            if (lot.items && lot.items.length > 1) {
+                lot.items.forEach(subItem => {
+                    const subRow = document.createElement('tr');
+                    subRow.className = 'lot-sub-item';
+                    
+                    const subAvgPrice = subItem.ebay_avg_price || 0;
+                    const subEncodedSearch = encodeURIComponent(subItem.item_name || '');
+                    const subEbayUrl = `https://www.ebay.com/sch/i.html?_from=R40&_nkw=${subEncodedSearch}&_sacat=0&LH_Complete=1&LH_Sold=1`;
+                    const subGoogleUrl = `https://www.google.com/search?q=${subEncodedSearch}`;
+
+                    subRow.innerHTML = `
+                        <td></td>
+                        <td style="padding-left: 35px;">${subItem.item_name || 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: right;">${formatCurrency(subItem.estimated_value)}</td>
+                        <td style="text-align: right;">${subAvgPrice > 0 ? formatCurrency(subAvgPrice) : 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: center;"><a href="${subEbayUrl}" target="_blank">eBay</a></td>
+                        <td style="text-align: center;"><a href="${subGoogleUrl}" target="_blank">Google</a></td>
+                    `;
+                    tableBody.appendChild(subRow);
+                });
+            }
+        });
+    }
+
+    function sortData(column, keepDirection = false) {
+        const isNumeric = ['price', 'ebay_price', 'lot_number', 'confidence'].includes(column);
+
+        if (!keepDirection) {
+            if (currentSort.column === column) {
+                currentSort.isAscending = !currentSort.isAscending;
+            } else {
+                currentSort.column = column;
+                currentSort.isAscending = !isNumeric;
+            }
+        } else if (currentSort.column !== column) {
+             currentSort.column = column;
+             currentSort.isAscending = !isNumeric;
+        }
+
+        currentFilteredData.sort((a, b) => {
+            let valA, valB;
+            switch (column) {
+                case 'price': valA = a.total_market_value || 0; valB = b.total_market_value || 0; break;
+                case 'ebay_price': valA = a.ebay_avg_price || 0; valB = b.ebay_avg_price || 0; break;
+                case 'confidence': valA = a.ebay_confidence_score || 0; valB = b.ebay_confidence_score || 0; break;
+                case 'lot_number': valA = a.lot_number || 0; valB = b.lot_number || 0; break;
+                case 'name': valA = (a.ebay_search_title || '').toLowerCase(); valB = (b.ebay_search_title || '').toLowerCase(); break;
+                case 'category': valA = (a.category || '').toLowerCase(); valB = (b.category || '').toLowerCase(); break;
+                default: return 0;
+            }
+            let comparison = 0;
+            if (valA > valB) { comparison = 1; }
+            else if (valA < valB) { comparison = -1; }
+            return currentSort.isAscending ? comparison : comparison * -1;
+        });
+        updateSortIndicators();
+        populateTable();
+    }
+
+    function updateSortIndicators() {
+        headers.forEach(header => {
+            const indicator = header.querySelector('.sort-indicator');
+            if (header.dataset.column === currentSort.column) {
+                indicator.textContent = currentSort.isAscending ? ' ▲' : ' ▼';
+            } else { indicator.textContent = ''; }
+        });
+    }
+
+    headers.forEach(header => { header.addEventListener('click', () => { sortData(header.dataset.column); }); });
+    hideFurnitureCheckbox.addEventListener('change', applyFiltersAndRepopulate);
+    hideMedicalCheckbox.addEventListener('change', applyFiltersAndRepopulate);
+
+    sortData('ebay_price');
+</script>
+
+    <div style="text-align: center; margin-top: 2rem; font-size: 0.8em; color: #888;">
+        <p>Analysis powered by:</p>
+        <p><strong>Auction Analysis Model:</strong> meta-llama/llama-4-maverick-17b-128e-instruct (Groq)</p>
+        <p><strong>eBay Cleaning Model(s):</strong> meta-llama/llama-4-maverick:free (Openrouter)</p>
+    </div>
+
+</body>
+</html>

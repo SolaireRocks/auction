@@ -1,0 +1,43 @@
+
+--- [2025-10-24 00:00:42] eBay Analysis for 'Table Craft 4 Burner Induction Cooker' (Lot #8) ---
+
+--- RAW ---
+- $ 107.99 | 4200W Portable Induction Cooktop Countertop Cooker Burner Stove Hot Plate 110V
+- $  96.32 | 4000W Portable Induction Cooktop Countertop Dual Cooker Burner Stove Hot Plate--
+- $  98.89 | 2400W Portable Induction Cooker Cooktop Countertop Dual Burner Stove Hot Plate
+- $  98.90 | Portable Induction Cooktop Countertop Dual Cooker Burner Stove Hot Plate 2400W
+- $  57.47 | Portable Induction Cooktop 1800W Burner Cooker Hot Pot Stove 110v-120v
+- $ 124.44 | Electric Cooktop 12/24/30/36" Ceramic  Induction Cooker  2/4/5 Burners Knob
+- $ 107.50 | Portable Induction Cooktop Countertop 2400W Dual Cooker Burner Stove Hot Plate
+- $  69.00 | NEW Cooksir Induction Electric Cooker Cooktop Single Burner Model ALP DC99, Pink
+- $  98.94 | Portable Induction Cooktop Countertop 2400W Dual Cooker Burner Stove Hot Plate
+- $ 235.99 | Amzgachfktch Portable Induction Cooktop,Electric Induction Cooker and 4 Burner
+- $ 107.99 | 4200W Portable Induction Cooktop Countertop Cooker Burner Stove Hot Plate 110V
+- $  92.12 | 1800W Intelligent Induction Cooktop,Countertop Cooker Burner Stove Hot Plate
+- $  44.99 | Induction Cooktop One Burner Induction Cooker Touch with Fry Pan 1800W 110V
+- $  79.95 | Double Induction Portable 1800W Cooker w/ Sensor Touch 10 Temp & power Levels
+- $ 136.00 | Portable Induction Cooker with 2 Burner Independent Control Safety Lock Timer
+- $  95.08 | 3500-5000W Induction Cooker Single Cooker Burner Stove Hot Plate Stainless Steel
+- $ 272.64 | Induction cooker with 2 burners, detachable baking tray, non stick, temperatu...
+- $ 112.41 | 2Burner Stove Countertop Cooker Electric Induction Ceramic Cooktop Touch Control
+- $  57.99 | Portable Induction Cooktop 1800W Countertop Cooker Burner Black 8 Settings NEW
+- $ 259.99 | Amzgachfktch 30inch Built-In Induction Cooker Timer, Safety Lock,11600W,4Burners
+- $  31.00 | Multi-Function 1800W Portable Induction Cooker Cooktop Burner - Bx56
+- $ 148.35 | Commercial Induction Cooker Touch Control 4 Burner Cooktop 2000W+1400W-
+- $  98.88 | Portable Induction Cooktop Countertop 2400W Dual Cooker Burner Stove Hot Plate
+- $  35.00 | Induction Cooker Burner Single 1800W; 10 Timer Settings 450F; 110V; Black Gift
+- $  34.99 | Induction Cooker K1001 Portable Cooktop Countertop Burner Stove Hot Plate 2000W
+- $ 104.63 | 4000W Electric Dual Burner Cooktop Double Induction Cooker Camping Hot Plate New
+- $  50.00 | induction cooker single burner
+- $  52.99 | K4002 2 BURNER INDUCTION COOKER #206
+- $ 118.54 | 4000W Portable Induction Cooktop Countertop Dual Cooker Burner Stove Hot Plate--
+- $  91.19 | 1800W Intelligent Induction Cooktop,Countertop Cooker Burner Stove Hot Plate
+
+--- CLEANED ---
+- $ 259.99 | Amzgachfktch 30inch Built-In Induction Cooker Timer, Safety Lock,11600W,4Burners
+- $ 148.35 | Commercial Induction Cooker Touch Control 4 Burner Cooktop 2000W+1400W-
+- $ 124.44 | Electric Cooktop 12/24/30/36" Ceramic  Induction Cooker  2/4/5 Burners Knob
+
+--- REASONING ---
+Kept items that are 4-burner induction cookers, matching the key feature, despite lacking the 'Table Craft' brand name in the listings.
+-> AVG: $177.59 | CONF: 60%
