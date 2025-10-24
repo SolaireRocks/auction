@@ -1,0 +1,353 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Item Analysis</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a; --table-bg-color: #2c2c2c; --header-bg-color: #3a3a3a;
+            --header-hover-bg-color: #4a4a4a; --row-even-bg-color: #333333; --row-odd-bg-color: #2c2c2c;
+            --border-color: #444444; --text-color: #e0e0e0; --link-color: #4a90e2;
+            --link-hover-color: #81b5f5; --sort-indicator-color: #81b5f5;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 2rem; line-height: 1.6; }
+        h1 { text-align: center; color: #ffffff; font-weight: 300; margin-bottom: 2rem; }
+        .controls-container { max-width: 1600px; margin: auto; margin-bottom: 1rem; }
+        .filter-container { text-align: left; padding: 10px 15px; background-color: var(--table-bg-color); border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        .filter-container label { margin-right: 20px; font-size: 0.9em; cursor: pointer; user-select: none; }
+        .filter-container input { vertical-align: middle; margin-right: 5px; }
+        .table-container { max-width: 1600px; margin: auto; overflow-x: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        table { width: 100%; border-collapse: collapse; background-color: var(--table-bg-color); border-spacing: 0; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        thead th { background-color: var(--header-bg-color); color: #ffffff; font-weight: 600; position: sticky; top: 0; z-index: 10; }
+        thead th[data-column] { cursor: pointer; transition: background-color 0.2s ease-in-out; user-select: none; }
+        thead th[data-column]:hover { background-color: var(--header-hover-bg-color); }
+        tbody tr:not(.reasoning-row):hover { background-color: var(--header-hover-bg-color); }
+        td { font-size: 0.95em; }
+        td:nth-child(4), td:nth-child(5), td:nth-child(6) { font-family: 'Courier New', Courier, monospace; text-align: right; white-space: nowrap; }
+        td:nth-child(7), td:nth-child(8) { text-align: center; }
+        a { color: var(--link-color); text-decoration: none; transition: color 0.2s ease-in-out; }
+        a:hover { color: var(--link-hover-color); text-decoration: underline; }
+        .sort-indicator { color: var(--sort-indicator-color); font-size: 0.8em; margin-left: 8px; display: inline-block; width: 10px; }
+        .lot-main td { font-weight: bold; }
+        .lot-main.expandable { cursor: pointer; }
+        .lot-main:nth-child(4n+1), .lot-main:nth-child(4n+2) { background-color: var(--row-odd-bg-color); }
+        .lot-main:nth-child(4n+3), .lot-main:nth-child(4n) { background-color: var(--row-even-bg-color); }
+        .lot-sub-item { background-color: rgba(0,0,0,0.15) !important; }
+        .lot-sub-item td { font-size: 0.9em; color: #c0c0c0; border-color: #383838; }
+        .lot-sub-item td:nth-child(2) { padding-left: 35px; }
+        .reasoning-row { display: none; background-color: #222 !important; }
+        .reasoning-row.visible { display: table-row; }
+        .reasoning-row td {
+            padding: 10px 20px 10px 40px;
+            font-style: italic;
+            color: #b0b0b0;
+            border-top: 1px dashed #555;
+            white-space: normal;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Auction Item Analysis</h1>
+    <div class="controls-container">
+        <div class="filter-container">
+            <label><input type="checkbox" id="hideFurniture"> Hide Large Furniture</label>
+            <label><input type="checkbox" id="hideMedical"> Hide Medical Devices</label>
+        </div>
+    </div>
+    <div class="table-container"><table><thead><tr><th data-column="lot_number">Lot # <span class="sort-indicator"></span></th><th data-column="name">Item Name <span class="sort-indicator"></span></th><th data-column="category">Category <span class="sort-indicator"></span></th><th data-column="price">AI Market Value <span class="sort-indicator"></span></th><th data-column="ebay_price">eBay Avg. Sold <span class="sort-indicator"></span></th><th data-column="confidence">Confidence <span class="sort-indicator"></span></th><th>eBay Search</th><th>Google Search</th></tr></thead><tbody id="data-table-body"></tbody></table></div>
+
+<script type="application/json" id="auctionData">
+    [
+    {
+        "ebay_search_title": "Breville 2-Slice Toaster",
+        "category": "Small Furniture",
+        "is_shippable": true,
+        "total_market_value": 80,
+        "items": [
+            {
+                "item_name": "Breville 2-Slice Toaster",
+                "estimated_value": 80,
+                "ebay_avg_price": 54.04875
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://www.winnola.com/Event/LotDetails/56005644/Breville-2-Slice-Toaster-BRAND-NEW-Buyers-Assurance",
+            "title": "Breville 2 Slice Toaster | BRAND NEW - Buyer's Assurance",
+            "lot_number": 3,
+            "url": "https://www.winnola.com/Event/LotDetails/56005644/Breville-2-Slice-Toaster-BRAND-NEW-Buyers-Assurance",
+            "pics": [
+                "56005644_1.jpg",
+                "56005644_2.jpg"
+            ]
+        },
+        "reasoning": "The Breville 2-Slice Toaster is a brand new, high-quality appliance. The images show the toaster in its original packaging, indicating that it has not been used. The '100% Buyer's Assurance' sticker suggests that the seller is confident in the product's condition. Breville is a well-known brand in the kitchen appliance market, and their products generally retain value well. The estimated value of $80 is based on the average price of similar Breville 2-slice toasters found online. Expert resellers can capitalize on the brand name and the fact that it's new in box. I analyzed 2 images for this item.",
+        "lot_number": 3,
+        "ebay_avg_price": 54.04875,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Breville+2-Slice+Toaster&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Northwest Wall Mounted Electric Fireplace Heater",
+        "category": "Decor/Lighting",
+        "is_shippable": false,
+        "total_market_value": 250,
+        "items": [
+            {
+                "item_name": "Northwest Wall Mounted Electric Fireplace Heater",
+                "estimated_value": 250
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://www.winnola.com/Event/LotDetails/56005442/Northwest-Wall-Mounted-Electric-Fireplace-Heater-BRAND-NEW-Buyers-Assurance",
+            "title": "Northwest Wall Mounted Electric Fireplace Heater | BRAND NEW - Buyer's Assurance",
+            "lot_number": 1,
+            "url": "https://www.winnola.com/Event/LotDetails/56005442/Northwest-Wall-Mounted-Electric-Fireplace-Heater-BRAND-NEW-Buyers-Assurance",
+            "pics": [
+                "56005442_1.jpg",
+                "56005442_2.jpg"
+            ]
+        },
+        "reasoning": "The item is a brand new Northwest wall-mounted electric fireplace heater. The listing includes two images showing the product and its packaging. The product appears to be in good condition, and the '100% Buyer's Assurance' sticker suggests that it is a genuine product with some form of warranty or guarantee. The estimated value is based on the assumption that the product is a high-quality electric fireplace heater from a reputable brand. To increase its value, consider including the original packaging, instructions, and any additional accessories. I analyzed 2 images for this item.",
+        "lot_number": 1,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Northwest+Wall+Mounted+Electric+Fireplace+Heater&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Progrit Golf Practice Net BRAND NEW",
+        "category": "Toys/Games",
+        "is_shippable": true,
+        "total_market_value": 80,
+        "items": [
+            {
+                "item_name": "Progrit Golf Practice Net BRAND NEW",
+                "estimated_value": 80,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://www.winnola.com/Event/LotDetails/56005543/Progrit-Golf-Practice-Net-BRAND-NEW-Buyers-Assurance",
+            "title": "Progrit Golf Practice Net | BRAND NEW - Buyer's Assurance",
+            "lot_number": 2,
+            "url": "https://www.winnola.com/Event/LotDetails/56005543/Progrit-Golf-Practice-Net-BRAND-NEW-Buyers-Assurance",
+            "pics": [
+                "56005543_1.jpg",
+                "56005543_2.jpg"
+            ]
+        },
+        "reasoning": "This is a brand new Progrit Golf Practice Net with various accessories like targets and golf balls. The product appears to be in its original packaging and is likely still sealed. Given its condition and the presence of multiple units in the provided image, we can infer that this is a new, unopened item. The estimated value is based on similar golf practice nets available on eBay, which range from $60 to $100. We priced it at $80, considering it's a brand new item with buyer's assurance. The presence of multiple boxes in the second image suggests a bulk lot, but we are pricing a single unit. Expert reseller advice: To increase value, consider highlighting the product's features, such as its durability, ease of setup, and the variety of targets included. Also, emphasize the '100% Buyer's Assurance' for added buyer confidence. We analyzed 2 images for this item.",
+        "lot_number": 2,
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Progrit+Golf+Practice+Net+BRAND+NEW&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Steel Garden Trellis",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Steel Garden Trellis",
+                "estimated_value": 50
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://www.winnola.com/Event/LotDetails/56005745/Interlocking-Steel-Garden-Trellis-BRAND-NEW-Buyers-Assurance",
+            "title": "Interlocking Steel Garden Trellis | BRAND NEW - Buyer's Assurance",
+            "lot_number": 4,
+            "url": "https://www.winnola.com/Event/LotDetails/56005745/Interlocking-Steel-Garden-Trellis-BRAND-NEW-Buyers-Assurance",
+            "pics": [
+                "56005745_1.jpg",
+                "56005745_2.jpg"
+            ]
+        },
+        "reasoning": "The lot contains a brand new interlocking steel garden trellis. The item appears to be in good condition and is likely to be useful for gardening purposes. The presence of multiple boxes in the second image suggests that there may be multiple units available. The estimated value of $50 is based on the assumption that the trellis is made of durable steel and is of good quality. Expert reseller advice: Consider highlighting the durability and versatility of the trellis in the listing to attract gardening enthusiasts. 2 images were analyzed for this item.",
+        "lot_number": 4,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Steel+Garden+Trellis&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "2-Step Folding Ladder Stool with Pouch",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "2-Step Folding Ladder Stool",
+                "estimated_value": 40
+            },
+            {
+                "item_name": "Tool Pouch for Ladder",
+                "estimated_value": 10
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://www.winnola.com/Event/LotDetails/56005846/2Step-Stool-Folding-Ladder-Not-Inspected-Buyers-Assurance",
+            "title": "2-Step Stool - Folding Ladder | Not Inspected - Buyer's Assurance",
+            "lot_number": 5,
+            "url": "https://www.winnola.com/Event/LotDetails/56005846/2Step-Stool-Folding-Ladder-Not-Inspected-Buyers-Assurance",
+            "pics": [
+                "56005846_1.jpg",
+                "56005846_2.jpg"
+            ]
+        },
+        "reasoning": "The item is a 2-step folding ladder stool with a tool pouch. The stool is made of metal and has a foldable design, making it portable. The tool pouch is likely designed to attach to the ladder. The total market value is estimated to be $50, with the ladder stool accounting for $40 and the tool pouch $10. The item is not shippable due to its size and weight. I analyzed 2 images for this item. To increase value, consider adding a listing description that highlights the product's features, such as its durability and portability. Additionally, including more detailed photos of the product from different angles could help attract more bidders.",
+        "lot_number": 5,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=2-Step+Folding+Ladder+Stool+with+Pouch&_sacat=0&LH_Complete=1&LH_Sold=1"
+    }
+]
+</script>
+
+<script>
+    const fullJsonData = JSON.parse(document.getElementById('auctionData').textContent);
+    let currentFilteredData = [...fullJsonData];
+    
+    const tableBody = document.getElementById('data-table-body');
+    const headers = document.querySelectorAll('thead th[data-column]');
+    const hideFurnitureCheckbox = document.getElementById('hideFurniture');
+    const hideMedicalCheckbox = document.getElementById('hideMedical');
+
+    let currentSort = { column: 'ebay_price', isAscending: false };
+
+    function applyFiltersAndRepopulate() {
+        const hideFurniture = hideFurnitureCheckbox.checked;
+        const hideMedical = hideMedicalCheckbox.checked;
+
+        currentFilteredData = fullJsonData.filter(lot => {
+            const category = (lot.category || '').toLowerCase();
+            if (hideFurniture && category === 'large furniture') {
+                return false;
+            }
+            if (hideMedical && category === 'medical devices') {
+                return false;
+            }
+            return true;
+        });
+
+        sortData(currentSort.column, true);
+    }
+
+    function populateTable() {
+        tableBody.innerHTML = '';
+        const formatCurrency = (value) => (value || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 });
+        const sanitizeText = (text) => (text || 'No reasoning provided.');
+
+        currentFilteredData.forEach(lot => {
+            const hasReasoning = lot.reasoning && lot.reasoning.trim() !== '';
+            
+            const mainRow = document.createElement('tr');
+            mainRow.className = 'lot-main' + (hasReasoning ? ' expandable' : '');
+            
+            const encodedSearch = encodeURIComponent(lot.ebay_search_title || '');
+            
+            mainRow.innerHTML = `
+                <td>${lot.lot_number > 0 ? lot.lot_number : ''}</td>
+                <td><a href="${lot.original_listing.url}" target="_blank" title="${lot.original_listing.title}">${lot.ebay_search_title || 'N/A'}</a></td>
+                <td>${lot.category || 'Miscellaneous'}</td>
+                <td style="text-align: right;">${formatCurrency(lot.total_market_value)}</td>
+                <td style="text-align: right;">${lot.ebay_avg_price > 0 ? formatCurrency(lot.ebay_avg_price) : 'N/A'}</td>
+                <td style="text-align: right;">${lot.ebay_confidence_score > 0 ? lot.ebay_confidence_score + '%' : 'N/A'}</td>
+                <td style="text-align: center;"><a href="${lot.ebay_search_url || '#'}" target="_blank">eBay</a></td>
+                <td style="text-align: center;"><a href="https://www.google.com/search?q=${encodedSearch}" target="_blank">Google</a></td>
+            `;
+            
+            tableBody.appendChild(mainRow);
+            
+            if (hasReasoning) {
+                const reasoningRow = document.createElement('tr');
+                reasoningRow.className = 'reasoning-row';
+                reasoningRow.innerHTML = `<td colspan="8">${sanitizeText(lot.reasoning)}</td>`;
+                tableBody.appendChild(reasoningRow);
+
+                mainRow.addEventListener('click', () => {
+                    reasoningRow.classList.toggle('visible');
+                });
+            }
+
+            if (lot.items && lot.items.length > 1) {
+                lot.items.forEach(subItem => {
+                    const subRow = document.createElement('tr');
+                    subRow.className = 'lot-sub-item';
+                    
+                    const subAvgPrice = subItem.ebay_avg_price || 0;
+                    const subEncodedSearch = encodeURIComponent(subItem.item_name || '');
+                    const subEbayUrl = `https://www.ebay.com/sch/i.html?_from=R40&_nkw=${subEncodedSearch}&_sacat=0&LH_Complete=1&LH_Sold=1`;
+                    const subGoogleUrl = `https://www.google.com/search?q=${subEncodedSearch}`;
+
+                    subRow.innerHTML = `
+                        <td></td>
+                        <td style="padding-left: 35px;">${subItem.item_name || 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: right;">${formatCurrency(subItem.estimated_value)}</td>
+                        <td style="text-align: right;">${subAvgPrice > 0 ? formatCurrency(subAvgPrice) : 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: center;"><a href="${subEbayUrl}" target="_blank">eBay</a></td>
+                        <td style="text-align: center;"><a href="${subGoogleUrl}" target="_blank">Google</a></td>
+                    `;
+                    tableBody.appendChild(subRow);
+                });
+            }
+        });
+    }
+
+    function sortData(column, keepDirection = false) {
+        const isNumeric = ['price', 'ebay_price', 'lot_number', 'confidence'].includes(column);
+
+        if (!keepDirection) {
+            if (currentSort.column === column) {
+                currentSort.isAscending = !currentSort.isAscending;
+            } else {
+                currentSort.column = column;
+                currentSort.isAscending = !isNumeric;
+            }
+        } else if (currentSort.column !== column) {
+             currentSort.column = column;
+             currentSort.isAscending = !isNumeric;
+        }
+
+        currentFilteredData.sort((a, b) => {
+            let valA, valB;
+            switch (column) {
+                case 'price': valA = a.total_market_value || 0; valB = b.total_market_value || 0; break;
+                case 'ebay_price': valA = a.ebay_avg_price || 0; valB = b.ebay_avg_price || 0; break;
+                case 'confidence': valA = a.ebay_confidence_score || 0; valB = b.ebay_confidence_score || 0; break;
+                case 'lot_number': valA = a.lot_number || 0; valB = b.lot_number || 0; break;
+                case 'name': valA = (a.ebay_search_title || '').toLowerCase(); valB = (b.ebay_search_title || '').toLowerCase(); break;
+                case 'category': valA = (a.category || '').toLowerCase(); valB = (b.category || '').toLowerCase(); break;
+                default: return 0;
+            }
+            let comparison = 0;
+            if (valA > valB) { comparison = 1; }
+            else if (valA < valB) { comparison = -1; }
+            return currentSort.isAscending ? comparison : comparison * -1;
+        });
+        updateSortIndicators();
+        populateTable();
+    }
+
+    function updateSortIndicators() {
+        headers.forEach(header => {
+            const indicator = header.querySelector('.sort-indicator');
+            if (header.dataset.column === currentSort.column) {
+                indicator.textContent = currentSort.isAscending ? ' ▲' : ' ▼';
+            } else { indicator.textContent = ''; }
+        });
+    }
+
+    headers.forEach(header => { header.addEventListener('click', () => { sortData(header.dataset.column); }); });
+    hideFurnitureCheckbox.addEventListener('change', applyFiltersAndRepopulate);
+    hideMedicalCheckbox.addEventListener('change', applyFiltersAndRepopulate);
+
+    sortData('ebay_price');
+</script>
+
+    <div style="text-align: center; margin-top: 2rem; font-size: 0.8em; color: #888;">
+        <p>Analysis powered by:</p>
+        <p><strong>Auction Analysis Model:</strong> N/A</p>
+        <p><strong>eBay Cleaning Model(s):</strong> openai/gpt-oss-120b (Groq)</p>
+    </div>
+
+</body>
+</html>
