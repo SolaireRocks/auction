@@ -1,0 +1,60 @@
+
+--- [2025-10-24 00:11:14] eBay Analysis for 'Tiffany Style Stained Glass Hanging Lamp Shade' (Lot #7) ---
+
+--- RAW ---
+- $ 115.79 | Tiffany Style Stained Glass Ceiling Pendant Light Fixture Vintage Hanging Lamp
+- $ 131.25 | VTG Tiffany Style Stained Glass Hanging Light / Lamp Shade Floral Design 16” Di
+- $  45.00 | Tiffany Style Hanging Stained Glass Ceiling Light Lamp Shade Vintage
+- $  71.50 | Vintage Tiffany Style Stained Glass Hanging Lamp Shade Diamond Cream Clear 
+- $ 575.00 | VTG Tiffany Studio Reproduction Arrowroot Stained Glass Lamp Shade Hanging Light
+- $ 150.00 | Vintage Tiffany Style Stained Glass Hanging Light Lamp Shade 18.25”D x 13”H
+- $  32.00 | Tiffany Style Stained Slag Glass Hanging Shade Table Lamp Shade 5”
+- $  45.15 | Tiffany Style Stained Glass Hanging Shade 5 Jewel Table Lamp Shade 5 Inches Wide
+- $  55.00 | TIFFANY STYLE STAINED GLASS PENDANT HANGING LIGHT SHADE / LAMP SHADE 7in WIDE
+- $  45.93 | Tiffany Style Ceiling Light Stained Glass Shade Hanging Pendent Lamp Fixture
+- $ 100.00 | VTG Tiffany Style Stained Leaded Glass Hanging Light Lamp Shade Hand Crafted
+- $  69.95 | Vintage Tiffany-Style Stained And Colored Glass Hanging Pendant Light Lamp Shade
+- $ 124.95 | Vtg Set of 3 Tiffany Style Stained Glass Lamp Shade Or Hanging Pendant 7 1/2”
+- $ 115.79 | Tiffany Style Stained Glass Ceiling Pendant Light Fixture Vintage Hanging Lamp
+- $ 200.00 | Vintage Tiffany Style Stained Glass Hanging Lamp Shade with Birds - 
+- $ 100.00 | Vintage Tiffany Style Stained Leaded Glass Tulip Hanging Lamp Shade
+- $  34.00 | TIFFANY STYLE STAINED GLASS PENDANT HANGING LIGHT LAMP SHADE
+- $  99.00 | Tiffany Style Stained Glass Pendant Hanging Lamp Shade  Glass Reflection 10”
+- $ 139.00 | Vintage Tiffany-Style Stained Glass Hanging Lamp Shade 14″ × 9″ — Pink & Amber
+- $1000.00 | Tiffany Style Stained Glass Ceiling Hanging Acorn 11" Tall Pendant Lamp Shade
+- $  74.99 | VINTAGE TIFFANY STYLE RED AMBER STAINED GLASS LEADED HANGING LAMP SHADE
+- $  25.80 | Tiffany Style 8 1/2" Wide 5 1/2" H.  Stained Glass Multicolor Hanging Lamp Shade
+- $ 212.46 | Tiffany Style 20” Diameter Stained Glass Hanging Lamp Shade Grapes
+- $  12.99 | TIFFANY STYLE STAINED GLASS PENDANT HANGING LIGHT LAMP SHADE
+- $  45.00 | Tiffany Style Vintage Stained Glass Lamp Shade 10"
+- $  53.84 | Vintage Stained Glass Suspension Shade 18.5in Tiffany Style 3 Point Hanging
+- $ 150.00 | Beer Tiffany Style Hanging Lamp Shade Light Bar Stained Glass Look. Michelob
+- $ 299.11 | Large Tiffany Style Stained Glass Hanging Lamp Shade, 22" Diameter, QuikShip
+- $ 121.69 | Tiffany Style Stained Glass Ceiling Pendant Light Fixture Vintage Hanging Lamp
+- $ 149.95 | 🔥20" Tiffany Style Stained Glass Hanging Light Fixture Shade - 3 Bulb Purple 
+
+--- CLEANED ---
+- $ 115.79 | Tiffany Style Stained Glass Ceiling Pendant Light Fixture Vintage Hanging Lamp
+- $ 131.25 | VTG Tiffany Style Stained Glass Hanging Light / Lamp Shade Floral Design 16” Di
+- $  45.00 | Tiffany Style Hanging Stained Glass Ceiling Light Lamp Shade Vintage
+- $  71.50 | Vintage Tiffany Style Stained Glass Hanging Lamp Shade Diamond Cream Clear 
+- $ 150.00 | Vintage Tiffany Style Stained Glass Hanging Light Lamp Shade 18.25”D x 13”H
+- $  45.15 | Tiffany Style Stained Glass Hanging Shade 5 Jewel Table Lamp Shade 5 Inches Wide
+- $  45.93 | Tiffany Style Ceiling Light Stained Glass Shade Hanging Pendent Lamp Fixture
+- $ 124.95 | Vtg Set of 3 Tiffany Style Stained Glass Lamp Shade Or Hanging Pendant 7 1/2”
+- $ 115.79 | Tiffany Style Stained Glass Ceiling Pendant Light Fixture Vintage Hanging Lamp
+- $ 200.00 | Vintage Tiffany Style Stained Glass Hanging Lamp Shade with Birds - 
+- $  99.00 | Tiffany Style Stained Glass Pendant Hanging Lamp Shade  Glass Reflection 10”
+- $1000.00 | Tiffany Style Stained Glass Ceiling Hanging Acorn 11" Tall Pendant Lamp Shade
+- $  25.80 | Tiffany Style 8 1/2" Wide 5 1/2" H.  Stained Glass Multicolor Hanging Lamp Shade
+- $ 212.46 | Tiffany Style 20” Diameter Stained Glass Hanging Lamp Shade Grapes
+- $  45.00 | Tiffany Style Vintage Stained Glass Lamp Shade 10"
+- $  53.84 | Vintage Stained Glass Suspension Shade 18.5in Tiffany Style 3 Point Hanging
+- $ 150.00 | Beer Tiffany Style Hanging Lamp Shade Light Bar Stained Glass Look. Michelob
+- $ 299.11 | Large Tiffany Style Stained Glass Hanging Lamp Shade, 22" Diameter, QuikShip
+- $ 121.69 | Tiffany Style Stained Glass Ceiling Pendant Light Fixture Vintage Hanging Lamp
+- $ 149.95 | ⚫️20" Tiffany Style Stained Glass Hanging Light Fixture Shade - 3 Bulb Purple 
+
+--- REASONING ---
+Kept items that match 'Tiffany Style Stained Glass Hanging Lamp Shade' with a focus on stained glass, hanging, pendant, or lamp shades.
+-> AVG: $105.73 | CONF: 90%
