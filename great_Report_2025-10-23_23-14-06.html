@@ -1,0 +1,381 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Item Analysis</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a; --table-bg-color: #2c2c2c; --header-bg-color: #3a3a3a;
+            --header-hover-bg-color: #4a4a4a; --row-even-bg-color: #333333; --row-odd-bg-color: #2c2c2c;
+            --border-color: #444444; --text-color: #e0e0e0; --link-color: #4a90e2;
+            --link-hover-color: #81b5f5; --sort-indicator-color: #81b5f5;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 2rem; line-height: 1.6; }
+        h1 { text-align: center; color: #ffffff; font-weight: 300; margin-bottom: 2rem; }
+        .controls-container { max-width: 1600px; margin: auto; margin-bottom: 1rem; }
+        .filter-container { text-align: left; padding: 10px 15px; background-color: var(--table-bg-color); border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        .filter-container label { margin-right: 20px; font-size: 0.9em; cursor: pointer; user-select: none; }
+        .filter-container input { vertical-align: middle; margin-right: 5px; }
+        .table-container { max-width: 1600px; margin: auto; overflow-x: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        table { width: 100%; border-collapse: collapse; background-color: var(--table-bg-color); border-spacing: 0; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        thead th { background-color: var(--header-bg-color); color: #ffffff; font-weight: 600; position: sticky; top: 0; z-index: 10; }
+        thead th[data-column] { cursor: pointer; transition: background-color 0.2s ease-in-out; user-select: none; }
+        thead th[data-column]:hover { background-color: var(--header-hover-bg-color); }
+        tbody tr:not(.reasoning-row):hover { background-color: var(--header-hover-bg-color); }
+        td { font-size: 0.95em; }
+        td:nth-child(4), td:nth-child(5), td:nth-child(6) { font-family: 'Courier New', Courier, monospace; text-align: right; white-space: nowrap; }
+        td:nth-child(7), td:nth-child(8) { text-align: center; }
+        a { color: var(--link-color); text-decoration: none; transition: color 0.2s ease-in-out; }
+        a:hover { color: var(--link-hover-color); text-decoration: underline; }
+        .sort-indicator { color: var(--sort-indicator-color); font-size: 0.8em; margin-left: 8px; display: inline-block; width: 10px; }
+        .lot-main td { font-weight: bold; }
+        .lot-main.expandable { cursor: pointer; }
+        .lot-main:nth-child(4n+1), .lot-main:nth-child(4n+2) { background-color: var(--row-odd-bg-color); }
+        .lot-main:nth-child(4n+3), .lot-main:nth-child(4n) { background-color: var(--row-even-bg-color); }
+        .lot-sub-item { background-color: rgba(0,0,0,0.15) !important; }
+        .lot-sub-item td { font-size: 0.9em; color: #c0c0c0; border-color: #383838; }
+        .lot-sub-item td:nth-child(2) { padding-left: 35px; }
+        .reasoning-row { display: none; background-color: #222 !important; }
+        .reasoning-row.visible { display: table-row; }
+        .reasoning-row td {
+            padding: 10px 20px 10px 40px;
+            font-style: italic;
+            color: #b0b0b0;
+            border-top: 1px dashed #555;
+            white-space: normal;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Auction Item Analysis</h1>
+    <div class="controls-container">
+        <div class="filter-container">
+            <label><input type="checkbox" id="hideFurniture"> Hide Large Furniture</label>
+            <label><input type="checkbox" id="hideMedical"> Hide Medical Devices</label>
+        </div>
+    </div>
+    <div class="table-container"><table><thead><tr><th data-column="lot_number">Lot # <span class="sort-indicator"></span></th><th data-column="name">Item Name <span class="sort-indicator"></span></th><th data-column="category">Category <span class="sort-indicator"></span></th><th data-column="price">AI Market Value <span class="sort-indicator"></span></th><th data-column="ebay_price">eBay Avg. Sold <span class="sort-indicator"></span></th><th data-column="confidence">Confidence <span class="sort-indicator"></span></th><th>eBay Search</th><th>Google Search</th></tr></thead><tbody id="data-table-body"></tbody></table></div>
+
+<script type="application/json" id="auctionData">
+    [
+    {
+        "ebay_search_title": "Steinbach Signed Scottish Santa Nutcracker, Limited Edition Collectible",
+        "category": "Decor/Lighting",
+        "is_shippable": true,
+        "total_market_value": 1200,
+        "items": [
+            {
+                "item_name": "Steinbach Signed Scottish Santa Nutcracker, Limited Edition Collectible",
+                "estimated_value": 1200,
+                "ebay_avg_price": 220.998
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/58498383/SIGNED-STEINBACH-NUTCRACKER-DUNCAN-THE-SCOTTISH-SANTA-1908",
+            "title": "SIGNED STEINBACH NUTCRACKER, DUNCAN THE SCOTTISH SANTA 1908",
+            "lot_number": 4,
+            "url": "https://greatfindsauction.com/Event/LotDetails/58498383/SIGNED-STEINBACH-NUTCRACKER-DUNCAN-THE-SCOTTISH-SANTA-1908",
+            "pics": [
+                "58498383_1.jpg",
+                "58498383_2.jpg",
+                "58498383_3.jpg",
+                "58498383_4.jpg",
+                "58498383_5.jpg",
+                "58498383_6.jpg"
+            ]
+        },
+        "reasoning": "The item is a signed Steinbach nutcracker, which is known for its high quality and collectible value. The 'Scottish Santa' theme and the limited edition status (as indicated by the 'With Compliments' label and the signature) add significant value. The year '1908' mentioned in the title, combined with the collectible branding, suggests historical or commemorative significance, which can increase demand. The presence of the original tag and the wooden base with detailed engravings, including the Kurt S. Adler exclusive distributor label, further authenticate its value. \n\nAs an expert reseller, it's important to note that the condition of the item, as shown in the images, appears to be excellent, with all features intact and no visible wear. This is crucial for its resale value. The nutcracker's vibrant colors and detailed design make it highly appealing to collectors of Christmas themes and Steinbach items. Shipping this item would be straightforward due to its size and the fact that it is a single piece. The collectible nature of this nutcracker makes it a desirable item for enthusiasts, likely justifying the estimated value. \n\nI analyzed all five images provided, which showed various angles of the nutcracker, its signature base, and the original tag, contributing to the overall assessment of its value.",
+        "lot_number": 4,
+        "ebay_avg_price": 220.998,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Steinbach+Signed+Scottish+Santa+Nutcracker%2C+Limited+Edition+Collectible&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Steinbach Limited Edition Christmas Legends Santa Claus Nutcracker 1930",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 350,
+        "items": [
+            {
+                "item_name": "Steinbach Limited Edition Christmas Legends Santa Claus Nutcracker 1930",
+                "estimated_value": 350,
+                "ebay_avg_price": 204.75
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/58498972/LIMITED-EDITION-STEINBACH-NUTCRACKER-SANTA-CLAUS-1930",
+            "title": "LIMITED EDITION STEINBACH NUTCRACKER: SANTA CLAUS 1930",
+            "lot_number": 6,
+            "url": "https://greatfindsauction.com/Event/LotDetails/58498972/LIMITED-EDITION-STEINBACH-NUTCRACKER-SANTA-CLAUS-1930",
+            "pics": [
+                "58498972_1.jpg",
+                "58498972_2.jpg",
+                "58498972_3.jpg",
+                "58498972_4.jpg",
+                "58498972_5.jpg",
+                "58498972_6.jpg",
+                "58498972_7.jpg"
+            ]
+        },
+        "reasoning": "The Steinbach Limited Edition Christmas Legends Santa Claus Nutcracker from 1930 is a highly collectible item, especially due to its limited edition status and renowned brand. Steinbach is a prestigious manufacturer known for high-quality collectibles, and the 1930 year designation suggests it is a vintage piece, which adds to its value. The detailed craftsmanship, including the plush Santa figure, the festive accessories like the 'Good Boys & Girls' plaque, and the plush bag with a holiday theme, all indicate a high level of detail that collectors appreciate. The base, which reads 'The Christmas Legends Santa Claus 1930,' further emphasizes the collectible nature of this item. The market value of $350 is estimated based on similar items sold on marketplaces, the brand reputation, and the demand for vintage, limited edition collectibles. For maximizing value, it's essential to maintain the item in pristine condition, preserving any tags or certificates of authenticity that come with it. Adding a certificate of authenticity or provenance from the manufacturer or a reputable collector can significantly boost the resale value.",
+        "lot_number": 6,
+        "ebay_avg_price": 204.75,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Steinbach+Limited+Edition+Christmas+Legends+Santa+Claus+Nutcracker+1930&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Signed Original Steinbach Nutcracker - King's Treasurer Model",
+        "category": "Decor/Lighting",
+        "is_shippable": true,
+        "total_market_value": 350,
+        "items": [
+            {
+                "item_name": "Signed Original Steinbach Nutcracker - King's Treasurer Model",
+                "estimated_value": 350,
+                "ebay_avg_price": 200.48000000000002
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/58498107/SIGNED-ORIGINAL-STEINBACH-NUTCRACKER",
+            "title": "SIGNED ORIGINAL STEINBACH NUTCRACKER",
+            "lot_number": 3,
+            "url": "https://greatfindsauction.com/Event/LotDetails/58498107/SIGNED-ORIGINAL-STEINBACH-NUTCRACKER",
+            "pics": [
+                "58498107_1.jpg",
+                "58498107_2.jpg",
+                "58498107_3.jpg",
+                "58498107_4.jpg",
+                "58498107_5.jpg",
+                "58498107_6.jpg",
+                "58498107_7.jpg",
+                "58498107_8.jpg"
+            ]
+        },
+        "reasoning": "The nutcracker is a signed original Steinbach model, specifically the \"King's Treasurer\" variant, which is known for its collectibility and craftsmanship. Steinbach nutcrackers are highly sought after by collectors due to their quality, and this one appears to be in good condition, although there is some minor staining on the hat which may slightly affect its value. The presence of the brand tag and the detailed depiction of the character contribute to its authenticity and value. The estimated market value of $350 is based on recent sales of similar Steinbach nutcrackers in good condition. The item is sized appropriately for shipping and does not pose any special shipping challenges, hence it is marked as shippable. Expert reseller advice: Always inspect for defects such as cracks or paint wear, and ensure that any accessories, such as the sign on this nutcracker, are intact and legible. Photographing the item from multiple angles and clearly displaying any labels or tags can significantly enhance its attractiveness to potential buyers.",
+        "lot_number": 3,
+        "ebay_avg_price": 200.48000000000002,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Signed+Original+Steinbach+Nutcracker+-+King%27s+Treasurer+Model&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Signed Steinbach Phantom of the Opera Nutcracker Figurine",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 150,
+        "items": [
+            {
+                "item_name": "Signed Steinbach Phantom of the Opera Nutcracker Figurine",
+                "estimated_value": 150,
+                "ebay_avg_price": 156.65666666666667
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/58499247/SIGNED-STEINBACH-NUTCRACKER-PHANTOM-OF-THE-OPERA-1998",
+            "title": "SIGNED STEINBACH NUTCRACKER: PHANTOM OF THE OPERA 1998",
+            "lot_number": 7,
+            "url": "https://greatfindsauction.com/Event/LotDetails/58499247/SIGNED-STEINBACH-NUTCRACKER-PHANTOM-OF-THE-OPERA-1998",
+            "pics": [
+                "58499247_1.jpg",
+                "58499247_2.jpg",
+                "58499247_3.jpg",
+                "58499247_4.jpg",
+                "58499247_5.jpg",
+                "58499247_6.jpg"
+            ]
+        },
+        "reasoning": "The item is a signed Steinbach Phantom of the Opera nutcracker figurine from 1998, which adds significant value due to its connection to a popular musical and its collectible nature. The figurine is beautifully detailed with a mask, purple cape, and a rose, indicating high craftsmanship. The signing by the creator, as seen on the accompanying card, further enhances its collectibility and market value. Given the popularity of Steinbach nutcrackers and the added value of the signature, this item is likely to appeal to collectors and enthusiasts. The estimated market value of $150 reflects its collectibility and condition, as seen in the images. **Expert Advice:** Adding a certificate of authenticity or detailed provenance could significantly boost its value. Displaying it in a protective case could ensure its preservation and attract higher bids from collectors.",
+        "lot_number": 7,
+        "ebay_avg_price": 156.65666666666667,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Signed+Steinbach+Phantom+of+the+Opera+Nutcracker+Figurine&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Signed Steinbach Nutcracker Humpty Dumpty Figurine",
+        "category": "Decor/Lighting",
+        "is_shippable": true,
+        "total_market_value": 350,
+        "items": [
+            {
+                "item_name": "Signed Steinbach Nutcracker Humpty Dumpty Figurine",
+                "estimated_value": 350,
+                "ebay_avg_price": 107.94000000000001
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://greatfindsauction.com/Event/LotDetails/58498657/SIGNED-STEINBACH-NUTCRACKER-HUMPTY-DUMPTY",
+            "title": "SIGNED STEINBACH NUTCRACKER: HUMPTY DUMPTY",
+            "lot_number": 5,
+            "url": "https://greatfindsauction.com/Event/LotDetails/58498657/SIGNED-STEINBACH-NUTCRACKER-HUMPTY-DUMPTY",
+            "pics": [
+                "58498657_1.jpg",
+                "58498657_2.jpg",
+                "58498657_3.jpg",
+                "58498657_4.jpg",
+                "58498657_5.jpg",
+                "58498657_6.jpg"
+            ]
+        },
+        "reasoning": "The Steinbach Nutcracker Humpty Dumpty is a collectible item, known for its craftsmanship and collectibility. The figurine is signed, which adds significant value as it indicates authenticity and uniqueness. The tag shown in the images suggests a retail price of $200.00, but since we are estimating resale value, a more realistic figure is used. Steinbach nutcrackers are often valued between $200 and $500 based on condition and rarity. The figurine's condition appears to be good, with no visible damage, and the brand Steinbach is recognized for its quality. Expert reseller tip: Always look for signed pieces as they can significantly increase the value of collectibles. Adding authentic documentation or certificates, if available, can also enhance the resale value. All 5 images were analyzed to ensure accurate assessment of condition and details.",
+        "lot_number": 5,
+        "ebay_avg_price": 107.94000000000001,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Signed+Steinbach+Nutcracker+Humpty+Dumpty+Figurine&_sacat=0&LH_Complete=1&LH_Sold=1"
+    }
+]
+</script>
+
+<script>
+    const fullJsonData = JSON.parse(document.getElementById('auctionData').textContent);
+    let currentFilteredData = [...fullJsonData];
+    
+    const tableBody = document.getElementById('data-table-body');
+    const headers = document.querySelectorAll('thead th[data-column]');
+    const hideFurnitureCheckbox = document.getElementById('hideFurniture');
+    const hideMedicalCheckbox = document.getElementById('hideMedical');
+
+    let currentSort = { column: 'ebay_price', isAscending: false };
+
+    function applyFiltersAndRepopulate() {
+        const hideFurniture = hideFurnitureCheckbox.checked;
+        const hideMedical = hideMedicalCheckbox.checked;
+
+        currentFilteredData = fullJsonData.filter(lot => {
+            const category = (lot.category || '').toLowerCase();
+            if (hideFurniture && category === 'large furniture') {
+                return false;
+            }
+            if (hideMedical && category === 'medical devices') {
+                return false;
+            }
+            return true;
+        });
+
+        sortData(currentSort.column, true);
+    }
+
+    function populateTable() {
+        tableBody.innerHTML = '';
+        const formatCurrency = (value) => (value || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 });
+        const sanitizeText = (text) => (text || 'No reasoning provided.');
+
+        currentFilteredData.forEach(lot => {
+            const hasReasoning = lot.reasoning && lot.reasoning.trim() !== '';
+            
+            const mainRow = document.createElement('tr');
+            mainRow.className = 'lot-main' + (hasReasoning ? ' expandable' : '');
+            
+            const encodedSearch = encodeURIComponent(lot.ebay_search_title || '');
+            
+            mainRow.innerHTML = `
+                <td>${lot.lot_number > 0 ? lot.lot_number : ''}</td>
+                <td><a href="${lot.original_listing.url}" target="_blank" title="${lot.original_listing.title}">${lot.ebay_search_title || 'N/A'}</a></td>
+                <td>${lot.category || 'Miscellaneous'}</td>
+                <td style="text-align: right;">${formatCurrency(lot.total_market_value)}</td>
+                <td style="text-align: right;">${lot.ebay_avg_price > 0 ? formatCurrency(lot.ebay_avg_price) : 'N/A'}</td>
+                <td style="text-align: right;">${lot.ebay_confidence_score > 0 ? lot.ebay_confidence_score + '%' : 'N/A'}</td>
+                <td style="text-align: center;"><a href="${lot.ebay_search_url || '#'}" target="_blank">eBay</a></td>
+                <td style="text-align: center;"><a href="https://www.google.com/search?q=${encodedSearch}" target="_blank">Google</a></td>
+            `;
+            
+            tableBody.appendChild(mainRow);
+            
+            if (hasReasoning) {
+                const reasoningRow = document.createElement('tr');
+                reasoningRow.className = 'reasoning-row';
+                reasoningRow.innerHTML = `<td colspan="8">${sanitizeText(lot.reasoning)}</td>`;
+                tableBody.appendChild(reasoningRow);
+
+                mainRow.addEventListener('click', () => {
+                    reasoningRow.classList.toggle('visible');
+                });
+            }
+
+            if (lot.items && lot.items.length > 1) {
+                lot.items.forEach(subItem => {
+                    const subRow = document.createElement('tr');
+                    subRow.className = 'lot-sub-item';
+                    
+                    const subAvgPrice = subItem.ebay_avg_price || 0;
+                    const subEncodedSearch = encodeURIComponent(subItem.item_name || '');
+                    const subEbayUrl = `https://www.ebay.com/sch/i.html?_from=R40&_nkw=${subEncodedSearch}&_sacat=0&LH_Complete=1&LH_Sold=1`;
+                    const subGoogleUrl = `https://www.google.com/search?q=${subEncodedSearch}`;
+
+                    subRow.innerHTML = `
+                        <td></td>
+                        <td style="padding-left: 35px;">${subItem.item_name || 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: right;">${formatCurrency(subItem.estimated_value)}</td>
+                        <td style="text-align: right;">${subAvgPrice > 0 ? formatCurrency(subAvgPrice) : 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: center;"><a href="${subEbayUrl}" target="_blank">eBay</a></td>
+                        <td style="text-align: center;"><a href="${subGoogleUrl}" target="_blank">Google</a></td>
+                    `;
+                    tableBody.appendChild(subRow);
+                });
+            }
+        });
+    }
+
+    function sortData(column, keepDirection = false) {
+        const isNumeric = ['price', 'ebay_price', 'lot_number', 'confidence'].includes(column);
+
+        if (!keepDirection) {
+            if (currentSort.column === column) {
+                currentSort.isAscending = !currentSort.isAscending;
+            } else {
+                currentSort.column = column;
+                currentSort.isAscending = !isNumeric;
+            }
+        } else if (currentSort.column !== column) {
+             currentSort.column = column;
+             currentSort.isAscending = !isNumeric;
+        }
+
+        currentFilteredData.sort((a, b) => {
+            let valA, valB;
+            switch (column) {
+                case 'price': valA = a.total_market_value || 0; valB = b.total_market_value || 0; break;
+                case 'ebay_price': valA = a.ebay_avg_price || 0; valB = b.ebay_avg_price || 0; break;
+                case 'confidence': valA = a.ebay_confidence_score || 0; valB = b.ebay_confidence_score || 0; break;
+                case 'lot_number': valA = a.lot_number || 0; valB = b.lot_number || 0; break;
+                case 'name': valA = (a.ebay_search_title || '').toLowerCase(); valB = (b.ebay_search_title || '').toLowerCase(); break;
+                case 'category': valA = (a.category || '').toLowerCase(); valB = (b.category || '').toLowerCase(); break;
+                default: return 0;
+            }
+            let comparison = 0;
+            if (valA > valB) { comparison = 1; }
+            else if (valA < valB) { comparison = -1; }
+            return currentSort.isAscending ? comparison : comparison * -1;
+        });
+        updateSortIndicators();
+        populateTable();
+    }
+
+    function updateSortIndicators() {
+        headers.forEach(header => {
+            const indicator = header.querySelector('.sort-indicator');
+            if (header.dataset.column === currentSort.column) {
+                indicator.textContent = currentSort.isAscending ? ' ▲' : ' ▼';
+            } else { indicator.textContent = ''; }
+        });
+    }
+
+    headers.forEach(header => { header.addEventListener('click', () => { sortData(header.dataset.column); }); });
+    hideFurnitureCheckbox.addEventListener('change', applyFiltersAndRepopulate);
+    hideMedicalCheckbox.addEventListener('change', applyFiltersAndRepopulate);
+
+    sortData('ebay_price');
+</script>
+
+    <div style="text-align: center; margin-top: 2rem; font-size: 0.8em; color: #888;">
+        <p>Analysis powered by:</p>
+        <p><strong>Auction Analysis Model:</strong> N/A</p>
+        <p><strong>eBay Cleaning Model(s):</strong> openai/gpt-oss-120b (Groq)</p>
+    </div>
+
+</body>
+</html>
