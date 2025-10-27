@@ -1,0 +1,2607 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Item Analysis</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a; --table-bg-color: #2c2c2c; --header-bg-color: #3a3a3a;
+            --header-hover-bg-color: #4a4a4a; --row-even-bg-color: #333333; --row-odd-bg-color: #2c2c2c;
+            --border-color: #444444; --text-color: #e0e0e0; --link-color: #4a90e2;
+            --link-hover-color: #81b5f5; --sort-indicator-color: #81b5f5;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 2rem; line-height: 1.6; }
+        h1 { text-align: center; color: #ffffff; font-weight: 300; margin-bottom: 2rem; }
+        .controls-container { max-width: 1600px; margin: auto; margin-bottom: 1rem; }
+        .filter-container { text-align: left; padding: 10px 15px; background-color: var(--table-bg-color); border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        .filter-container label { margin-right: 20px; font-size: 0.9em; cursor: pointer; user-select: none; }
+        .filter-container input { vertical-align: middle; margin-right: 5px; }
+        .table-container { max-width: 1600px; margin: auto; overflow-x: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        table { width: 100%; border-collapse: collapse; background-color: var(--table-bg-color); border-spacing: 0; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        thead th { background-color: var(--header-bg-color); color: #ffffff; font-weight: 600; position: sticky; top: 0; z-index: 10; }
+        thead th[data-column] { cursor: pointer; transition: background-color 0.2s ease-in-out; user-select: none; }
+        thead th[data-column]:hover { background-color: var(--header-hover-bg-color); }
+        tbody tr:not(.reasoning-row):hover { background-color: var(--header-hover-bg-color); }
+        td { font-size: 0.95em; }
+        td:nth-child(4), td:nth-child(5), td:nth-child(6) { font-family: 'Courier New', Courier, monospace; text-align: right; white-space: nowrap; }
+        td:nth-child(7), td:nth-child(8) { text-align: center; }
+        a { color: var(--link-color); text-decoration: none; transition: color 0.2s ease-in-out; }
+        a:hover { color: var(--link-hover-color); text-decoration: underline; }
+        .sort-indicator { color: var(--sort-indicator-color); font-size: 0.8em; margin-left: 8px; display: inline-block; width: 10px; }
+        .lot-main td { font-weight: bold; }
+        .lot-main.expandable { cursor: pointer; }
+        .lot-main:nth-child(4n+1), .lot-main:nth-child(4n+2) { background-color: var(--row-odd-bg-color); }
+        .lot-main:nth-child(4n+3), .lot-main:nth-child(4n) { background-color: var(--row-even-bg-color); }
+        .lot-sub-item { background-color: rgba(0,0,0,0.15) !important; }
+        .lot-sub-item td { font-size: 0.9em; color: #c0c0c0; border-color: #383838; }
+        .lot-sub-item td:nth-child(2) { padding-left: 35px; }
+        .reasoning-row { display: none; background-color: #222 !important; }
+        .reasoning-row.visible { display: table-row; }
+        .reasoning-row td {
+            padding: 10px 20px 10px 40px;
+            font-style: italic;
+            color: #b0b0b0;
+            border-top: 1px dashed #555;
+            white-space: normal;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Auction Item Analysis</h1>
+    <div class="controls-container">
+        <div class="filter-container">
+            <label><input type="checkbox" id="hideFurniture"> Hide Large Furniture</label>
+            <label><input type="checkbox" id="hideMedical"> Hide Medical Devices</label>
+        </div>
+    </div>
+    <div class="table-container"><table><thead><tr><th data-column="lot_number">Lot # <span class="sort-indicator"></span></th><th data-column="name">Item Name <span class="sort-indicator"></span></th><th data-column="category">Category <span class="sort-indicator"></span></th><th data-column="price">AI Market Value <span class="sort-indicator"></span></th><th data-column="ebay_price">eBay Avg. Sold <span class="sort-indicator"></span></th><th data-column="confidence">Confidence <span class="sort-indicator"></span></th><th>eBay Search</th><th>Google Search</th></tr></thead><tbody id="data-table-body"></tbody></table></div>
+
+<script type="application/json" id="auctionData">
+    [
+    {
+        "ebay_search_title": "TOWLE Sterling Silver Flatware Set Lot Forks Spoons Knives Ornate Pattern 24 Pieces",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 425,
+        "items": [
+            {
+                "item_name": "TOWLE Sterling Silver Dinner Forks Lot of 6",
+                "estimated_value": 120,
+                "ebay_avg_price": 849.5
+            },
+            {
+                "item_name": "TOWLE Sterling Silver Salad Forks Lot of 6",
+                "estimated_value": 100,
+                "ebay_avg_price": 324.99333333333334
+            },
+            {
+                "item_name": "TOWLE Sterling Hollow Handle Dinner Knives Lot of 5",
+                "estimated_value": 75,
+                "ebay_avg_price": 157.34875
+            },
+            {
+                "item_name": "TOWLE Sterling Silver Teaspoons Lot of 3",
+                "estimated_value": 45,
+                "ebay_avg_price": 172.100625
+            },
+            {
+                "item_name": "TOWLE Sterling Silver Soup / Dessert Spoons Lot of 2",
+                "estimated_value": 40,
+                "ebay_avg_price": 114.46
+            },
+            {
+                "item_name": "TOWLE Sterling Silver Spreaders / Small Knives Lot of 2",
+                "estimated_value": 40,
+                "ebay_avg_price": 80.598
+            },
+            {
+                "item_name": "Vintage Silver Plated Bar Cocktail Stirring Spoon",
+                "estimated_value": 5,
+                "ebay_avg_price": 14.896666666666667
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89171167/TOWLE-Sterling-Silver-Flatware",
+            "title": "TOWLE Sterling Silver Flatware",
+            "lot_number": 11,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89171167/TOWLE-Sterling-Silver-Flatware",
+            "pics": [
+                "89171167_1.jpg",
+                "89171167_2.jpg",
+                "89171167_3.jpg",
+                "89171167_4.jpg",
+                "89171167_5.jpg",
+                "89171167_6.jpg",
+                "89171167_7.jpg"
+            ]
+        },
+        "reasoning": "This lot consists of approximately 23 pieces of genuine Towle sterling silver flatware (excluding the bar spoon). The value is derived primarily from the silver weight plus the intrinsic value of the pieces as collectible table settings. Sterling flatware holds high resale value, whether sold as a set, by the piece for completion, or for scrap silver. We priced the solid sterling spoons/forks slightly higher than the hollow-handled knives. Expert advice: Identify the specific Towle pattern (e.g., Old Master, French Provincial) before listing, as highly sought patterns command a higher premium than generic spot price. I estimate this lot was made around 1950s-1960s. I analyzed 7 images.",
+        "lot_number": 11,
+        "ebay_avg_price": 1713.8973750000002,
+        "ebay_confidence_score": 86,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=TOWLE+Sterling+Silver+Flatware+Set+Lot+Forks+Spoons+Knives+Ornate+Pattern+24+Pieces&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Mixed Set Golf Clubs Datrek Bag Nike SQ Irons Woods Cleveland DL310 Driver Pull Cart",
+        "category": "Toys/Games",
+        "is_shippable": true,
+        "total_market_value": 180,
+        "items": [
+            {
+                "item_name": "Datrek Red/Black Golf Stand Bag",
+                "estimated_value": 40,
+                "ebay_avg_price": 147.69142857142856
+            },
+            {
+                "item_name": "Cleveland DL310 9.5 Driver",
+                "estimated_value": 50,
+                "ebay_avg_price": 0.0
+            },
+            {
+                "item_name": "Nike SQ Mixed Irons and Woods Set",
+                "estimated_value": 70,
+                "ebay_avg_price": 539.138
+            },
+            {
+                "item_name": "Folding Golf Pull Cart",
+                "estimated_value": 20,
+                "ebay_avg_price": 106.73103448275862
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89375996/Golf-Club-Set-wPull-Cart",
+            "title": "Golf Club Set w/Pull Cart",
+            "lot_number": 70,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89375996/Golf-Club-Set-wPull-Cart",
+            "pics": [
+                "89375996_1.jpg",
+                "89375996_2.jpg",
+                "89375996_3.jpg",
+                "89375996_4.jpg",
+                "89375996_5.jpg",
+                "89375996_6.jpg",
+                "89375996_7.jpg"
+            ]
+        },
+        "reasoning": "This mixed set contains higher-quality clubs than the previous lot, featuring a desirable Cleveland driver and a cohesive set of Nike SQ irons and woods. The Datrek bag is functional and in good condition. Total value reflects the sum of the components. Expert advice: The inclusion of the Cleveland driver significantly boosts the value. These types of used bags often sell well during golf season (spring/summer). Est. Year: 2008-2012. Images analyzed: 7.",
+        "year_made": "2008-2012",
+        "images_analyzed": 7,
+        "lot_number": 70,
+        "ebay_avg_price": 793.5604630541873,
+        "ebay_confidence_score": 67,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Mixed+Set+Golf+Clubs+Datrek+Bag+Nike+SQ+Irons+Woods+Cleveland+DL310+Driver+Pull+Cart&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "DAHON Boardwalk Folding Bicycle Commuter Bike Red Travel Single Speed",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 120,
+        "items": [
+            {
+                "item_name": "DAHON Boardwalk Folding Bicycle Commuter Bike Red Travel Single Speed",
+                "estimated_value": 120,
+                "ebay_avg_price": 697.28
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89370713/DAHON-Boardwalk-Folding-Bicycle",
+            "title": "DAHON Boardwalk Folding Bicycle",
+            "lot_number": 57,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89370713/DAHON-Boardwalk-Folding-Bicycle",
+            "pics": [
+                "89370713_1.jpg",
+                "89370713_2.jpg",
+                "89370713_3.jpg",
+                "89370713_4.jpg",
+                "89370713_5.jpg",
+                "89370713_6.jpg",
+                "89370713_7.jpg"
+            ]
+        },
+        "reasoning": "Dahon is a leading brand in folding bicycles, which are favored by RV owners and commuters due to their portability. The Boardwalk model is a reliable entry-level bike. The value assumes good, rideable condition. Reseller Advice: Since the tires appear to be 20 inches, confirming this size and the specific gear configuration (likely single speed or 3-speed hub) will significantly help remote buyers who rely on precise specifications. I estimate it was made in the 2000s. I analyzed 7 images.",
+        "lot_number": 57,
+        "ebay_avg_price": 697.28,
+        "ebay_confidence_score": 75,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=DAHON+Boardwalk+Folding+Bicycle+Commuter+Bike+Red+Travel+Single+Speed&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Mixed Set Golf Clubs Datrek Bag Nike SQ DyMo2 Driver Excalibur Comp 3 Irons Woods Pull Cart",
+        "category": "Toys/Games",
+        "is_shippable": true,
+        "total_market_value": 130,
+        "items": [
+            {
+                "item_name": "Datrek Golf Stand/Cart Bag",
+                "estimated_value": 30,
+                "ebay_avg_price": 145.306
+            },
+            {
+                "item_name": "Nike SQ DyMo2 Driver 9.5",
+                "estimated_value": 40,
+                "ebay_avg_price": 80.03999999999999
+            },
+            {
+                "item_name": "Excalibur Comp 3 Irons & Woods Set",
+                "estimated_value": 40,
+                "ebay_avg_price": 79.94
+            },
+            {
+                "item_name": "Generic Golf Pull Cart",
+                "estimated_value": 20,
+                "ebay_avg_price": 84.0317857142857
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89375260/Golf-Club-Set-wPull-Cart",
+            "title": "Golf Club Set w/Pull Cart",
+            "lot_number": 69,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89375260/Golf-Club-Set-wPull-Cart",
+            "pics": [
+                "89375260_1.jpg",
+                "89375260_2.jpg",
+                "89375260_3.jpg",
+                "89375260_4.jpg",
+                "89375260_5.jpg",
+                "89375260_6.jpg"
+            ]
+        },
+        "reasoning": "This is a mixed set of mid-range clubs suitable for a beginner or casual golfer. The value is driven primarily by the brand-name components, specifically the Nike driver. The items are shippable, though they must be carefully boxed. Expert advice: The Excalibur clubs are entry-level; the Nike driver holds the most resale interest and could potentially be sold separately for faster liquidation. Est. Year: 2005-2010. Images analyzed: 6.",
+        "year_made": "2005-2010",
+        "images_analyzed": 6,
+        "lot_number": 69,
+        "ebay_avg_price": 389.3177857142857,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Mixed+Set+Golf+Clubs+Datrek+Bag+Nike+SQ+DyMo2+Driver+Excalibur+Comp+3+Irons+Woods+Pull+Cart&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "PYREX Green Swirl Ribbed Glass Plates Terre E Provence Scalloped Dinner Plate Lot 16 pieces",
+        "category": "Glassware",
+        "is_shippable": true,
+        "total_market_value": 170,
+        "items": [
+            {
+                "item_name": "PYREX USA Green Swirl Ribbed Glass Dinner Plates Lot of 8",
+                "estimated_value": 72,
+                "ebay_avg_price": 39.12818181818182
+            },
+            {
+                "item_name": "Terre E Provence Made in France Scalloped Edge Green Ceramic Plates Lot of 5",
+                "estimated_value": 60,
+                "ebay_avg_price": 207.5
+            },
+            {
+                "item_name": "Terre E Provence Made in France Scalloped Edge Orange/Mustard Ceramic Plates Lot of 3",
+                "estimated_value": 38,
+                "ebay_avg_price": 132.42714285714285
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89174170/PYREX-TERRE-PROVENCE-Dinner-Plates",
+            "title": "PYREX / TERRE PROVENCE Dinner Plates",
+            "lot_number": 16,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89174170/PYREX-TERRE-PROVENCE-Dinner-Plates",
+            "pics": [
+                "89174170_1.jpg",
+                "89174170_2.jpg",
+                "89174170_3.jpg",
+                "89174170_4.jpg",
+                "89174170_5.jpg",
+                "89174170_6.jpg",
+                "89174170_7.jpg"
+            ]
+        },
+        "reasoning": "This is a large lot of colorful and brand-name dinnerware, totaling 16 plates. The Pyrex green glass plates are desirable vintage items for collectors of Pyrex dinnerware, typically dating to the 1970s/80s. The Terre E Provence stoneware from France also has a steady resale market for rustic/farmhouse style buyers. Expert advice: Given the high quantity and fragility, ensure these are double-boxed and shipped using strong packing material. I estimate the average production year to be 1975. I analyzed 7 images.",
+        "lot_number": 16,
+        "ebay_avg_price": 379.05532467532464,
+        "ebay_confidence_score": 76,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=PYREX+Green+Swirl+Ribbed+Glass+Plates+Terre+E+Provence+Scalloped+Dinner+Plate+Lot+16+pieces&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Antique Lantern Lot 3 Kerosene Oil Lamps & 2 Glass Jar Butter Churns",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 160,
+        "items": [
+            {
+                "item_name": "Large Rustic Kerosene Oil Lantern Farmhouse Decor",
+                "estimated_value": 45,
+                "ebay_avg_price": 42.482
+            },
+            {
+                "item_name": "Vintage Railroad Style Lantern Black with Red Globe",
+                "estimated_value": 45,
+                "ebay_avg_price": 87.8915
+            },
+            {
+                "item_name": "Small Red Kerosene Oil Lantern Candle Holder",
+                "estimated_value": 20,
+                "ebay_avg_price": 17.19333333333333
+            },
+            {
+                "item_name": "Antique Glass Jar Hand Crank Butter Churn Square Jar",
+                "estimated_value": 30,
+                "ebay_avg_price": 128.06333333333333
+            },
+            {
+                "item_name": "Antique Glass Jar Hand Crank Butter Churn Round Jar",
+                "estimated_value": 20,
+                "ebay_avg_price": 89.6084
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89219809/Vintage-Lanterns-Butter-Churns",
+            "title": "Vintage Lanterns & Butter Churns",
+            "lot_number": 21,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89219809/Vintage-Lanterns-Butter-Churns",
+            "pics": [
+                "89219809_1.jpg",
+                "89219809_2.jpg",
+                "89219809_3.jpg",
+                "89219809_4.jpg",
+                "89219809_5.jpg",
+                "89219809_6.jpg"
+            ]
+        },
+        "reasoning": "The lot consists of desirable vintage farmhouse and railroad collectibles. The value is based on the condition and completeness of the gears on the churns and the globes on the lanterns. The glass jar churns are desirable for farmhouse decor. The medium black lantern appears to have a red globe, which can add value, potentially identifying it as a Dietz or similar marker lamp. Resellers should note that if the glass globes are etched with a railroad line name or specific brand mark (like Dietz or Adlake), the value of those individual lanterns could triple. I estimate the year around the early to mid-20th century (1910s-1950s). Analyzed 6 images.",
+        "lot_number": 21,
+        "ebay_avg_price": 365.23856666666666,
+        "ebay_confidence_score": 82,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Antique+Lantern+Lot+3+Kerosene+Oil+Lamps+%26+2+Glass+Jar+Butter+Churns&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Empava 30\" 5-Burner Gas Cooktop Stainless Steel NIB",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 200,
+        "items": [
+            {
+                "item_name": "Empava 30\" 5-Burner Gas Cooktop Stainless Steel NIB",
+                "estimated_value": 200,
+                "ebay_avg_price": 332.81230769230774
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89286713/EMPAVA-30-Stainless-Steel-BuiltIn-Cooktop",
+            "title": "EMPAVA 30\" Stainless Steel Built-In Cooktop",
+            "lot_number": 10,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89286713/EMPAVA-30-Stainless-Steel-BuiltIn-Cooktop",
+            "pics": [
+                "89286713_1.jpg",
+                "89286713_2.jpg",
+                "89286713_3.jpg"
+            ]
+        },
+        "reasoning": "The key factor here is that the item is New In Box (NIB). Empava is a budget-friendly appliance brand, and this model retails for around $250-$300. To sell it quickly, a reseller needs to price it competitively below the new retail price. $200 is an attractive price point for a buyer looking for a deal on a new appliance. Expert tip: Shipping costs for items like this can be high. Be sure to use a service like Pirate Ship to calculate and get the best rates before listing, and offer calculated shipping on eBay. This is a current model. I analyzed 3 images.",
+        "lot_number": 10,
+        "ebay_avg_price": 332.81230769230774,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Empava+30%22+5-Burner+Gas+Cooktop+Stainless+Steel+NIB&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Pepsi-Cola 5 Cent Wooden Advertising Thermometer Swift Anderson Barometer Weather Station",
+        "category": "Decor/Lighting",
+        "is_shippable": true,
+        "total_market_value": 90,
+        "items": [
+            {
+                "item_name": "Vintage Style Pepsi-Cola 5 Cent Wooden Advertising Thermometer Sign",
+                "estimated_value": 55,
+                "ebay_avg_price": 232.16333333333333
+            },
+            {
+                "item_name": "Swift Instruments Triple Weather Station Barometer Thermometer Hygrometer Wall Plaque",
+                "estimated_value": 35,
+                "ebay_avg_price": 46.153
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89171807/Swift-Anderson-Weather-Station-Pepsi-Wooden-Thermometer-Sign",
+            "title": "Swift & Anderson Weather Station / Pepsi Wooden Thermometer Sign",
+            "lot_number": 12,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89171807/Swift-Anderson-Weather-Station-Pepsi-Wooden-Thermometer-Sign",
+            "pics": [
+                "89171807_1.jpg",
+                "89171807_2.jpg",
+                "89171807_3.jpg",
+                "89171807_4.jpg",
+                "89171807_5.jpg",
+                "89171807_6.jpg"
+            ]
+        },
+        "reasoning": "The lot contains two decorative items. The Pepsi thermometer, advertising 5 cents, is highly appealing to soda/advertising collectors. While the style suggests the 1930s-1940s, the condition and texture suggest it is likely a modern reproduction mimicking that period, valued accordingly as decor. The Swift & Anderson weather station (barometer, thermometer, hygrometer) is a classic piece of mid-century home decor. Expert advice: When listing the Pepsi sign, specify whether it's genuine vintage or a reproduction, though in this case, selling it as a 'Vintage Style 5 Cents Sign' captures the most traffic. I estimate the weather station era to be 1950. I analyzed 6 images.",
+        "lot_number": 12,
+        "ebay_avg_price": 278.3163333333333,
+        "ebay_confidence_score": 85,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Pepsi-Cola+5+Cent+Wooden+Advertising+Thermometer+Swift+Anderson+Barometer+Weather+Station&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Jacques Pepin Sur La Table Ceramic Rooster Menu Baker Dish Pier 1 Carynthum Utensil Crock Red Cast Iron Trivet",
+        "category": "Pottery/China",
+        "is_shippable": true,
+        "total_market_value": 70,
+        "items": [
+            {
+                "item_name": "Jacques Pepin for Sur La Table Rooster Menu Ceramic Baker Dish Made in Italy",
+                "estimated_value": 40,
+                "ebay_avg_price": 174.99666666666667
+            },
+            {
+                "item_name": "Pier 1 Imports Carynthum Hand-Painted Ceramic Utensil Holder Crock",
+                "estimated_value": 15,
+                "ebay_avg_price": 40.995000000000005
+            },
+            {
+                "item_name": "Red Painted Cast Iron Ornate Oval Trivet Hot Plate",
+                "estimated_value": 15,
+                "ebay_avg_price": 18.845
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89172413/Kitchenware-Lot",
+            "title": "Kitchenware Lot",
+            "lot_number": 13,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89172413/Kitchenware-Lot",
+            "pics": [
+                "89172413_1.jpg",
+                "89172413_2.jpg",
+                "89172413_3.jpg",
+                "89172413_4.jpg",
+                "89172413_5.jpg",
+                "89172413_6.jpg",
+                "89172413_7.jpg",
+                "89172413_8.jpg"
+            ]
+        },
+        "reasoning": "The value of this kitchenware lot is concentrated in the branded ceramics. The Jacques Pepin for Sur La Table baker is the most valuable piece due to the recognizable chef branding and Italian manufacturing. The Pier 1 crock is lower value, characteristic of mass-produced decor. The cast iron trivet adds minor value. Expert advice: Highlight the 'Menu' inscription on the Pepin piece as it's a unique selling point. I estimate this lot was made around 2005. I analyzed 8 images.",
+        "lot_number": 13,
+        "ebay_avg_price": 234.83666666666667,
+        "ebay_confidence_score": 88,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Jacques+Pepin+Sur+La+Table+Ceramic+Rooster+Menu+Baker+Dish+Pier+1+Carynthum+Utensil+Crock+Red+Cast+Iron+Trivet&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "SCHWINN Ranger 2.6FS 26 Inch All Terrain Mountain Bike Full Suspension",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 90,
+        "items": [
+            {
+                "item_name": "SCHWINN Ranger 2.6FS 26 Inch All Terrain Mountain Bike Full Suspension",
+                "estimated_value": 90,
+                "ebay_avg_price": 225.08928571428572
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89371271/SCHWINN-Ranger-26FS-AllTerrain-Bike",
+            "title": "SCHWINN Ranger 2.6FS All-Terrain Bike",
+            "lot_number": 58,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89371271/SCHWINN-Ranger-26FS-AllTerrain-Bike",
+            "pics": [
+                "89371271_1.jpg",
+                "89371271_2.jpg",
+                "89371271_3.jpg",
+                "89371271_4.jpg",
+                "89371271_5.jpg"
+            ]
+        },
+        "reasoning": "This is a mass-market, budget mountain bike from a recognized brand (Schwinn). The pricing reflects standard resale value for a used, entry-level bike that likely requires a tune-up. The term 'Full Suspension' in the title is likely inaccurate based on the images (appears to be front suspension only, typical for Ranger models). Reseller Advice: Be cautious when using 'Full Suspension' unless the bike clearly has both front and rear shocks. The mismatched handle grips suggest previous use modifications. I estimate it was made in the 2000s. I analyzed 5 images.",
+        "lot_number": 58,
+        "ebay_avg_price": 225.08928571428572,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=SCHWINN+Ranger+2.6FS+26+Inch+All+Terrain+Mountain+Bike+Full+Suspension&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Heavy Duty 2-Wheel Manual Trailer Dolly Tow Hitch Mover Red Steel Frame",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "Heavy Duty 2-Wheel Manual Trailer Dolly Tow Hitch Mover Red Steel Frame",
+                "estimated_value": 60,
+                "ebay_avg_price": 206.0561904761905
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89369050/Trailer-Dolly",
+            "title": "Trailer Dolly",
+            "lot_number": 53,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89369050/Trailer-Dolly",
+            "pics": [
+                "89369050_1.jpg",
+                "89369050_2.jpg",
+                "89369050_3.jpg"
+            ]
+        },
+        "reasoning": "This is a standard, useful piece of garage equipment for manually moving small trailers. The value is moderate as it is generic, functional, and appears to be in good, used condition. Reseller Advice: The most critical piece of missing information is the tongue weight capacity; if this can be determined (often based on wheel size or frame thickness), it would increase buyer confidence and resale potential. Assuming average residential/utility capacity. I estimate it was made in the 2010s-2020s. I analyzed 3 images.",
+        "lot_number": 53,
+        "ebay_avg_price": 206.0561904761905,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Heavy+Duty+2-Wheel+Manual+Trailer+Dolly+Tow+Hitch+Mover+Red+Steel+Frame&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Heavy Duty Adjustable 2-Wheel Trailer Dolly Tow Hitch Mover Dark Gray",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 70,
+        "items": [
+            {
+                "item_name": "Heavy Duty Adjustable 2-Wheel Trailer Dolly Tow Hitch Mover Dark Gray",
+                "estimated_value": 70,
+                "ebay_avg_price": 201.4604761904762
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89371940/Trailer-Dolly",
+            "title": "Trailer Dolly",
+            "lot_number": 60,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89371940/Trailer-Dolly",
+            "pics": [
+                "89371940_1.jpg",
+                "89371940_2.jpg",
+                "89371940_3.jpg"
+            ]
+        },
+        "reasoning": "Similar to listing 53, this is a heavy-duty manual trailer dolly. This specific design appears to allow for height adjustment on the hitch ball due to the multiple bolt holes on the frame, making it slightly more versatile and valuable than a fixed-height model. Reseller Advice: Emphasize the adjustable height feature in the listing, as this is a desirable quality for users needing to match different trailer heights. I estimate it was made in the 2010s-2020s. I analyzed 3 images.",
+        "lot_number": 60,
+        "ebay_avg_price": 201.4604761904762,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Heavy+Duty+Adjustable+2-Wheel+Trailer+Dolly+Tow+Hitch+Mover+Dark+Gray&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Large Franciscan Desert Rose Earthenware China Dinnerware Set Platter Gravy Butter Dish Vintage",
+        "category": "Pottery/China",
+        "is_shippable": true,
+        "total_market_value": 250,
+        "items": [
+            {
+                "item_name": "Franciscan Desert Rose Gravy Boat with Underplate",
+                "estimated_value": 30,
+                "ebay_avg_price": 20.170344827586206
+            },
+            {
+                "item_name": "Franciscan Desert Rose Butter Dish with Lid",
+                "estimated_value": 25,
+                "ebay_avg_price": 42.746
+            },
+            {
+                "item_name": "Franciscan Desert Rose Sugar Bowl with Lid and Creamer",
+                "estimated_value": 20,
+                "ebay_avg_price": 23.32392857142857
+            },
+            {
+                "item_name": "Franciscan Desert Rose Platter Oval Serving Tray Lot of 6",
+                "estimated_value": 75,
+                "ebay_avg_price": 33.005714285714284
+            },
+            {
+                "item_name": "Franciscan Desert Rose Divided Serving Bowl",
+                "estimated_value": 25,
+                "ebay_avg_price": 19.860344827586204
+            },
+            {
+                "item_name": "Franciscan Desert Rose Luncheon / Salad Plates Lot of 4",
+                "estimated_value": 20,
+                "ebay_avg_price": 41.2825925925926
+            },
+            {
+                "item_name": "Franciscan Desert Rose Salt Pepper Shakers Bell and Egg Cups Lot of 5 accessories",
+                "estimated_value": 55,
+                "ebay_avg_price": 19.382962962962964
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89175327/Franciscan-Desert-Rose-Earthenware-Set",
+            "title": "Franciscan Desert Rose Earthenware Set",
+            "lot_number": 18,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89175327/Franciscan-Desert-Rose-Earthenware-Set",
+            "pics": [
+                "89175327_1.jpg",
+                "89175327_2.jpg",
+                "89175327_3.jpg",
+                "89175327_4.jpg",
+                "89175327_5.jpg",
+                "89175327_6.jpg",
+                "89175327_7.jpg",
+                "89175327_8.jpg",
+                "89175327_9.jpg"
+            ]
+        },
+        "reasoning": "Franciscan Desert Rose is one of the most popular American ceramic patterns ever produced, with strong collector demand, especially for vintage pieces and serving accessories like the gravy boat and butter dish shown here. The lot contains several desirable secondary serving pieces, increasing the overall value dramatically beyond standard dinner plates. Expert advice: Determine if the stamp indicates US (Gladding McBean) or later UK/International production, as the US-made pieces (1940s-1970s) typically hold higher value. I estimate this particular style was made around 1950. I analyzed 9 images.",
+        "lot_number": 18,
+        "ebay_avg_price": 199.77188806787086,
+        "ebay_confidence_score": 96,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Large+Franciscan+Desert+Rose+Earthenware+China+Dinnerware+Set+Platter+Gravy+Butter+Dish+Vintage&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Used SUN JOE SPX3000 Electric Pressure Washer 2030 PSI 1.76 GPM with Hose Reel",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 80,
+        "items": [
+            {
+                "item_name": "Used SUN JOE SPX3000 Electric Pressure Washer 2030 PSI 1.76 GPM with Hose Reel",
+                "estimated_value": 80,
+                "ebay_avg_price": 164.99444444444444
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89297901/SUNJOE-2030-Electric-Pressure-Washer",
+            "title": "SUNJOE 2030 Electric Pressure Washer",
+            "lot_number": 27,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89297901/SUNJOE-2030-Electric-Pressure-Washer",
+            "pics": [
+                "89297901_1.jpg",
+                "89297901_2.jpg",
+                "89297901_3.jpg"
+            ]
+        },
+        "reasoning": "This is the recognizable Sun Joe 2030 PSI model (SPX3000 series) which is highly popular for residential use. It appears functional and complete with the hose reel and nozzle tips, but shows visible signs of dirt and use, justifying a lower used resale price. For tools like this, testing functionality and confirming pressure output are essential to maximize sale success, otherwise, it must be listed 'as is/untested.' I estimate the year around 2015-2020. Analyzed 3 images.",
+        "lot_number": 27,
+        "ebay_avg_price": 164.99444444444444,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Used+SUN+JOE+SPX3000+Electric+Pressure+Washer+2030+PSI+1.76+GPM+with+Hose+Reel&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "New KARINEAR NOXTON PF320SGB 2 Burner Gas Cooktop Stove Top Black Glass LPG/NG",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 140,
+        "items": [
+            {
+                "item_name": "New KARINEAR NOXTON PF320SGB 2 Burner Gas Cooktop Stove Top Black Glass LPG/NG",
+                "estimated_value": 140,
+                "ebay_avg_price": 164.62
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89287310/KARINEAR-Gas-Cooktop-2-Burner",
+            "title": "KARINEAR Gas Cooktop 2 Burner",
+            "lot_number": 25,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89287310/KARINEAR-Gas-Cooktop-2-Burner",
+            "pics": [
+                "89287310_1.jpg",
+                "89287310_2.jpg",
+                "89287310_3.jpg"
+            ]
+        },
+        "reasoning": "The item is new in the box, indicated by the packaging and model information (PF320SGB). It is crucial to include all brand names (Karinear and Noxton, as seen on the box) in the listing title to maximize searchability. As a small, two-burner gas cooktop, it appeals to RV owners, apartment builders, or those needing a secondary kitchen appliance. The resale value is discounted from the retail price since it comes from auction surplus rather than a direct retailer. I estimate the year to be contemporary (2020s). Analyzed 3 images.",
+        "lot_number": 25,
+        "ebay_avg_price": 164.62,
+        "ebay_confidence_score": 70,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=New+KARINEAR+NOXTON+PF320SGB+2+Burner+Gas+Cooktop+Stove+Top+Black+Glass+LPG%2FNG&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Department 56 Snow Village Christmas Lake High School Church Big Bill's Service Station Houses Lot",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 120,
+        "items": [
+            {
+                "item_name": "Department 56 Snow Village Christmas Lake High School Building",
+                "estimated_value": 35,
+                "ebay_avg_price": 59.63653846153846
+            },
+            {
+                "item_name": "Department 56 Snow Village Red Brick Church / Chapel Building",
+                "estimated_value": 30,
+                "ebay_avg_price": 68.15
+            },
+            {
+                "item_name": "Department 56 Snow Village Big Bill's Service Station Building",
+                "estimated_value": 25,
+                "ebay_avg_price": 33.318333333333335
+            },
+            {
+                "item_name": "Department 56 Snow Village Accessories Lot: Woodie Wagon Car, Gas Pumps, Biplane",
+                "estimated_value": 30,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89218569/DEPARTMENT-56-Village-Buildings-Lot",
+            "title": "DEPARTMENT 56 Village Buildings Lot",
+            "lot_number": 19,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89218569/DEPARTMENT-56-Village-Buildings-Lot",
+            "pics": [
+                "89218569_1.jpg",
+                "89218569_2.jpg",
+                "89218569_3.jpg",
+                "89218569_4.jpg",
+                "89218569_5.jpg",
+                "89218569_6.jpg",
+                "89218569_7.jpg"
+            ]
+        },
+        "reasoning": "This is a cohesive lot of Department 56 Snow Village ceramic buildings and related accessories. The primary value lies in the larger structures like the high school and church. The presence of original boxes, even damaged ones, adds slightly to the value for collectors who prioritize completeness. The accessories (car, plane, pumps) are highly desirable add-ons. Expert advice: When listing Department 56, always include the official title and year if possible, as condition and specific model dictate market price. I estimate these pieces were made around 1990. I analyzed 7 images.",
+        "lot_number": 19,
+        "ebay_avg_price": 161.1048717948718,
+        "ebay_confidence_score": 61,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Department+56+Snow+Village+Christmas+Lake+High+School+Church+Big+Bill%27s+Service+Station+Houses+Lot&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "New ELKAY Lustertone 16 Inch Undermount Single Basin Stainless Steel Kitchen Sink",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 180,
+        "items": [
+            {
+                "item_name": "New ELKAY Lustertone 16 Inch Undermount Single Basin Stainless Steel Kitchen Sink",
+                "estimated_value": 180,
+                "ebay_avg_price": 156.34214285714285
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89287592/ELKAY-Lustertone-16-Undermount-Single-Basin-Stainless-Steel-Kitchen-Sink",
+            "title": "ELKAY Lustertone 16\" Undermount Single Basin Stainless Steel Kitchen Sink",
+            "lot_number": 26,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89287592/ELKAY-Lustertone-16-Undermount-Single-Basin-Stainless-Steel-Kitchen-Sink",
+            "pics": [
+                "89287592_1.jpg",
+                "89287592_2.jpg",
+                "89287592_3.jpg"
+            ]
+        },
+        "reasoning": "Elkay is a premium, professional-grade sink manufacturer, and the Lustertone series is well-regarded. The sink appears new and includes installation materials/instructions, suggesting maximal resale value. The 16-inch undermount single basin style is popular for small kitchens, bar sinks, or utility rooms. Resellers should include the exact measurements and gauge if possible, as these details drive contractor and remodeler interest. I estimate the year to be contemporary (2020s). Analyzed 3 images.",
+        "lot_number": 26,
+        "ebay_avg_price": 156.34214285714285,
+        "ebay_confidence_score": 85,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=New+ELKAY+Lustertone+16+Inch+Undermount+Single+Basin+Stainless+Steel+Kitchen+Sink&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Heavy Duty Industrial Extension Power Cord Reel Yellow 12 Gauge Outdoor Caddy",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "Heavy Duty Industrial Extension Power Cord Reel Yellow 12 Gauge Outdoor Caddy",
+                "estimated_value": 75,
+                "ebay_avg_price": 155.52333333333334
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89371665/Industrial-Power-Cord-wCaddy",
+            "title": "Industrial Power Cord w/Caddy",
+            "lot_number": 59,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89371665/Industrial-Power-Cord-wCaddy",
+            "pics": [
+                "89371665_1.jpg",
+                "89371665_2.jpg",
+                "89371665_3.jpg",
+                "89371665_4.jpg"
+            ]
+        },
+        "reasoning": "The value is placed on the assumption that this is a heavy-gauge (likely 12 AWG or 10 AWG) industrial cord of 50-100 feet in length, as indicated by the thickness and yellow jacket. These hold good resale value because new, heavy-duty cords are expensive. The plastic reel adds convenience. Reseller Advice: The gauge (AWG) and length must be clearly listed, as this determines the cord's capability. Buyers look for markings directly on the cord jacket. I estimate it was made in the 2010s. I analyzed 4 images.",
+        "lot_number": 59,
+        "ebay_avg_price": 155.52333333333334,
+        "ebay_confidence_score": 70,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Heavy+Duty+Industrial+Extension+Power+Cord+Reel+Yellow+12+Gauge+Outdoor+Caddy&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "SCOTTS AccuGreen 3000 Walk Behind Drop Spreader Lawn Fertilizer Seeder",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "SCOTTS AccuGreen 3000 Walk Behind Drop Spreader Lawn Fertilizer Seeder",
+                "estimated_value": 50,
+                "ebay_avg_price": 99.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89369360/SCOTTS-Accugreen-3000-Drop-Spreader",
+            "title": "SCOTTS Accugreen 3000 Drop Spreader",
+            "lot_number": 54,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89369360/SCOTTS-Accugreen-3000-Drop-Spreader",
+            "pics": [
+                "89369360_1.jpg",
+                "89369360_2.jpg",
+                "89369360_3.jpg",
+                "89369360_4.jpg"
+            ]
+        },
+        "reasoning": "The Scotts brand name ensures easy resale for common gardening tools. The AccuGreen 3000 is a popular model for residential lawn care. The unit appears clean and functional, supporting the estimated used value. Reseller Advice: Always thoroughly clean out the hopper and mechanism, as residual fertilizer or seed can damage the unit and deter buyers. Mentioning that the item is tested (if applicable) is key. I estimate it was made in the 2000s-2010s. I analyzed 4 images.",
+        "lot_number": 54,
+        "ebay_avg_price": 99.0,
+        "ebay_confidence_score": 35,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=SCOTTS+AccuGreen+3000+Walk+Behind+Drop+Spreader+Lawn+Fertilizer+Seeder&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Heavy Duty Metal Kraft Butcher Paper Dispenser Cutter Roller Stand 36 Inch",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "total_market_value": 125,
+        "items": [
+            {
+                "item_name": "Heavy Duty Metal Kraft Butcher Paper Dispenser Cutter Roller Stand 36 Inch",
+                "estimated_value": 125,
+                "ebay_avg_price": 86.768
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89377933/Craft-Paper-Roller",
+            "title": "Craft Paper Roller",
+            "lot_number": 72,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89377933/Craft-Paper-Roller",
+            "pics": [
+                "89377933_1.jpg",
+                "89377933_2.jpg"
+            ]
+        },
+        "reasoning": "This is an industrial-grade paper roll dispenser, often referred to as a butcher paper or kraft paper cutter. Based on the size, it appears to be a common 36-inch model. These are highly desirable for small businesses, artists (for large format drawing surfaces), and professional packagers due to their efficiency and durability. Used commercial models like this, especially those made primarily of metal, resell well, typically ranging from $100 to $150 depending on the presence of a sharp cutting blade/bar and overall condition. Expert Advice: When listing, specify the width capacity (e.g., 36\" or 48\") as this is the most critical metric for buyers. Look for a manufacturer's label (like Bulman) to include the brand for maximized search visibility. The size makes this heavy, but it can be shipped via ground services. I estimate this equipment was likely made in the 2000s. I analyzed 2 images.",
+        "lot_number": 72,
+        "ebay_avg_price": 86.768,
+        "ebay_confidence_score": 88,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Heavy+Duty+Metal+Kraft+Butcher+Paper+Dispenser+Cutter+Roller+Stand+36+Inch&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Folk Craft by Shafford Measuring Cup Pitcher RRP Co Roseville Pottery Lot 3",
+        "category": "Pottery/China",
+        "is_shippable": true,
+        "total_market_value": 95,
+        "items": [
+            {
+                "item_name": "RRP Co Roseville Ohio Pottery Planter Bowl #709 Vintage Stoneware",
+                "estimated_value": 40,
+                "ebay_avg_price": 28.412666666666667
+            },
+            {
+                "item_name": "Vintage Blue White Spongeware Speckled Pottery Pitcher",
+                "estimated_value": 25,
+                "ebay_avg_price": 38.12217391304348
+            },
+            {
+                "item_name": "Folk Craft by Shafford Hand Painted Measuring Pitcher Mug 1986",
+                "estimated_value": 30,
+                "ebay_avg_price": 16.867142857142856
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89220633/Artisan-Pottery-Lot",
+            "title": "Artisan Pottery Lot",
+            "lot_number": 23,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89220633/Artisan-Pottery-Lot",
+            "pics": [
+                "89220633_1.jpg",
+                "89220633_2.jpg",
+                "89220633_3.jpg",
+                "89220633_4.jpg",
+                "89220633_5.jpg",
+                "89220633_6.jpg",
+                "89220633_7.jpg"
+            ]
+        },
+        "reasoning": "This is a solid mixed lot. The RRPCo Roseville planter adds brand recognition (though Robinson Ransbottom is not the same as the sought-after art pottery Roseville, it still commands value). The Folk Craft by Shafford measuring pitcher, dated 1986, is niche but desirable due to its unique figural design. The items are best sold separately to capture full market value based on their distinct categories (Ohio stoneware, kitchen collectible, and spongeware). I estimate the year range is broad, covering pieces from the early 1900s (RRPCo) up to 1986 (Shafford). Analyzed 7 images.",
+        "lot_number": 23,
+        "ebay_avg_price": 83.401983436853,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Folk+Craft+by+Shafford+Measuring+Cup+Pitcher+RRP+Co+Roseville+Pottery+Lot+3&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Zeller Fayencerie Wedgwood Grays Pottery Lusterware Creamer Pitcher Collection Lot of 8",
+        "category": "Pottery/China",
+        "is_shippable": true,
+        "total_market_value": 150,
+        "items": [
+            {
+                "item_name": "Zeller Fayencerie Rooster 'Hahn & Henne' Pitcher Hanau Germany",
+                "estimated_value": 35,
+                "ebay_avg_price": 0.0
+            },
+            {
+                "item_name": "Wedgwood Barlaston & Etruria Creamer/Pitcher",
+                "estimated_value": 20,
+                "ebay_avg_price": 25.94551724137931
+            },
+            {
+                "item_name": "Gray's Pottery Ship Mark Stoke-on-Trent Lusterware Creamer",
+                "estimated_value": 20,
+                "ebay_avg_price": 21.11642857142857
+            },
+            {
+                "item_name": "Lancaster & Sandland Ltd Hanley England Cottage Lusterware Creamer",
+                "estimated_value": 15,
+                "ebay_avg_price": 16.13851851851852
+            },
+            {
+                "item_name": "Assorted Vintage Lusterware & Metallic Pottery Creamers Lot of 4",
+                "estimated_value": 60,
+                "ebay_avg_price": 16.666666666666668
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89173487/Zeller-Fayencerie-Wedgwood-Grays-Pottery-Pitchers-Creamers",
+            "title": "Zeller Fayencerie / Wedgwood / Grays Pottery Pitchers & Creamers",
+            "lot_number": 15,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89173487/Zeller-Fayencerie-Wedgwood-Grays-Pottery-Pitchers-Creamers",
+            "pics": [
+                "89173487_1.jpg",
+                "89173487_2.jpg",
+                "89173487_3.jpg",
+                "89173487_4.jpg",
+                "89173487_5.jpg",
+                "89173487_6.jpg",
+                "89173487_7.jpg",
+                "89173487_8.jpg",
+                "89173487_9.jpg"
+            ]
+        },
+        "reasoning": "This lot is a good collection of identified ceramic pitchers, spanning various manufacturers known for quality vintage pottery (Wedgwood, Gray's, Zeller). The Zeller Fayencerie pitcher carries the highest individual value as that brand is highly collected. The lusterware pieces (metallic finish) are popular mid-century items. Expert advice: For resale, categorize the lusterware pitchers separately from the traditional ceramic pieces, as they appeal to different collectors, or list them highlighting the 'lusterware' finish. I estimate the manufacturing period for most pieces to be between 1920 and 1950. I analyzed 9 images.",
+        "lot_number": 15,
+        "ebay_avg_price": 79.86713099799307,
+        "ebay_confidence_score": 74,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Zeller+Fayencerie+Wedgwood+Grays+Pottery+Lusterware+Creamer+Pitcher+Collection+Lot+of+8&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Ruby Red Glassware Lot Decanter Baskets Covered Dishes Carnival Glass 8 Pieces",
+        "category": "Glassware",
+        "is_shippable": true,
+        "total_market_value": 180,
+        "items": [
+            {
+                "item_name": "Vintage Ruby Red Ruffled Basket Handled Dish Lot of 2",
+                "estimated_value": 50,
+                "ebay_avg_price": 19.668333333333333
+            },
+            {
+                "item_name": "Vintage Cranberry Ruby Red Dot Optic Decanter Cruet with Stopper",
+                "estimated_value": 35,
+                "ebay_avg_price": 35.556666666666665
+            },
+            {
+                "item_name": "Ruby Red Iridescent Carnival Glass Creamer and Handled Bowl Lot",
+                "estimated_value": 50,
+                "ebay_avg_price": 0.0
+            },
+            {
+                "item_name": "Ruby Red Pressed Glass Covered Candy Dish and Swan Dish Lot of 2",
+                "estimated_value": 40,
+                "ebay_avg_price": 19.786666666666665
+            },
+            {
+                "item_name": "Clear and Red Souvenir of Uniontown PA Miniature Glass Cup",
+                "estimated_value": 5,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89219209/Ruby-Red-Glassware-Lot",
+            "title": "Ruby Red Glassware Lot",
+            "lot_number": 20,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89219209/Ruby-Red-Glassware-Lot",
+            "pics": [
+                "89219209_1.jpg",
+                "89219209_2.jpg",
+                "89219209_3.jpg",
+                "89219209_4.jpg",
+                "89219209_5.jpg",
+                "89219209_6.jpg",
+                "89219209_7.jpg",
+                "89219209_8.jpg"
+            ]
+        },
+        "reasoning": "This is a diverse collection of ruby red glass, appealing to collectors of colored glassware, especially those interested in carnival glass (iridescent pieces) and pressed glass. The cranberry overlay dot optic decanter is a higher quality piece. The baskets and covered dishes are popular decorative items. Expert advice: If the labeled iridescent pieces are Fenton, highlight that brand prominently, as it significantly boosts value. The presence of the silver-plated rim on one piece also indicates potential quality. I estimate the majority of these pieces were made around 1960. I analyzed 8 images.",
+        "lot_number": 20,
+        "ebay_avg_price": 75.01166666666666,
+        "ebay_confidence_score": 51,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Ruby+Red+Glassware+Lot+Decanter+Baskets+Covered+Dishes+Carnival+Glass+8+Pieces&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Revere Ware Stainless Steel Canister Set Yellow Plastic Lids 4 Piece Kitchen Storage",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "Vintage Revere Ware Stainless Steel Canister Set Yellow Plastic Lids 4 Piece Kitchen Storage",
+                "estimated_value": 60,
+                "ebay_avg_price": 66.24249999999999
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89220202/REVERE-WARE-Stainless-Steel-Canister-Set",
+            "title": "REVERE WARE Stainless Steel Canister Set",
+            "lot_number": 22,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89220202/REVERE-WARE-Stainless-Steel-Canister-Set",
+            "pics": [
+                "89220202_1.jpg",
+                "89220202_2.jpg",
+                "89220202_3.jpg"
+            ]
+        },
+        "reasoning": "This is a recognizable and popular mid-century modern kitchen brand. Revere Ware kitchen items are collected, especially complete sets like this one with the distinct yellow plastic knobs/handles. The value is stable for these common sets, assuming good vintage condition despite some surface wear. When listing, ensure high-quality polishing before photography to maximize aesthetic appeal. I estimate the year around the 1960s-1970s. Analyzed 3 images.",
+        "lot_number": 22,
+        "ebay_avg_price": 66.24249999999999,
+        "ebay_confidence_score": 70,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Revere+Ware+Stainless+Steel+Canister+Set+Yellow+Plastic+Lids+4+Piece+Kitchen+Storage&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Antique Victorian Eastlake Mirrored Dresser Washstand",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "total_market_value": 350,
+        "items": [
+            {
+                "item_name": "Antique Victorian Eastlake Mirrored Dresser with Glove Boxes",
+                "estimated_value": 350
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89284776/Antique-Victorian-Eastlake-Dresser",
+            "title": "Antique Victorian Eastlake Dresser",
+            "lot_number": 1,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89284776/Antique-Victorian-Eastlake-Dresser",
+            "pics": [
+                "89284776_1.jpg",
+                "89284776_2.jpg",
+                "89284776_3.jpg",
+                "89284776_4.jpg",
+                "89284776_5.jpg",
+                "89284776_6.jpg",
+                "89284776_7.jpg",
+                "89284776_8.jpg",
+                "89284776_9.jpg",
+                "89284776_10.jpg"
+            ]
+        },
+        "reasoning": "This is a classic Eastlake piece in good condition for its age. The market for large antique furniture is location-dependent but this style maintains a following. The value is based on its distinctive style, original-appearing hardware, and overall good preservation. As an expert tip, be sure to highlight the 'spoon carved' details and the dovetail drawer construction in your listing to attract knowledgeable collectors. I estimate this was made around 1885. I analyzed 10 images.",
+        "lot_number": 1,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Antique+Victorian+Eastlake+Mirrored+Dresser+Washstand&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Calligaris Enterprise Extending Glass Dining Table & 4 Chairs",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "total_market_value": 700,
+        "items": [
+            {
+                "item_name": "Calligaris Enterprise Extending Glass Top Dining Table",
+                "estimated_value": 500
+            },
+            {
+                "item_name": "Pair of Black Faux Leather Nailhead Trim Dining Chairs",
+                "estimated_value": 100
+            },
+            {
+                "item_name": "Pair of Gray Geometric Pattern Upholstered Dining Chairs",
+                "estimated_value": 100
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89341056/Calligaris-Enterprise-Extending-Dining-Table-Set",
+            "title": "Calligaris Enterprise Extending Dining Table Set",
+            "lot_number": 2,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89341056/Calligaris-Enterprise-Extending-Dining-Table-Set",
+            "pics": [
+                "89341056_1.jpg",
+                "89341056_2.jpg",
+                "89341056_3.jpg",
+                "89341056_4.jpg",
+                "89341056_5.jpg",
+                "89341056_6.jpg",
+                "89341056_7.jpg",
+                "89341056_8.jpg",
+                "89341056_9.jpg",
+                "89341056_10.jpg"
+            ]
+        },
+        "reasoning": "Calligaris is a desirable, high-end Italian furniture brand, and its pieces retain significant value on the secondary market. The 'Enterprise' extending table is the main value driver. The chairs are mismatched, which slightly hinders selling it as a perfect set, but they are stylish. Expert tip: Consider listing the table and chairs separately. The table will attract buyers looking for that specific model, and the chairs can be sold as two distinct pairs. I estimate this set was made around 2015. I analyzed 10 images.",
+        "lot_number": 2,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Calligaris+Enterprise+Extending+Glass+Dining+Table+%26+4+Chairs&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Henredon Campaign Style Lighted Display Cabinet Bookcase",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "total_market_value": 225,
+        "items": [
+            {
+                "item_name": "Vintage Henredon Campaign Style Lighted Display Cabinet",
+                "estimated_value": 225
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89285501/HENREDON-Lighted-Display-Cabinet",
+            "title": "HENREDON Lighted Display Cabinet",
+            "lot_number": 3,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89285501/HENREDON-Lighted-Display-Cabinet",
+            "pics": [
+                "89285501_1.jpg",
+                "89285501_2.jpg",
+                "89285501_3.jpg",
+                "89285501_4.jpg",
+                "89285501_5.jpg",
+                "89285501_6.jpg",
+                "89285501_7.jpg"
+            ]
+        },
+        "reasoning": "Henredon is a top-tier American furniture brand, which is the primary source of this item's value. However, the visible finish damage on the lower cabinet doors significantly reduces the price from the $500+ it might otherwise fetch. It's priced for a buyer who is willing to do some restoration. Expert tip: Polishing the brass hardware with Brasso can make the piece look much more appealing in photos and may distract from the finish flaws. I estimate this was made in the 1970s. I analyzed 7 images.",
+        "lot_number": 3,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Henredon+Campaign+Style+Lighted+Display+Cabinet+Bookcase&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Pair Vintage Georgian Style Floral Upholstered Wingback Chairs",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "total_market_value": 250,
+        "items": [
+            {
+                "item_name": "Pair of Vintage Georgian Style Floral Upholstered Wingback Parlor Chairs",
+                "estimated_value": 250
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89341699/Georgian-Style-Floral-Wingback-Parlor-Chairs",
+            "title": "Georgian Style Floral Wingback Parlor Chairs",
+            "lot_number": 4,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89341699/Georgian-Style-Floral-Wingback-Parlor-Chairs",
+            "pics": [
+                "89341699_1.jpg",
+                "89341699_2.jpg",
+                "89341699_3.jpg",
+                "89341699_4.jpg",
+                "89341699_5.jpg",
+                "89341699_6.jpg",
+                "89341699_7.jpg",
+                "89341699_8.jpg"
+            ]
+        },
+        "reasoning": "The value here lies in the fact that it's a matching pair of chairs with a classic, desirable shape. The condition appears clean. The bold floral upholstery is a limiting factor as it won't suit all tastes, which keeps the price from being higher. Expert tip: Market these using keywords like 'Grandmillennial' or 'Hollywood Regency' to appeal to current interior design trends that embrace bold, traditional patterns. I estimate these were made in the 1970s. I analyzed 8 images.",
+        "lot_number": 4,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Pair+Vintage+Georgian+Style+Floral+Upholstered+Wingback+Chairs&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Mid-Century Modern Walnut Surfboard Coffee Table",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "Vintage Mid-Century Modern Walnut Surfboard Coffee Table",
+                "estimated_value": 75
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89225798/MidCentury-Walnut-Surfboard-Coffee-Table",
+            "title": "Mid-Century Walnut Surfboard Coffee Table",
+            "lot_number": 5,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89225798/MidCentury-Walnut-Surfboard-Coffee-Table",
+            "pics": [
+                "89225798_1.jpg",
+                "89225798_2.jpg",
+                "89225798_3.jpg",
+                "89225798_4.jpg",
+                "89225798_5.jpg",
+                "89225798_6.jpg",
+                "89225798_7.jpg",
+                "89225798_8.jpg",
+                "89225798_9.jpg",
+                "89225798_10.jpg"
+            ]
+        },
+        "reasoning": "This table has the highly sought-after Mid-Century Modern surfboard shape and tapered legs. However, the images of the underside reveal extensive and poorly executed glue repairs, indicating significant structural problems. This transforms it from a desirable vintage piece into a project piece, drastically reducing its value. It is priced for someone willing to undertake a proper restoration. I estimate this was made in the 1960s. I analyzed 10 images.",
+        "lot_number": 5,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Mid-Century+Modern+Walnut+Surfboard+Coffee+Table&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Peloton Tread Treadmill",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "total_market_value": 1625,
+        "items": [
+            {
+                "item_name": "Peloton Tread Treadmill with Swivel Screen",
+                "estimated_value": 1600
+            },
+            {
+                "item_name": "Acrylic Laptop/Book Tray for Peloton Tread",
+                "estimated_value": 25
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89342586/PELOTON-Cross-Training-Tread",
+            "title": "PELOTON Cross Training Tread",
+            "lot_number": 6,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89342586/PELOTON-Cross-Training-Tread",
+            "pics": [
+                "89342586_1.jpg",
+                "89342586_2.jpg",
+                "89342586_3.jpg",
+                "89342586_4.jpg",
+                "89342586_5.jpg",
+                "89342586_6.jpg",
+                "89342586_7.jpg",
+                "89342586_8.jpg",
+                "89342586_9.jpg",
+                "89342586_10.jpg",
+                "89342586_11.jpg",
+                "89342586_12.jpg",
+                "89342586_13.jpg",
+                "89342586_14.jpg"
+            ]
+        },
+        "reasoning": "Peloton equipment has a very strong resale market. This is the newer 'Tread' model which retails for about $3000. Used models in good condition sell for a significant fraction of their original price. The screen being password-locked is a minor issue, as a factory reset can be performed by the new owner. The price reflects a fair used market value for local pickup. Expert tip: As a seller, performing the factory reset before listing will increase buyer confidence and can lead to a quicker sale at a higher price. This model was made in the last 3-4 years. I analyzed 14 images.",
+        "lot_number": 6,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Peloton+Tread+Treadmill&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Mission Style Cherry Finish Glass Door Media Cabinet Bookcase",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "Mission Style Glass Door Media Cabinet / Bookcase",
+                "estimated_value": 75
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89343316/Glass-Window-Pane-Media-Cabinet",
+            "title": "Glass Window Pane Media Cabinet",
+            "lot_number": 7,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89343316/Glass-Window-Pane-Media-Cabinet",
+            "pics": [
+                "89343316_1.jpg",
+                "89343316_2.jpg",
+                "89343316_3.jpg",
+                "89343316_4.jpg",
+                "89343316_5.jpg",
+                "89343316_6.jpg",
+                "89343316_7.jpg"
+            ]
+        },
+        "reasoning": "This is a generic, mass-produced media cabinet. It has no identifiable high-value brand and is a common style found at big-box retailers or online stores like Wayfair. Its value is purely utilitarian. The price is based on typical secondhand values for modern, non-branded furniture. Expert tip: Because it's a common item, competitive pricing is key. Emphasize its clean condition and versatile use as a bookcase, media, or storage cabinet. I estimate this was made around 2010. I analyzed 7 images.",
+        "lot_number": 7,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Mission+Style+Cherry+Finish+Glass+Door+Media+Cabinet+Bookcase&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Colonial Mfg Co Grandmother Clock Model 1728",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "total_market_value": 150,
+        "items": [
+            {
+                "item_name": "Vintage Colonial Manufacturing Co. Grandmother Clock Model 1728",
+                "estimated_value": 150
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89343919/Colonial-Manufacturing-Grandmother-Clock",
+            "title": "Colonial Manufacturing Grandmother Clock",
+            "lot_number": 8,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89343919/Colonial-Manufacturing-Grandmother-Clock",
+            "pics": [
+                "89343919_1.jpg",
+                "89343919_2.jpg",
+                "89343919_3.jpg",
+                "89343919_4.jpg",
+                "89343919_5.jpg",
+                "89343919_6.jpg",
+                "89343919_7.jpg"
+            ]
+        },
+        "reasoning": "Despite being made by a reputable company, the market for floor clocks (grandfather and grandmother) is very weak. They are difficult to move and don't fit into many modern homes. The valuation of $150 is assuming the clock mechanism is in good working order. If not, the value would be under $100. Expert tip: To maximize value, you must verify that the clock runs and keeps time. A video showing the pendulum in motion is a powerful selling tool. I estimate this was made in the 1960s. I analyzed 7 images.",
+        "lot_number": 8,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Colonial+Mfg+Co+Grandmother+Clock+Model+1728&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Bassett Lighted Secretary Desk Hutch Burl Wood",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "total_market_value": 250,
+        "items": [
+            {
+                "item_name": "Vintage Bassett Furniture Lighted Secretary Desk with Glass Hutch",
+                "estimated_value": 250
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89286182/BASSETT-Lighted-Secretary-Desk",
+            "title": "BASSETT Lighted Secretary Desk",
+            "lot_number": 9,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89286182/BASSETT-Lighted-Secretary-Desk",
+            "pics": [
+                "89286182_1.jpg",
+                "89286182_2.jpg",
+                "89286182_3.jpg",
+                "89286182_4.jpg",
+                "89286182_5.jpg",
+                "89286182_6.jpg",
+                "89286182_7.jpg",
+                "89286182_8.jpg",
+                "89286182_9.jpg"
+            ]
+        },
+        "reasoning": "This is a highly functional and classic piece from a well-known American brand, Bassett. The combination of a drop-front desk, drawers for storage, and a lighted display hutch makes it very practical. The burl wood veneer on the front adds a touch of quality. The price reflects a solid value for a versatile piece in good condition. Expert tip: Stage the hutch with a few attractive books or collectibles and show the light working in your photos to help buyers envision it in their home. I estimate this was made in the 1980s. I analyzed 9 images.",
+        "lot_number": 9,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Bassett+Lighted+Secretary+Desk+Hutch+Burl+Wood&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Large Clay Terracotta Tribal Face Mask Frog Toad Head Wall Decor Primitive Art",
+        "category": "Decor/Lighting",
+        "is_shippable": true,
+        "total_market_value": 45,
+        "items": [
+            {
+                "item_name": "Large Clay Terracotta Tribal Face Mask Frog Toad Head Wall Decor Primitive Art",
+                "estimated_value": 45,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89172890/Clay-Tribal-Face-Mask",
+            "title": "Clay Tribal Face Mask",
+            "lot_number": 14,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89172890/Clay-Tribal-Face-Mask",
+            "pics": [
+                "89172890_1.jpg",
+                "89172890_2.jpg",
+                "89172890_3.jpg",
+                "89172890_4.jpg",
+                "89172890_5.jpg"
+            ]
+        },
+        "reasoning": "This is a heavy, primitive style mask, likely intended for wall decoration. Without provenance or definitive markings, its value rests as a piece of ethnographic decor or modern folk art. The detailed frog motif on the forehead adds character. The value is conservative due to potential breakage risk during shipping and lack of origin/age certainty. Expert advice: Ensure it is packaged extremely well due to its clay composition, as breakage reduces value to zero. I estimate this was made around 1980. I analyzed 5 images.",
+        "lot_number": 14,
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Large+Clay+Terracotta+Tribal+Face+Mask+Frog+Toad+Head+Wall+Decor+Primitive+Art&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "1991 Mercedes-Benz Club of America Etched Glassware Tumblers Bowls 15 Piece Lot",
+        "category": "Collectibles",
+        "is_shippable": true,
+        "total_market_value": 110,
+        "items": [
+            {
+                "item_name": "1991 Mercedes-Benz Club of America Etched Square Tumblers Lot of 7",
+                "estimated_value": 60,
+                "ebay_avg_price": 0.0
+            },
+            {
+                "item_name": "1991 Mercedes-Benz Club of America Etched Decorative Glass Bowls Lot of 8",
+                "estimated_value": 50,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89174646/1991-MercedesBenz-Club-of-America-Branded-Glassware-Lot",
+            "title": "1991 Mercedes-Benz Club of America Branded Glassware Lot",
+            "lot_number": 17,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89174646/1991-MercedesBenz-Club-of-America-Branded-Glassware-Lot",
+            "pics": [
+                "89174646_1.jpg",
+                "89174646_2.jpg",
+                "89174646_3.jpg",
+                "89174646_4.jpg"
+            ]
+        },
+        "reasoning": "This lot of glassware derives its value primarily from its niche collectible appeal: Mercedes-Benz branded items tied to a specific club event in 1991. The glasses are commemorative and appeal specifically to auto enthusiasts or club members. The value is moderate, reflecting the specialized market rather than high intrinsic quality glass. Expert advice: This type of item sells best when marketed directly to car collectors or relevant online forums/groups. The year is confirmed as 1991. I analyzed 4 images.",
+        "lot_number": 17,
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=1991+Mercedes-Benz+Club+of+America+Etched+Glassware+Tumblers+Bowls+15+Piece+Lot&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "HENREDON Heritage Lighted Display Cabinet China Hutch Mid Century Modern Bookcase",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "total_market_value": 450,
+        "items": [
+            {
+                "item_name": "HENREDON Asian Style Display Cabinet Lighted Glass Doors Bookcase",
+                "estimated_value": 450
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89287039/HENREDON-Lighted-Display-Cabinet",
+            "title": "HENREDON Lighted Display Cabinet",
+            "lot_number": 24,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89287039/HENREDON-Lighted-Display-Cabinet",
+            "pics": [
+                "89287039_1.jpg",
+                "89287039_2.jpg",
+                "89287039_3.jpg",
+                "89287039_4.jpg",
+                "89287039_5.jpg",
+                "89287039_6.jpg",
+                "89287039_7.jpg"
+            ]
+        },
+        "reasoning": "Henredon is a prestigious, sought-after vintage furniture brand. The styling of this display cabinet, with its clean lines and brass Ming hardware accents, points toward a desirable Mid-Century or Asian Modern aesthetic. Despite some finish damage visible on the bottom cabinet doors (white discoloration), the high brand recognition maintains a strong local resale value. Buyers often restore these pieces. When listing such a cabinet, always emphasize the high-end manufacturer and the style (MCM/Asian Modern). I estimate the year around the 1970s. Analyzed 7 images.",
+        "lot_number": 24,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=HENREDON+Heritage+Lighted+Display+Cabinet+China+Hutch+Mid+Century+Modern+Bookcase&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Sears Craftsman 10\" Direct Drive 2 HP Table Saw on Mobile Stand",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "total_market_value": 225,
+        "items": [
+            {
+                "item_name": "Vintage SEARS Craftsman 10 Inch Direct Drive 2 HP Table Saw",
+                "estimated_value": 225
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89298250/SEARS-Craftsman-Table-Saw",
+            "title": "SEARS Craftsman Table Saw",
+            "lot_number": 28,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89298250/SEARS-Craftsman-Table-Saw",
+            "pics": [
+                "89298250_1.jpg",
+                "89298250_2.jpg",
+                "89298250_3.jpg",
+                "89298250_4.jpg",
+                "89298250_5.jpg"
+            ]
+        },
+        "reasoning": "This is a typical 1980s-1990s era Craftsman table saw. While direct-drive models are generally less desirable than belt-drive, this unit looks complete with its extensions, fence, and miter gauge, and it is mounted on a useful mobile stand. The value is stable as a functional entry-level or secondary shop saw, but the need for local pickup heavily restricts the market. Resellers should include the full model number (usually found on a plate under the table or stamped on the motor housing) if possible, as enthusiasts search by those numbers. I estimate the year around the 1980s-1990s. Analyzed 5 images.",
+        "lot_number": 28,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Sears+Craftsman+10%22+Direct+Drive+2+HP+Table+Saw+on+Mobile+Stand&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Farmhouse Gray Painted Pine Cabinet Sideboard Buffet Dresser 2 Door 3 Drawer",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "total_market_value": 300,
+        "items": [
+            {
+                "item_name": "Hand Painted Gray Pine Sideboard Cabinet Buffet 2 Door 3 Drawer",
+                "estimated_value": 300
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89298642/Hand-Painted-Pine-Cabinet",
+            "title": "Hand Painted Pine Cabinet",
+            "lot_number": 29,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89298642/Hand-Painted-Pine-Cabinet",
+            "pics": [
+                "89298642_1.jpg",
+                "89298642_2.jpg",
+                "89298642_3.jpg",
+                "89298642_4.jpg",
+                "89298642_5.jpg",
+                "89298642_6.jpg"
+            ]
+        },
+        "reasoning": "This pine cabinet has been updated with a popular distressed gray paint, fitting well into the modern farmhouse or shabby chic decor trend. Its function as a sideboard, buffet, or entryway piece gives it versatile appeal. Although it appears to be a repurposed or custom piece rather than branded furniture, the size and current aesthetic drive a moderate local resale price. The interior looks like cedar in the drawers/cabinetry, which is a selling point for textile storage. I estimate the construction year is unknown, but the painting style is contemporary (post-2000). Analyzed 6 images.",
+        "lot_number": 29,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Farmhouse+Gray+Painted+Pine+Cabinet+Sideboard+Buffet+Dresser+2+Door+3+Drawer&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Dark Wood Drop Leaf Gateleg Dining Table Oval Round Small Space",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "total_market_value": 180,
+        "items": [
+            {
+                "item_name": "Vintage Dark Wood Drop Leaf Dining Table Oval Round Gateleg Style",
+                "estimated_value": 180
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89299161/Drop-Leaf-Dining-Table",
+            "title": "Drop Leaf Dining Table",
+            "lot_number": 30,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89299161/Drop-Leaf-Dining-Table",
+            "pics": [
+                "89299161_1.jpg",
+                "89299161_2.jpg",
+                "89299161_3.jpg",
+                "89299161_4.jpg",
+                "89299161_5.jpg",
+                "89299161_6.jpg"
+            ]
+        },
+        "reasoning": "Drop-leaf tables are practical for maximizing space and are consistently marketable. This piece features turned legs and a dark finish, typical of traditional or colonial revival styles. Since the manufacturer is unknown, pricing reflects the general desirability and condition rather than brand value. Resellers should emphasize the space-saving aspect and the functional versatility (round when open, narrow console when closed). I estimate the year around the 1950s-1970s. Analyzed 6 images.",
+        "lot_number": 30,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Dark+Wood+Drop+Leaf+Gateleg+Dining+Table+Oval+Round+Small+Space&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Set of 4 Chartreuse Green Upholstered Dining Chairs Parsons Style",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 300,
+        "items": [
+            {
+                "item_name": "Set of 4 Chartreuse Green Upholstered Dining Chairs",
+                "estimated_value": 300
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89344397/Chartreuse-Dining-Chair-Set",
+            "title": "Chartreuse Dining Chair Set",
+            "lot_number": 31,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89344397/Chartreuse-Dining-Chair-Set",
+            "pics": [
+                "89344397_1.jpg",
+                "89344397_2.jpg",
+                "89344397_3.jpg",
+                "89344397_4.jpg",
+                "89344397_5.jpg"
+            ]
+        },
+        "reasoning": "This is a set of four modern Parsons-style dining chairs upholstered in a desirable, bold chartreuse (lime green) color. While they lack a specific brand name, the style is clean and contemporary. The pricing reflects the resale value for a local pickup lot of four accent chairs. I estimate these were made around 2010-2015. 5 images were analyzed.",
+        "year_made_estimate": "2010-2015",
+        "lot_number": 31,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Set+of+4+Chartreuse+Green+Upholstered+Dining+Chairs+Parsons+Style&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Pair Modern White Nightstands Brass Hairpin Legs 2-Drawer Bedside Tables",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 350,
+        "items": [
+            {
+                "item_name": "Pair of Modern White 2-Drawer Nightstands with Geometric Fronts and Brass Hairpin Legs",
+                "estimated_value": 350
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89344835/Modern-Bedside-Tables",
+            "title": "Modern Bedside Tables",
+            "lot_number": 32,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89344835/Modern-Bedside-Tables",
+            "pics": [
+                "89344835_1.jpg",
+                "89344835_2.jpg",
+                "89344835_3.jpg",
+                "89344835_4.jpg",
+                "89344835_5.jpg"
+            ]
+        },
+        "reasoning": "This pair of nightstands features highly sought-after design elements: white lacquer finish, geometric/quilted drawer fronts, and mid-century modern inspired brass hairpin legs. This contemporary styling demands a strong resale price for the pair. I estimate these were made around 2015-2020. 5 images were analyzed.",
+        "year_made_estimate": "2015-2020",
+        "lot_number": 32,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Pair+Modern+White+Nightstands+Brass+Hairpin+Legs+2-Drawer+Bedside+Tables&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Black Faux Leather Upholstered Storage Trunk Ottoman Bench Chest",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "Black Faux Leather Storage Ottoman Trunk Bench",
+                "estimated_value": 60
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89345227/Storage-Trunk-Bench",
+            "title": "Storage Trunk Bench",
+            "lot_number": 33,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89345227/Storage-Trunk-Bench",
+            "pics": [
+                "89345227_1.jpg",
+                "89345227_2.jpg",
+                "89345227_3.jpg",
+                "89345227_4.jpg"
+            ]
+        },
+        "reasoning": "This is a generic, functional black storage ottoman/trunk, likely constructed with composite materials and faux leather. Its resale value is low due to ubiquity and non-premium materials, despite its utility. I estimate this was made around 2010-2020. 4 images were analyzed.",
+        "year_made_estimate": "2010-2020",
+        "lot_number": 33,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Black+Faux+Leather+Upholstered+Storage+Trunk+Ottoman+Bench+Chest&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Richardson Brothers Solid Oak Buffet Server Cabinet Dresser Brass Campaign Style Hardware",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "total_market_value": 450,
+        "items": [
+            {
+                "item_name": "Richardson Brothers Solid Oak Campaign Style Buffet Cabinet Server",
+                "estimated_value": 450
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89345659/Richardson-Brothers-Oak-Buffet-Cabinet",
+            "title": "Richardson Brothers Oak Buffet Cabinet",
+            "lot_number": 34,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89345659/Richardson-Brothers-Oak-Buffet-Cabinet",
+            "pics": [
+                "89345659_1.jpg",
+                "89345659_2.jpg",
+                "89345659_3.jpg",
+                "89345659_4.jpg",
+                "89345659_5.jpg",
+                "89345659_6.jpg"
+            ]
+        },
+        "reasoning": "Richardson Brothers is known for quality, often solid wood, pieces. This oak buffet features brass corner hardware reminiscent of Campaign style furniture, popular in the 80s and 90s. The solid construction maintains a moderate value, though the style is slightly dated. Expert Advice: A simple refinishing of the wood top and polishing the brass accents could significantly increase the listing price, appealing to vintage enthusiasts. I estimate this was made around 1985-1995. 6 images were analyzed.",
+        "year_made_estimate": "1985-1995",
+        "lot_number": 34,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Richardson+Brothers+Solid+Oak+Buffet+Server+Cabinet+Dresser+Brass+Campaign+Style+Hardware&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Bassett Furniture Rustic Black Distressed Sideboard Buffet Credenza Cabinet with Flatware Drawer",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "total_market_value": 650,
+        "items": [
+            {
+                "item_name": "Bassett Rustic Black Distressed 4-Drawer Sideboard Buffet Console with Flatware Storage",
+                "estimated_value": 650
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89346257/BASSETT-FURNITURE-Rustic-Sideboard-Buffet-Cabinet",
+            "title": "BASSETT FURNITURE Rustic Sideboard Buffet Cabinet",
+            "lot_number": 35,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89346257/BASSETT-FURNITURE-Rustic-Sideboard-Buffet-Cabinet",
+            "pics": [
+                "89346257_1.jpg",
+                "89346257_2.jpg",
+                "89346257_3.jpg",
+                "89346257_4.jpg",
+                "89346257_5.jpg",
+                "89346257_6.jpg",
+                "89346257_7.jpg",
+                "89346257_8.jpg"
+            ]
+        },
+        "reasoning": "This large Bassett sideboard is desirable due to its size, storage capacity (4 drawers, central shelving, cabinets), and popular aesthetic. The rustic distressed black finish aligns perfectly with current farmhouse and transitional decor trends, justifying a high resale value despite surface wear. Expert Advice: Make sure to photograph and emphasize the flatware insert, as dedicated storage features significantly enhance the perceived utility and value of dining room case goods. I estimate this was made around 2005-2015. 8 images were analyzed.",
+        "year_made_estimate": "2005-2015",
+        "lot_number": 35,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Bassett+Furniture+Rustic+Black+Distressed+Sideboard+Buffet+Credenza+Cabinet+with+Flatware+Drawer&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Pair Twin Upholstered Headboards Dark Gray Nailhead Trim Bedroom Frames",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "total_market_value": 200,
+        "items": [
+            {
+                "item_name": "Pair of Twin Size Dark Gray Upholstered Bed Frames with Nailhead Trim",
+                "estimated_value": 200
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89346775/Twin-Beds",
+            "title": "Twin Beds",
+            "lot_number": 36,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89346775/Twin-Beds",
+            "pics": [
+                "89346775_1.jpg",
+                "89346775_2.jpg",
+                "89346775_3.jpg",
+                "89346775_4.jpg"
+            ]
+        },
+        "reasoning": "This is a pair of modern twin upholstered beds (headboard and frame components are shown). The dark gray fabric and nailhead trim are stylish and versatile. The value is moderate, reflecting the popularity of the style offset by the lower demand for twin size beds compared to larger sizes. I estimate these were made around 2010-2020. 4 images were analyzed.",
+        "year_made_estimate": "2010-2020",
+        "lot_number": 36,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Pair+Twin+Upholstered+Headboards+Dark+Gray+Nailhead+Trim+Bedroom+Frames&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Pair Wingback Slipper Tufted Dining Chairs Bold Paisley Floral Pattern",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 180,
+        "items": [
+            {
+                "item_name": "Pair of Wingback Slipper Tufted Dining/Accent Chairs Bold Floral Paisley Upholstery",
+                "estimated_value": 180
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89347289/Wingback-Tufted-Dining-Chairs",
+            "title": "Wingback Tufted Dining Chairs",
+            "lot_number": 37,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89347289/Wingback-Tufted-Dining-Chairs",
+            "pics": [
+                "89347289_1.jpg",
+                "89347289_2.jpg",
+                "89347289_3.jpg",
+                "89347289_4.jpg",
+                "89347289_5.jpg",
+                "89347289_6.jpg",
+                "89347289_7.jpg"
+            ]
+        },
+        "reasoning": "This pair features an attractive wingback slipper chair form with tufting and exposed nailhead trim, indicating a higher style bracket. However, the bold brown/blue floral paisley upholstery is highly specific and slightly dated, which narrows the potential buying market. This limits the total value relative to a pair in a neutral fabric. I estimate these were made around 2000-2010. 7 images were analyzed.",
+        "year_made_estimate": "2000-2010",
+        "lot_number": 37,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Pair+Wingback+Slipper+Tufted+Dining+Chairs+Bold+Paisley+Floral+Pattern&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Pair Gray Faux Leather Dining Chairs Curved Back Parson Style",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 140,
+        "items": [
+            {
+                "item_name": "Pair of Grey Faux Leather Dining Chairs Curved High Back",
+                "estimated_value": 140
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89347806/Faux-Leather-Dining-Chairs",
+            "title": "Faux Leather Dining Chairs",
+            "lot_number": 38,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89347806/Faux-Leather-Dining-Chairs",
+            "pics": [
+                "89347806_1.jpg",
+                "89347806_2.jpg",
+                "89347806_3.jpg",
+                "89347806_4.jpg",
+                "89347806_5.jpg"
+            ]
+        },
+        "reasoning": "A functional pair of modern dining chairs in gray faux leather. The neutral color makes them broadly appealing, but the faux leather material keeps the resale value in the mid-range. The style is classic contemporary. I estimate these were made around 2010-2020. 5 images were analyzed.",
+        "year_made_estimate": "2010-2020",
+        "lot_number": 38,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Pair+Gray+Faux+Leather+Dining+Chairs+Curved+Back+Parson+Style&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Pair Wingback Slipper Tufted Dining Chairs Zebra Print Upholstery Nailhead Trim",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 250,
+        "items": [
+            {
+                "item_name": "Pair of Zebra Print Wingback Slipper Tufted Accent Chairs with Nailhead Trim",
+                "estimated_value": 250
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89348280/Animal-Print-Dining-Chairs",
+            "title": "Animal Print Dining Chairs",
+            "lot_number": 39,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89348280/Animal-Print-Dining-Chairs",
+            "pics": [
+                "89348280_1.jpg",
+                "89348280_2.jpg",
+                "89348280_3.jpg",
+                "89348280_4.jpg",
+                "89348280_5.jpg",
+                "89348280_6.jpg"
+            ]
+        },
+        "reasoning": "These chairs are identical in form to listing #37 but feature a popular beige/white zebra print and nailhead trim. Animal prints, particularly light, neutral ones, are currently high demand accent pieces in transitional and maximalist decor, allowing for a significantly higher resale price than the floral pair. I estimate these were made around 2010-2018. 6 images were analyzed.",
+        "year_made_estimate": "2010-2018",
+        "lot_number": 39,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Pair+Wingback+Slipper+Tufted+Dining+Chairs+Zebra+Print+Upholstery+Nailhead+Trim&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Pair Cream Ivory Faux Leather Dining Chairs Curved Back Parson Style",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 150,
+        "items": [
+            {
+                "item_name": "Pair of Ivory Cream Faux Leather Dining Chairs Curved High Back",
+                "estimated_value": 150
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89348674/Faux-Leather-Dining-Chairs",
+            "title": "Faux Leather Dining Chairs",
+            "lot_number": 40,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89348674/Faux-Leather-Dining-Chairs",
+            "pics": [
+                "89348674_1.jpg",
+                "89348674_2.jpg",
+                "89348674_3.jpg",
+                "89348674_4.jpg"
+            ]
+        },
+        "reasoning": "Standard modern dining chairs, similar in style to the gray pair (listing #38), but in a light cream/ivory faux leather. This color can appeal strongly to buyers seeking a clean, modern look, leading to a slightly higher perceived value compared to the gray. Expert Advice: For quick sales, list these alongside a recommendation for a glass table, as the light color pairs well with bright, minimalist environments. I estimate these were made around 2010-2020. 4 images were analyzed.",
+        "year_made_estimate": "2010-2020",
+        "lot_number": 40,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Pair+Cream+Ivory+Faux+Leather+Dining+Chairs+Curved+Back+Parson+Style&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Wrought Iron Accent Side Table Mother of Pearl Faux Abalone Mosaic Top",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 65,
+        "items": [
+            {
+                "item_name": "Wrought Iron Faux Abalone Mother of Pearl Inlaid Accent Side Table",
+                "estimated_value": 65
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89348984/Faux-Abalone-Top-Accent-Table",
+            "title": "Faux Abalone Top Accent Table",
+            "lot_number": 41,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89348984/Faux-Abalone-Top-Accent-Table",
+            "pics": [
+                "89348984_1.jpg",
+                "89348984_2.jpg",
+                "89348984_3.jpg"
+            ]
+        },
+        "reasoning": "Priced at $65. This piece has a unique look combining rustic wrought iron with a highly decorative mother-of-pearl (or faux abalone/shell) inlaid top, which appeals to specific decorator tastes. The style suggests mid-to-late 20th century construction, possibly imported. Reseller advice: Emphasize the mosaic inlay pattern, as this is the primary aesthetic selling point. Estimated year: 1980s. Images analyzed: 3.",
+        "lot_number": 41,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Wrought+Iron+Accent+Side+Table+Mother+of+Pearl+Faux+Abalone+Mosaic+Top&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Modern C Shape Accent Side Table Red Black Geometric Floral Resin Top",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Modern Red and Black Geometric Round Top C-Table Side Accent Table",
+                "estimated_value": 50
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89349251/Modern-Accent-Table",
+            "title": "Modern Accent Table",
+            "lot_number": 42,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89349251/Modern-Accent-Table",
+            "pics": [
+                "89349251_1.jpg",
+                "89349251_2.jpg",
+                "89349251_3.jpg"
+            ]
+        },
+        "reasoning": "Priced at $50. This is a generic modern accent piece, popular for sliding over a sofa arm (C-table style). The primary value driver is the bold, graphic red and black pattern on the top, which aligns with contemporary decor trends. Estimated year: 2010s. Images analyzed: 3.",
+        "lot_number": 42,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Modern+C+Shape+Accent+Side+Table+Red+Black+Geometric+Floral+Resin+Top&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Floral Round Skirted Ottoman Footstool & Vintage Wooden Spindle Magazine Rack Lot",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 80,
+        "items": [
+            {
+                "item_name": "Vintage Round Skirted Tufted Ottoman Floral Upholstery",
+                "estimated_value": 45
+            },
+            {
+                "item_name": "Mid Century Modern Spindle Wooden Magazine Rack Holder Stand",
+                "estimated_value": 35
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89349395/Skirted-Ottoman-wMagazine-Stand",
+            "title": "Skirted Ottoman w/Magazine Stand",
+            "lot_number": 43,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89349395/Skirted-Ottoman-wMagazine-Stand",
+            "pics": [
+                "89349395_1.jpg",
+                "89349395_2.jpg",
+                "89349395_3.jpg"
+            ]
+        },
+        "reasoning": "Priced at $80 total. The ottoman has a dated floral pattern but is large and sturdy, fetching moderate value locally. The wooden magazine stand, likely maple or similar hardwood, is a classic vintage style. Reseller advice: If the ottoman upholstery is clean, it could be used for slipcover projects. The magazine rack is shippable on its own and should be marketed as vintage/mid-century traditional. Estimated year: 1980s (Ottoman) / 1960s (Rack). Images analyzed: 3.",
+        "lot_number": 43,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Floral+Round+Skirted+Ottoman+Footstool+%26+Vintage+Wooden+Spindle+Magazine+Rack+Lot&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Rustic Industrial Slate Tile Top Rectangular Coffee Table Black Metal Frame",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "total_market_value": 120,
+        "items": [
+            {
+                "item_name": "Heavy Rustic Industrial Style Slate Tile Top Rectangle Coffee Table",
+                "estimated_value": 120
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89349621/Slate-Top-Coffee-Table",
+            "title": "Slate Top Coffee Table",
+            "lot_number": 44,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89349621/Slate-Top-Coffee-Table",
+            "pics": [
+                "89349621_1.jpg",
+                "89349621_2.jpg",
+                "89349621_3.jpg",
+                "89349621_4.jpg",
+                "89349621_5.jpg"
+            ]
+        },
+        "reasoning": "Priced at $120. Slate top tables are very popular in rustic, industrial, or lodge decor settings due to their durability and natural look. The weight (due to the slate) means this must be sold via local pickup. Estimated year: 2000s. Images analyzed: 5.",
+        "lot_number": 44,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Rustic+Industrial+Slate+Tile+Top+Rectangular+Coffee+Table+Black+Metal+Frame&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Modern Curved Wood Glass Entertainment Console TV Stand Media Center",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "total_market_value": 80,
+        "items": [
+            {
+                "item_name": "Modern Curved Oval Cherry Wood and Glass Entertainment Console Media Stand",
+                "estimated_value": 80
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89349808/Entertainment-Console",
+            "title": "Entertainment Console",
+            "lot_number": 45,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89349808/Entertainment-Console",
+            "pics": [
+                "89349808_1.jpg",
+                "89349808_2.jpg",
+                "89349808_3.jpg",
+                "89349808_4.jpg"
+            ]
+        },
+        "reasoning": "Priced at $80. This is a functional, contemporary media stand. The curved shape and contrasting wood veneer/black finish make it slightly more appealing than basic rectangle stands, helping its local resale value. Estimated year: 2000s. Images analyzed: 4.",
+        "lot_number": 45,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Modern+Curved+Wood+Glass+Entertainment+Console+TV+Stand+Media+Center&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "King Upholstered Panel Bed Frame Headboard Nailhead Trim Light Grey Fabric",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "total_market_value": 250,
+        "items": [
+            {
+                "item_name": "King Size Upholstered Panel Bed Frame Headboard with Scalloped Nailhead Trim",
+                "estimated_value": 250
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89350364/King-Panel-Bed",
+            "title": "King Panel Bed",
+            "lot_number": 46,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89350364/King-Panel-Bed",
+            "pics": [
+                "89350364_1.jpg",
+                "89350364_2.jpg",
+                "89350364_3.jpg",
+                "89350364_4.jpg",
+                "89350364_5.jpg",
+                "89350364_6.jpg"
+            ]
+        },
+        "reasoning": "Priced at $250. Upholstered king beds are currently fashionable. The light linen look fabric and nailhead trim provide a classic, transitional style. Reseller advice: Since this breaks down into components (headboard, side rails, slats), it's easier for the buyer to transport than solid wood pieces, increasing local desirability. Estimated year: 2010s. Images analyzed: 6.",
+        "lot_number": 46,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=King+Upholstered+Panel+Bed+Frame+Headboard+Nailhead+Trim+Light+Grey+Fabric&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "HOOKER FURNITURE Executive Kneehole Pedestal Desk Dark Cherry Wood Veneer",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "total_market_value": 350,
+        "items": [
+            {
+                "item_name": "Hooker Furniture Traditional Executive Kneehole Pedestal Desk Dark Wood",
+                "estimated_value": 350
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89351009/HOOKER-FURNITURE-Kneehole-Desk",
+            "title": "HOOKER FURNITURE Kneehole Desk",
+            "lot_number": 47,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89351009/HOOKER-FURNITURE-Kneehole-Desk",
+            "pics": [
+                "89351009_1.jpg",
+                "89351009_2.jpg",
+                "89351009_3.jpg",
+                "89351009_4.jpg",
+                "89351009_5.jpg",
+                "89351009_6.jpg",
+                "89351009_7.jpg",
+                "89351009_8.jpg",
+                "89351009_9.jpg"
+            ]
+        },
+        "reasoning": "Priced at $350. Hooker Furniture is a known high-quality brand, giving this desk credibility. While it shows cosmetic wear (scratches/chips shown in close-ups), the overall traditional style remains popular for home offices. Reseller advice: The drop-down center drawer is important functionality to highlight. Ensure the dimensions are provided, as size significantly impacts freight/pickup feasibility and location use. Estimated year: 1990s. Images analyzed: 9.",
+        "lot_number": 47,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=HOOKER+FURNITURE+Executive+Kneehole+Pedestal+Desk+Dark+Cherry+Wood+Veneer&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "King Size Split Box Spring Foundation for Mattress Base",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "King Size Box Spring Mattress Foundation (Split, if applicable)",
+                "estimated_value": 50
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89366903/King-Size-Box-Spring",
+            "title": "King Size Box Spring",
+            "lot_number": 48,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89366903/King-Size-Box-Spring",
+            "pics": [
+                "89366903_1.jpg",
+                "89366903_2.jpg"
+            ]
+        },
+        "reasoning": "Priced at $50. Used bed foundations are a necessity item but have low inherent value unless brand new or specific low-profile types. The value relies on local demand for a functional, clean king-size foundation. Estimated year: 2010s. Images analyzed: 2.",
+        "lot_number": 48,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=King+Size+Split+Box+Spring+Foundation+for+Mattress+Base&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Jenny Lind Spool Bobbin Turned Wood Bed Frame Twin or Full Size",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "total_market_value": 150,
+        "items": [
+            {
+                "item_name": "Vintage Wood Jenny Lind Spool Bed Frame (Twin/Full Size)",
+                "estimated_value": 150
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89367374/Jenny-Lind-Style-Bed-Frame",
+            "title": "Jenny Lind Style Bed Frame",
+            "lot_number": 49,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89367374/Jenny-Lind-Style-Bed-Frame",
+            "pics": [
+                "89367374_1.jpg",
+                "89367374_2.jpg",
+                "89367374_3.jpg",
+                "89367374_4.jpg"
+            ]
+        },
+        "reasoning": "Priced at $150. Jenny Lind/Spool beds are highly desirable in the vintage market, often repainted white or black to fit modern farmhouse or cottage decor. Reseller advice: Highlight the possibility for DIY paint projects, as buyers often seek these specific dimensions and style for customization. Estimated year: 1950s. Images analyzed: 4.",
+        "lot_number": 49,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Jenny+Lind+Spool+Bobbin+Turned+Wood+Bed+Frame+Twin+or+Full+Size&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Black Faux Leather Low Back Swivel Task Office Desk Chair",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Generic Black Vinyl Low Back Rolling Swivel Office Task Chair",
+                "estimated_value": 40
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89367894/Office-Chair",
+            "title": "Office Chair",
+            "lot_number": 50,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89367894/Office-Chair",
+            "pics": [
+                "89367894_1.jpg",
+                "89367894_2.jpg",
+                "89367894_3.jpg"
+            ]
+        },
+        "reasoning": "Priced at $40. This is a very generic, basic office task chair. Without a premium brand (like Herman Miller or Steelcase) or ergonomic features, the value is minimal and based entirely on local functionality demand. Estimated year: 2000s. Images analyzed: 3.",
+        "lot_number": 50,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Black+Faux+Leather+Low+Back+Swivel+Task+Office+Desk+Chair&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Traditional Maple Wood End Table Side Accent Drawer Shelf Colonial Style",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Maple Wood End Table with Drawer and Shelf",
+                "estimated_value": 50
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89368214/Maple-End-Table",
+            "title": "Maple End Table",
+            "lot_number": 51,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89368214/Maple-End-Table",
+            "pics": [
+                "89368214_1.jpg",
+                "89368214_2.jpg",
+                "89368214_3.jpg",
+                "89368214_4.jpg"
+            ]
+        },
+        "reasoning": "This is a generic, traditional style end table, likely maple veneer or maple finished wood, commonly found in mid-to-late 20th-century homes. The value is based solely on local pickup resale for functional furniture. Reseller Advice: Replacing the generic brass-tone hardware with modern, striking pulls (e.g., matte black or geometric brass) can significantly increase its appeal to decorators looking for project pieces. I estimate it was made in the 1970s-1980s. I analyzed 4 images.",
+        "lot_number": 51,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Traditional+Maple+Wood+End+Table+Side+Accent+Drawer+Shelf+Colonial+Style&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Colonial Style Wood Dining Table Set 4 Chairs Oval Laminate Top",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "total_market_value": 150,
+        "items": [
+            {
+                "item_name": "Colonial Style Dining Table with Laminate Top and Leaves",
+                "estimated_value": 80
+            },
+            {
+                "item_name": "Colonial Style Windsor Spindle Back Chairs (Set of 4)",
+                "estimated_value": 70
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89368696/Colonial-Style-Dining-Set",
+            "title": "Colonial Style Dining Set",
+            "lot_number": 52,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89368696/Colonial-Style-Dining-Set",
+            "pics": [
+                "89368696_1.jpg",
+                "89368696_2.jpg",
+                "89368696_3.jpg",
+                "89368696_4.jpg"
+            ]
+        },
+        "reasoning": "The valuation reflects the reality of used dining sets: functional but aesthetically dated. The table's laminate top limits its value significantly compared to solid wood, placing it in the budget furniture category for local pickup. Reseller Advice: The chairs (especially the armchair) are easier to move and can be sold separately or as a refinishing project (e.g., painted black Windsor chairs are currently trendy). I estimate it was made in the 1980s. I analyzed 4 images.",
+        "lot_number": 52,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Colonial+Style+Wood+Dining+Table+Set+4+Chairs+Oval+Laminate+Top&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Modern Patio Bistro Set 4 Woven Resin Wicker Chairs Square Metal Mesh Table Outdoor",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 180,
+        "items": [
+            {
+                "item_name": "Square Metal Mesh Patio Table",
+                "estimated_value": 40
+            },
+            {
+                "item_name": "Woven Resin Wicker Outdoor Dining Chairs (Set of 4)",
+                "estimated_value": 140
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89369759/Bistro-Patio-Set",
+            "title": "Bistro Patio Set",
+            "lot_number": 55,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89369759/Bistro-Patio-Set",
+            "pics": [
+                "89369759_1.jpg",
+                "89369759_2.jpg",
+                "89369759_3.jpg",
+                "89369759_4.jpg",
+                "89369759_5.jpg"
+            ]
+        },
+        "reasoning": "This is a contemporary, functional patio seating arrangement. Resin wicker chairs are popular and durable, driving the bulk of the value. The square metal table is generic but completes the set. Since this is a multi-piece furniture set, it must be sold locally. Reseller Advice: Outdoor furniture sells best in the late spring and summer. Listing this during peak season will maximize the local resale price. I estimate it was made in the 2010s. I analyzed 5 images.",
+        "lot_number": 55,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Modern+Patio+Bistro+Set+4+Woven+Resin+Wicker+Chairs+Square+Metal+Mesh+Table+Outdoor&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Aluminum Folding Lawn Chairs Set of 4 Yellow Nylon Web Strap Patio Outdoor",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 140,
+        "items": [
+            {
+                "item_name": "Vintage Aluminum Folding Yellow Strap Lawn Chairs (Set of 4)",
+                "estimated_value": 140
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89370197/Vintage-Nylon-Strap-Lawn-Chair-Set",
+            "title": "Vintage Nylon Strap Lawn Chair Set",
+            "lot_number": 56,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89370197/Vintage-Nylon-Strap-Lawn-Chair-Set",
+            "pics": [
+                "89370197_1.jpg",
+                "89370197_2.jpg",
+                "89370197_3.jpg",
+                "89370197_4.jpg",
+                "89370197_5.jpg"
+            ]
+        },
+        "reasoning": "These vintage aluminum strap chairs are highly sought after, especially in a matching set of four and a vibrant color like this yellow. The condition appears excellent with no visible strap damage, justifying the strong valuation for local pickup. Reseller Advice: This style appeals strongly to Mid-Century Modern enthusiasts and 'glamping' style buyers. If sold individually, they could potentially fetch $35-$45 each, but the set premium is maintained here. I estimate it was made in the 1960s-1970s. I analyzed 5 images.",
+        "lot_number": 56,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Aluminum+Folding+Lawn+Chairs+Set+of+4+Yellow+Nylon+Web+Strap+Patio+Outdoor&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Black Metal Firewood Log Storage Rack Heavy Duty Minimalist",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Black Metal Firewood Log Storage Rack",
+                "estimated_value": 40
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89372171/Firewood-Log-Rack",
+            "title": "Firewood / Log Rack",
+            "lot_number": 61,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89372171/Firewood-Log-Rack",
+            "pics": [
+                "89372171_1.jpg",
+                "89372171_2.jpg"
+            ]
+        },
+        "reasoning": "This is a basic, sturdy metal log rack. The value is based purely on utility and condition, which appears good. Due to its size and awkward shape, resale is restricted to local pickup, keeping the market value modest. Expert advice: Ensure to specify dimensions when selling locally, as buyers often look for specific capacities (like 1/4 cord). Est. Year: 2000s-2020s. Images analyzed: 2.",
+        "year_made": "2000s-2020s",
+        "images_analyzed": 2,
+        "lot_number": 61,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Black+Metal+Firewood+Log+Storage+Rack+Heavy+Duty+Minimalist&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Lot of 5 Resin Plastic Adirondack Style Patio Deck Chairs Stackable Outdoor Furniture",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Lot of 5 Generic Plastic Resin Adirondack Style Patio Chairs",
+                "estimated_value": 50
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89372398/Plastic-Patio-Chairs",
+            "title": "Plastic Patio Chairs",
+            "lot_number": 62,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89372398/Plastic-Patio-Chairs",
+            "pics": [
+                "89372398_1.jpg",
+                "89372398_2.jpg",
+                "89372398_3.jpg"
+            ]
+        },
+        "reasoning": "Generic used plastic patio chairs have low resale value, estimated at about $10 per chair. The lot includes 5 chairs, mostly dark green/grey. Shipping is prohibitively expensive compared to the item value. Expert advice: Selling these quickly via local platforms for pool or deck use is the easiest way to move them. Est. Year: 2000s. Images analyzed: 3.",
+        "year_made": "2000s",
+        "images_analyzed": 3,
+        "lot_number": 62,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Lot+of+5+Resin+Plastic+Adirondack+Style+Patio+Deck+Chairs+Stackable+Outdoor+Furniture&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Lot 4 Stackable Aluminum Sling Mesh Patio Chairs & 2 Matching Outdoor Footstools Ottomans",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "total_market_value": 250,
+        "items": [
+            {
+                "item_name": "4 Stackable Aluminum/Metal Frame Sling Patio Chairs",
+                "estimated_value": 160
+            },
+            {
+                "item_name": "2 Matching Outdoor Sling Mesh Footstools/Ottomans",
+                "estimated_value": 90
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89372747/Metal-Patio-Chairs-wFootstools",
+            "title": "Metal Patio Chairs w/Footstools",
+            "lot_number": 63,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89372747/Metal-Patio-Chairs-wFootstools",
+            "pics": [
+                "89372747_1.jpg",
+                "89372747_2.jpg",
+                "89372747_3.jpg",
+                "89372747_4.jpg",
+                "89372747_5.jpg"
+            ]
+        },
+        "reasoning": "This is a useful set of modern patio furniture consisting of four chairs and two footstools. Aluminum/metal frames with sling mesh are highly desirable for durability and stackability. Pricing reflects a good utility set sold locally. Expert advice: Ensure the fabric is structurally sound and free from major sun rot, as replacing sling mesh can be more expensive than the furniture itself. Est. Year: 2010s-2020s. Images analyzed: 5.",
+        "year_made": "2010s-2020s",
+        "images_analyzed": 5,
+        "lot_number": 63,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Lot+4+Stackable+Aluminum+Sling+Mesh+Patio+Chairs+%26+2+Matching+Outdoor+Footstools+Ottomans&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage SPEEDAIRE Industrial Duty Air Compressor 1/2 HP 32427C Portable Tank Dayton Electric MFG",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "total_market_value": 180,
+        "items": [
+            {
+                "item_name": "SPEEDAIRE Industrial Duty Air Compressor Model 32427C 1/2 HP",
+                "estimated_value": 180
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89373139/SPEEDAIRE-Industrial-Duty-Air-Compressor",
+            "title": "SPEEDAIRE Industrial Duty Air Compressor",
+            "lot_number": 64,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89373139/SPEEDAIRE-Industrial-Duty-Air-Compressor",
+            "pics": [
+                "89373139_1.jpg",
+                "89373139_2.jpg",
+                "89373139_3.jpg",
+                "89373139_4.jpg"
+            ]
+        },
+        "reasoning": "Speedaire (Dayton Electric/Grainger) compressors are known for durability. Even heavily used, this older industrial duty unit retains significant value if operational or easily repairable. Due to weight, potential hazardous material issues (oil/pressure), and size, shipping is not feasible. Expert advice: Highlight the model number (32427C) as specific repair parts or manuals might be sought by collectors or mechanics. Always sell industrial equipment 'as-is' unless tested fully. Est. Year: 1960s-1970s. Images analyzed: 4.",
+        "year_made": "1960s-1970s",
+        "images_analyzed": 4,
+        "lot_number": 64,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+SPEEDAIRE+Industrial+Duty+Air+Compressor+1%2F2+HP+32427C+Portable+Tank+Dayton+Electric+MFG&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Pair Gordon's Furniture End Tables Nightstands Traditional Wood Side Tables w Drawer MCM Vintage",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 140,
+        "items": [
+            {
+                "item_name": "Pair of Gordon's Furniture Wood End Tables w/ Drawers",
+                "estimated_value": 140
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89373571/Gordons-Furniture-MidCentury-End-Table-Set",
+            "title": "Gordon's Furniture Mid-Century End Table Set",
+            "lot_number": 65,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89373571/Gordons-Furniture-MidCentury-End-Table-Set",
+            "pics": [
+                "89373571_1.jpg",
+                "89373571_2.jpg",
+                "89373571_3.jpg",
+                "89373571_4.jpg",
+                "89373571_5.jpg",
+                "89373571_6.jpg"
+            ]
+        },
+        "reasoning": "This is a pair of quality, traditional wood end tables made by Gordon's Furniture, a known brand. The style features intricate turned legs and useful drawer storage. Value is $70 per table. Shipping large, heavy wooden items is generally avoided in favor of local pickup. Expert advice: While listed as 'Mid-Century,' the style is more Traditional/Victorian Revival, popular in the 70s/80s. When listing, use keywords like 'Traditional,' 'Vintage Wood,' and the brand name. Est. Year: 1970s-1980s. Images analyzed: 6.",
+        "year_made": "1970s-1980s",
+        "images_analyzed": 6,
+        "lot_number": 65,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Pair+Gordon%27s+Furniture+End+Tables+Nightstands+Traditional+Wood+Side+Tables+w+Drawer+MCM+Vintage&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Heavy Duty Folding Wood Picnic Table & 2 Bench Set 3-Piece Portable Rustic Outdoor",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "Vintage 3-Piece Folding Wood Plank Picnic Table and Bench Set",
+                "estimated_value": 100
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89374128/3Piece-Folding-Picnic-Table",
+            "title": "3-Piece Folding Picnic Table",
+            "lot_number": 66,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89374128/3Piece-Folding-Picnic-Table",
+            "pics": [
+                "89374128_1.jpg",
+                "89374128_2.jpg",
+                "89374128_3.jpg",
+                "89374128_4.jpg",
+                "89374128_5.jpg"
+            ]
+        },
+        "reasoning": "This is a heavy-duty folding picnic table and bench set. Despite the heavily weathered wood, the folding mechanism and rustic appeal make it desirable for outdoor use, maintaining a solid utility value. It is too large and heavy for affordable standard shipping. Expert advice: These are often used by vendors or for event rental. Highlight the heavy-duty metal frame and rustic patina in the listing description. Est. Year: 1980s. Images analyzed: 5.",
+        "year_made": "1980s",
+        "images_analyzed": 5,
+        "lot_number": 66,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Heavy+Duty+Folding+Wood+Picnic+Table+%26+2+Bench+Set+3-Piece+Portable+Rustic+Outdoor&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Synthetic Resin Wicker Patio Rocking Chair Brown All Weather Outdoor Furniture",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "Synthetic Resin Wicker Patio Rocking Chair",
+                "estimated_value": 75
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89374479/Synthetic-Wicker-Rocking-Chair",
+            "title": "Synthetic Wicker Rocking Chair",
+            "lot_number": 67,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89374479/Synthetic-Wicker-Rocking-Chair",
+            "pics": [
+                "89374479_1.jpg",
+                "89374479_2.jpg",
+                "89374479_3.jpg"
+            ]
+        },
+        "reasoning": "A contemporary synthetic (resin) wicker rocking chair. These are popular for outdoor environments due to weather resistance. $75 is a fair used price for local pickup. It is too large for economical shipping. Expert advice: Emphasize 'all-weather' and 'resin' to assure buyers of durability compared to natural wicker. Suggesting matching cushions could increase buyer interest. Est. Year: 2010s. Images analyzed: 3.",
+        "year_made": "2010s",
+        "images_analyzed": 3,
+        "lot_number": 67,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Synthetic+Resin+Wicker+Patio+Rocking+Chair+Brown+All+Weather+Outdoor+Furniture&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vintage Hollywood Regency Brass & Glass Demilune Console Sofa Table w Casters Half Moon",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 180,
+        "items": [
+            {
+                "item_name": "Vintage Brass Frame Glass Top Demilune Console Table",
+                "estimated_value": 180
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89374746/Brass-Glass-Console-Table",
+            "title": "Brass & Glass Console Table",
+            "lot_number": 68,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89374746/Brass-Glass-Console-Table",
+            "pics": [
+                "89374746_1.jpg",
+                "89374746_2.jpg",
+                "89374746_3.jpg"
+            ]
+        },
+        "reasoning": "This brass and glass demilune table is characteristic of the Hollywood Regency style popular in the late 20th century. The casters and decorative details add appeal. Resale is strong locally due to current design trends favoring vintage brass. Shipping is impractical due to the large, fragile glass top. Expert advice: Clean and polish the brass carefully before selling to maximize appeal. Est. Year: 1970s-1980s. Images analyzed: 3.",
+        "year_made": "1970s-1980s",
+        "images_analyzed": 3,
+        "lot_number": 68,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vintage+Hollywood+Regency+Brass+%26+Glass+Demilune+Console+Sofa+Table+w+Casters+Half+Moon&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "White Metal Wrought Iron Style Scroll Quilt Blanket Display Rack Stand",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "total_market_value": 60,
+        "items": [
+            {
+                "item_name": "White Metal Wrought Iron Style Scroll Quilt Blanket Display Rack Stand",
+                "estimated_value": 60
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://auctions.transitionaldesign.net/Event/LotDetails/89377516/Metal-Quilt-Rack",
+            "title": "Metal Quilt Rack",
+            "lot_number": 71,
+            "url": "https://auctions.transitionaldesign.net/Event/LotDetails/89377516/Metal-Quilt-Rack",
+            "pics": [
+                "89377516_1.jpg",
+                "89377516_2.jpg"
+            ]
+        },
+        "reasoning": "This is a standard decorative metal quilt or blanket rack. The white finish and scrollwork give it a Victorian revival or shabby chic aesthetic, which maintains modest demand. Quilt racks like this generally resell for $50-$80, depending on condition and local market demand. They are classified as Small Furniture and are difficult and costly to ship securely, justifying the 'false' shippable classification. Expert Advice: If the metal is solid wrought iron, it adds value, but this appears to be tubular metal, which is less desirable. Listing it locally via Facebook Marketplace will yield the best return compared to trying to ship it. I estimate this piece was likely manufactured in the 1980s or 1990s. I analyzed 2 images.",
+        "lot_number": 71,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=White+Metal+Wrought+Iron+Style+Scroll+Quilt+Blanket+Display+Rack+Stand&_sacat=0&LH_Complete=1&LH_Sold=1"
+    }
+]
+</script>
+
+<script>
+    const fullJsonData = JSON.parse(document.getElementById('auctionData').textContent);
+    let currentFilteredData = [...fullJsonData];
+    
+    const tableBody = document.getElementById('data-table-body');
+    const headers = document.querySelectorAll('thead th[data-column]');
+    const hideFurnitureCheckbox = document.getElementById('hideFurniture');
+    const hideMedicalCheckbox = document.getElementById('hideMedical');
+
+    let currentSort = { column: 'ebay_price', isAscending: false };
+
+    function applyFiltersAndRepopulate() {
+        const hideFurniture = hideFurnitureCheckbox.checked;
+        const hideMedical = hideMedicalCheckbox.checked;
+
+        currentFilteredData = fullJsonData.filter(lot => {
+            const category = (lot.category || '').toLowerCase();
+            if (hideFurniture && category === 'large furniture') {
+                return false;
+            }
+            if (hideMedical && category === 'medical devices') {
+                return false;
+            }
+            return true;
+        });
+
+        sortData(currentSort.column, true);
+    }
+
+    function populateTable() {
+        tableBody.innerHTML = '';
+        const formatCurrency = (value) => (value || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 });
+        const sanitizeText = (text) => (text || 'No reasoning provided.');
+
+        currentFilteredData.forEach(lot => {
+            const hasReasoning = lot.reasoning && lot.reasoning.trim() !== '';
+            
+            const mainRow = document.createElement('tr');
+            mainRow.className = 'lot-main' + (hasReasoning ? ' expandable' : '');
+            
+            const encodedSearch = encodeURIComponent(lot.ebay_search_title || '');
+            
+            mainRow.innerHTML = `
+                <td>${lot.lot_number > 0 ? lot.lot_number : ''}</td>
+                <td><a href="${lot.original_listing.url}" target="_blank" title="${lot.original_listing.title}">${lot.ebay_search_title || 'N/A'}</a></td>
+                <td>${lot.category || 'Miscellaneous'}</td>
+                <td style="text-align: right;">${formatCurrency(lot.total_market_value)}</td>
+                <td style="text-align: right;">${lot.ebay_avg_price > 0 ? formatCurrency(lot.ebay_avg_price) : 'N/A'}</td>
+                <td style="text-align: right;">${lot.ebay_confidence_score > 0 ? lot.ebay_confidence_score + '%' : 'N/A'}</td>
+                <td style="text-align: center;"><a href="${lot.ebay_search_url || '#'}" target="_blank">eBay</a></td>
+                <td style="text-align: center;"><a href="https://www.google.com/search?q=${encodedSearch}" target="_blank">Google</a></td>
+            `;
+            
+            tableBody.appendChild(mainRow);
+            
+            if (hasReasoning) {
+                const reasoningRow = document.createElement('tr');
+                reasoningRow.className = 'reasoning-row';
+                reasoningRow.innerHTML = `<td colspan="8">${sanitizeText(lot.reasoning)}</td>`;
+                tableBody.appendChild(reasoningRow);
+
+                mainRow.addEventListener('click', () => {
+                    reasoningRow.classList.toggle('visible');
+                });
+            }
+
+            if (lot.items && lot.items.length > 1) {
+                lot.items.forEach(subItem => {
+                    const subRow = document.createElement('tr');
+                    subRow.className = 'lot-sub-item';
+                    
+                    const subAvgPrice = subItem.ebay_avg_price || 0;
+                    const subEncodedSearch = encodeURIComponent(subItem.item_name || '');
+                    const subEbayUrl = `https://www.ebay.com/sch/i.html?_from=R40&_nkw=${subEncodedSearch}&_sacat=0&LH_Complete=1&LH_Sold=1`;
+                    const subGoogleUrl = `https://www.google.com/search?q=${subEncodedSearch}`;
+
+                    subRow.innerHTML = `
+                        <td></td>
+                        <td style="padding-left: 35px;">${subItem.item_name || 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: right;">${formatCurrency(subItem.estimated_value)}</td>
+                        <td style="text-align: right;">${subAvgPrice > 0 ? formatCurrency(subAvgPrice) : 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: center;"><a href="${subEbayUrl}" target="_blank">eBay</a></td>
+                        <td style="text-align: center;"><a href="${subGoogleUrl}" target="_blank">Google</a></td>
+                    `;
+                    tableBody.appendChild(subRow);
+                });
+            }
+        });
+    }
+
+    function sortData(column, keepDirection = false) {
+        const isNumeric = ['price', 'ebay_price', 'lot_number', 'confidence'].includes(column);
+
+        if (!keepDirection) {
+            if (currentSort.column === column) {
+                currentSort.isAscending = !currentSort.isAscending;
+            } else {
+                currentSort.column = column;
+                currentSort.isAscending = !isNumeric;
+            }
+        } else if (currentSort.column !== column) {
+             currentSort.column = column;
+             currentSort.isAscending = !isNumeric;
+        }
+
+        currentFilteredData.sort((a, b) => {
+            let valA, valB;
+            switch (column) {
+                case 'price': valA = a.total_market_value || 0; valB = b.total_market_value || 0; break;
+                case 'ebay_price': valA = a.ebay_avg_price || 0; valB = b.ebay_avg_price || 0; break;
+                case 'confidence': valA = a.ebay_confidence_score || 0; valB = b.ebay_confidence_score || 0; break;
+                case 'lot_number': valA = a.lot_number || 0; valB = b.lot_number || 0; break;
+                case 'name': valA = (a.ebay_search_title || '').toLowerCase(); valB = (b.ebay_search_title || '').toLowerCase(); break;
+                case 'category': valA = (a.category || '').toLowerCase(); valB = (b.category || '').toLowerCase(); break;
+                default: return 0;
+            }
+            let comparison = 0;
+            if (valA > valB) { comparison = 1; }
+            else if (valA < valB) { comparison = -1; }
+            return currentSort.isAscending ? comparison : comparison * -1;
+        });
+        updateSortIndicators();
+        populateTable();
+    }
+
+    function updateSortIndicators() {
+        headers.forEach(header => {
+            const indicator = header.querySelector('.sort-indicator');
+            if (header.dataset.column === currentSort.column) {
+                indicator.textContent = currentSort.isAscending ? ' ▲' : ' ▼';
+            } else { indicator.textContent = ''; }
+        });
+    }
+
+    headers.forEach(header => { header.addEventListener('click', () => { sortData(header.dataset.column); }); });
+    hideFurnitureCheckbox.addEventListener('change', applyFiltersAndRepopulate);
+    hideMedicalCheckbox.addEventListener('change', applyFiltersAndRepopulate);
+
+    sortData('ebay_price');
+</script>
+
+    <div style="text-align: center; margin-top: 2rem; font-size: 0.8em; color: #888;">
+        <p>Analysis powered by:</p>
+        <p><strong>Auction Analysis Model:</strong> gemini-flash-latest (Gemini)</p>
+        <p><strong>eBay Cleaning Model(s):</strong> gemini-flash-latest (Gemini)</p>
+    </div>
+
+</body>
+</html>
