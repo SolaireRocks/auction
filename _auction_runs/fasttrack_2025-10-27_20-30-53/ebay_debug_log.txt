@@ -1,0 +1,683 @@
+
+--- [2025-10-27 20:36:59] eBay Analysis for 'BIRO 922 Meat Grinder' (Lot #1) ---
+
+--- RAW ---
+- $3000.00 | Biro 922 Meat Grinder Countertop
+- $3000.00 | BIRO COUNTERTOP MODEL # 922 MEAT GRINDER - 1 H.P/ 60 HZ/ 120 VOLTS/ 1 PHASE -
+- $3500.00 | BIRO COUNTERTOP MODEL # 922 MEAT GRINDER - 1 H.P/ 60 HZ/ 120 VOLTS/ 1 PHASE -
+- $4295.00 | BIRO MINI-32 MEAT GRINDER MIXER SAUSAGE BEEF BUTCHER MACHINE
+- $4400.00 | Biro 922 Manual Feed Countertop Meat Grinder, Brand New
+- $ 495.00 | Biro Model 922 Meat Grinder Motor. Single Phase  115/220 Volt
+- $2899.00 | Biro 922SS Stainless Manual Feed Meat Grinder
+- $7500.00 | Meat Grinder/Mixer Biro AFMG-48 200lbs Capacity 3ph 208V Tested
+- $4895.00 | BIRO AFMG-24 MEAT MIXER GRINDER SAUSAGE MILL BUTCHER MACHINE W/ FOOT PEDAL
+- $3499.00 | Biro G54314a Metal Commerical Floor Style Meat Grinder 115/230 V
+- $4475.00 | Biro 6642 Meat Grinder 2 HP
+- $5000.00 | Biro G58482A Meat Grinder
+- $5310.00 | BIRO AFMG-24 Meat Mixer Grinder 208v 3Ph - No Auger - 30 Day Warranty Free Ship
+- $2200.00 | Meat Grinder Biro 6642
+- $3400.00 | Biro Meat Grinder 
+- $5500.00 | BIRO Mini 32 Meat Grinder Mixer 3 Phase 230V 60lb Capacity
+- $6100.00 | Biro Model Mini 32 Meat Grinder 220v 3P Excellent Condition
+- $4975.00 | Biro 6642 Meat Grinder
+- $7995.00 | BIRO Mini 32 Meat Grinder Mixer 3 Phase 230V - VIDEO - WE CRATE AND SHIP GLOBAL
+- $6500.00 | BIRO AFMG-24 Meat Mixer Grinder 208v 3Ph
+- $ 725.00 | BIRO 42MG15A Meat Grinder  HEAD Complete
+- $ 900.00 | HOPPER FIR BIRO Model 32 Mini Meat Grinder & Mixer 63036
+- $5500.00 | Biro Mini 32 Heavy Duty Meat Mixer Grinder w/ Foot Switch
+- $6200.00 | Biro Model Mini 32 Meat Grinder 220v 3P Excellent Condition
+- $7150.00 | Biro Meat Mixer Grinder Mini-32 Carnicería Meat Market Hobart
+- $13775.00 | Biro AFMG-52 Meat Mixer Grinder, Used Excellent Condition
+- $1500.00 | Biro 822 Commercial Stainless Manual Feed Counter top Meat Grinder
+- $13775.00 | Biro AFMG-52 Meat Mixer Grinder, Used Excellent Condition
+- $5995.00 | BIRO Mini-32 Meat Mixer Grinder Mill Machine with Foot Pedal
+- $7500.00 | BIRO Model 32 Mini Meat Grinder & Mixer (industrial grade-refurbished)
+
+--- CLEANED ---
+- $3000.00 | Biro 922 Meat Grinder Countertop
+- $3000.00 | BIRO COUNTERTOP MODEL # 922 MEAT GRINDER - 1 H.P/ 60 HZ/ 120 VOLTS/ 1 PHASE -
+- $3500.00 | BIRO COUNTERTOP MODEL # 922 MEAT GRINDER - 1 H.P/ 60 HZ/ 120 VOLTS/ 1 PHASE -
+- $4400.00 | Biro 922 Manual Feed Countertop Meat Grinder, Brand New
+- $2899.00 | Biro 922SS Stainless Manual Feed Meat Grinder
+
+--- REASONING ---
+Kept only direct BIRO 922 model matches, excluding parts and other models like Mini-32 and AFMG-series.
+-> AVG: $3,359.80 | CONF: 100%
+
+--- [2025-10-27 20:36:59] eBay Analysis for 'Bizerba GSP HD Slicer' (Lot #2) ---
+
+--- RAW ---
+- $2895.00 | 2020 BIZERBA GSP HD AUTOMATIC GRAVITY COMMERCIAL DELI MEAT CHEESE SLICER
+- $ 475.00 | Knife Cover For Bizerba Slicer GSP Models Closed. Replaces 000000038030942003
+- $  27.00 | BIZERBA SLICER KNOB SE12, SE12D, GSP H33, HC33, HD33, HDC33
+- $2700.00 | Bizerba GSP-HD Automatic Slicer Deli Meat Cheese Slicer - Used
+- $1475.00 | Bizerba GSP-HD Automatic Slicer Deli Meat Cheese Slicer 2012
+- $1995.00 | 2019 Bizerba automatic manual slicer GSP HD ham Cheese Deli Restaurant Kitchen A
+- $2295.00 | 2020 Bizerba automatic manual slicer GSP HD ham Cheese Deli Restaurant Kitchen
+- $1995.00 | 2019 Bizerba automatic manual slicer GSP HD ham Cheese Deli Restaurant Kitchen B
+- $ 310.00 | BIZERBA GSP H, GSP HD DELI SLICER BLADE GUARD-COVER.  SLICER PARTS
+- $1800.00 | Bizerba GSP HD Automatic Deli Slicer with Sharpener
+- $3500.00 | 2023 Bizerba GSP HD 33Ee25HIIIu Automatic Meat Deli Cheese Slicer
+- $  49.35 | BIZERBA GSP HD Slicer Carriage Assy with support arm, #3 03701005.01
+- $   5.00 | BIZERBA  GSP HD 33  MEAT SLICER    LOCKING SLIDER
+- $3500.00 | BIZERBA GSP-HD AUTOMATIC SLICER 2020 MODEL WITH DELI BUDDY 120V/ 60 HZ/2.6 AMPS
+- $2500.00 | Bizerba - 1/2 HP - GSP HD - Automatic Meat Deli Cheese Slicer - Used
+- $1750.00 | Bizerba GSP HD IP 33 Automatic Slicer  13" Blade, 1/2 hp Meat Deli Slicer
+- $4475.00 | Bizerba GSP HD Automatic Meat Slicer
+- $ 299.00 | BIZERBA GSP HD MEAT SLICER  CARRIAGE MOTOR & PULLEY ASSEMBLY COMPLETE
+- $2750.00 | BIZERBA GSP-HD AUTOMATIC SLICER 2020 MODEL 120V/ 60 HZ/2.6 AMPS
+- $1995.00 | 2018 Bizerba automatic manual slicer GSP HD ham Cheese Deli Restaurant Kitchen K
+- $3195.00 | 2020 Bizerba automatic slicer GSP HD 33 deli cheese meat slicer scale new cart
+- $1495.00 | BIZERBA GSP HD 33 AUTOMATIC MEAT SLICER
+- $2500.00 | Bizerba GSP-HD-I-W-90 Semi-Automatic Gravity Feed Deli Slicer
+- $2299.00 | Bizerba GSPHD 2017 Automatic Deli Slicer Refurbished!
+- $  85.30 | Bizerba GSP-HD Slicer Parts - Slicer Gauge Plate, Excellent!
+- $3550.00 | Refurbished 2023 Bizerba GSP HD Automatic Meat Slicer with Illuminated Knob
+- $1995.00 | 2017 Bizerba automatic manual slicer GSP HD ham Cheese Deli Restaurant New cover
+- $ 175.00 | Bizerba 000000038011665000 Product Fixation Ruler for GSP HD meat slicer A
+- $3200.00 | NICE 2017 Bizerba 13" Slicer GSP HD 33 AUTOMATIC or MANUAL - Watch Running Video
+- $3500.00 | BIZERBA GSP HD33 AUTOMATIC ELECTRIC DELI SLICER 13" BLADE SEE VIDEO/DESCRIPTION
+
+--- CLEANED ---
+- $2895.00 | 2020 BIZERBA GSP HD AUTOMATIC GRAVITY COMMERCIAL DELI MEAT CHEESE SLICER
+- $2700.00 | Bizerba GSP-HD Automatic Slicer Deli Meat Cheese Slicer - Used
+- $1475.00 | Bizerba GSP-HD Automatic Slicer Deli Meat Cheese Slicer 2012
+- $1995.00 | 2019 Bizerba automatic manual slicer GSP HD ham Cheese Deli Restaurant Kitchen A
+- $2295.00 | 2020 Bizerba automatic manual slicer GSP HD ham Cheese Deli Restaurant Kitchen
+- $1995.00 | 2019 Bizerba automatic manual slicer GSP HD ham Cheese Deli Restaurant Kitchen B
+- $1800.00 | Bizerba GSP HD Automatic Deli Slicer with Sharpener
+- $3500.00 | 2023 Bizerba GSP HD 33Ee25HIIIu Automatic Meat Deli Cheese Slicer
+- $3500.00 | BIZERBA GSP-HD AUTOMATIC SLICER 2020 MODEL WITH DELI BUDDY 120V/ 60 HZ/2.6 AMPS
+- $2500.00 | Bizerba - 1/2 HP - GSP HD - Automatic Meat Deli Cheese Slicer - Used
+- $1750.00 | Bizerba GSP HD IP 33 Automatic Slicer  13" Blade, 1/2 hp Meat Deli Slicer
+- $4475.00 | Bizerba GSP HD Automatic Meat Slicer
+- $2750.00 | BIZERBA GSP-HD AUTOMATIC SLICER 2020 MODEL 120V/ 60 HZ/2.6 AMPS
+- $1995.00 | 2018 Bizerba automatic manual slicer GSP HD ham Cheese Deli Restaurant Kitchen K
+- $3195.00 | 2020 Bizerba automatic slicer GSP HD 33 deli cheese meat slicer scale new cart
+- $1495.00 | BIZERBA GSP HD 33 AUTOMATIC MEAT SLICER
+- $2500.00 | Bizerba GSP-HD-I-W-90 Semi-Automatic Gravity Feed Deli Slicer
+- $2299.00 | Bizerba GSPHD 2017 Automatic Deli Slicer Refurbished!
+- $3550.00 | Refurbished 2023 Bizerba GSP HD Automatic Meat Slicer with Illuminated Knob
+- $1995.00 | 2017 Bizerba automatic manual slicer GSP HD ham Cheese Deli Restaurant New cover
+- $3200.00 | NICE 2017 Bizerba 13" Slicer GSP HD 33 AUTOMATIC or MANUAL - Watch Running Video
+- $3500.00 | BIZERBA GSP HD33 AUTOMATIC ELECTRIC DELI SLICER 13" BLADE SEE VIDEO/DESCRIPTION
+
+--- REASONING ---
+Kept all direct Bizerba GSP HD slicer units and variants, while strictly excluding all parts, accessories, and components.
+-> AVG: $2,607.23 | CONF: 95%
+
+--- [2025-10-27 20:36:59] eBay Analysis for 'True GDM-10SSL Refrigerator' (Lot #3) ---
+
+--- RAW ---
+- $ 900.00 | True GDM-10-58-HC Single 1 Door Glass Cooler Merchandiser Refrigerator
+- $ 995.95 | TRUE GDM-30-LD 2 GLASS DOOR REFRIGERATOR COOLER DISPLAY MERCHANDISER
+- $1000.00 | True GDM-10-HC~TSL01 Glass Merchandiser Refrigerator
+- $3695.00 | True Refrigeration GDM-33SSL-56-HC-LD
+- $1995.00 | True GDM-10-HC~TSL01 Glass Merchandiser Refrigerator (Scratch & Dent 0947)
+- $ 995.00 | True GDM-10-HC-LD - Refrigerated Glass Door Merchandiser
+- $1700.00 | 2022 True GDM-10-HC Swing Door Glass Drink Merchandiser Refrigerator Cooler NEW
+- $1250.00 | Cooler/ True GDM-10 Refrigerated Glass Door Refrigerator
+- $1250.00 | Cooler/ True GDM-10 Refrigerated Glass Door Merchandiser
+- $1299.99 | True GDM-10SSL-LD One Section Glass Door Merchandiser 115V
+- $1149.99 | 2019 TRUE GDM-12-HC-TSL01 REACH-IN REFRIGERATOR 115V
+- $3999.00 | True GDM-49-HC~TSL01 54" Glass Door Refrigerated Merchandiser
+- $ 749.99 | 1 Glass Door Refrigerator True GDM-06-3-HC-TSL01 Counter Top NSF #4077
+- $1600.00 | True TS-23-1-G-1-HC~FGD01 27" One Section Reach-In Refrigerator w/ Glass & So...
+- $1650.00 | True T-23  1 Solid Door Stainless steel Commercial Refrigerator With Casters
+- $ 990.00 | True GDM-33CPT-54-HC-LD 40" Pass-Thru Glass Door Commercial Refrigerator
+- $2512.79 | True GDM-10-HC~TSL01 25" Black Glass Door Refrigerated Merchandiser
+- $2900.00 | True GDM-HC-TSLO1 39”1/2 2 Glass Door Refrigerator
+- $1450.00 | Cooler/ True GDM-10PT Pass-Through Refrigerated 2 Glass Doors Merchandiser
+- $4023.99 | New 2020 True GDM-41CPT-48-HC-LD 48" Refrigerated Pass-Through Merchandiser
+- $2795.00 | True GDM-23-HC~TSL01 27" 1 Door Merchandiser Refrigerator (Scratch & Dent 6756)
+- $1295.00 | Used True GDM-12 1 Door Merchandiser Refrigerator | Stock No. 1015104
+- $1199.00 | True GDM-12-HC-LD Single Swing Glass Door Merchandiser Refrigerator
+- $1795.00 | TRUE GDM-23-LD GLASS DOOR REFRIGERATED MERCHANDISER
+- $3999.00 | True GDM-49-HC-TSL01 Two Glass Door Refrigerated Merchandiser New Scratch Dent
+- $2512.79 | True GDM-10-HC~TSL01 10 CuFt One Section Refrigerated Merchandiser
+- $1799.99 | True GDM-41 Merchandiser Commercial Cooler Refrigerator FREE SHIPPING
+- $1750.00 | True GDM-12-HC~TSL01 25" Glass Door Refrigerated Merchandiser
+- $ 399.95 | True GDM-12 PE57201 Single Glass Door Merch Cooler Refrigerator Pickup Only
+- $2950.00 | Cooler True GDM-49 Merchandiser 2017 Double Glass Door LED Lighting 115V TESTED
+
+--- CLEANED ---
+- $ 900.00 | True GDM-10-58-HC Single 1 Door Glass Cooler Merchandiser Refrigerator
+- $1000.00 | True GDM-10-HC~TSL01 Glass Merchandiser Refrigerator
+- $1995.00 | True GDM-10-HC~TSL01 Glass Merchandiser Refrigerator (Scratch & Dent 0947)
+- $ 995.00 | True GDM-10-HC-LD - Refrigerated Glass Door Merchandiser
+- $1700.00 | 2022 True GDM-10-HC Swing Door Glass Drink Merchandiser Refrigerator Cooler NEW
+- $1250.00 | Cooler/ True GDM-10 Refrigerated Glass Door Refrigerator
+- $1250.00 | Cooler/ True GDM-10 Refrigerated Glass Door Merchandiser
+- $1299.99 | True GDM-10SSL-LD One Section Glass Door Merchandiser 115V
+- $2512.79 | True GDM-10-HC~TSL01 25" Black Glass Door Refrigerated Merchandiser
+- $1450.00 | Cooler/ True GDM-10PT Pass-Through Refrigerated 2 Glass Doors Merchandiser
+- $2512.79 | True GDM-10-HC~TSL01 10 CuFt One Section Refrigerated Merchandiser
+
+--- REASONING ---
+Kept the exact GDM-10SSL variant and all closely related GDM-10 one-section merchandiser models for strong comparison.
+-> AVG: $1,533.23 | CONF: 85%
+
+--- [2025-10-27 20:36:59] eBay Analysis for 'True GDM-52TM-RL Refrigerator' (Lot #4) ---
+
+--- RAW ---
+- $ 995.95 | TRUE GDM-30-LD 2 GLASS DOOR REFRIGERATOR COOLER DISPLAY MERCHANDISER
+- $1600.00 | True TS-23-1-G-1-HC~FGD01 27" One Section Reach-In Refrigerator w/ Glass & So...
+- $3999.00 | True GDM-49-HC~TSL01 54" Glass Door Refrigerated Merchandiser
+- $1650.00 | True T-23  1 Solid Door Stainless steel Commercial Refrigerator With Casters
+- $2199.99 | TRUE GDM-52TM-RL-LD BLK PASS THRU GLASS DOORS REFRIGERATED MERCHANDISER
+- $3800.00 | True GDM-49RL-HC~TSL01 54 1/8" Black Refrigerated Rear Load Glass Door Merchandi
+- $6995.93 | True GDM-49RL-HC~TSL01 54" Two-Section Black Exterior Refrigerator Merchandiser
+- $6930.05 | True GDM-47RL-HC-LD 54" White Exterior Refrigerated Pass-Thru Merchandiser
+- $1149.99 | 2019 TRUE GDM-12-HC-TSL01 REACH-IN REFRIGERATOR 115V
+- $ 900.00 | True GDM-10-58-HC Single 1 Door Glass Cooler Merchandiser Refrigerator
+- $2795.00 | True GDM-23-HC~TSL01 27" 1 Door Merchandiser Refrigerator (Scratch & Dent 6756)
+- $1799.99 | True GDM-41 Merchandiser Commercial Cooler Refrigerator FREE SHIPPING
+- $4023.99 | New 2020 True GDM-41CPT-48-HC-LD 48" Refrigerated Pass-Through Merchandiser
+- $ 990.00 | True GDM-33CPT-54-HC-LD 40" Pass-Thru Glass Door Commercial Refrigerator
+- $2000.00 | True GDM-41-HC-LD 47" Black Sliding Glass Door Refrigerated Merchandiser
+- $2249.25 | True GDM-45-HC-LD Refrigerated Sliding Glass Door Merchandiser USED
+- $2900.00 | True GDM-HC-TSLO1 39”1/2 2 Glass Door Refrigerator
+- $1295.00 | Used True GDM-12 1 Door Merchandiser Refrigerator | Stock No. 1015104
+- $3999.00 | True GDM-49-HC-TSL01 Two Glass Door Refrigerated Merchandiser New Scratch Dent
+- $1199.00 | True GDM-12-HC-LD Single Swing Glass Door Merchandiser Refrigerator
+- $1795.00 | TRUE GDM-23-LD GLASS DOOR REFRIGERATED MERCHANDISER
+- $3950.00 | True GDM-41CPT-48-HC-LD 2 Glass Door Refrigerator
+- $1750.00 | True GDM-12-HC~TSL01 25" Glass Door Refrigerated Merchandiser
+- $1995.00 | True Manufacturing Two Door Refrigerator TS-49G-LD 120V Commercial Use Fridge
+- $2900.00 | True GDM23HC~TSL01LH 23 cu ft Refrigerated Merchandiser w/ 1 Swing
+- $1295.00 | TRUE GDM-30-LD 2 GLASS DOOR REFRIGERATOR COOLER DISPLAY MERCHANDISER
+- $ 999.00 | True GDM-12-HC-LD Glass Door Merchandiser Refrigerator Refurbished Works Great!
+- $2799.95 | 2018 True GDM-49 2 Door Cooler Refrigerator Merchandiser FREE SHIPPING
+- $ 399.95 | True GDM-12 PE57201 Single Glass Door Merch Cooler Refrigerator Pickup Only
+- $3695.00 | True Refrigeration GDM-33SSL-56-HC-LD
+
+--- CLEANED ---
+- $2199.99 | TRUE GDM-52TM-RL-LD BLK PASS THRU GLASS DOORS REFRIGERATED MERCHANDISER
+- $3800.00 | True GDM-49RL-HC~TSL01 54 1/8" Black Refrigerated Rear Load Glass Door Merchandi
+- $6995.93 | True GDM-49RL-HC~TSL01 54" Two-Section Black Exterior Refrigerator Merchandiser
+- $6930.05 | True GDM-47RL-HC-LD 54" White Exterior Refrigerated Pass-Thru Merchandiser
+- $3999.00 | True GDM-49-HC-TSL01 Two Glass Door Refrigerated Merchandiser New Scratch Dent
+- $2799.95 | 2018 True GDM-49 2 Door Cooler Refrigerator Merchandiser FREE SHIPPING
+
+--- REASONING ---
+Kept the specific GDM-52TM-RL variant and relied on similar large GDM-47 and GDM-49 two-door rear-load merchandisers as comparables.
+-> AVG: $4,454.15 | CONF: 70%
+
+--- [2025-10-27 20:36:59] eBay Analysis for 'Bizerba SE 12 Slicer' (Lot #5) ---
+
+--- RAW ---
+- $1295.00 | BIZERBA SE12D US AUTOMATIC MANUAL GRAVITY DELI MEAT SLICER
+- $  70.00 | BIZERBA SLICER REAR WALL FOR MODEL SE12
+- $1495.00 | BIZERBA SE12D US AUTOMATIC MANUAL GRAVITY DELI MEAT SLICER
+- $1295.00 | BIZERBA SE12 US MANUAL MEAT CHEESE DELI SLICER
+- $2500.00 | Bizerba SE12D 13" Automatic Cheese Meat Deli Slicer With Base Stand
+- $1075.50 | Bizerba SE12-D Automatic Slicer Meat Cheese Free Shipping 30 Day Warranty - READ
+- $1295.00 | BIZERBA SE12 US MANUAL MEAT CHEESE DELI SLICER
+- $ 295.00 | Bizerba GSPH33/SE12 Slicer Control Board 60375301105 OEM Brand New 
+- $4598.99 | Used Bizerba SE12D 13" Automatic/Manual Deli Meat Cheese Slicer 120V
+- $  22.99 | BIZERBA OEM Slicer Parts SE-12 DECO FOIL #60376400300
+- $1295.00 | BIZERBA SE12 MANUAL MEAT CHEESE DELI SLICER
+- $1295.00 | BIZERBA SE12 US MANUAL MEAT CHEESE DELI SLICER
+- $1295.00 | BIZERBA SE12 US MANUAL MEAT CHEESE DELI SLICER
+- $1295.00 | BIZERBA SE12 US MANUAL MEAT CHEESE DELI SLICER
+- $1295.00 | BIZERBA SE12 US MANUAL MEAT CHEESE DELI SLICER
+- $ 199.99 | Sharpener Assembly With Stones To Fit Bizerba Slicers, Replaces 60370800100
+- $ 990.00 | BIZERBA SE12 US MANUAL MEAT CHEESE DELI SLICER FREE SHIPPING 30 DAY WARRANTY
+- $1125.00 | Bizerba SE12-D Automatic Slicer Meat Cheese Free Shipping 30 Day Warranty - READ
+- $1075.50 | Bizerba SE12-D Automatic Slicer Meat Cheese Free Shipping 30 Day Warranty - READ
+- $1295.00 | BIZERBA SE12 US MANUAL MEAT CHEESE DELI SLICER
+- $1295.00 | BIZERBA SE12 US MANUAL MEAT CHEESE DELI SLICER
+- $1295.00 | BIZERBA SE12 US MANUAL MEAT CHEESE DELI SLICER
+- $1295.00 | BIZERBA SE12 MANUAL MEAT CHEESE DELI SLICER
+- $1377.00 | BIZERBA SE12 US MANUAL COMMERCIAL MEAT CHEESE DELI SLICER EUC
+- $2595.00 | BIZERBA SE12 US MANUAL MEAT CHEESE DELI SLICER ON SHEET PAN CART W/ CASTERS
+- $  27.00 | BIZERBA SLICER KNOB SE12, SE12D, GSP H33, HC33, HD33, HDC33
+- $1475.00 | Bizerba GSP-HD Automatic Slicer Deli Meat Cheese Slicer 2012
+- $  10.00 | Shoring Bolt, For Bizerba Slicer GSPH33 and SE12, 38002106000
+- $ 179.99 | G&B G 13 HC Replace Blade  Bizerba Meat / Deli Slicer 4 Hole Fits G13/SE355/SE12
+- $  49.00 | Remnant holder fits Bizerba slicers SE12 SE12D GSP GSPG V12 VS12F 60220401708
+
+--- CLEANED ---
+- $1295.00 | BIZERBA SE12D US AUTOMATIC MANUAL GRAVITY DELI MEAT SLICER
+- $1495.00 | BIZERBA SE12D US AUTOMATIC MANUAL GRAVITY DELI MEAT SLICER
+- $1295.00 | BIZERBA SE12 US MANUAL MEAT CHEESE DELI SLICER
+- $2500.00 | Bizerba SE12D 13" Automatic Cheese Meat Deli Slicer With Base Stand
+- $1075.50 | Bizerba SE12-D Automatic Slicer Meat Cheese Free Shipping 30 Day Warranty - READ
+- $1295.00 | BIZERBA SE12 US MANUAL MEAT CHEESE DELI SLICER
+- $4598.99 | Used Bizerba SE12D 13" Automatic/Manual Deli Meat Cheese Slicer 120V
+- $1295.00 | BIZERBA SE12 MANUAL MEAT CHEESE DELI SLICER
+- $1295.00 | BIZERBA SE12 US MANUAL MEAT CHEESE DELI SLICER
+- $1295.00 | BIZERBA SE12 US MANUAL MEAT CHEESE DELI SLICER
+- $1295.00 | BIZERBA SE12 US MANUAL MEAT CHEESE DELI SLICER
+- $1295.00 | BIZERBA SE12 US MANUAL MEAT CHEESE DELI SLICER
+- $ 990.00 | BIZERBA SE12 US MANUAL MEAT CHEESE DELI SLICER FREE SHIPPING 30 DAY WARRANTY
+- $1125.00 | Bizerba SE12-D Automatic Slicer Meat Cheese Free Shipping 30 Day Warranty - READ
+- $1075.50 | Bizerba SE12-D Automatic Slicer Meat Cheese Free Shipping 30 Day Warranty - READ
+- $1295.00 | BIZERBA SE12 US MANUAL MEAT CHEESE DELI SLICER
+- $1295.00 | BIZERBA SE12 US MANUAL MEAT CHEESE DELI SLICER
+- $1295.00 | BIZERBA SE12 US MANUAL MEAT CHEESE DELI SLICER
+- $1295.00 | BIZERBA SE12 MANUAL MEAT CHEESE DELI SLICER
+- $1377.00 | BIZERBA SE12 US MANUAL COMMERCIAL MEAT CHEESE DELI SLICER EUC
+- $2595.00 | BIZERBA SE12 US MANUAL MEAT CHEESE DELI SLICER ON SHEET PAN CART W/ CASTERS
+
+--- REASONING ---
+Only kept full Bizerba SE12 or SE12D slicer units, excluding all accessories, parts, and different Bizerba models.
+-> AVG: $1,295.00 | CONF: 100%
+
+--- [2025-10-27 20:36:59] eBay Analysis for 'Electrolux Dito TRS Food Processor' (Lot #6) ---
+
+--- RAW ---
+- $ 675.00 | Electrolux Dito Food Processor Dicer
+- $ 764.99 | ELECTROLUX DITO TR 22 COMMER FOOD PROCESSOR CHOPPER /SLICER/SHREDDER w/ 5 BLADES
+- $ 100.00 | ELECTROLUX DITO SAMA FOOD PROCESSOR K45 K55 K70 BALL GRIP
+- $ 630.00 | Electrolux Dito Food chopper shredder Processor/Slicer TR22
+- $ 255.00 | ELECTROLUX DITO SAMA FOOD PROCESSOR K55 K70 SHAFT EQ TRK2
+- $ 125.00 | ELECTROLUX DITO SAMA FOOD PROCESSORS K55 / K70 SCRAPER
+- $ 325.00 | ELECTROLUX DITO SAMA FOOD PROCESSORS K35 3-P SWITCH W/OPERATING LEVER
+- $ 225.00 | ELECTROLUX DITO SAMA COMPLETE LID FOOD PROCESSORS K70 DITO SAMA  TAMPA COMPLETA
+- $ 265.00 | ELECTROLUX DITO SAMA FOOD PROCESSORS K70 CARD CDE COMPLETE 1V
+- $ 180.00 | ELECTROLUX DITO SAMA FOOD PROCESSORS K70 COMPLETE LID
+
+--- CLEANED ---
+- $ 675.00 | Electrolux Dito Food Processor Dicer
+- $ 764.99 | ELECTROLUX DITO TR 22 COMMER FOOD PROCESSOR CHOPPER /SLICER/SHREDDER w/ 5 BLADES
+- $ 630.00 | Electrolux Dito Food chopper shredder Processor/Slicer TR22
+
+--- REASONING ---
+Since no exact TRS models were listed, only similar Dito food processors (like TR22) were kept as functional comparables, excluding all parts.
+-> AVG: $690.00 | CONF: 50%
+
+--- [2025-10-27 20:36:59] eBay Analysis for 'Minus Forty Undercounter Freezer' (Lot #7) ---
+
+--- RAW ---
+- $1399.99 | Minus Forty 22-USGF-X1-FRR2 Right Hinge Glass Door Freezer, 7 Adjustable Shelves
+- $1599.99 | Minus Forty 22-USGF-X1-FRR2 Right Hinge Glass Door Freezer, Adjustable Shelves
+- $1850.00 | Minus forty 22-USGF 30” One Section Display Freezer W/ Swing Door
+- $1790.00 | Minus Forty 07-CSGF-01 Countertop Glass Door Freezer – R290, Frost-Free, 7.4 cu
+- $ 390.00 | Minús Forty Freezer
+- $ 500.00 | Minus Forty Commercial Frost Free Freezer Combo
+- $1500.00 | Minus Forty Two Section Display Freezer w/ Swing doors
+- $1500.00 | Minus Forty Two Section Display Freezer w/ Swing doors
+
+--- CLEANED ---
+- $1399.99 | Minus Forty 22-USGF-X1-FRR2 Right Hinge Glass Door Freezer, 7 Adjustable Shelves
+- $1599.99 | Minus Forty 22-USGF-X1-FRR2 Right Hinge Glass Door Freezer, Adjustable Shelves
+- $1850.00 | Minus forty 22-USGF 30” One Section Display Freezer W/ Swing Door
+
+--- REASONING ---
+Kept all relevant Minus Forty 22-USGF single-section display freezers, which fit the description of an undercounter unit, excluding large and countertop models.
+-> AVG: $1,616.66 | CONF: 80%
+
+--- [2025-10-27 20:36:59] eBay Analysis for 'American Delphi Work Table' (Lot #8) ---
+
+--- RAW ---
+- $1295.00 | 96" x 32" Stainless Steel Heavy Duty Work Table Four 4 Door Kitchen Cabinet 8'
+
+--- CLEANED ---
+
+--- REASONING ---
+No items matching the specific 'American Delphi' brand or description were found, rendering the results useless for valuation.
+-> AVG: $0.00 | CONF: 0%
+
+--- [2025-10-27 20:36:59] eBay Analysis for 'Berkel Equipment Stand' (Lot #9) ---
+
+--- RAW ---
+
+--- CLEANED ---
+
+--- REASONING ---
+No search results were returned for this specific branded item.
+-> AVG: $0.00 | CONF: 0%
+
+--- [2025-10-27 20:36:59] eBay Analysis for 'Oliver 2005 Bread Slicer' (Lot #10) ---
+
+--- RAW ---
+- $ 400.00 | Oliver 709 Commercial Front Load Mini 3/4" Bread Slicer
+- $2995.00 | Oliver 938-N Self-Serve Bread Slicer 1/2" Cut w/New Blades
+- $3694.40 | Oliver Gravity Feed Bakery Bread Slicer 797-32NC 1/2'' slice
+- $ 175.00 | Oliver Bread Slicer P/N 0777-083 Rear Arm
+- $2099.99 | OLIVER 797-32NC GRAVITY FEED BAKERY ARTISAN BREAD SLICER
+- $1999.00 | OLIVER 797-32NC 1/2" Slicing Feed Bread Loaf Slicer, Clean, SN:193737, w/ Wheels
+- $2550.00 | Oliver Gravity Feed Bakery Bread Slicer 797-32NC w/ Pro Guard Artisan Bread
+- $1195.00 | Oliver 777 Commercial 16" Safety Bakery Bread Loaf Slicer Cutter 1/2" Slices
+- $6250.00 | 3/2025 Oliver Gravity Feed Bakery Bread Slicer 797-32NC w/ Pro Guard Artisan
+- $5950.00 | 2025 NEW OLIVER COUNTERTOP BREAD SLICER MODEL 732-N ARTISAN BREAD SLICED BREAD
+- $4295.00 | OLIVER 2005 VARI-SLICER VARISLICER ADJUSTABLE COUNTERTOP BREAD SLICER
+- $3999.00 | Oliver 797-32NC Bread Slicer 1/2" w/ Pro GuardFully Refurbished Tested & Working
+- $3000.00 | Oliver 732-N Commercial Bread Slicer
+- $3750.00 | 2015 Oliver Gravity Feed Bakery Bread Slicer 797-32NC w/ Pro Guard Artisan Bread
+- $8950.00 | 2/2025 Oliver Gravity Feed Bakery Bread Slicer 797-32NC w/ Pro Guard Artisan
+- $ 800.00 | Oliver Bread Slicer 797-32
+- $3737.99 | Used Oliver 732-N Legacy Countertop Front Load Bread Slicer with Stand 120V
+- $ 500.00 | vintage bread Slicer oliver brand
+- $  90.00 | Blade changing tool to use with Oliver bread slicers, New Style, replaces 079...
+- $2250.00 | Oliver Gravity Feed Bakery Bread Slicer 797-32NC Artisan Bread Sliced loaves B
+- $2000.00 | OLIVER  797-32NC GRAVITY FEED BAKERY BREAD SLICER
+- $2495.00 | Oliver 2003 Variable Slice Bakery Bread Slicer Vari Slicer
+- $3995.00 | Oliver 2005 Variable Slice Bakery Bread Slicer Vari Slicer
+- $3750.00 | 2019 Oliver Bakery Bread Slicer 777-NT with zip tie bag sealer Artisan Bread
+- $3999.00 | Oliver 797-32NC Bread Slicer 1/2 w/ Pro Guard Fully Refurbished Working Mfg 2019
+- $2450.00 | Oliver Gravity Feed Bakery Bread Slicer 797-32NC Artisan Bread Sliced Bread
+- $3875.00 | Oliver 777 Bread Slicer 1/2" Cut
+- $2000.00 | Bread Slicer Oliver 797 Gravity Feed 1/2'' Slices 115 Volts 1 Phase Tested
+- $ 175.00 | Oliver Bread Slicer P/N 0777-082 Front Arm
+- $ 425.00 | Oliver Bread Slicer P/N  0777-0024-032
+
+--- CLEANED ---
+- $4295.00 | OLIVER 2005 VARI-SLICER VARISLICER ADJUSTABLE COUNTERTOP BREAD SLICER
+- $2495.00 | Oliver 2003 Variable Slice Bakery Bread Slicer Vari Slicer
+- $3995.00 | Oliver 2005 Variable Slice Bakery Bread Slicer Vari Slicer
+
+--- REASONING ---
+Kept the two exact Oliver 2005 models and the closely related Oliver 2003 Variable Slice slicer, while filtering out parts and different model series like 797.
+-> AVG: $3,595.00 | CONF: 90%
+
+--- [2025-10-27 20:36:59] eBay Analysis for 'Grindmaster 810 Commercial Coffee Grinder' (Lot #11) ---
+
+--- RAW ---
+- $ 600.00 | Grindmaster 890 Commercial Brown Countertop Coffee Bean Grinder 1/2 HP
+- $ 995.00 | NEW GRINDMASTER 890E-TS-STARG COFFEE BEAN GRINDER AUTOMATIC HIGH VOLUME
+- $ 375.00 | Grindmaster Coffee Grinder Model 100 Grind Master Stainless Commercial Machine
+- $ 550.00 | Grindmaster 875 Commercial Countertop Whole Coffee Bean Grinder 1/2 HP
+- $ 625.00 | Grindmaster 875 Bulk Bean Commercial 3lb Coffee Grinder Red Eight O’clock Coffee
+- $ 525.95 | Grindmaster Commercial Coffee Bean Grinder 875 Nice!
+- $ 688.99 | Used Grindmaster 495 Adjustable Commercial Coffee Grinder 115V - RLC
+- $ 594.99 | Grindmaster 875 Commercial Coffee Grinder with "8 O’CLOCK BEAN COFFEE" Logo RARE
+- $ 594.99 | Grindmaster 875 Commercial Coffee Grinder with "8 O’CLOCK BEAN COFFEE" Logo RARE
+- $ 750.00 | Grindmaster Commercial Coffee Bean Grinder 875 Excellent Condition 
+- $1150.00 | SALE NEW! Grindmaster 890 Bean Commercial 3lb Coffee Grinder READY TO USE 1091
+- $ 424.99 | Vtg Grindmaster 490 Commercial Coffee Grinder - Working Condition - Heavy Duty
+- $  15.40 | Grindmaster H10 Cafemill 120V AC 60Hz 1.2 AMP White & Black Coffee Grinder
+- $ 950.00 | Grindmaster 875 Commercial Coffee Grinder Bulk Bean, 3 Lb, Black
+- $1150.00 | SALE NEW! Grindmaster 890 Bean Commercial 3lb Coffee Grinder READY TO USE 0391
+- $1200.00 | NEW Grindmaster 890E-TS-STARG Commercial High-Volume 3lb Coffee Bean Grinder
+- $1195.00 | NEW Grindmaster 890E-TS-STARG Commercial High-Volume 3lb Coffee Bean Grinder
+- $ 125.00 | Grindmaster Model 225 Commercial Double Hopper Coffee Bean Grinder Works Great
+- $ 594.99 | Grindmaster 875 Commercial Coffee Grinder "Brothers Gourmet Coffee" Logo *RARE*
+- $ 449.99 | Grindmaster 505 Commercial Vintage Coffee Grinder *RARE WITH STAND! Works great!
+- $ 649.00 | Grindmaster 850 Commercial Coffee Grinder 3 lb. Hopper Capacity
+- $ 700.00 | Grindmaster-Cecilware 890BS 3 lb. Hopper Heavy Duty Black Retail Coffee Grinder
+- $ 498.00 | Grind Master 875 3 lb. Hopper Black Automatic Gourmet Grocery Coffee Grinder EUC
+- $ 649.95 | GRINDMASTER Cecilware 890 Commercial 3lb Coffee Espresso Bean Grinder *Video
+- $ 624.99 | Grindmaster 250AB Dual Hopper with Dual Portion Commercial Coffee Grinder
+- $ 624.99 | Grindmaster 250AB Dual Hopper with Dual Portion Commercial Coffee Grinder
+- $ 500.00 | Grindmaster Commercial Heavy Duty Dual Hopper Coffee Grinder 225
+- $ 449.99 | Grindmaster 495 Vintage Old Fashioned Ground Coffee Commercial Grinder Works!
+- $1149.00 | Grindmaster Coffee Grinder Model 250
+- $1316.70 | Grindmaster-Cecilware 890BS 3 lb. Hopper Heavy Duty Black Retail Coffee Grinder
+
+--- CLEANED ---
+- $ 600.00 | Grindmaster 890 Commercial Brown Countertop Coffee Bean Grinder 1/2 HP
+- $ 995.00 | NEW GRINDMASTER 890E-TS-STARG COFFEE BEAN GRINDER AUTOMATIC HIGH VOLUME
+- $ 550.00 | Grindmaster 875 Commercial Countertop Whole Coffee Bean Grinder 1/2 HP
+- $ 625.00 | Grindmaster 875 Bulk Bean Commercial 3lb Coffee Grinder Red Eight O’clock Coffee
+- $ 525.95 | Grindmaster Commercial Coffee Bean Grinder 875 Nice!
+- $ 594.99 | Grindmaster 875 Commercial Coffee Grinder with "8 O’CLOCK BEAN COFFEE" Logo RARE
+- $ 594.99 | Grindmaster 875 Commercial Coffee Grinder with "8 O’CLOCK BEAN COFFEE" Logo RARE
+- $ 750.00 | Grindmaster Commercial Coffee Bean Grinder 875 Excellent Condition 
+- $1150.00 | SALE NEW! Grindmaster 890 Bean Commercial 3lb Coffee Grinder READY TO USE 1091
+- $ 950.00 | Grindmaster 875 Commercial Coffee Grinder Bulk Bean, 3 Lb, Black
+- $1150.00 | SALE NEW! Grindmaster 890 Bean Commercial 3lb Coffee Grinder READY TO USE 0391
+- $1200.00 | NEW Grindmaster 890E-TS-STARG Commercial High-Volume 3lb Coffee Bean Grinder
+- $1195.00 | NEW Grindmaster 890E-TS-STARG Commercial High-Volume 3lb Coffee Bean Grinder
+- $ 594.99 | Grindmaster 875 Commercial Coffee Grinder "Brothers Gourmet Coffee" Logo *RARE*
+- $ 649.00 | Grindmaster 850 Commercial Coffee Grinder 3 lb. Hopper Capacity
+- $ 700.00 | Grindmaster-Cecilware 890BS 3 lb. Hopper Heavy Duty Black Retail Coffee Grinder
+- $ 498.00 | Grind Master 875 3 lb. Hopper Black Automatic Gourmet Grocery Coffee Grinder EUC
+- $ 649.95 | GRINDMASTER Cecilware 890 Commercial 3lb Coffee Espresso Bean Grinder *Video
+- $1316.70 | Grindmaster-Cecilware 890BS 3 lb. Hopper Heavy Duty Black Retail Coffee Grinder
+
+--- REASONING ---
+Included comparable commercial grinders from the same Grindmaster 800-series (models 850, 875, 890) since the exact 810 model was unavailable.
+-> AVG: $804.71 | CONF: 65%
+
+--- [2025-10-27 20:36:59] eBay Analysis for 'Bizerba Slicer Portion Control Scale PW' (Lot #12) ---
+
+--- RAW ---
+- $1495.00 | BIZERBA GSP H HEAVY DUTY MANUAL GRAVITY FEED DELI CHEESE MEAT SLICER
+- $2895.00 | 2020 BIZERBA GSP HD AUTOMATIC GRAVITY COMMERCIAL DELI MEAT CHEESE SLICER
+- $ 899.00 | CHEAP! SANITIZED BIZERBA XC 100 22 lb. countertop computing scale W/Printer 6709
+- $1295.00 | BIZERBA SE12D US AUTOMATIC MANUAL GRAVITY DELI MEAT SLICER
+- $ 950.00 | 2020 BIZERBA GSP H HEAVY DUTY MANUAL GRAVITY FEED DELI CHEESE MEAT SLICER
+- $1080.00 | Bizerba GSP H Meat & Cheese Slicer Free Shipping 30 Day Warranty
+- $1599.00 | Bizerba GSPH 2012 Manual Slicer Fully Refurbished Tested and Working
+- $1475.00 | Bizerba GSP-HD Automatic Slicer Deli Meat Cheese Slicer 2012
+- $3000.00 | Refurbished 2020 Bizerba GSP HD W Digital Portion Scale Automatic Meat Slicer
+- $1075.50 | Bizerba SE12-D Automatic Slicer Meat Cheese Free Shipping 30 Day Warranty - READ
+- $1495.00 | BIZERBA SE12D US AUTOMATIC MANUAL GRAVITY DELI MEAT SLICER
+- $2750.00 | BIZERBA GSP-HD AUTOMATIC SLICER 2020 MODEL 120V/ 60 HZ/2.6 AMPS
+- $1599.00 | Bizerba GSPH Manual Deli Slicer 2014 Fully Refurbished Tested Working!
+- $1495.00 | BIZERBA GSP H HEAVY DUTY MANUAL GRAVITY FEED DELI CHEESE MEAT SLICER
+- $1495.00 | BIZERBA GSP H HEAVY DUTY MANUAL GRAVITY FEED DELI CHEESE MEAT SLICER
+- $ 149.95 | New and Sealed Bizerba Weighing Module
+- $ 449.00 | Bizerba XC 100 PRO 15-30 lb. Countertop Food Scale W/Printer - Tested & Working
+- $1080.00 | Bizerba GSP H Meat & Cheese Slicer Free Shipping 30 Day Warranty
+- $1999.00 | Bizerba GSPH 2016 Manual Deli Slicer Refurbished, Tested, Working
+- $1999.00 | Bizerba GSPH 2015 Manual Deli Slicer Refurbished, Tested, Working!
+- $2999.00 | Bizerba GSP H 2020 Manual Slicer Fully Refurbished Tested and Working
+- $1999.00 | Bizerba GSPH Manual 2017 Deli Slicer Fully Refurbished Working
+- $1125.00 | Bizerba SE12-D Automatic Slicer Meat Cheese Free Shipping 30 Day Warranty - READ
+- $2999.00 | Bizerba 2022 Manual Deli Slicer Fully Refurbished & Working
+- $1075.50 | Bizerba SE12-D Automatic Slicer Meat Cheese Free Shipping 30 Day Warranty - READ
+- $1080.00 | Bizerba GSP H Meat & Cheese Slicer Free Shipping 30 Day Warranty
+- $3450.00 | 2024 Bizerba manual meat cheese deli slicer GSP H with blade sharpener D
+- $1599.00 | Bizerba GSPH 2012 Manual Slicer Fully Refurbished Tested and Working
+- $ 499.99 | Bizerba XC 100 PRO 22 lb. Countertop Scale W/Printer - Tested & Working
+- $2700.00 | Bizerba GSP-HD Automatic Slicer Deli Meat Cheese Slicer - Used
+
+--- CLEANED ---
+- $3000.00 | Refurbished 2020 Bizerba GSP HD W Digital Portion Scale Automatic Meat Slicer
+
+--- REASONING ---
+Only one item was retained because it explicitly matches the requirement of being a combined slicer with an integrated digital portion control scale.
+-> AVG: $3,000.00 | CONF: 40%
+
+--- [2025-10-27 20:36:59] eBay Analysis for 'Server Triple FS-4 Food Warmer 5 Qt' (Lot #13) ---
+
+--- RAW ---
+- $ 708.49 | SERVER 86481 FOOD WARMER 1/3 PAN SS PHASE7
+- $ 972.42 | Server 85900 Triple 5 Quart Cooker/Warmer
+- $ 643.67 | Server 84000 7 Qt Food Warmer
+- $ 656.08 | Server 84100 11 Qt Food Warmer
+
+--- CLEANED ---
+- $ 972.42 | Server 85900 Triple 5 Quart Cooker/Warmer
+
+--- REASONING ---
+Kept the single result that matches the specified brand, triple function, and 5-quart capacity, treating it as a modern equivalent to the FS-4 model.
+-> AVG: $972.42 | CONF: 55%
+
+--- [2025-10-27 20:36:59] eBay Analysis for 'Heat Seal PC-1318 Pizza Capper Film Wrapper' (Lot #14) ---
+
+--- RAW ---
+
+--- CLEANED ---
+
+--- REASONING ---
+No raw search results were provided, resulting in zero comparable items.
+-> AVG: $0.00 | CONF: 0%
+
+--- [2025-10-27 20:36:59] eBay Analysis for 'Wine Well Commercial Wine Chiller' (Lot #15) ---
+
+--- RAW ---
+- $ 103.45 | Wine Chiller | Award Winning Iceless Design | Keeps Wine Cold up to 6 Hours |...
+- $  24.98 | Wine Enthusiast Double Wall Iceless Wine Bottle Chiller
+- $ 209.00 | Commercial Intelligent Wine Chiller Fast Cooling Temp Control 110V-220V
+- $  40.00 | White Wine Chiller 18/8 Stainless Steel
+- $  29.99 | Wine Bottle Chiller - Built in Ice Compartment
+- $  26.47 | Vinotemp Wine Chiller Single Bottle
+- $  18.65 | Stainless Steel Wine Chiller Double Walled
+- $ 109.99 | Stainless Steel Wine Chiller | Iceless Design | 6-Hour Chill
+- $  94.13 | Premium Vacuum Insulated, Triple Walled, Stainless Steel Wine Chiller w/Optim...
+- $  19.95 | Wine Chiller And Aerator
+- $  19.99 | 12 Degrés Iceless Wine Chiller Set
+- $  80.50 | 3-In-1 Stainless Steel Wine Chiller with Wine Aerator and Wine Pourer,
+- $  20.99 | 3-in-1 Stainless Steel Wine Chiller, Aerator & Pourer – The Ultimate Holiday ...
+- $  30.00 | 12 Degrés Iceless Wine Chiller Set
+- $ 549.00 | Commercial Wine Cooler Electric Glass Froster Cup Chiller CO2 Cylinder Connect
+- $  97.99 | MegaChef Electric Wine Chiller With Digital Display |775
+- $1899.99 | U-LINE 18 INCH WINE CHILLER 31 BOTTLE CAPACITY STAINLESS STEEL GLASS DOOR
+- $  25.00 | CHILL PERFECT WINE CHILLER & AERATOR
+- $  24.50 | Double Wall Wine Bottle Chiller
+- $  30.00 | Insulated Wooden Wine Chiller
+- $  49.99 | Stainless Steel Wine Chiller with EZ Pour Spout - 3 in 1 Aerator
+- $   5.99 | Imusa Wine Chiller w/Aerator & Pourer - NEW
+- $  50.00 | Wine Chiller
+- $  38.88 | Wine Chiller for Wine Bottles - White
+- $   9.99 | Chefmate Steel Wine Chiller, 7 1/2 X 4 1/2 Inches
+- $  35.00 | Wine Chiller
+- $  40.00 | Wine Enthusiast Wine Chiller Brand New In Box
+- $ 218.04 | Premium 8 Bottle Horizontal Thermoelectric Wine Cooler/Chiller Counter Top Re...
+- $ 262.12 | Electric Wine Chiller - Keep 750ml Bottles at Perfect Temp (35.6°F-64°F) | Si...
+- $  94.13 | Premium Vacuum Insulated, Triple Walled, Stainless Steel Wine Chiller w/Optim...
+
+--- CLEANED ---
+- $ 209.00 | Commercial Intelligent Wine Chiller Fast Cooling Temp Control 110V-220V
+- $ 549.00 | Commercial Wine Cooler Electric Glass Froster Cup Chiller CO2 Cylinder Connect
+- $1899.99 | U-LINE 18 INCH WINE CHILLER 31 BOTTLE CAPACITY STAINLESS STEEL GLASS DOOR
+- $ 218.04 | Premium 8 Bottle Horizontal Thermoelectric Wine Cooler/Chiller Counter Top Re...
+- $ 262.12 | Electric Wine Chiller - Keep 750ml Bottles at Perfect Temp (35.6°F-64°F) | Si...
+
+--- REASONING ---
+Only retained electric or cabinet-style commercial wine chillers, excluding all passive sleeves and single-bottle consumer accessories.
+-> AVG: $627.63 | CONF: 70%
+
+--- [2025-10-27 20:36:59] eBay Analysis for 'Sunkist S-100 Commercial Fruit Sectionizer' (Lot #16) ---
+
+--- RAW ---
+- $ 170.00 | Sunkist Commercial Sectionizer Model 100 6 Slices Works Made in the USA
+- $ 199.99 | Sunkist Commercial Sectionizer Model 100 6 Slices Works Made in the USA
+
+--- CLEANED ---
+- $ 170.00 | Sunkist Commercial Sectionizer Model 100 6 Slices Works Made in the USA
+- $ 199.99 | Sunkist Commercial Sectionizer Model 100 6 Slices Works Made in the USA
+
+--- REASONING ---
+All results were kept as they are perfect, direct matches for the Sunkist Model 100 Commercial Sectionizer.
+-> AVG: $185.00 | CONF: 100%
+
+--- [2025-10-27 20:36:59] eBay Analysis for 'Rubbermaid 4500 Utility Service Cart' (Lot #17) ---
+
+--- RAW ---
+- $ 186.99 | Rubbermaid Commercial Fg450088beig Utility Cart With Deep Lipped Plastic
+- $ 194.04 | Rubbermaid FG450088BLA HD 2-Shelf Utility Cart w/Lipped Shelf (Small) (4500-88)
+- $ 198.00 | Rubbermaid Commercial Fg452088bla Plastic Utility Cart With Deep Lipped Plastic
+- $ 193.99 | Rubbermaid Commercial Fg9t6700bla Utility Cart With Deep Lipped Plastic
+- $ 199.84 | Rubbermaid FG450089BLK 18"W x 33"H x 39"I Utility Cart Black (4500-89)
+- $ 161.98 | Rubbermaid Commercial 9T6600BLA 2 Shelves 500lbs. Service/Utility Cart,Black-NEW
+- $ 162.15 | Rubbermaid Commercial 9T6600BLA 2 Shelves 500 lbs. Service/Utility Carts -BLKNew
+- $  39.99 | Rubbermaid #4597 - 16 In. x 30 In. Optional Mid-Shelf For 4500 Utility Cart
+- $ 175.94 | Rubbermaid Commercial 450088BK 17.13" x 38.5" x 38.88" 2 Shelf Utility Cart New
+- $ 257.99 | Rubbermaid Commercial 1997206 Adaptable-Design Utility Cart With Deep Lipped
+- $  66.02 | Rubbermaid 4 gal Black Plastic Service Cart Utility Bin 
+- $ 194.92 | Rubbermaid Commercial 9T6700BLA 2 Shelves Plastic Service/Utility Carts New
+- $ 224.99 | Rubbermaid Commercial Fg452088beig Utility Cart With Deep Lipped Plastic
+- $ 780.00 | New Rubbermaid Commercial Products 4-Shelf Utility/Service Quad Cart
+- $ 491.00 | Rubbermaid Commercial Fg345700bla Enclosed Service Cart, Plastic, 200 Lb Load
+- $ 366.99 | Rubbermaid Commercial Fg454600bla Utility Cart With Deep Lipped Plastic
+- $ 216.27 | Rubbermaid Commercial 452500BK 25.25" x 44" x 38.13" 2 Shelf Utility Cart New
+- $ 186.99 | Rubbermaid Commercial Fg450088bla Utility Cart With Deep Lipped Plastic
+- $ 195.00 | Rubbermaid Commercial 452088BG 25.9" x 45.2" x 32.2" 2 Shelf Utility Cart New
+- $ 204.99 | Rubbermaid Commercial 2192464 Utility Cart, 500 Lb Load Capacity, 2 Shelves, 44
+- $ 332.00 | Rubbermaid Commercial Fg409100gray Dual-Handle Utility Cart With Lipped Plastic
+- $ 212.01 | Rubbermaid Commercial 1997206 Heavy Duty Adaptable Utility Cart - S, Black New
+- $ 244.99 | Rubbermaid Commercial Fg342488bla Dual-Handle Utility Cart With Lipped Plastic
+- $ 380.99 | Rubbermaid Commercial 2192463 Utility Cart, 750 Lb Load Capacity, 2 Shelves, 55
+- $ 271.99 | Rubbermaid Commercial Fg342488owht Dual-Handle Utility Cart With Lipped Plastic
+- $ 513.00 | Rubbermaid Commercial Fg409400gray Enclosed Service Cart, 300 Lb Load Capacity,
+- $ 181.14 | Rubbermaid Commercial Products 2-Shelf Utility/Service Cart, Medium, Black, Lipp
+- $ 174.81 | Rubbermaid Commercial 450088BG 500 lbs. cap. 2 Shelves HD Utility Cart - BG New
+- $ 207.00 | Rubbermaid Commercial 1881781 2-Compartment Collapsible Cart - Black/Silver New
+- $ 222.69 | Rubbermaid FG4520-88BLA Heavy-Duty Utility/Service Cart (Black)
+
+--- CLEANED ---
+- $ 186.99 | Rubbermaid Commercial Fg450088beig Utility Cart With Deep Lipped Plastic
+- $ 194.04 | Rubbermaid FG450088BLA HD 2-Shelf Utility Cart w/Lipped Shelf (Small) (4500-88)
+- $ 199.84 | Rubbermaid FG450089BLK 18"W x 33"H x 39"I Utility Cart Black (4500-89)
+- $ 175.94 | Rubbermaid Commercial 450088BK 17.13" x 38.5" x 38.88" 2 Shelf Utility Cart New
+- $ 186.99 | Rubbermaid Commercial Fg450088bla Utility Cart With Deep Lipped Plastic
+- $ 174.81 | Rubbermaid Commercial 450088BG 500 lbs. cap. 2 Shelves HD Utility Cart - BG New
+
+--- REASONING ---
+Only kept results that explicitly belong to the Rubbermaid 4500 model series, excluding parts, accessories, and other model numbers (4520, 9T66, etc.).
+-> AVG: $186.44 | CONF: 95%
+
+--- [2025-10-27 20:36:59] eBay Analysis for 'Danby DAR026A1BDD Mini Fridge Refrigerator' (Lot #18) ---
+
+--- RAW ---
+- $ 200.00 | Danby Model # DAR026A1BDD-3
+- $ 437.99 | Danby Dar033a1bsldbo Compact Refrigerator, 3.3 Cu. Ft.
+- $ 125.00 | Danby Designer mini fridge refrigerator
+- $ 291.58 | DANBY DAR026A1WDD Refrigerator,2.6 cu ft,White 6RNP9
+- $ 399.99 | Danby Designer Series Mini Fridge - DAR026A1BDD
+- $ 399.99 | Danby 4.4 cu. ft. Contemporary Compact Refrigerator DAR044A8BBSL
+- $ 297.13 | DANBY DAR026A1BDD Refrigerator,2.6 cu ft,Black 10N668
+- $ 287.24 | Danby Designer 1.7 cu. ft. Compact Refrigerator (DAR017A2BDD), 1.7, Black 
+- $ 165.00 | Danby 1.6 Cu. Ft Compact All Refrigerator - DAR016A1BDB-SD
+- $ 236.29 | DANBY DAR017A2BDD Refrigerator,1.7 cu ft,Black 6RNP8
+- $ 450.00 | Danby DCR031B1BSLDD 87L Mini Refrigerator
+- $  29.99 | Danby 4.4 cu Mini Fridge Model DAR044 Glass Shelf
+- $  35.00 | 2.6 CU Ft. Black Mini Fridge Small Refrigerator for Collage Dorm Cooler, Compact
+- $ 130.00 | Danby DAR044A6DDB Contemporary Classic 4.4 Cu.Ft. Mini Fridge, Compact
+- $ 130.00 | Danby Dar026A1bdd 2.6 cu.ft. Designer Compact Refrigerator
+- $  89.00 | Danby Designer Mini Refrigerator 2.6 cu.ft.
+- $ 200.00 | Danby Dar026A1bdd 2.6 cu.ft. Designer Compact Refrigerator
+- $ 145.00 | Danby DAR026A1BDD 18 In Wide 2.6 Cu. Ft. Free Standing Compact Refrigerator Blac
+- $ 139.95 | DANBY DAR033A18BDD COMPACT REFRIGERATOR 3.3 cu. ft. BLACK 
+- $  99.00 | Danby DAR017A2BDD-3 Mini Refrigerator 1.7 cu. ft. - Black
+- $ 175.00 | Danby DCR047A1BBSL 4.7 Cubic Feet Mini Refrigerator
+- $ 200.00 | Danby DCR047A1BBSL 4.7 Cubic Feet Mini Refrigerator
+
+--- CLEANED ---
+- $ 200.00 | Danby Model # DAR026A1BDD-3
+- $ 291.58 | DANBY DAR026A1WDD Refrigerator,2.6 cu ft,White 6RNP9
+- $ 399.99 | Danby Designer Series Mini Fridge - DAR026A1BDD
+- $ 297.13 | DANBY DAR026A1BDD Refrigerator,2.6 cu ft,Black 10N668
+- $ 130.00 | Danby Dar026A1bdd 2.6 cu.ft. Designer Compact Refrigerator
+- $  89.00 | Danby Designer Mini Refrigerator 2.6 cu.ft.
+- $ 200.00 | Danby Dar026A1bdd 2.6 cu.ft. Designer Compact Refrigerator
+- $ 145.00 | Danby DAR026A1BDD 18 In Wide 2.6 Cu. Ft. Free Standing Compact Refrigerator Blac
+
+--- REASONING ---
+Retained all items matching the DAR026A1BDD model number or functionally identical 2.6 cu. ft. variants (including the white version), while excluding different sizes and accessories.
+-> AVG: $219.09 | CONF: 90%
+
+--- [2025-10-27 20:36:59] eBay Analysis for 'Danby DAR026A1BDD Mini Fridge Refrigerator' (Lot #19) ---
+
+--- RAW ---
+- $ 200.00 | Danby Model # DAR026A1BDD-3
+- $ 437.99 | Danby Dar033a1bsldbo Compact Refrigerator, 3.3 Cu. Ft.
+- $ 125.00 | Danby Designer mini fridge refrigerator
+- $ 291.58 | DANBY DAR026A1WDD Refrigerator,2.6 cu ft,White 6RNP9
+- $ 399.99 | Danby Designer Series Mini Fridge - DAR026A1BDD
+- $ 399.99 | Danby 4.4 cu. ft. Contemporary Compact Refrigerator DAR044A8BBSL
+- $ 297.13 | DANBY DAR026A1BDD Refrigerator,2.6 cu ft,Black 10N668
+- $ 287.24 | Danby Designer 1.7 cu. ft. Compact Refrigerator (DAR017A2BDD), 1.7, Black 
+- $ 165.00 | Danby 1.6 Cu. Ft Compact All Refrigerator - DAR016A1BDB-SD
+- $ 236.29 | DANBY DAR017A2BDD Refrigerator,1.7 cu ft,Black 6RNP8
+- $ 450.00 | Danby DCR031B1BSLDD 87L Mini Refrigerator
+- $  29.99 | Danby 4.4 cu Mini Fridge Model DAR044 Glass Shelf
+- $  35.00 | 2.6 CU Ft. Black Mini Fridge Small Refrigerator for Collage Dorm Cooler, Compact
+- $ 130.00 | Danby DAR044A6DDB Contemporary Classic 4.4 Cu.Ft. Mini Fridge, Compact
+- $ 130.00 | Danby Dar026A1bdd 2.6 cu.ft. Designer Compact Refrigerator
+- $  89.00 | Danby Designer Mini Refrigerator 2.6 cu.ft.
+- $ 200.00 | Danby Dar026A1bdd 2.6 cu.ft. Designer Compact Refrigerator
+- $ 145.00 | Danby DAR026A1BDD 18 In Wide 2.6 Cu. Ft. Free Standing Compact Refrigerator Blac
+- $ 139.95 | DANBY DAR033A18BDD COMPACT REFRIGERATOR 3.3 cu. ft. BLACK 
+- $  99.00 | Danby DAR017A2BDD-3 Mini Refrigerator 1.7 cu. ft. - Black
+- $ 175.00 | Danby DCR047A1BBSL 4.7 Cubic Feet Mini Refrigerator
+- $ 200.00 | Danby DCR047A1BBSL 4.7 Cubic Feet Mini Refrigerator
+
+--- CLEANED ---
+- $ 200.00 | Danby Model # DAR026A1BDD-3
+- $ 291.58 | DANBY DAR026A1WDD Refrigerator,2.6 cu ft,White 6RNP9
+- $ 399.99 | Danby Designer Series Mini Fridge - DAR026A1BDD
+- $ 297.13 | DANBY DAR026A1BDD Refrigerator,2.6 cu ft,Black 10N668
+- $ 130.00 | Danby Dar026A1bdd 2.6 cu.ft. Designer Compact Refrigerator
+- $  89.00 | Danby Designer Mini Refrigerator 2.6 cu.ft.
+- $ 200.00 | Danby Dar026A1bdd 2.6 cu.ft. Designer Compact Refrigerator
+- $ 145.00 | Danby DAR026A1BDD 18 In Wide 2.6 Cu. Ft. Free Standing Compact Refrigerator Blac
+
+--- REASONING ---
+Retained all items matching the DAR026A1BDD model number or functionally identical 2.6 cu. ft. variants (including the white version), while excluding different sizes and accessories.
+-> AVG: $219.09 | CONF: 90%

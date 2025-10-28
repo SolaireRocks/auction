@@ -1,0 +1,898 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Item Analysis</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a; --table-bg-color: #2c2c2c; --header-bg-color: #3a3a3a;
+            --header-hover-bg-color: #4a4a4a; --row-even-bg-color: #333333; --row-odd-bg-color: #2c2c2c;
+            --border-color: #444444; --text-color: #e0e0e0; --link-color: #4a90e2;
+            --link-hover-color: #81b5f5; --sort-indicator-color: #81b5f5;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 2rem; line-height: 1.6; }
+        h1 { text-align: center; color: #ffffff; font-weight: 300; margin-bottom: 2rem; }
+        .controls-container { max-width: 1600px; margin: auto; margin-bottom: 1rem; }
+        .filter-container { text-align: left; padding: 10px 15px; background-color: var(--table-bg-color); border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        .filter-container label { margin-right: 20px; font-size: 0.9em; cursor: pointer; user-select: none; }
+        .filter-container input { vertical-align: middle; margin-right: 5px; }
+        .table-container { max-width: 1600px; margin: auto; overflow-x: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        table { width: 100%; border-collapse: collapse; background-color: var(--table-bg-color); border-spacing: 0; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        thead th { background-color: var(--header-bg-color); color: #ffffff; font-weight: 600; position: sticky; top: 0; z-index: 10; }
+        thead th[data-column] { cursor: pointer; transition: background-color 0.2s ease-in-out; user-select: none; }
+        thead th[data-column]:hover { background-color: var(--header-hover-bg-color); }
+        tbody tr:not(.reasoning-row):hover { background-color: var(--header-hover-bg-color); }
+        td { font-size: 0.95em; }
+        td:nth-child(4), td:nth-child(5), td:nth-child(6), td:nth-child(7) { font-family: 'Courier New', Courier, monospace; text-align: right; white-space: nowrap; }
+        td:nth-child(8), td:nth-child(9) { text-align: center; }
+        a { color: var(--link-color); text-decoration: none; transition: color 0.2s ease-in-out; }
+        a:hover { color: var(--link-hover-color); text-decoration: underline; }
+        .sort-indicator { color: var(--sort-indicator-color); font-size: 0.8em; margin-left: 8px; display: inline-block; width: 10px; }
+        .lot-main td { font-weight: bold; }
+        .lot-main.expandable { cursor: pointer; }
+        .lot-main:nth-child(4n+1), .lot-main:nth-child(4n+2) { background-color: var(--row-odd-bg-color); }
+        .lot-main:nth-child(4n+3), .lot-main:nth-child(4n) { background-color: var(--row-even-bg-color); }
+        .lot-sub-item { background-color: rgba(0,0,0,0.15) !important; }
+        .lot-sub-item td { font-size: 0.9em; color: #c0c0c0; border-color: #383838; }
+        .lot-sub-item td:nth-child(2) { padding-left: 35px; }
+        .reasoning-row { display: none; background-color: #222 !important; }
+        .reasoning-row.visible { display: table-row; }
+        .reasoning-row td {
+            padding: 10px 20px 10px 40px;
+            font-style: italic;
+            color: #b0b0b0;
+            border-top: 1px dashed #555;
+            white-space: normal;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Auction Item Analysis</h1>
+    <div class="controls-container">
+        <div class="filter-container">
+            <label><input type="checkbox" id="hideFurniture"> Hide Large Furniture</label>
+            <label><input type="checkbox" id="hideMedical"> Hide Medical Devices</label>
+        </div>
+    </div>
+    <div class="table-container"><table><thead><tr><th data-column="lot_number">Lot # <span class="sort-indicator"></span></th><th data-column="name">Item Name <span class="sort-indicator"></span></th><th data-column="category">Category <span class="sort-indicator"></span></th><th data-column="price">AI Market Value <span class="sort-indicator"></span></th><th data-column="ebay_price">eBay Avg. Sold <span class="sort-indicator"></span></th><th data-column="confidence">Confidence <span class="sort-indicator"></span></th><th data-column="sell_rating">Sell Rating <span class="sort-indicator"></span></th><th>eBay Search</th><th>Google Search</th></tr></thead><tbody id="data-table-body"></tbody></table></div>
+
+<script type="application/json" id="auctionData">
+    [
+    {
+        "ebay_search_title": "True GDM-52TM-RL Refrigerator",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 4,
+        "total_market_value": 1200,
+        "items": [
+            {
+                "item_name": "True GDM-52TM-RL Refrigerator",
+                "estimated_value": 1200,
+                "ebay_avg_price": 4454.153333333333
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=Qb0KCcOAOQbyyBAm9kjBWg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "True | TRUE GDM-52TM-RL Black PASS THRU GLASS DOORS REFRIGERATED MERCHANDISER, Powers On And In Great Working Condition!",
+            "lot_number": 4,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=Qb0KCcOAOQbyyBAm9kjBWg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "Qb0KCcOAOQbyyBAm9kjBWg_1.jpg",
+                "Qb0KCcOAOQbyyBAm9kjBWg_2.jpg",
+                "Qb0KCcOAOQbyyBAm9kjBWg_3.jpg",
+                "Qb0KCcOAOQbyyBAm9kjBWg_4.jpg",
+                "Qb0KCcOAOQbyyBAm9kjBWg_5.jpg"
+            ]
+        },
+        "reasoning": "This is a large, high-capacity pass-through merchandiser from True. It holds significant value because new units are very expensive. However, its massive size and weight make it a logistical challenge, severely limiting the buyer pool to local businesses with the means to move it. This difficulty is reflected in the low sell rating. Estimated manufacturing year: 2010s. I analyzed 5 images.",
+        "lot_number": 4,
+        "ebay_avg_price": 4454.153333333333,
+        "ebay_confidence_score": 70,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=True+GDM-52TM-RL+Refrigerator&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Oliver 2005 Bread Slicer",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 7,
+        "total_market_value": 1500,
+        "items": [
+            {
+                "item_name": "Oliver 2005 Bread Slicer",
+                "estimated_value": 1500,
+                "ebay_avg_price": 3595.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=IX%2bdmZBNCzKKu%2bODuVV%2bdQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Oliver | Oliver Model 2005 Vari Slicer Bread Slicer, Powers On Has Code Outfeed Door Open Close to continue, Otherwise Good Condition!",
+            "lot_number": 10,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=IX%2bdmZBNCzKKu%2bODuVV%2bdQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "IXdmZBNCzKKuODuVVdQ_1.jpg",
+                "IXdmZBNCzKKuODuVVdQ_2.jpg",
+                "IXdmZBNCzKKuODuVVdQ_3.jpg",
+                "IXdmZBNCzKKuODuVVdQ_4.jpg",
+                "IXdmZBNCzKKuODuVVdQ_5.jpg",
+                "IXdmZBNCzKKuODuVVdQ_6.jpg",
+                "IXdmZBNCzKKuODuVVdQ_7.jpg"
+            ]
+        },
+        "reasoning": "Oliver is a premier brand for bakery equipment, and these slicers are extremely expensive new ($10k+). This makes it a gold star item. However, the listing notes an error code 'Outfeed door open,' which introduces risk. It's likely a simple sensor issue, but it could be more complex. The value is heavily discounted from a fully working unit to account for this uncertainty and potential repair cost. Estimated manufacturing year: 2007. I analyzed 7 images.",
+        "lot_number": 10,
+        "ebay_avg_price": 3595.0,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Oliver+2005+Bread+Slicer&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "BIRO 922 Meat Grinder",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 8,
+        "total_market_value": 2200,
+        "items": [
+            {
+                "item_name": "BIRO 922 Meat Grinder",
+                "estimated_value": 2200,
+                "ebay_avg_price": 3359.8
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=G%2fgX8UA4o%2fTtk2aIX7wGaA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "BIRO | Biro Brand New Model 922 Commercial Counter Top 115v Manual Feed Meat Grinder, Brand New!",
+            "lot_number": 1,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=G%2fgX8UA4o%2fTtk2aIX7wGaA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "GgX8UA4oTtk2aIX7wGaA_1.jpg",
+                "GgX8UA4oTtk2aIX7wGaA_2.jpg",
+                "GgX8UA4oTtk2aIX7wGaA_3.jpg",
+                "GgX8UA4oTtk2aIX7wGaA_4.jpg",
+                "GgX8UA4oTtk2aIX7wGaA_5.jpg",
+                "GgX8UA4oTtk2aIX7wGaA_6.jpg",
+                "GgX8UA4oTtk2aIX7wGaA_7.jpg",
+                "GgX8UA4oTtk2aIX7wGaA_8.jpg",
+                "GgX8UA4oTtk2aIX7wGaA_9.jpg",
+                "GgX8UA4oTtk2aIX7wGaA_10.jpg",
+                "GgX8UA4oTtk2aIX7wGaA_11.jpg"
+            ]
+        },
+        "reasoning": "This is a brand new, unused commercial meat grinder from a reputable brand, BIRO. New units are very expensive ($3k+), making this a highly desirable item for restaurants or butchers. Its 'brand new' status justifies the gold star rating and high valuation. It is heavy and requires freight shipping, which slightly lowers the sell rating. Estimated manufacturing year: 2010s. I analyzed 11 images.",
+        "lot_number": 1,
+        "ebay_avg_price": 3359.8,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=BIRO+922+Meat+Grinder&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Bizerba Slicer Portion Control Scale PW",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 8,
+        "total_market_value": 550,
+        "items": [
+            {
+                "item_name": "Bizerba Slicer Portion Control Scale PW",
+                "estimated_value": 550,
+                "ebay_avg_price": 3000.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=aW5U8sIok418TMy6O9u6Ew%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Bizerba | Bizerba Portion Control Scale, for Slicers SE12, SE12D, GSPH, GSPV, GSPHD Brand New!",
+            "lot_number": 12,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=aW5U8sIok418TMy6O9u6Ew%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "aW5U8sIok418TMy6O9u6Ew_1.jpg",
+                "aW5U8sIok418TMy6O9u6Ew_2.jpg",
+                "aW5U8sIok418TMy6O9u6Ew_3.jpg",
+                "aW5U8sIok418TMy6O9u6Ew_4.jpg"
+            ]
+        },
+        "reasoning": "This is a specialized, brand new Bizerba accessory part (Scale PW) designed for high-end commercial slicers. Bizerba equipment parts retain extremely high value, especially new items, justifying a premium resale price close to 50-60% of retail cost. Estimated manufacturing year is Post-2015. Analyzed 4 images.",
+        "lot_number": 12,
+        "ebay_avg_price": 3000.0,
+        "ebay_confidence_score": 40,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Bizerba+Slicer+Portion+Control+Scale+PW&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Bizerba GSP HD Slicer",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 9,
+        "total_market_value": 3000,
+        "items": [
+            {
+                "item_name": "Bizerba GSP HD Slicer",
+                "estimated_value": 3000,
+                "ebay_avg_price": 2607.2272727272725
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=a7WVNxPbzMfgvLeAdhllKw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "BIZERBA | Bizerba Model GSP HD Automatic Gravity Feed Meat/Cheese Deli Slicer, Powers On And Great Working Condition!",
+            "lot_number": 2,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=a7WVNxPbzMfgvLeAdhllKw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "a7WVNxPbzMfgvLeAdhllKw_1.jpg",
+                "a7WVNxPbzMfgvLeAdhllKw_2.jpg",
+                "a7WVNxPbzMfgvLeAdhllKw_3.jpg",
+                "a7WVNxPbzMfgvLeAdhllKw_4.jpg",
+                "a7WVNxPbzMfgvLeAdhllKw_5.jpg",
+                "a7WVNxPbzMfgvLeAdhllKw_6.jpg",
+                "a7WVNxPbzMfgvLeAdhllKw_7.jpg"
+            ]
+        },
+        "reasoning": "Bizerba is a premium German brand, and the GSP HD is a heavy-duty, automatic slicer that retails for over $10,000 new. Used, working models are in extremely high demand. The listing confirms it powers on and is in great working condition, making it a gold star item that will sell quickly to a commercial buyer. Estimated manufacturing year: 2010s. I analyzed 7 images.",
+        "lot_number": 2,
+        "ebay_avg_price": 2607.2272727272725,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Bizerba+GSP+HD+Slicer&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Minus Forty Undercounter Freezer",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 5,
+        "total_market_value": 250,
+        "items": [
+            {
+                "item_name": "Minus Forty Undercounter Freezer",
+                "estimated_value": 250,
+                "ebay_avg_price": 1616.6599999999999
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=clvvMHilKkK9kuC2EeXN9w%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Minus Forty | Undercounter Glass Door Freezer, Powers On And In Great Working Condition!",
+            "lot_number": 7,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=clvvMHilKkK9kuC2EeXN9w%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "clvvMHilKkK9kuC2EeXN9w_1.jpg",
+                "clvvMHilKkK9kuC2EeXN9w_2.jpg",
+                "clvvMHilKkK9kuC2EeXN9w_3.jpg",
+                "clvvMHilKkK9kuC2EeXN9w_4.jpg"
+            ]
+        },
+        "reasoning": "This is a commercial undercounter freezer. The MFG date is 2010, making it over a decade old. The biggest red flag is the temperature display showing '26', which is not a freezing temperature. While the listing says 'powers on', it doesn't guarantee it cools properly. This risk significantly lowers the value. It's a local pickup item only. Estimated manufacturing year: 2010. I analyzed 4 images.",
+        "lot_number": 7,
+        "ebay_avg_price": 1616.6599999999999,
+        "ebay_confidence_score": 80,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Minus+Forty+Undercounter+Freezer&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "True GDM-10SSL Refrigerator",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 6,
+        "total_market_value": 500,
+        "items": [
+            {
+                "item_name": "True GDM-10SSL Refrigerator",
+                "estimated_value": 500,
+                "ebay_avg_price": 1533.2336363636364
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=jRbNTlymjPWVSCP1vUC6ng%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "True | True GDM-10SSL Low Profile Refrigerated Glass Door Merchandiser, Powers On And Great Working Condition!",
+            "lot_number": 3,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=jRbNTlymjPWVSCP1vUC6ng%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "jRbNTlymjPWVSCP1vUC6ng_1.jpg",
+                "jRbNTlymjPWVSCP1vUC6ng_2.jpg",
+                "jRbNTlymjPWVSCP1vUC6ng_3.jpg",
+                "jRbNTlymjPWVSCP1vUC6ng_4.jpg",
+                "jRbNTlymjPWVSCP1vUC6ng_5.jpg"
+            ]
+        },
+        "reasoning": "True is the industry standard for commercial refrigeration, so their products always have resale value. This is a common, smaller countertop model. Since it is confirmed to be working, it's a solid bread-and-butter item for any reseller. Due to its size and weight, it is a local pickup item, which limits the market and sell rating. Estimated manufacturing year: 2010s. I analyzed 5 images.",
+        "lot_number": 3,
+        "ebay_avg_price": 1533.2336363636364,
+        "ebay_confidence_score": 85,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=True+GDM-10SSL+Refrigerator&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Bizerba SE 12 Slicer",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 8,
+        "total_market_value": 1000,
+        "items": [
+            {
+                "item_name": "Bizerba SE 12 Slicer",
+                "estimated_value": 1000,
+                "ebay_avg_price": 1295.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=%2f2wOVeyMgzRbBbzu36393Q%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "BIZERBA | Bizerba Model SE 12 US Manual Meat/Cheese Deli Slicer, Powers On Great Working Condition!!",
+            "lot_number": 5,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=%2f2wOVeyMgzRbBbzu36393Q%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "2wOVeyMgzRbBbzu36393Q_1.jpg",
+                "2wOVeyMgzRbBbzu36393Q_2.jpg",
+                "2wOVeyMgzRbBbzu36393Q_3.jpg",
+                "2wOVeyMgzRbBbzu36393Q_4.jpg",
+                "2wOVeyMgzRbBbzu36393Q_5.jpg",
+                "2wOVeyMgzRbBbzu36393Q_6.jpg",
+                "2wOVeyMgzRbBbzu36393Q_7.jpg",
+                "2wOVeyMgzRbBbzu36393Q_8.jpg"
+            ]
+        },
+        "reasoning": "Another Bizerba slicer, this time the SE 12 manual model. While not as valuable as the automatic GSP, it's a legendary workhorse known for durability. These are highly sought after by delis and restaurants. The fact that it powers on and is in good cosmetic condition makes it a gold star item with a strong resale value. Estimated manufacturing year: 2000s-2010s. I analyzed 8 images.",
+        "lot_number": 5,
+        "ebay_avg_price": 1295.0,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Bizerba+SE+12+Slicer&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Server Triple FS-4 Food Warmer 5 Qt",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 6,
+        "total_market_value": 300,
+        "items": [
+            {
+                "item_name": "Server Triple FS-4 Food Warmer 5 Qt",
+                "estimated_value": 300,
+                "ebay_avg_price": 972.42
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=9t29GOMMgS9aPsubHsjdVw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Server | Server Triple 5 qt Round Soup/sauce warmer, Powers On And Working!",
+            "lot_number": 13,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=9t29GOMMgS9aPsubHsjdVw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "9t29GOMMgS9aPsubHsjdVw_1.jpg",
+                "9t29GOMMgS9aPsubHsjdVw_2.jpg",
+                "9t29GOMMgS9aPsubHsjdVw_3.jpg",
+                "9t29GOMMgS9aPsubHsjdVw_4.jpg"
+            ]
+        },
+        "reasoning": "This is a used, functional Server brand commercial warmer (Model TRIPLE FS-4). Server is a quality brand, and three-well warmers are useful, though the unit shows considerable staining/wear. Valuation reflects typical used commercial equipment resale rates ($250-$400). Estimated manufacturing year 2000s-2010s. Analyzed 4 images.",
+        "lot_number": 13,
+        "ebay_avg_price": 972.42,
+        "ebay_confidence_score": 55,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Server+Triple+FS-4+Food+Warmer+5+Qt&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Grindmaster 810 Commercial Coffee Grinder",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 7,
+        "total_market_value": 200,
+        "items": [
+            {
+                "item_name": "Grindmaster 810 Commercial Coffee Grinder",
+                "estimated_value": 200,
+                "ebay_avg_price": 804.7142105263158
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=kSYT19n1lBJaxwugtvz%2bFg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Grindmaster | Grindmaster Model 810 1.5Lb Commercial Coffee/Bean Grinder, Powers on Great Working Condition!",
+            "lot_number": 11,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=kSYT19n1lBJaxwugtvz%2bFg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "kSYT19n1lBJaxwugtvzFg_1.jpg",
+                "kSYT19n1lBJaxwugtvzFg_2.jpg",
+                "kSYT19n1lBJaxwugtvzFg_3.jpg",
+                "kSYT19n1lBJaxwugtvzFg_4.jpg",
+                "kSYT19n1lBJaxwugtvzFg_5.jpg"
+            ]
+        },
+        "reasoning": "Valuation is based on the Grindmaster Model 810 being a known, reliable piece of commercial coffee equipment. Used, tested models typically resell between $150 and $300. The item is shippable despite its weight. Estimated manufacturing year 2005 (based on '0205' date code). Analyzed 5 images.",
+        "lot_number": 11,
+        "ebay_avg_price": 804.7142105263158,
+        "ebay_confidence_score": 65,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Grindmaster+810+Commercial+Coffee+Grinder&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Electrolux Dito TRS Food Processor",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 6,
+        "total_market_value": 350,
+        "items": [
+            {
+                "item_name": "Electrolux Dito TRS Food Processor",
+                "estimated_value": 350,
+                "ebay_avg_price": 689.9966666666666
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=TjGs12K0O%2b%2bn4Z7GU2QgTQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Electrolux | Electrolux Dito TRS 1V Commercial Single Speed Continuous Food Processor Slicer Chopper Shredder Grater, Powers On And Great Working Condition!",
+            "lot_number": 6,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=TjGs12K0O%2b%2bn4Z7GU2QgTQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "TjGs12K0On4Z7GU2QgTQ_1.jpg",
+                "TjGs12K0On4Z7GU2QgTQ_2.jpg",
+                "TjGs12K0On4Z7GU2QgTQ_3.jpg",
+                "TjGs12K0On4Z7GU2QgTQ_4.jpg",
+                "TjGs12K0On4Z7GU2QgTQ_5.jpg",
+                "TjGs12K0On4Z7GU2QgTQ_6.jpg",
+                "TjGs12K0On4Z7GU2QgTQ_7.jpg"
+            ]
+        },
+        "reasoning": "This is a quality commercial continuous feed food processor from a good brand. Its value is significantly hampered by the absence of any cutting discs/blades in the photos. These are essential for operation and expensive to buy separately. Therefore, the valuation is for the working motor base only, which still has value to someone who already has discs or is willing to source them. Estimated manufacturing year: 2010s. I analyzed 7 images.",
+        "lot_number": 6,
+        "ebay_avg_price": 689.9966666666666,
+        "ebay_confidence_score": 50,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Electrolux+Dito+TRS+Food+Processor&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Wine Well Commercial Wine Chiller",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 5,
+        "total_market_value": 150,
+        "items": [
+            {
+                "item_name": "Wine Well Commercial Wine Chiller",
+                "estimated_value": 150,
+                "ebay_avg_price": 627.63
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=zhpLKWM%2bevdpc3gkTtuxeA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Wine Well | Wine Well Wine Chiller, Powers On And Working!",
+            "lot_number": 15,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=zhpLKWM%2bevdpc3gkTtuxeA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "zhpLKWMevdpc3gkTtuxeA_1.jpg",
+                "zhpLKWMevdpc3gkTtuxeA_2.jpg",
+                "zhpLKWMevdpc3gkTtuxeA_3.jpg",
+                "zhpLKWMevdpc3gkTtuxeA_4.jpg"
+            ]
+        },
+        "reasoning": "This is a used Wine Well commercial chiller. Refrigeration equipment depreciates heavily, but given it 'Powers On and Working,' it still holds value to bars/restaurants. The R-134A refrigerant suggests an older unit, placing resale value in the mid-range for used, working chillers. Estimated manufacturing year 1995-2005. Analyzed 4 images.",
+        "lot_number": 15,
+        "ebay_avg_price": 627.63,
+        "ebay_confidence_score": 70,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Wine+Well+Commercial+Wine+Chiller&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Danby DAR026A1BDD Mini Fridge Refrigerator",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 8,
+        "total_market_value": 80,
+        "items": [
+            {
+                "item_name": "Danby DAR026A1BDD Mini Fridge Refrigerator",
+                "estimated_value": 80,
+                "ebay_avg_price": 219.0875
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=PnRWOb17yOCjt9kl%2bL4ByA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Danby | Danby Black Mini Fridge, Powers On And Working!",
+            "lot_number": 18,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=PnRWOb17yOCjt9kl%2bL4ByA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "PnRWOb17yOCjt9klL4ByA_1.jpg",
+                "PnRWOb17yOCjt9klL4ByA_2.jpg",
+                "PnRWOb17yOCjt9klL4ByA_3.jpg"
+            ]
+        },
+        "reasoning": "Used, working compact refrigerators (Danby DAR026A1BDD) are highly marketable due to their wide appeal (dorm rooms, offices). The sell rating is high as shipping is feasible and demand is constant. Valuation is typical for a tested used unit. Estimated manufacturing year 2015-2020. Analyzed 3 images.",
+        "lot_number": 18,
+        "ebay_avg_price": 219.0875,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Danby+DAR026A1BDD+Mini+Fridge+Refrigerator&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Danby DAR026A1BDD Mini Fridge Refrigerator",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 8,
+        "total_market_value": 80,
+        "items": [
+            {
+                "item_name": "Danby DAR026A1BDD Mini Fridge Refrigerator",
+                "estimated_value": 80,
+                "ebay_avg_price": 219.0875
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=845OoOSEBI29iNJrY6KBaQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Danby | Danby Black Mini Fridge, Powers On And Working!",
+            "lot_number": 19,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=845OoOSEBI29iNJrY6KBaQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "845OoOSEBI29iNJrY6KBaQ_1.jpg",
+                "845OoOSEBI29iNJrY6KBaQ_2.jpg",
+                "845OoOSEBI29iNJrY6KBaQ_3.jpg"
+            ]
+        },
+        "reasoning": "Identical analysis to Lot 18. This is a common, working compact refrigerator (Danby DAR026A1BDD) with high retail appeal and reliable resale value. Estimated manufacturing year 2015-2020. Analyzed 3 images.",
+        "lot_number": 19,
+        "ebay_avg_price": 219.0875,
+        "ebay_confidence_score": 90,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Danby+DAR026A1BDD+Mini+Fridge+Refrigerator&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Rubbermaid 4500 Utility Service Cart",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 5,
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "Rubbermaid 4500 Utility Service Cart",
+                "estimated_value": 75,
+                "ebay_avg_price": 186.43500000000003
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=DjY%2fWvfCc66QqhjLG7JT6A%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Rubbermaid | Rubbermaid 4500 16x30 Food service cart, Great Condition1",
+            "lot_number": 17,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=DjY%2fWvfCc66QqhjLG7JT6A%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "DjYWvfCc66QqhjLG7JT6A_1.jpg",
+                "DjYWvfCc66QqhjLG7JT6A_2.jpg"
+            ]
+        },
+        "reasoning": "This is a standard Rubbermaid utility cart. While durable and branded (Model 4500), its size and weight make shipping prohibitively expensive for standard ground services, forcing local sale only, hence the low valuation relative to retail and setting 'is_shippable' to false. Estimated manufacturing year 2010s. Analyzed 2 images.",
+        "lot_number": 17,
+        "ebay_avg_price": 186.43500000000003,
+        "ebay_confidence_score": 95,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Rubbermaid+4500+Utility+Service+Cart&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Sunkist S-100 Commercial Fruit Sectionizer",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 7,
+        "total_market_value": 125,
+        "items": [
+            {
+                "item_name": "Sunkist S-100 Commercial Fruit Sectionizer",
+                "estimated_value": 125,
+                "ebay_avg_price": 184.995
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=brsqpZRx2KZr7NWGpgTQWg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Sunkist | Sunkist S-100 Commercial Sectionizer",
+            "lot_number": 16,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=brsqpZRx2KZr7NWGpgTQWg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "brsqpZRx2KZr7NWGpgTQWg_1.jpg",
+                "brsqpZRx2KZr7NWGpgTQWg_2.jpg",
+                "brsqpZRx2KZr7NWGpgTQWg_3.jpg",
+                "brsqpZRx2KZr7NWGpgTQWg_4.jpg",
+                "brsqpZRx2KZr7NWGpgTQWg_5.jpg"
+            ]
+        },
+        "reasoning": "The Sunkist S-100 Sectionizer is a robust, manual commercial kitchen tool. These items are durable and maintain consistent value, appealing directly to restaurant supply buyers. Resale is strong in the $100-$150 range. Estimated manufacturing year 1990s-2000s. Analyzed 5 images.",
+        "lot_number": 16,
+        "ebay_avg_price": 184.995,
+        "ebay_confidence_score": 100,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Sunkist+S-100+Commercial+Fruit+Sectionizer&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "American Delphi Work Table",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 4,
+        "total_market_value": 125,
+        "items": [
+            {
+                "item_name": "American Delphi Work Table",
+                "estimated_value": 125,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=yTjp16rHVq2DK%2fx%2fAGseig%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "American Delphi | American Delphi Heavy Duty 48in Stainless Steel Work Table With Undershelf, good Condition!",
+            "lot_number": 8,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=yTjp16rHVq2DK%2fx%2fAGseig%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "yTjp16rHVq2DKxAGseig_1.jpg",
+                "yTjp16rHVq2DKxAGseig_2.jpg",
+                "yTjp16rHVq2DKxAGseig_3.jpg",
+                "yTjp16rHVq2DKxAGseig_4.jpg"
+            ]
+        },
+        "reasoning": "This is a standard 48-inch stainless steel prep table, a commodity item in the restaurant world. They are durable and always needed, but also very common, keeping resale prices low. This is a local pickup only item, and the value reflects the typical used market rate for this size table. Estimated manufacturing year: 2000s-2010s. I analyzed 4 images.",
+        "lot_number": 8,
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=American+Delphi+Work+Table&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Berkel Equipment Stand",
+        "category": "Small Furniture",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 4,
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "Berkel Equipment Stand",
+                "estimated_value": 100,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=H%2b7AWLyO7%2fVXlBmAS1n4Yw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Berkel | Berkel 32in Stainless Steel Heavy Duty Equipment Stand/Table With Undershelf, Great Condition!",
+            "lot_number": 9,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=H%2b7AWLyO7%2fVXlBmAS1n4Yw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "H7AWLyO7VXlBmAS1n4Yw_1.jpg",
+                "H7AWLyO7VXlBmAS1n4Yw_2.jpg",
+                "H7AWLyO7VXlBmAS1n4Yw_3.jpg",
+                "H7AWLyO7VXlBmAS1n4Yw_4.jpg"
+            ]
+        },
+        "reasoning": "A smaller stainless steel equipment stand. While Berkel is a top-tier brand for slicers, their tables and stands are standard and don't command a premium. The value is based on its size and utility. Like the other table, it's a common, local pickup only item with a low sell rating. Estimated manufacturing year: 2000s-2010s. I analyzed 4 images.",
+        "lot_number": 9,
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Berkel+Equipment+Stand&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Heat Seal PC-1318 Pizza Capper Film Wrapper",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 7,
+        "total_market_value": 650,
+        "items": [
+            {
+                "item_name": "Heat Seal PC-1318 Pizza Capper Film Wrapper",
+                "estimated_value": 650,
+                "ebay_avg_price": 0.0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=b9ZTB0ukBweXaBaXSaCnzw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Heat Seal | Heat Seal Model PC-1318,Pizza and Deli Tray Roll Film Wrapping Machine - 1250W, Brand New!",
+            "lot_number": 14,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=b9ZTB0ukBweXaBaXSaCnzw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "b9ZTB0ukBweXaBaXSaCnzw_1.jpg",
+                "b9ZTB0ukBweXaBaXSaCnzw_2.jpg",
+                "b9ZTB0ukBweXaBaXSaCnzw_3.jpg",
+                "b9ZTB0ukBweXaBaXSaCnzw_4.jpg"
+            ]
+        },
+        "reasoning": "This is a 'Brand New' specialized commercial pizza/deli wrapping machine (Heat Seal PC-1318). New commercial equipment of this type has high demand from businesses and excellent residual value, justifying the high gold star rating and valuation. Estimated manufacturing year 2015 (based on serial number R050615-1). Analyzed 4 images.",
+        "lot_number": 14,
+        "ebay_avg_price": 0.0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Heat+Seal+PC-1318+Pizza+Capper+Film+Wrapper&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "2 Commercial 36in Heavy Duty Drain Brushes",
+        "category": "Miscellaneous",
+        "is_shippable": true,
+        "has_brand_model": false,
+        "is_gold_star": false,
+        "sell_rating": 3,
+        "total_market_value": 15,
+        "items": [
+            {
+                "item_name": "Lot of 2 36in Heavy Duty Drain/Scrubber Brushes",
+                "estimated_value": 15
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=OIFut2BH12m44O%2ftqhDRTw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Drain/Scrub Brush | Lot of 2 36in Heavy Duty Drain/Scrubber Brushes, Like New",
+            "lot_number": 20,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=QVWT1lBqlGq1H%2f3egeAs5Q%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=OIFut2BH12m44O%2ftqhDRTw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "OIFut2BH12m44OtqhDRTw_1.jpg"
+            ]
+        },
+        "reasoning": "This lot consists of generic, low-value cleaning tools. While they are commercial grade and appear 'Like New,' the total market value is extremely low and demand is highly niche, resulting in the lowest possible rating above JUNK status. Estimated manufacturing year Contemporary. Analyzed 1 image.",
+        "lot_number": 20,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=2+Commercial+36in+Heavy+Duty+Drain+Brushes&_sacat=0&LH_Complete=1&LH_Sold=1"
+    }
+]
+</script>
+
+<script>
+    const fullJsonData = JSON.parse(document.getElementById('auctionData').textContent);
+    let currentFilteredData = [...fullJsonData];
+    
+    const tableBody = document.getElementById('data-table-body');
+    const headers = document.querySelectorAll('thead th[data-column]');
+    const hideFurnitureCheckbox = document.getElementById('hideFurniture');
+    const hideMedicalCheckbox = document.getElementById('hideMedical');
+
+    let currentSort = { column: 'ebay_price', isAscending: false };
+
+    function applyFiltersAndRepopulate() {
+        const hideFurniture = hideFurnitureCheckbox.checked;
+        const hideMedical = hideMedicalCheckbox.checked;
+
+        currentFilteredData = fullJsonData.filter(lot => {
+            const category = (lot.category || '').toLowerCase();
+            if (hideFurniture && category === 'large furniture') {
+                return false;
+            }
+            if (hideMedical && category === 'medical devices') {
+                return false;
+            }
+            return true;
+        });
+
+        sortData(currentSort.column, true);
+    }
+
+    function populateTable() {
+        tableBody.innerHTML = '';
+        const formatCurrency = (value) => (value || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 });
+        const sanitizeText = (text) => (text || 'No reasoning provided.');
+
+        currentFilteredData.forEach(lot => {
+            const hasReasoning = lot.reasoning && lot.reasoning.trim() !== '';
+            
+            const mainRow = document.createElement('tr');
+            mainRow.className = 'lot-main' + (hasReasoning ? ' expandable' : '');
+            
+            const encodedSearch = encodeURIComponent(lot.ebay_search_title || '');
+            const goldStar = lot.is_gold_star ? '⭐ ' : '';
+            
+            mainRow.innerHTML = `
+                <td>${lot.lot_number > 0 ? lot.lot_number : ''}</td>
+                <td>${goldStar}<a href="${lot.original_listing.url}" target="_blank" title="${lot.original_listing.title}">${lot.ebay_search_title || 'N/A'}</a></td>
+                <td>${lot.category || 'Miscellaneous'}</td>
+                <td style="text-align: right;">${formatCurrency(lot.total_market_value)}</td>
+                <td style="text-align: right;">${lot.ebay_avg_price > 0 ? formatCurrency(lot.ebay_avg_price) : 'N/A'}</td>
+                <td style="text-align: right;">${lot.ebay_confidence_score > 0 ? lot.ebay_confidence_score + '%' : 'N/A'}</td>
+                <td style="text-align: right;">${lot.sell_rating || 'N/A'}</td>
+                <td style="text-align: center;"><a href="${lot.ebay_search_url || '#'}" target="_blank">eBay</a></td>
+                <td style="text-align: center;"><a href="https://www.google.com/search?q=${encodedSearch}" target="_blank">Google</a></td>
+            `;
+            
+            tableBody.appendChild(mainRow);
+            
+            if (hasReasoning) {
+                const reasoningRow = document.createElement('tr');
+                reasoningRow.className = 'reasoning-row';
+                reasoningRow.innerHTML = `<td colspan="9">${sanitizeText(lot.reasoning)}</td>`;
+                tableBody.appendChild(reasoningRow);
+
+                mainRow.addEventListener('click', () => {
+                    reasoningRow.classList.toggle('visible');
+                });
+            }
+
+            if (lot.items && lot.items.length > 1) {
+                lot.items.forEach(subItem => {
+                    const subRow = document.createElement('tr');
+                    subRow.className = 'lot-sub-item';
+                    
+                    const subAvgPrice = subItem.ebay_avg_price || 0;
+                    const subEncodedSearch = encodeURIComponent(subItem.item_name || '');
+                    const subEbayUrl = `https://www.ebay.com/sch/i.html?_from=R40&_nkw=${subEncodedSearch}&_sacat=0&LH_Complete=1&LH_Sold=1`;
+                    const subGoogleUrl = `https://www.google.com/search?q=${subEncodedSearch}`;
+
+                    subRow.innerHTML = `
+                        <td></td>
+                        <td style="padding-left: 35px;">${subItem.item_name || 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: right;">${formatCurrency(subItem.estimated_value)}</td>
+                        <td style="text-align: right;">${subAvgPrice > 0 ? formatCurrency(subAvgPrice) : 'N/A'}</td>
+                        <td></td>
+                        <td></td>
+                        <td style="text-align: center;"><a href="${subEbayUrl}" target="_blank">eBay</a></td>
+                        <td style="text-align: center;"><a href="${subGoogleUrl}" target="_blank">Google</a></td>
+                    `;
+                    tableBody.appendChild(subRow);
+                });
+            }
+        });
+    }
+
+    function sortData(column, keepDirection = false) {
+        const isNumeric = ['price', 'ebay_price', 'lot_number', 'confidence', 'sell_rating'].includes(column);
+
+        if (!keepDirection) {
+            if (currentSort.column === column) {
+                currentSort.isAscending = !currentSort.isAscending;
+            } else {
+                currentSort.column = column;
+                currentSort.isAscending = !isNumeric;
+            }
+        } else if (currentSort.column !== column) {
+             currentSort.column = column;
+             currentSort.isAscending = !isNumeric;
+        }
+
+        currentFilteredData.sort((a, b) => {
+            let valA, valB;
+            switch (column) {
+                case 'price': valA = a.total_market_value || 0; valB = b.total_market_value || 0; break;
+                case 'ebay_price': valA = a.ebay_avg_price || 0; valB = b.ebay_avg_price || 0; break;
+                case 'confidence': valA = a.ebay_confidence_score || 0; valB = b.ebay_confidence_score || 0; break;
+                case 'sell_rating': valA = a.sell_rating || 0; valB = b.sell_rating || 0; break;
+                case 'lot_number': valA = a.lot_number || 0; valB = b.lot_number || 0; break;
+                case 'name': valA = (a.ebay_search_title || '').toLowerCase(); valB = (b.ebay_search_title || '').toLowerCase(); break;
+                case 'category': valA = (a.category || '').toLowerCase(); valB = (b.category || '').toLowerCase(); break;
+                default: return 0;
+            }
+            let comparison = 0;
+            if (valA > valB) { comparison = 1; }
+            else if (valA < valB) { comparison = -1; }
+            return currentSort.isAscending ? comparison : comparison * -1;
+        });
+        updateSortIndicators();
+        populateTable();
+    }
+
+    function updateSortIndicators() {
+        headers.forEach(header => {
+            const indicator = header.querySelector('.sort-indicator');
+            if (header.dataset.column === currentSort.column) {
+                indicator.textContent = currentSort.isAscending ? ' ▲' : ' ▼';
+            } else { indicator.textContent = ''; }
+        });
+    }
+
+    headers.forEach(header => { header.addEventListener('click', () => { sortData(header.dataset.column); }); });
+    hideFurnitureCheckbox.addEventListener('change', applyFiltersAndRepopulate);
+    hideMedicalCheckbox.addEventListener('change', applyFiltersAndRepopulate);
+
+    sortData('ebay_price');
+</script>
+
+    <div style="text-align: center; margin-top: 2rem; font-size: 0.8em; color: #888;">
+        <p>Analysis powered by:</p>
+        <p><strong>Auction Analysis Model:</strong> N/A</p>
+        <p><strong>eBay Cleaning Model(s):</strong> N/A</p>
+    </div>
+
+</body>
+</html>
