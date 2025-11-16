@@ -1,0 +1,664 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Item Analysis</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a; --table-bg-color: #2c2c2c; --header-bg-color: #3a3a3a;
+            --header-hover-bg-color: #4a4a4a; --row-even-bg-color: #333333; --row-odd-bg-color: #2c2c2c;
+            --border-color: #444444; --text-color: #e0e0e0; --link-color: #4a90e2;
+            --link-hover-color: #81b5f5; --sort-indicator-color: #81b5f5;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 2rem; line-height: 1.6; }
+        h1 { text-align: center; color: #ffffff; font-weight: 300; margin-bottom: 2rem; }
+        .controls-container { max-width: 1600px; margin: auto; margin-bottom: 1rem; }
+        .filter-container { text-align: left; padding: 10px 15px; background-color: var(--table-bg-color); border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        .filter-container label { margin-right: 20px; font-size: 0.9em; cursor: pointer; user-select: none; }
+        .filter-container input { vertical-align: middle; margin-right: 5px; }
+        .table-container { max-width: 1600px; margin: auto; overflow-x: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        table { width: 100%; border-collapse: collapse; background-color: var(--table-bg-color); border-spacing: 0; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        thead th { background-color: var(--header-bg-color); color: #ffffff; font-weight: 600; position: sticky; top: 0; z-index: 10; }
+        thead th[data-column] { cursor: pointer; transition: background-color 0.2s ease-in-out; user-select: none; }
+        thead th[data-column]:hover { background-color: var(--header-hover-bg-color); }
+        tbody tr:not(.reasoning-row):hover { background-color: var(--header-hover-bg-color); }
+        td { font-size: 0.95em; }
+        td:nth-child(4), td:nth-child(5), td:nth-child(6), td:nth-child(7) { font-family: 'Courier New', Courier, monospace; text-align: right; white-space: nowrap; }
+        td:nth-child(8), td:nth-child(9) { text-align: center; }
+        a { color: var(--link-color); text-decoration: none; transition: color 0.2s ease-in-out; }
+        a:hover { color: var(--link-hover-color); text-decoration: underline; }
+        .sort-indicator { color: var(--sort-indicator-color); font-size: 0.8em; margin-left: 8px; display: inline-block; width: 10px; }
+        .lot-main td { font-weight: bold; }
+        .lot-main.expandable { cursor: pointer; }
+        .lot-main:nth-child(4n+1), .lot-main:nth-child(4n+2) { background-color: var(--row-odd-bg-color); }
+        .lot-main:nth-child(4n+3), .lot-main:nth-child(4n) { background-color: var(--row-even-bg-color); }
+        .lot-sub-item { background-color: rgba(0,0,0,0.15) !important; }
+        .lot-sub-item td { font-size: 0.9em; color: #c0c0c0; border-color: #383838; }
+        .lot-sub-item td:nth-child(2) { padding-left: 35px; }
+        .reasoning-row { display: none; background-color: #222 !important; }
+        .reasoning-row.visible { display: table-row; }
+        .reasoning-row td {
+            padding: 10px 20px 10px 40px;
+            font-style: italic;
+            color: #b0b0b0;
+            border-top: 1px dashed #555;
+            white-space: normal;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Auction Item Analysis</h1>
+    <div class="controls-container">
+        <div class="filter-container">
+            <label><input type="checkbox" id="hideFurniture"> Hide Large Furniture</label>
+            <label><input type="checkbox" id="hideMedical"> Hide Medical Devices</label>
+        </div>
+    </div>
+    <div class="table-container"><table><thead><tr><th data-column="lot_number">Lot # <span class="sort-indicator"></span></th><th data-column="name">Item Name <span class="sort-indicator"></span></th><th data-column="category">Category <span class="sort-indicator"></span></th><th data-column="price">AI Market Value <span class="sort-indicator"></span></th><th data-column="ebay_price">eBay Avg. Sold <span class="sort-indicator"></span></th><th data-column="confidence">Confidence <span class="sort-indicator"></span></th><th data-column="sell_rating">Sell Rating <span class="sort-indicator"></span></th><th>eBay Search</th><th>Google Search</th></tr></thead><tbody id="data-table-body"></tbody></table></div>
+
+<script type="application/json" id="auctionData">
+    [
+    {
+        "ebay_search_title": "Biro 3334",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 7,
+        "total_market_value": 2500,
+        "items": [
+            {
+                "item_name": "Biro 3334 Commercial Meat/Bone Saw",
+                "estimated_value": 2500
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=F%2fmHdcFu1t5UPOwV4PZXqg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Biro | Biro Model 3334 Commercial Meat/Bone Saw, Very Clean Great Condition! | Model: 3334 | Specs: 208/230v/3ph | Width: 44\" | Depth: 34\" | Height: 69\"",
+            "lot_number": 1,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=F%2fmHdcFu1t5UPOwV4PZXqg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "FmHdcFu1t5UPOwV4PZXqg_1.jpg",
+                "FmHdcFu1t5UPOwV4PZXqg_2.jpg",
+                "FmHdcFu1t5UPOwV4PZXqg_3.jpg",
+                "FmHdcFu1t5UPOwV4PZXqg_4.jpg",
+                "FmHdcFu1t5UPOwV4PZXqg_5.jpg",
+                "FmHdcFu1t5UPOwV4PZXqg_6.jpg",
+                "FmHdcFu1t5UPOwV4PZXqg_7.jpg",
+                "FmHdcFu1t5UPOwV4PZXqg_8.jpg",
+                "FmHdcFu1t5UPOwV4PZXqg_9.jpg",
+                "FmHdcFu1t5UPOwV4PZXqg_10.jpg"
+            ]
+        },
+        "reasoning": "Biro is a top-tier brand for butcher equipment, and the 3334 is a well-known, heavy-duty model. The machine appears very clean in the photos, which is a major selling point for food-grade equipment. Its high value and desirability make it a 'gold star' item. The only drawbacks are its large size, which requires freight shipping, and its 3-phase power requirement, which limits the buyer pool to commercial operations. Expert advice: If possible, make a short video showing the blade wheel spinning to demonstrate it is operational. This can add hundreds to the final sale price. Estimated manufacture year: 2000s. Analyzed 10 images.",
+        "lot_number": 1,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Biro+3334&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Biro Pro 9",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 8,
+        "total_market_value": 1200,
+        "items": [
+            {
+                "item_name": "Biro Pro 9 Sir Steak Meat Tenderizer",
+                "estimated_value": 1200
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=8hS7zCGbX79SvUeTmhngAw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Biro | Biro Model Pro 9 Sir Steak Heavy Duty Meat Tenderizer, Powers On Great Working Condition, Very Clean! | Model: Pro 9 | Specs: 115v/1ph | Width: 17\" | Depth: 14\" | Height: 18\"",
+            "lot_number": 2,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=8hS7zCGbX79SvUeTmhngAw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "8hS7zCGbX79SvUeTmhngAw_1.jpg",
+                "8hS7zCGbX79SvUeTmhngAw_2.jpg",
+                "8hS7zCGbX79SvUeTmhngAw_3.jpg",
+                "8hS7zCGbX79SvUeTmhngAw_4.jpg",
+                "8hS7zCGbX79SvUeTmhngAw_5.jpg",
+                "8hS7zCGbX79SvUeTmhngAw_6.jpg",
+                "8hS7zCGbX79SvUeTmhngAw_7.jpg"
+            ]
+        },
+        "reasoning": "This is another high-quality Biro product. The Pro 9 tenderizer is very popular. Its countertop size, shippability, and standard 115v plug make it accessible to a wide audience, from small butcher shops to serious home users. The listing states it powers on and is clean, justifying a high valuation. Expert advice: The clear plastic safety cover is often cracked or missing on these units; the fact that this one is intact is a significant value-add that should be highlighted in the sale listing. Estimated manufacture year: 2000s. Analyzed 7 images.",
+        "lot_number": 2,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Biro+Pro+9&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "True TA2R-2S",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 7,
+        "total_market_value": 1500,
+        "items": [
+            {
+                "item_name": "True TA2R-2S Commercial Refrigerator",
+                "estimated_value": 1500
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=zvqkjGDtnWwcwRtd5Gox4Q%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "True | True TA2R-2S Two-Section Reach In Solid Door Refrigerator On Casters, Powers On In Good Working Condition! | Model: TA2R-2S | Specs: 115v/1ph | Width: 50.5\" | Depth: 35\" | Height: 82.5\"",
+            "lot_number": 3,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=zvqkjGDtnWwcwRtd5Gox4Q%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "zvqkjGDtnWwcwRtd5Gox4Q_1.jpg",
+                "zvqkjGDtnWwcwRtd5Gox4Q_2.jpg",
+                "zvqkjGDtnWwcwRtd5Gox4Q_3.jpg",
+                "zvqkjGDtnWwcwRtd5Gox4Q_4.jpg",
+                "zvqkjGDtnWwcwRtd5Gox4Q_5.jpg",
+                "zvqkjGDtnWwcwRtd5Gox4Q_6.jpg",
+                "zvqkjGDtnWwcwRtd5Gox4Q_7.jpg"
+            ]
+        },
+        "reasoning": "True is the industry leader in commercial refrigeration, and their units are known for reliability and hold their value exceptionally well. This two-door model is a very common and desirable size. The listing states it's in good working condition, and the photo shows the digital display lit up, supporting this claim. It will sell quickly to any local restaurant, bar, or commercial kitchen. Expert advice: Let the unit run for an hour and take a picture of the temperature display holding steady around 35-38\u00b0F. This proof of function is the single most important factor in getting top dollar. Estimated manufacture year: 2010s. Analyzed 7 images.",
+        "lot_number": 3,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=True+TA2R-2S&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Hobart 4346",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 6,
+        "total_market_value": 1800,
+        "items": [
+            {
+                "item_name": "Hobart 4346 Meat Mixer Grinder (Incomplete)",
+                "estimated_value": 1800
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=dPLt8PcZE%2bhBzhQ2D01ouA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Hobart | Hobart 4346 Meat Mixer Grinder Sausage Mill Butcher Machine W/ Foot Pedal, Removed From Working Grocery Store | Model: 4346 | Specs: 200v/3ph | Width: 29\" | Depth: 42\" | Height: 54\"",
+            "lot_number": 4,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=dPLt8PcZE%2bhBzhQ2D01ouA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "dPLt8PcZEhBzhQ2D01ouA_1.jpg",
+                "dPLt8PcZEhBzhQ2D01ouA_2.jpg",
+                "dPLt8PcZEhBzhQ2D01ouA_3.jpg",
+                "dPLt8PcZEhBzhQ2D01ouA_4.jpg",
+                "dPLt8PcZEhBzhQ2D01ouA_5.jpg",
+                "dPLt8PcZEhBzhQ2D01ouA_6.jpg",
+                "dPLt8PcZEhBzhQ2D01ouA_7.jpg",
+                "dPLt8PcZEhBzhQ2D01ouA_8.jpg",
+                "dPLt8PcZEhBzhQ2D01ouA_9.jpg",
+                "dPLt8PcZEhBzhQ2D01ouA_10.jpg",
+                "dPLt8PcZEhBzhQ2D01ouA_11.jpg"
+            ]
+        },
+        "reasoning": "Hobart is the undisputed king of commercial food equipment, and this mixer/grinder is a serious piece of machinery. A complete, working unit would be worth over $5,000. However, the photos clearly show it is missing the entire grinder head assembly (auger, plate, knife, ring), which are expensive and essential parts. The valuation is significantly reduced to reflect its current state as an incomplete machine, essentially just a mixer. Expert advice: Be extremely upfront and clear in your listing that the grinder parts are missing. You can part out the motor and foot pedal, but the best buyer is someone who has a broken 4346 and can use this for parts. The serial number indicates this unit was manufactured in 1993. Analyzed 11 images.",
+        "lot_number": 4,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Hobart+4346&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Turbochef NGO",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 9,
+        "total_market_value": 1800,
+        "items": [
+            {
+                "item_name": "Turbochef NGO Rapid Cook Oven",
+                "estimated_value": 1800
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=fDQnooiiF55AWCP9DD05hA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Turbochef | TurboChef Countertop Rapid Cook Convection Oven, Removed From Working Grocery Store | Model: NGO | Specs: 208/240 1ph | Width: 16\" | Depth: 31\" | Height: 25\"",
+            "lot_number": 5,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=fDQnooiiF55AWCP9DD05hA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "fDQnooiiF55AWCP9DD05hA_1.jpg",
+                "fDQnooiiF55AWCP9DD05hA_2.jpg",
+                "fDQnooiiF55AWCP9DD05hA_3.jpg",
+                "fDQnooiiF55AWCP9DD05hA_4.jpg",
+                "fDQnooiiF55AWCP9DD05hA_5.jpg",
+                "fDQnooiiF55AWCP9DD05hA_6.jpg"
+            ]
+        },
+        "reasoning": "Turbochef ovens are extremely popular and expensive, known for their use in chains like Starbucks and Dunkin'. They sell very quickly on the used market. This NGO model is a desirable countertop unit. Assuming it is fully functional as implied by 'Removed From Working Grocery Store', it commands a high resale price. Expert advice: You MUST test this unit and provide video proof of it powering on, heating up, and the screen functioning. A non-working Turbochef is worth only a fraction of a working one due to expensive repair costs. The manufacturing date on the tag is May 2011. Analyzed 6 images.",
+        "lot_number": 5,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Turbochef+NGO&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Oliver Dough Divider",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 4,
+        "total_market_value": 600,
+        "items": [
+            {
+                "item_name": "Oliver Hydraulic Commercial Dough Divider",
+                "estimated_value": 600
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=eCnem7q1qGvej2%2fT4HLIww%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Oliver | Oliver Hydraulic Commercial Dough Divider, Removed From Working Grocery Store | Width: 22\" | Depth: 28\" | Height: 44\"",
+            "lot_number": 6,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=eCnem7q1qGvej2%2fT4HLIww%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "eCnem7q1qGvej2T4HLIww_1.jpg",
+                "eCnem7q1qGvej2T4HLIww_2.jpg",
+                "eCnem7q1qGvej2T4HLIww_3.jpg",
+                "eCnem7q1qGvej2T4HLIww_4.jpg",
+                "eCnem7q1qGvej2T4HLIww_5.jpg"
+            ]
+        },
+        "reasoning": "Oliver is a reputable brand in bakery equipment. However, this is a very specialized machine for a niche market. The value is significantly hampered because the specific model number is not provided in the listing or visible in the photos. Without knowing the exact model and proof of function, it's a risky purchase. The valuation is a conservative estimate for an untested, unidentified model. Expert advice: Locate the model number plate on the machine. Adding this single piece of information to the listing could double its value by allowing potential buyers to research its capabilities and confirm it meets their needs. Estimated manufacture year: 1990s. Analyzed 5 images.",
+        "lot_number": 6,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Oliver+Dough+Divider&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Jungheinrich EJE 120",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 8,
+        "total_market_value": 1200,
+        "items": [
+            {
+                "item_name": "Jungheinrich EJE 120 Electric Pallet Jack",
+                "estimated_value": 1200
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=uGSATHUJfFAS6pjXXP1DMQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Tow-Lift | 4,500 / 6,000 lb. Capacity Electric Walkie Pallet Trucks, Powers On And Working! | Model: EjE120",
+            "lot_number": 7,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=uGSATHUJfFAS6pjXXP1DMQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "uGSATHUJfFAS6pjXXP1DMQ_1.jpg",
+                "uGSATHUJfFAS6pjXXP1DMQ_2.jpg",
+                "uGSATHUJfFAS6pjXXP1DMQ_3.jpg",
+                "uGSATHUJfFAS6pjXXP1DMQ_4.jpg",
+                "uGSATHUJfFAS6pjXXP1DMQ_5.jpg",
+                "uGSATHUJfFAS6pjXXP1DMQ_6.jpg",
+                "uGSATHUJfFAS6pjXXP1DMQ_7.jpg",
+                "uGSATHUJfFAS6pjXXP1DMQ_8.jpg"
+            ]
+        },
+        "reasoning": "Working electric pallet jacks are always in high demand. This is a Jungheinrich EJE 120, a quality German brand (Tow-Lift is a distributor). The listing states it's working, and the photo shows a green battery light, which is excellent. A key feature is the built-in charger that uses a standard wall plug, making it very desirable for smaller businesses without dedicated charging stations. Expert advice: Create a 30-second video showing the pallet jack driving forward/reverse and lifting/lowering. This removes all buyer hesitation and will ensure a quick, high-value sale. Estimated manufacture year: 2010s. Analyzed 8 images.",
+        "lot_number": 7,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Jungheinrich+EJE+120&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Hyster W45Z-HD",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 3,
+        "total_market_value": 300,
+        "items": [
+            {
+                "item_name": "Hyster W45Z-HD Electric Pallet Jack (For Parts/Repair)",
+                "estimated_value": 300
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=H1WKHsLPOGIR7fBDuU%2bcgg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Hyster | 4500 Lb. 24V Electric Walkie Pallet Jack, Needs New Battery | Model: W45Z-HD",
+            "lot_number": 8,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=H1WKHsLPOGIR7fBDuU%2bcgg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "H1WKHsLPOGIR7fBDuUcgg_1.jpg",
+                "H1WKHsLPOGIR7fBDuUcgg_2.jpg",
+                "H1WKHsLPOGIR7fBDuUcgg_3.jpg",
+                "H1WKHsLPOGIR7fBDuUcgg_4.jpg",
+                "H1WKHsLPOGIR7fBDuUcgg_5.jpg",
+                "H1WKHsLPOGIR7fBDuUcgg_6.jpg",
+                "H1WKHsLPOGIR7fBDuUcgg_7.jpg"
+            ]
+        },
+        "reasoning": "Hyster is a premium brand, but the listing explicitly states 'Needs New Battery'. An industrial 24V battery for this unit can cost $800-$1,500, and there is no guarantee that the battery is the only problem. The charger is also not pictured or mentioned. This makes the unit a high-risk project for a buyer. The value is therefore reduced to its potential parts value. Expert advice: Sell this strictly 'as-is, for parts or repair'. If you have the associated charger (like lot #9), consider selling them as a pair, but still disclose the bad battery. The serial number indicates it was made in 2012. Analyzed 7 images.",
+        "lot_number": 8,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Hyster+W45Z-HD&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "CMP SCR20012260S1L",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 5,
+        "total_market_value": 250,
+        "items": [
+            {
+                "item_name": "CMP SCR200 24V Industrial Battery Charger",
+                "estimated_value": 250
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=90QtmBibPC2zYHPZ%2bZ3q1A%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "CMP | Industrial Battery Charger SCR200 24V 60HZ 12 Cell, Powers On! | Model: SCR20012260S1L | Specs: 120v/1ph",
+            "lot_number": 9,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=90QtmBibPC2zYHPZ%2bZ3q1A%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "90QtmBibPC2zYHPZZ3q1A_1.jpg",
+                "90QtmBibPC2zYHPZZ3q1A_2.jpg",
+                "90QtmBibPC2zYHPZZ3q1A_3.jpg",
+                "90QtmBibPC2zYHPZZ3q1A_4.jpg",
+                "90QtmBibPC2zYHPZZ3q1A_5.jpg",
+                "90QtmBibPC2zYHPZZ3q1A_6.jpg",
+                "90QtmBibPC2zYHPZZ3q1A_7.jpg"
+            ]
+        },
+        "reasoning": "This is a standard industrial charger for electric pallet jacks or forklifts. It is likely the companion to the Hyster in lot #8. Its value is moderate, as it's a necessary but unexciting accessory. The listing states it 'Powers On,' which is a good sign. It runs on standard 120v power, which is a plus. The final sale price depends on finding a buyer who needs this exact 24V output and connector type. Expert advice: Take a very clear, close-up picture of the grey connector head. This connector style is the most critical piece of information for a potential buyer. Also list the part number of the connector if visible. The serial number suggests a 2005 manufacture date. Analyzed 7 images.",
+        "lot_number": 9,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=CMP+SCR20012260S1L&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Kelmax HTH2-SP-EXT",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 2,
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Kelmax Bread Tray Hand Truck",
+                "estimated_value": 50
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=ML9H53t0B4aus6DoRt0Pyw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "KelMax | Bread Tray Hand Truck",
+            "lot_number": 10,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=ML9H53t0B4aus6DoRt0Pyw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "ML9H53t0B4aus6DoRt0Pyw_1.jpg",
+                "ML9H53t0B4aus6DoRt0Pyw_2.jpg",
+                "ML9H53t0B4aus6DoRt0Pyw_3.jpg"
+            ]
+        },
+        "reasoning": "This is a specialized piece of equipment, a hand truck specifically designed for moving stacks of bread trays. Its niche design limits its appeal to the general public. While it's a commercial-grade tool, the market is small, and its value is low. It is best sold locally on platforms like Facebook Marketplace. Shipping would likely cost more than the item is worth. Expert advice: Market this directly to local bakeries, pizza shops, or food service distributors who would immediately recognize its purpose and value. For a general audience, it's just an awkward hand truck. Estimated manufacture year: 2010s. Analyzed 3 images.",
+        "lot_number": 10,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Kelmax+HTH2-SP-EXT&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "KelMax Bread Tray Hand Truck",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 4,
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "KelMax Bread Tray Hand Truck",
+                "estimated_value": 50
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=dL2CiCx0EyT5luMnWhRZlg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "KelMax | Bread Tray Hand Truck",
+            "lot_number": 11,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=dL2CiCx0EyT5luMnWhRZlg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "dL2CiCx0EyT5luMnWhRZlg_1.jpg",
+                "dL2CiCx0EyT5luMnWhRZlg_2.jpg"
+            ]
+        },
+        "reasoning": "This is a commercial-grade bread tray hand truck by KelMax. While more durable than a standard consumer dolly, its specialized nature limits the buyer pool to bakeries or food service businesses. The value is fair for a used piece of equipment sold on a local-pickup basis. Expert tip: These are often made of aluminum; if so, highlight that in the listing as 'lightweight yet strong' to attract more buyers. Estimated manufacturing year: 2000s. Analyzed 2 images.",
+        "lot_number": 11,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=KelMax+Bread+Tray+Hand+Truck&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "National Cart HTBT2H-65-10SP",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 5,
+        "total_market_value": 85,
+        "items": [
+            {
+                "item_name": "National Cart HTBT2H-65-10SP Bread Tray Hand Truck",
+                "estimated_value": 85
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=uLhJkgoBBMkz%2fWn2ZAPTvw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "National Cart | Bread Tray Hand Truck",
+            "lot_number": 12,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=uLhJkgoBBMkz%2fWn2ZAPTvw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "uLhJkgoBBMkzWn2ZAPTvw_1.jpg",
+                "uLhJkgoBBMkzWn2ZAPTvw_2.jpg",
+                "uLhJkgoBBMkzWn2ZAPTvw_3.jpg"
+            ]
+        },
+        "reasoning": "The value of this hand truck is significantly increased by the clear photo of the manufacturer's sticker, which provides the brand (National Cart), model number, and date. This allows potential buyers to look up the exact specs and new price (which can be over $300), making them more confident in purchasing it used. Expert tip: Always photograph labels on equipment. It turns a generic item into a searchable, specific product, often doubling its value. Manufacturing year: 2014. Analyzed 3 images.",
+        "lot_number": 12,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=National+Cart+HTBT2H-65-10SP&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Hand Truck Dolly with Hooks",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "has_brand_model": false,
+        "is_gold_star": false,
+        "sell_rating": 4,
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Hand Truck Dolly with Hooks",
+                "estimated_value": 40
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=9UkbDTPk4BNVmHETSfNUMA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Hand Truck | Two Wheel Dolly",
+            "lot_number": 13,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=T4FAjo1Wu5LvbMDUyKp5ZQ%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=9UkbDTPk4BNVmHETSfNUMA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "9UkbDTPk4BNVmHETSfNUMA_1.jpg",
+                "9UkbDTPk4BNVmHETSfNUMA_2.jpg"
+            ]
+        },
+        "reasoning": "This is a generic, unbranded hand truck. Its value is purely utilitarian. The added hooks give it some niche utility for moving items like stacked chairs or certain equipment, which slightly increases its value over a basic dolly. However, as a local pickup item without a brand, its value is limited to what someone would pay for a basic used tool. Expert tip: Check the tires. If they are 'flat-free' solid tires, mention that in the listing as it's a desirable feature. Estimated manufacturing year: 2000s. Analyzed 2 images.",
+        "lot_number": 13,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Hand+Truck+Dolly+with+Hooks&_sacat=0&LH_Complete=1&LH_Sold=1"
+    }
+]
+</script>
+
+<script>
+    const fullJsonData = JSON.parse(document.getElementById('auctionData').textContent);
+    let currentFilteredData = [...fullJsonData];
+    
+    const tableBody = document.getElementById('data-table-body');
+    const headers = document.querySelectorAll('thead th[data-column]');
+    const hideFurnitureCheckbox = document.getElementById('hideFurniture');
+    const hideMedicalCheckbox = document.getElementById('hideMedical');
+
+    let currentSort = { column: 'ebay_price', isAscending: false };
+
+    function applyFiltersAndRepopulate() {
+        const hideFurniture = hideFurnitureCheckbox.checked;
+        const hideMedical = hideMedicalCheckbox.checked;
+
+        currentFilteredData = fullJsonData.filter(lot => {
+            const category = (lot.category || '').toLowerCase();
+            if (hideFurniture && category === 'large furniture') {
+                return false;
+            }
+            if (hideMedical && category === 'medical devices') {
+                return false;
+            }
+            return true;
+        });
+
+        sortData(currentSort.column, true);
+    }
+
+    function populateTable() {
+        tableBody.innerHTML = '';
+        const formatCurrency = (value) => (value || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 });
+        const sanitizeText = (text) => (text || 'No reasoning provided.');
+
+        currentFilteredData.forEach(lot => {
+            const hasReasoning = lot.reasoning && lot.reasoning.trim() !== '';
+            
+            const mainRow = document.createElement('tr');
+            mainRow.className = 'lot-main' + (hasReasoning ? ' expandable' : '');
+            
+            const encodedSearch = encodeURIComponent(lot.ebay_search_title || '');
+            const goldStar = lot.is_gold_star ? '⭐ ' : '';
+            
+            mainRow.innerHTML = `
+                <td>${lot.lot_number > 0 ? lot.lot_number : ''}</td>
+                <td>${goldStar}<a href="${lot.original_listing.url}" target="_blank" title="${lot.original_listing.title}">${lot.ebay_search_title || 'N/A'}</a></td>
+                <td>${lot.category || 'Miscellaneous'}</td>
+                <td style="text-align: right;">${formatCurrency(lot.total_market_value)}</td>
+                <td style="text-align: right;">${lot.ebay_avg_price > 0 ? formatCurrency(lot.ebay_avg_price) : 'N/A'}</td>
+                <td style="text-align: right;">${lot.ebay_confidence_score > 0 ? lot.ebay_confidence_score + '%' : 'N/A'}</td>
+                <td style="text-align: right;">${lot.sell_rating || 'N/A'}</td>
+                <td style="text-align: center;"><a href="${lot.ebay_search_url || '#'}" target="_blank">eBay</a></td>
+                <td style="text-align: center;"><a href="https://www.google.com/search?q=${encodedSearch}" target="_blank">Google</a></td>
+            `;
+            
+            tableBody.appendChild(mainRow);
+            
+            if (hasReasoning) {
+                const reasoningRow = document.createElement('tr');
+                reasoningRow.className = 'reasoning-row';
+                reasoningRow.innerHTML = `<td colspan="9">${sanitizeText(lot.reasoning)}</td>`;
+                tableBody.appendChild(reasoningRow);
+
+                mainRow.addEventListener('click', () => {
+                    reasoningRow.classList.toggle('visible');
+                });
+            }
+
+            if (lot.items && lot.items.length > 1) {
+                lot.items.forEach(subItem => {
+                    const subRow = document.createElement('tr');
+                    subRow.className = 'lot-sub-item';
+                    
+                    const subAvgPrice = subItem.ebay_avg_price || 0;
+                    const subEncodedSearch = encodeURIComponent(subItem.item_name || '');
+                    const subEbayUrl = `https://www.ebay.com/sch/i.html?_from=R40&_nkw=${subEncodedSearch}&_sacat=0&LH_Complete=1&LH_Sold=1`;
+                    const subGoogleUrl = `https://www.google.com/search?q=${subEncodedSearch}`;
+
+                    subRow.innerHTML = `
+                        <td></td>
+                        <td style="padding-left: 35px;">${subItem.item_name || 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: right;">${formatCurrency(subItem.estimated_value)}</td>
+                        <td style="text-align: right;">${subAvgPrice > 0 ? formatCurrency(subAvgPrice) : 'N/A'}</td>
+                        <td></td>
+                        <td></td>
+                        <td style="text-align: center;"><a href="${subEbayUrl}" target="_blank">eBay</a></td>
+                        <td style="text-align: center;"><a href="${subGoogleUrl}" target="_blank">Google</a></td>
+                    `;
+                    tableBody.appendChild(subRow);
+                });
+            }
+        });
+    }
+
+    function sortData(column, keepDirection = false) {
+        const isNumeric = ['price', 'ebay_price', 'lot_number', 'confidence', 'sell_rating'].includes(column);
+
+        if (!keepDirection) {
+            if (currentSort.column === column) {
+                currentSort.isAscending = !currentSort.isAscending;
+            } else {
+                currentSort.column = column;
+                currentSort.isAscending = !isNumeric;
+            }
+        } else if (currentSort.column !== column) {
+             currentSort.column = column;
+             currentSort.isAscending = !isNumeric;
+        }
+
+        currentFilteredData.sort((a, b) => {
+            let valA, valB;
+            switch (column) {
+                case 'price': valA = a.total_market_value || 0; valB = b.total_market_value || 0; break;
+                case 'ebay_price': valA = a.ebay_avg_price || 0; valB = b.ebay_avg_price || 0; break;
+                case 'confidence': valA = a.ebay_confidence_score || 0; valB = b.ebay_confidence_score || 0; break;
+                case 'sell_rating': valA = a.sell_rating || 0; valB = b.sell_rating || 0; break;
+                case 'lot_number': valA = a.lot_number || 0; valB = b.lot_number || 0; break;
+                case 'name': valA = (a.ebay_search_title || '').toLowerCase(); valB = (b.ebay_search_title || '').toLowerCase(); break;
+                case 'category': valA = (a.category || '').toLowerCase(); valB = (b.category || '').toLowerCase(); break;
+                default: return 0;
+            }
+            let comparison = 0;
+            if (valA > valB) { comparison = 1; }
+            else if (valA < valB) { comparison = -1; }
+            return currentSort.isAscending ? comparison : comparison * -1;
+        });
+        updateSortIndicators();
+        populateTable();
+    }
+
+    function updateSortIndicators() {
+        headers.forEach(header => {
+            const indicator = header.querySelector('.sort-indicator');
+            if (header.dataset.column === currentSort.column) {
+                indicator.textContent = currentSort.isAscending ? ' ▲' : ' ▼';
+            } else { indicator.textContent = ''; }
+        });
+    }
+
+    headers.forEach(header => { header.addEventListener('click', () => { sortData(header.dataset.column); }); });
+    hideFurnitureCheckbox.addEventListener('change', applyFiltersAndRepopulate);
+    hideMedicalCheckbox.addEventListener('change', applyFiltersAndRepopulate);
+
+    sortData('ebay_price');
+</script>
+
+    <div style="text-align: center; margin-top: 2rem; font-size: 0.8em; color: #888;">
+        <p>Analysis powered by:</p>
+        <p><strong>Auction Analysis Model:</strong> gemini-2.5-pro (Gemini)</p>
+        <p><strong>eBay Cleaning Model(s):</strong> N/A</p>
+    </div>
+
+</body>
+</html>
