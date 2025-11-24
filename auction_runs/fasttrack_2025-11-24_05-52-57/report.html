@@ -1,0 +1,1546 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Auction Item Analysis</title>
+    <style>
+        :root {
+            --bg-color: #1a1a1a; --table-bg-color: #2c2c2c; --header-bg-color: #3a3a3a;
+            --header-hover-bg-color: #4a4a4a; --row-even-bg-color: #333333; --row-odd-bg-color: #2c2c2c;
+            --border-color: #444444; --text-color: #e0e0e0; --link-color: #4a90e2;
+            --link-hover-color: #81b5f5; --sort-indicator-color: #81b5f5;
+        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: var(--bg-color); color: var(--text-color); margin: 0; padding: 2rem; line-height: 1.6; }
+        h1 { text-align: center; color: #ffffff; font-weight: 300; margin-bottom: 2rem; }
+        .controls-container { max-width: 1600px; margin: auto; margin-bottom: 1rem; }
+        .filter-container { text-align: left; padding: 10px 15px; background-color: var(--table-bg-color); border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        .filter-container label { margin-right: 20px; font-size: 0.9em; cursor: pointer; user-select: none; }
+        .filter-container input { vertical-align: middle; margin-right: 5px; }
+        .table-container { max-width: 1600px; margin: auto; overflow-x: auto; border-radius: 8px; box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); }
+        table { width: 100%; border-collapse: collapse; background-color: var(--table-bg-color); border-spacing: 0; }
+        th, td { padding: 12px 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        thead th { background-color: var(--header-bg-color); color: #ffffff; font-weight: 600; position: sticky; top: 0; z-index: 10; }
+        thead th[data-column] { cursor: pointer; transition: background-color 0.2s ease-in-out; user-select: none; }
+        thead th[data-column]:hover { background-color: var(--header-hover-bg-color); }
+        tbody tr:not(.reasoning-row):hover { background-color: var(--header-hover-bg-color); }
+        td { font-size: 0.95em; }
+        td:nth-child(4), td:nth-child(5), td:nth-child(6), td:nth-child(7) { font-family: 'Courier New', Courier, monospace; text-align: right; white-space: nowrap; }
+        td:nth-child(8), td:nth-child(9) { text-align: center; }
+        a { color: var(--link-color); text-decoration: none; transition: color 0.2s ease-in-out; }
+        a:hover { color: var(--link-hover-color); text-decoration: underline; }
+        .sort-indicator { color: var(--sort-indicator-color); font-size: 0.8em; margin-left: 8px; display: inline-block; width: 10px; }
+        .lot-main td { font-weight: bold; }
+        .lot-main.expandable { cursor: pointer; }
+        .lot-main:nth-child(4n+1), .lot-main:nth-child(4n+2) { background-color: var(--row-odd-bg-color); }
+        .lot-main:nth-child(4n+3), .lot-main:nth-child(4n) { background-color: var(--row-even-bg-color); }
+        .lot-sub-item { background-color: rgba(0,0,0,0.15) !important; }
+        .lot-sub-item td { font-size: 0.9em; color: #c0c0c0; border-color: #383838; }
+        .lot-sub-item td:nth-child(2) { padding-left: 35px; }
+        .reasoning-row { display: none; background-color: #222 !important; }
+        .reasoning-row.visible { display: table-row; }
+        .reasoning-row td {
+            padding: 10px 20px 10px 40px;
+            font-style: italic;
+            color: #b0b0b0;
+            border-top: 1px dashed #555;
+            white-space: normal;
+            line-height: 1.5;
+        }
+    </style>
+</head>
+<body>
+    <h1>Auction Item Analysis</h1>
+    <div class="controls-container">
+        <div class="filter-container">
+            <label><input type="checkbox" id="hideFurniture"> Hide Large Furniture</label>
+            <label><input type="checkbox" id="hideMedical"> Hide Medical Devices</label>
+        </div>
+    </div>
+    <div class="table-container"><table><thead><tr><th data-column="lot_number">Lot # <span class="sort-indicator"></span></th><th data-column="name">Item Name <span class="sort-indicator"></span></th><th data-column="category">Category <span class="sort-indicator"></span></th><th data-column="price">AI Market Value <span class="sort-indicator"></span></th><th data-column="ebay_price">eBay Avg. Sold <span class="sort-indicator"></span></th><th data-column="confidence">Confidence <span class="sort-indicator"></span></th><th data-column="sell_rating">Sell Rating <span class="sort-indicator"></span></th><th>eBay Search</th><th>Google Search</th></tr></thead><tbody id="data-table-body"></tbody></table></div>
+
+<script type="application/json" id="auctionData">
+    [
+    {
+        "ebay_search_title": "Apple iPad (Untested)",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 5,
+        "total_market_value": 15,
+        "items": [
+            {
+                "item_name": "Apple iPad (Untested)",
+                "estimated_value": 15
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=INHAjpCDnqcSCL8Xd1S8ug%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Apple | iPads",
+            "lot_number": 1,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=INHAjpCDnqcSCL8Xd1S8ug%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "INHAjpCDnqcSCL8Xd1S8ug_1.jpg"
+            ]
+        },
+        "reasoning": "This is a single, older model iPad (likely iPad 2-4) in unknown working condition. The value is low due to the high risk of it being iCloud locked, which would make it useful only for parts. The screen does not appear cracked, which is a small positive. Reseller advice: Unless you can verify the device is unlocked, always price older Apple products from auctions as 'for parts' and explicitly state the iCloud status is unknown to prevent returns. Estimated manufacturing year: 2011-2013. I analyzed 1 image.",
+        "lot_number": 1,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Apple+iPad+%28Untested%29&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Apple iPad (Lot of 3)",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 5,
+        "total_market_value": 45,
+        "items": [
+            {
+                "item_name": "Lot of 3 Apple iPads (Untested)",
+                "estimated_value": 45
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=jA4oNdz0xx6u%2biOufW7mgQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Apple | iPads",
+            "lot_number": 2,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=jA4oNdz0xx6u%2biOufW7mgQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "jA4oNdz0xx6uiOufW7mgQ_1.jpg"
+            ]
+        },
+        "reasoning": "This lot contains three older model iPads, all untested. The valuation is based on a low 'for parts' price per unit due to the high probability of them being iCloud locked. The value comes from salvageable parts like screens if they are indeed locked. Reseller advice: When selling untested electronics lots, it is better to sell them as a single lot 'AS-IS' rather than individually to minimize risk and labor. Estimated manufacturing year: 2011-2013. I analyzed 1 image.",
+        "lot_number": 2,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Apple+iPad+%28Lot+of+3%29&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Apple iPad (Untested)",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 6,
+        "total_market_value": 25,
+        "items": [
+            {
+                "item_name": "Apple iPad (Untested)",
+                "estimated_value": 25
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=OjP5gjTXyfJwvYzSnEY8Zw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Apple | iPads",
+            "lot_number": 3,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=OjP5gjTXyfJwvYzSnEY8Zw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "OjP5gjTXyfJwvYzSnEY8Zw_1.jpg"
+            ]
+        },
+        "reasoning": "This iPad appears to have thinner bezels than the previous lots, suggesting it might be a newer model like an iPad Air or 5th/6th generation. This increases its potential value, but the risk of it being iCloud locked or non-functional remains. The value is a conservative estimate based on its potential as a more recent model. Reseller advice: If possible during inspection, check the model number on the back (e.g., A1822 for a 5th gen) to accurately identify it. This information dramatically increases bidder confidence and final price. Estimated manufacturing year: 2013-2018. I analyzed 1 image.",
+        "lot_number": 3,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Apple+iPad+%28Untested%29&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Cisco IP Phone Wall Mount Kit",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 3,
+        "total_market_value": 10,
+        "items": [
+            {
+                "item_name": "Cisco Universal Wall Mount Kit",
+                "estimated_value": 10
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=%2fmyAwQ6m21rAuE3VT9EpBA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Cisco | IP Phone Wall Mount Kits",
+            "lot_number": 11,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=%2fmyAwQ6m21rAuE3VT9EpBA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "myAwQ6m21rAuE3VT9EpBA_1.jpg"
+            ]
+        },
+        "reasoning": "This is a new-in-box wall mount kit for Cisco IP phones. It is a highly niche business-to-business (B2B) item. While it has value to the right buyer (an IT department or installer), demand is very low, meaning it could take a very long time to sell. Reseller advice: For niche IT parts, search for a specific part number on the box or instructions (like 'CP-WALLMOUNT-KIT='). Using the exact part number in your eBay title is critical, as that is how buyers search for these items. Estimated manufacturing year: N/A. I analyzed 1 image.",
+        "lot_number": 11,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Cisco+IP+Phone+Wall+Mount+Kit&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "HP ProDesk 600 G3 SFF",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 9,
+        "total_market_value": 200,
+        "items": [
+            {
+                "item_name": "HP ProDesk G3 SFF i7 Computer",
+                "estimated_value": 100
+            },
+            {
+                "item_name": "HP ProDesk G3 SFF i7 Computer",
+                "estimated_value": 100
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=kLD5DpRFiNqXF%2bpSSvUhjA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "HP | 7th Gen CORE i7 Prodesk Computers",
+            "lot_number": 12,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=kLD5DpRFiNqXF%2bpSSvUhjA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "kLD5DpRFiNqXFpSSvUhjA_1.jpg"
+            ]
+        },
+        "reasoning": "A lot of two HP ProDesk Small Form Factor PCs with 7th Gen Core i7 processors (likely i7-7700). These are highly sought-after for reliable office work and as powerful bases for budget gaming builds. They sell very quickly. The valuation assumes they are in working order but may lack RAM or storage, which is common for office surplus. Reseller advice: To maximize value, add a cheap 256GB SSD and 16GB of DDR4 RAM. This simple upgrade can increase the sale price by $40-$60 per unit for a minimal investment. Estimated manufacturing year: 2017. I analyzed 1 image.",
+        "lot_number": 12,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=HP+ProDesk+600+G3+SFF&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "HP ProDesk 600 G3 SFF (Lot of 8)",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 9,
+        "total_market_value": 800,
+        "items": [
+            {
+                "item_name": "Lot of 8 HP ProDesk G3 SFF i7 Computers",
+                "estimated_value": 800
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=JI0XNs3i9KLuRw0J2Fk6xA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "HP | 7th Gen CORE i7 Prodesk Computers",
+            "lot_number": 13,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=JI0XNs3i9KLuRw0J2Fk6xA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "JI0XNs3i9KLuRw0J2Fk6xA_1.jpg"
+            ]
+        },
+        "reasoning": "A large lot of approximately 8 desirable HP ProDesk 7th Gen i7 computers. This is an excellent find for an electronics reseller, offering significant profit potential. The value is based on the average per-unit price of these systems in untested/off-lease condition. Reseller advice: For bulk lots, create a listing offering them in pairs or sets of four. This attracts other resellers and people setting up small offices, allowing you to move inventory faster than selling one by one. Estimated manufacturing year: 2017. I analyzed 1 image.",
+        "lot_number": 13,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=HP+ProDesk+600+G3+SFF+%28Lot+of+8%29&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "HP ProDesk 600 G3 SFF (Lot of 10)",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 9,
+        "total_market_value": 1000,
+        "items": [
+            {
+                "item_name": "Lot of 10 HP ProDesk G3 SFF i7 Computers",
+                "estimated_value": 1000
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=Nm%2bhn8ZJm0xt1mveYW89%2fA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "HP | 7th Gen CORE i7 Prodesk Computers",
+            "lot_number": 14,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=Nm%2bhn8ZJm0xt1mveYW89%2fA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "Nmhn8ZJm0xt1mveYW89A_1.jpg"
+            ]
+        },
+        "reasoning": "Another fantastic bulk lot of approximately 10 HP ProDesk 7th Gen i7 computers. The consistent availability of these models in this auction indicates a large-scale office liquidation, which usually means the machines are in good cosmetic condition and were professionally maintained. This is a top-tier lot. Reseller advice: When listing, show a photo of the PC booted into the BIOS screen. This single picture proves the machine works and confirms the CPU and RAM specs, which can add $10-20 to the final sale price by increasing buyer trust. Estimated manufacturing year: 2017. I analyzed 1 image.",
+        "lot_number": 14,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=HP+ProDesk+600+G3+SFF+%28Lot+of+10%29&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "HP ProDesk 600 G3 SFF (Lot of 12)",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 9,
+        "total_market_value": 1200,
+        "items": [
+            {
+                "item_name": "Lot of 12 HP ProDesk G3 SFF i7 Computers",
+                "estimated_value": 1200
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=yYEyQUuNWAtesvwMWTWmXw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "HP | 7th Gen CORE i7 Prodesk Computers",
+            "lot_number": 15,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=yYEyQUuNWAtesvwMWTWmXw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "yYEyQUuNWAtesvwMWTWmXw_1.jpg"
+            ]
+        },
+        "reasoning": "This appears to be the largest lot yet, with an estimated 12 units of the desirable HP ProDesk SFF i7 desktops. The high quantity makes this a significant investment with a high potential return. These will sell quickly either individually or in smaller lots. Reseller advice: Check inside each case for dust. A quick cleaning with compressed air takes seconds and dramatically improves the perceived value and presentation of the computer to a potential buyer. A clean interior suggests a well-cared-for machine. Estimated manufacturing year: 2017. I analyzed 1 image.",
+        "lot_number": 15,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=HP+ProDesk+600+G3+SFF+%28Lot+of+12%29&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "HP ProDesk 600 G3 SFF (Lot of 12)",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 9,
+        "total_market_value": 1200,
+        "items": [
+            {
+                "item_name": "Lot of 12 HP ProDesk G3 SFF i7 Computers",
+                "estimated_value": 1200
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=mbajC8MK8xwFM3rUrDsLpA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "HP | 7th Gen CORE i7 Prodesk Computers",
+            "lot_number": 16,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=mbajC8MK8xwFM3rUrDsLpA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "mbajC8MK8xwFM3rUrDsLpA_1.jpg"
+            ]
+        },
+        "reasoning": "A final large lot of approximately 12 HP ProDesk 7th Gen i7 computers. This entire series of lots represents a golden opportunity for an electronics flipper. The consistent model and high-end specs (for their time) make them a very reliable and profitable item to source from auction. Reseller advice: These SFF computers often have proprietary power supply units. Test them all, and if you find any with bad PSUs, you can often buy used replacements on eBay for $20-30 to save an otherwise valuable machine. Estimated manufacturing year: 2017. I analyzed 1 image.",
+        "lot_number": 16,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=HP+ProDesk+600+G3+SFF+%28Lot+of+12%29&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "HP ProDesk 7th Gen i7",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 8,
+        "total_market_value": 840,
+        "items": [
+            {
+                "item_name": "Lot of 14 HP ProDesk 7th Gen i7 SFF Computers",
+                "estimated_value": 840
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=ADtLFk%2bm0M7sJk5MFPG5hQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "HP | 7th Gen CORE i7 Prodesk Computers",
+            "lot_number": 17,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=ADtLFk%2bm0M7sJk5MFPG5hQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "ADtLFkm0M7sJk5MFPG5hQ_1.jpg"
+            ]
+        },
+        "reasoning": "This is a high-value lot of desirable business computers. A 7th Gen i7 is still very capable for office work and general use. The value is based on an estimated 14 units at a bulk, untested price of $60 each. Reseller tip: These surplus lots are often missing RAM and hard drives. Adding an inexpensive 8GB stick of DDR4 RAM and a 256GB SSD can more than double the individual resale price. Test each unit and sell them individually for maximum profit. Estimated manufacturing year: 2017. Images analyzed: 1.",
+        "lot_number": 17,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=HP+ProDesk+7th+Gen+i7&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Brocade ICX-7450-48P",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 7,
+        "total_market_value": 600,
+        "items": [
+            {
+                "item_name": "Lot of 4 Brocade ICX-7450-48P PoE Switches",
+                "estimated_value": 600
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=wNcKwCJrXckXExbN0TPnjw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Brocade | 48 Port Switches - + each on | Model: ICX-7450-48P",
+            "lot_number": 18,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=wNcKwCJrXckXExbN0TPnjw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "wNcKwCJrXckXExbN0TPnjw_1.jpg"
+            ]
+        },
+        "reasoning": "The Brocade ICX-7450-48P is a powerful 48-port PoE+ enterprise switch popular with IT professionals and home lab enthusiasts. Based on eBay sold listings, untested units sell for around $150. This lot appears to contain 4 units. Reseller tip: You will need a console cable to connect to these switches to test them and factory reset them. Buyers will ask for proof of boot-up. Including rack-mount ears increases the value. Estimated manufacturing year: 2015. Images analyzed: 1.",
+        "lot_number": 18,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Brocade+ICX-7450-48P&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Brocade ICX-7450-48P",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 7,
+        "total_market_value": 900,
+        "items": [
+            {
+                "item_name": "Lot of 6 Brocade ICX-7450-48P PoE Switches",
+                "estimated_value": 900
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=RtD8oGPTi8bJQ%2bgHhVeVRA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Brocade | 48 Port Switches - + each on | Model: ICX-7450-48P",
+            "lot_number": 19,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=RtD8oGPTi8bJQ%2bgHhVeVRA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "RtD8oGPTi8bJQgHhVeVRA_1.jpg"
+            ]
+        },
+        "reasoning": "This is another lot of the same valuable Brocade enterprise switches. The image shows at least 6 units. Valuing them at the same conservative, untested price of $150 each. Reseller tip: Check the fans on these units. They can be loud, and some users replace them with quieter Noctua fans. Mentioning that the original fans are working and not excessively noisy can be a selling point. Estimated manufacturing year: 2015. Images analyzed: 1.",
+        "lot_number": 19,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Brocade+ICX-7450-48P&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Brocade ICX-7450-48P",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 7,
+        "total_market_value": 900,
+        "items": [
+            {
+                "item_name": "Lot of 6 Brocade ICX-7450-48P PoE Switches",
+                "estimated_value": 900
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=VQWQHo3JUIfzv48llvknEg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Brocade | 48 Port Switches - + each on | Model: ICX-7450-48P",
+            "lot_number": 20,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=VQWQHo3JUIfzv48llvknEg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "VQWQHo3JUIfzv48llvknEg_1.jpg"
+            ]
+        },
+        "reasoning": "A third lot of the same valuable Brocade enterprise switches. This stack appears to contain at least 6 units. Value is consistent with the other lots at $150 per untested switch. Reseller tip: When selling these, be sure to package them extremely well. They are heavy, and the rack ears can be bent easily if not protected, which will lead to returns. Estimated manufacturing year: 2015. Images analyzed: 1.",
+        "lot_number": 20,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Brocade+ICX-7450-48P&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Brocade ICX-7450-48P",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 7,
+        "total_market_value": 750,
+        "items": [
+            {
+                "item_name": "Lot of 5 Brocade ICX-7450-48P PoE Switches",
+                "estimated_value": 750
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=BccEjHZrEgOuoIaBiCaojg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Brocade | 48 Port Switches - + each on | Model: ICX-7450-48P",
+            "lot_number": 21,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=BccEjHZrEgOuoIaBiCaojg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "BccEjHZrEgOuoIaBiCaojg_1.jpg"
+            ]
+        },
+        "reasoning": "A fourth lot of Brocade ICX-7450-48P switches. This stack appears to have 5 units. The valuation remains consistent at $150 per unit in an untested state. Reseller tip: Some of these switches may have optional modules installed in the expansion slots on the right. These modules can be worth $50-$200+ on their own, so check each unit carefully. Estimated manufacturing year: 2015. Images analyzed: 1.",
+        "lot_number": 21,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Brocade+ICX-7450-48P&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Brocade ICX-7450-48P",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 7,
+        "total_market_value": 1200,
+        "items": [
+            {
+                "item_name": "Lot of 8 Brocade ICX-7450-48P PoE Switches",
+                "estimated_value": 1200
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=%2fz8tKoyf4eK0XLveb2YiBA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Brocade | 48 Port Switches - + each on | Model: ICX-7450-48P",
+            "lot_number": 22,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=%2fz8tKoyf4eK0XLveb2YiBA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "z8tKoyf4eK0XLveb2YiBA_1.jpg"
+            ]
+        },
+        "reasoning": "The final and largest lot of the Brocade switches. This pile contains at least 8 units, making it the most valuable of the switch lots. Valuation remains consistent at $150 per untested switch. Reseller tip: Since you have many units, you can use one for parts if others have issues (bad fans, dead power supply), increasing your yield of fully working units to sell. Estimated manufacturing year: 2015. Images analyzed: 1.",
+        "lot_number": 22,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Brocade+ICX-7450-48P&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "NEC ME331X Projector",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 6,
+        "total_market_value": 120,
+        "items": [
+            {
+                "item_name": "Lot of 3 NEC ME331X Projectors",
+                "estimated_value": 120
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=CofyTRbvILhwpwZKwBwNEw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "NEC | Projector | Model: ME331X",
+            "lot_number": 24,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=CofyTRbvILhwpwZKwBwNEw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "CofyTRbvILhwpwZKwBwNEw_1.jpg"
+            ]
+        },
+        "reasoning": "This lot contains 3 NEC ME331X standard-throw office projectors. These are common and have moderate resale value. Untested, they are worth around $40 each. Reseller tip: The single most important factor for used projectors is the number of hours on the lamp bulb. Power them on, go into the menu, and find the lamp life information. A projector with low lamp hours (under 1000) is worth significantly more than one with high hours (3000+). Always include this in your listing. Estimated manufacturing year: 2016. Images analyzed: 1.",
+        "lot_number": 24,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=NEC+ME331X+Projector&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "NEC ME331X Projector",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 6,
+        "total_market_value": 160,
+        "items": [
+            {
+                "item_name": "Lot of 4 NEC ME331X Projectors",
+                "estimated_value": 160
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=lmxfpyWINxBULqFjQS2pDA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "NEC | Projector | Model: ME331X",
+            "lot_number": 25,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=lmxfpyWINxBULqFjQS2pDA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "lmxfpyWINxBULqFjQS2pDA_1.jpg"
+            ]
+        },
+        "reasoning": "This lot contains 4 of the same NEC ME331X projectors. Valued consistently at $40 each for an untested unit. Reseller tip: These projectors often come from schools or offices and may have asset tags or markings. Removing these carefully with isopropyl alcohol and a plastic scraper will improve the cosmetic condition and increase buyer confidence. Estimated manufacturing year: 2016. Images analyzed: 1.",
+        "lot_number": 25,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=NEC+ME331X+Projector&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "NEC ME331X Projector",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 6,
+        "total_market_value": 160,
+        "items": [
+            {
+                "item_name": "Lot of 4 NEC ME331X Projectors",
+                "estimated_value": 160
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=rmOyfPAH8HK6L9qqLrNJUg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "NEC | Projector | Model: ME331X",
+            "lot_number": 26,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=rmOyfPAH8HK6L9qqLrNJUg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "rmOyfPAH8HK6L9qqLrNJUg_1.jpg"
+            ]
+        },
+        "reasoning": "A third lot of 4 NEC ME331X projectors. Valuation is consistent at $40 per unit. Reseller tip: Check for missing remotes. If none are included, you can often buy a single used original remote on eBay and test it with all projectors before selling them individually without a remote, confirming for buyers that common remotes work. Estimated manufacturing year: 2016. Images analyzed: 1.",
+        "lot_number": 26,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=NEC+ME331X+Projector&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Epson PowerLite 535W",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 7,
+        "total_market_value": 120,
+        "items": [
+            {
+                "item_name": "Lot of 2 Epson PowerLite 535W Short Throw Projectors",
+                "estimated_value": 120
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=UmnI8a4hRMU%2fKlSOhnAh4w%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Epson | Projector | Model: 535W",
+            "lot_number": 27,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=UmnI8a4hRMU%2fKlSOhnAh4w%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "UmnI8a4hRMUKlSOhnAh4w_1.jpg"
+            ]
+        },
+        "reasoning": "This lot contains two Epson PowerLite 535W projectors. These are desirable 'short-throw' models that command a higher price than standard projectors. They are popular for classrooms, small rooms, and even budget golf simulators. Untested, they are worth around $60 each. Reseller tip: Emphasize 'Short Throw' and 'HDMI' in your listing title. Check for, and mention, the lamp hours. These often came with a wall mount; if it's included, value increases, but it's rarely present in surplus auctions. Estimated manufacturing year: 2015. Images analyzed: 1.",
+        "lot_number": 27,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Epson+PowerLite+535W&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Epson 535W",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 6,
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Epson 535W Projector",
+                "estimated_value": 50
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=Jaud%2bLtyXp9%2bc1VfwY5qYg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Epson | Projector | Model: 535W",
+            "lot_number": 28,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=Jaud%2bLtyXp9%2bc1VfwY5qYg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "JaudLtyXp9c1VfwY5qYg_1.jpg"
+            ]
+        },
+        "reasoning": "This is a used, likely ex-school/business projector. The Epson 535W is a WXGA ultra-short-throw model. Its value is heavily dependent on the remaining lamp life, which is unknown. Without the remote and knowing the lamp hours, the value is limited. Reseller tip: Always check the filter and clean the lens before listing to improve perceived value. Estimated manufacturing year: 2014. Images analyzed: 1.",
+        "lot_number": 28,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Epson+535W&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Epson 535W",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 6,
+        "total_market_value": 50,
+        "items": [
+            {
+                "item_name": "Epson 535W Projector",
+                "estimated_value": 50
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=lMD1fz75dvAjjg8vvqGukg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Epson | Projector | Model: 535W",
+            "lot_number": 29,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=lMD1fz75dvAjjg8vvqGukg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "lMD1fz75dvAjjg8vvqGukg_1.jpg"
+            ]
+        },
+        "reasoning": "This is another Epson 535W projector, identical to the previous lot. The value is capped by its age and the unknown lamp hours. These are often sold from institutional environments and can have high usage. Reseller tip: If you can power it on, navigate to the menu to find the lamp hours. Listing this number (if low) can significantly increase the sale price. Estimated manufacturing year: 2014. Images analyzed: 1.",
+        "lot_number": 29,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Epson+535W&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "NEC MC453X",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 6,
+        "total_market_value": 80,
+        "items": [
+            {
+                "item_name": "NEC MC453X Projector",
+                "estimated_value": 80
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=CiuzAOiO%2fjpeQzqZqZXxxA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "NEC | Projector | Model: MC453X",
+            "lot_number": 30,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=CiuzAOiO%2fjpeQzqZqZXxxA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "CiuzAOiOjpeQzqZqZXxxA_1.jpg"
+            ]
+        },
+        "reasoning": "The NEC MC453X is a more modern XGA projector with higher brightness (4500 lumens) and HDMI inputs, making it more desirable than the older Epsons. The value is still tied to lamp hours and whether it includes a remote. Untested, it's a bit of a gamble, but the model itself holds better value. Estimated manufacturing year: 2018. Images analyzed: 1.",
+        "lot_number": 30,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=NEC+MC453X&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "NEC MC453X Projectors (Lot of 2)",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 7,
+        "total_market_value": 160,
+        "items": [
+            {
+                "item_name": "NEC MC453X Projector",
+                "estimated_value": 80
+            },
+            {
+                "item_name": "NEC MC453X Projector",
+                "estimated_value": 80
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=uAfQN5evTSK%2f0Rcecgc6aQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "NEC | Projector | Model: MC453X",
+            "lot_number": 31,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=uAfQN5evTSK%2f0Rcecgc6aQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "uAfQN5evTSK0Rcecgc6aQ_1.jpg"
+            ]
+        },
+        "reasoning": "This lot appears to contain two NEC MC453X projectors, based on the markings '31' on two separate units. This doubles the potential value compared to the single unit lots. Reseller tip: Offer these as a pair to buyers looking to equip a conference room or a dual-screen setup. The mounting hardware pieces can be sold separately if not complete. Estimated manufacturing year: 2018. Images analyzed: 1.",
+        "lot_number": 31,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=NEC+MC453X+Projectors+%28Lot+of+2%29&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Epson 455Wi",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 5,
+        "total_market_value": 35,
+        "items": [
+            {
+                "item_name": "Epson 455Wi Projector",
+                "estimated_value": 35
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=sSD1XGkEU6lIYoNwNG2tcg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Epson | Projector | Model: 455Wi",
+            "lot_number": 32,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=sSD1XGkEU6lIYoNwNG2tcg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "sSD1XGkEU6lIYoNwNG2tcg_1.jpg"
+            ]
+        },
+        "reasoning": "This is an Epson BrightLink 455Wi, an older interactive projector. The market for these is niche, and their value plummets without the accompanying interactive pens (ELPPN02) and software. Without accessories, it's just a low-resolution projector that will likely sell for parts or to someone needing this exact model as a replacement. Estimated manufacturing year: 2011. Images analyzed: 1.",
+        "lot_number": 32,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Epson+455Wi&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "NEC ME331X",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 6,
+        "total_market_value": 70,
+        "items": [
+            {
+                "item_name": "NEC ME331X Projector",
+                "estimated_value": 70
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=N%2fn69MJpscIvVsQLZAre2w%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "NEC | Projector | Model: ME331X",
+            "lot_number": 33,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=N%2fn69MJpscIvVsQLZAre2w%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "Nn69MJpscIvVsQLZAre2w_1.jpg"
+            ]
+        },
+        "reasoning": "The NEC ME331X is a solid, workhorse business/education projector (3300 lumens, XGA, HDMI). Like all used projectors from auctions, its value is highly dependent on lamp hours and overall condition. Without testing, this is a fair market estimate for a popular and reliable model. Estimated manufacturing year: 2016. Images analyzed: 1.",
+        "lot_number": 33,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=NEC+ME331X&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "NEC ME331X",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 6,
+        "total_market_value": 70,
+        "items": [
+            {
+                "item_name": "NEC ME331X Projector",
+                "estimated_value": 70
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=Q7AwVH1yWyumfonFrx2n9A%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "NEC | Projector | Model: ME331X",
+            "lot_number": 34,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=Q7AwVH1yWyumfonFrx2n9A%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "Q7AwVH1yWyumfonFrx2n9A_1.jpg"
+            ]
+        },
+        "reasoning": "Another NEC ME331X. The picture shows the input panel, confirming HDMI, multiple VGA, and composite video inputs, making it versatile for many applications. The valuation remains the same as the previous lot, contingent on functionality and lamp life. Estimated manufacturing year: 2016. Images analyzed: 1.",
+        "lot_number": 34,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=NEC+ME331X&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "NEC ME331X",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 6,
+        "total_market_value": 70,
+        "items": [
+            {
+                "item_name": "NEC ME331X Projector",
+                "estimated_value": 70
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=NU5quWCQ53M7FLhNCIsLvg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "NEC | Projector | Model: ME331X",
+            "lot_number": 35,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=NU5quWCQ53M7FLhNCIsLvg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "NU5quWCQ53M7FLhNCIsLvg_1.jpg"
+            ]
+        },
+        "reasoning": "This is the third single lot of the NEC ME331X model. Consistency in model number across multiple lots suggests a bulk buyout from an institution. Reseller tip: If you win multiple identical items, use the best-looking one for the main photo in your listing and mention you have others available. Estimated manufacturing year: 2016. Images analyzed: 1.",
+        "lot_number": 35,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=NEC+ME331X&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "NEC ME331X",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 6,
+        "total_market_value": 70,
+        "items": [
+            {
+                "item_name": "NEC ME331X Projector",
+                "estimated_value": 70
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=npd0Nbyit%2bO1zB1fcewBHg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "NEC | Projector | Model: ME331X",
+            "lot_number": 36,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=npd0Nbyit%2bO1zB1fcewBHg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "npd0NbyitO1zB1fcewBHg_1.jpg"
+            ]
+        },
+        "reasoning": "The fourth single lot of the NEC ME331X model. The market for this many identical projectors might be slightly saturated locally, but they are still individually valuable for online sales. Selling them one by one on eBay is the best strategy. Estimated manufacturing year: 2016. Images analyzed: 1.",
+        "lot_number": 36,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=NEC+ME331X&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Aver WVSIMUCART",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 3,
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "Aver Charging Cart",
+                "estimated_value": 100
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=IxPFx74Md4XbvaAdv6aY1A%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Aver | A/V Charging Carts",
+            "lot_number": 37,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=IxPFx74Md4XbvaAdv6aY1A%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "IxPFx74Md4XbvaAdv6aY1A_1.jpg",
+                "IxPFx74Md4XbvaAdv6aY1A_2.jpg"
+            ]
+        },
+        "reasoning": "This is an AVer branded charging cart, likely for tablets or chromebooks. Its value is severely hampered by its size and weight, making it a local-pickup-only item. The target audience is limited to schools or businesses needing bulk device charging. The key is usually missing, which further decreases value. Reseller tip: market this to local repair shops, IT businesses, or even community robotics clubs who often need mobile charging stations. Estimated manufacturing year: 2017. Images analyzed: 2.",
+        "lot_number": 37,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Aver+WVSIMUCART&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Aver WPSMARTCART",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 3,
+        "total_market_value": 75,
+        "items": [
+            {
+                "item_name": "Aver WPSMARTCART Charging Cart",
+                "estimated_value": 75
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=IhWLprAvOkdnQt3PBpoDnA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Aver | A/V Charging Carts",
+            "lot_number": 38,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=IhWLprAvOkdnQt3PBpoDnA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "IhWLprAvOkdnQt3PBpoDnA_1.jpg",
+                "IhWLprAvOkdnQt3PBpoDnA_2.jpg"
+            ]
+        },
+        "reasoning": "This is a standard school/office surplus laptop charging cart. Its value is significantly limited by its large size and weight, making it a local pickup only item. The market is niche, primarily other schools or IT departments. Reseller advice: Before listing, confirm if the key for the lock is included and test the internal power strips. A missing key can reduce the value. Estimated manufacturing year: 2010s. Analyzed 2 images.",
+        "lot_number": 38,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Aver+WPSMARTCART&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Ergotron Charging Cart",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 3,
+        "total_market_value": 100,
+        "items": [
+            {
+                "item_name": "Ergotron Tablet Charging Cart",
+                "estimated_value": 100
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=avf%2b4q%2faAG4sIQgCaVrAxQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Ergotron | A/V Charging Carts w/Lock and Electric",
+            "lot_number": 39,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=avf%2b4q%2faAG4sIQgCaVrAxQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "avf4qaAG4sIQgCaVrAxQ_1.jpg",
+                "avf4qaAG4sIQgCaVrAxQ_2.jpg"
+            ]
+        },
+        "reasoning": "Ergotron is a well-regarded brand in office and medical equipment, which gives this cart a slight value edge over generic brands. However, like all such carts, it is large, heavy, and impractical to ship, limiting the market to local buyers. Reseller advice: Highlight the Ergotron brand name in your listing. These can be popular with home lab enthusiasts for organizing tech gear, so market beyond just schools. Estimated manufacturing year: 2010s. Analyzed 2 images.",
+        "lot_number": 39,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Ergotron+Charging+Cart&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Vollrath Refrigerated Display Cart",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 2,
+        "total_market_value": 350,
+        "items": [
+            {
+                "item_name": "Vollrath 60\" Refrigerated Display Cart",
+                "estimated_value": 350
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=XRNNXy19zSdknfLo0qRIsg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Vollrath | 60\" Refrigerated Display Cart on casters",
+            "lot_number": 40,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=XRNNXy19zSdknfLo0qRIsg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "XRNNXy19zSdknfLo0qRIsg_1.jpg"
+            ]
+        },
+        "reasoning": "This Vollrath refrigerated serving cart is a valuable piece of commercial food service equipment. The high value is contingent on the refrigeration unit being fully functional. It's a 'Gold Star' item due to its potential resale price, but its large size requires freight or local pickup, making the sale difficult. Reseller advice: You MUST test this unit. A video showing a thermometer inside getting cold will double the price and attract serious buyers. List on dedicated restaurant equipment marketplaces. Estimated manufacturing year: 2000s. Analyzed 1 image.",
+        "lot_number": 40,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Vollrath+Refrigerated+Display+Cart&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Bespin Kids Binoculars Lot",
+        "category": "Toys/Games",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 4,
+        "total_market_value": 35,
+        "items": [
+            {
+                "item_name": "Lot of ~35 Bespin Kids Binoculars",
+                "estimated_value": 35
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=2YfG5YiG0x0ROSGPE2TVPw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Bespin | Kid's Binoculars | Specs: Stage",
+            "lot_number": 46,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=2YfG5YiG0x0ROSGPE2TVPw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "2YfG5YiG0x0ROSGPE2TVPw_1.jpg"
+            ]
+        },
+        "reasoning": "This is a bulk lot of inexpensive, generic children's toy binoculars. The value per unit is extremely low. The only way to sell this is as a single lot. The 'Bespin' brand is likely a generic Amazon private label. Reseller advice: Market this lot to teachers for classroom supplies, daycare centers, or parents looking for party favors. Cleaning them and ensuring all are complete will help the sale. Estimated manufacturing year: 2010s. Analyzed 1 image.",
+        "lot_number": 46,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Bespin+Kids+Binoculars+Lot&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Nissen Folding Gym Mats",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 2,
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Nissen Folding Gym Mat",
+                "estimated_value": 20
+            },
+            {
+                "item_name": "Nissen Folding Gym Mat",
+                "estimated_value": 20
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=XMXcWlRIt5ap0Nv3Z27E5A%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Nissen | Folding Gym Mats | Specs: Stage",
+            "lot_number": 47,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=XMXcWlRIt5ap0Nv3Z27E5A%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "XMXcWlRIt5ap0Nv3Z27E5A_1.jpg"
+            ]
+        },
+        "reasoning": "These are two used, folding gym mats from the classic brand Nissen. Their value is heavily diminished by their visible wear and tear, especially the frayed edges. They are too bulky to ship economically, limiting them to a local sale. Reseller advice: Clean the vinyl surfaces thoroughly. Market on local platforms like Facebook Marketplace to people setting up a home gym, workout space, or kids' play area. Estimated manufacturing year: 1990s. Analyzed 1 image.",
+        "lot_number": 47,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Nissen+Folding+Gym+Mats&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Nissen Gym Mats Lot",
+        "category": "Tools/Equipment",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 1,
+        "total_market_value": 200,
+        "items": [
+            {
+                "item_name": "Lot of ~10 Large Nissen Gym Mats",
+                "estimated_value": 200
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=Ry9pV2tQKxRfrCdBuv3XJQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Nissen | BIG Gym Mats | Specs: Stage",
+            "lot_number": 48,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=Ry9pV2tQKxRfrCdBuv3XJQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "Ry9pV2tQKxRfrCdBuv3XJQ_1.jpg"
+            ]
+        },
+        "reasoning": "This is a large quantity of big, heavy gym mats in poor to fair condition. The logistics of moving and storing this lot are a major challenge, and the worn condition limits the target audience. This lot is very difficult to sell. Reseller advice: You need a buyer with a large truck. Contact local martial arts dojos, gymnastics clubs, or indoor climbing gyms directly. You may have to sell them very cheaply just to move them. Estimated manufacturing year: 1990s. Analyzed 1 image.",
+        "lot_number": 48,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Nissen+Gym+Mats+Lot&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Virco Student Desks",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 3,
+        "total_market_value": 525,
+        "items": [
+            {
+                "item_name": "Lot of ~15 Virco Student Desks",
+                "estimated_value": 525
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=c90xtatUBGmXlmsIverMBA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Virco | NEW (many in boxes still!) Student Desks | Specs: Stage",
+            "lot_number": 51,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=c90xtatUBGmXlmsIverMBA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "c90xtatUBGmXlmsIverMBA_1.jpg"
+            ]
+        },
+        "reasoning": "The value of this lot is entirely dependent on the unspecified quantity of 'many'. Assuming a conservative 15 desks, there is good value here, especially since they are described as new. Virco is a leading brand in school furniture. Reseller advice: Get an exact count. The 'NEW' and 'in boxes' aspects are your strongest selling points. Market locally to homeschool groups, small private schools, or tutoring centers. Selling individually or in pairs will yield the most profit. Estimated manufacturing year: 2010s. Analyzed 1 image.",
+        "lot_number": 51,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Virco+Student+Desks&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Virco Student Chairs",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 4,
+        "total_market_value": 450,
+        "items": [
+            {
+                "item_name": "Lot of ~30 Virco Student Chairs",
+                "estimated_value": 450
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=D81gCIhR6hlJEaFzyKCXJw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Virco | NEW (many in boxes still!) Student Stackable Chairs | Specs: Stage",
+            "lot_number": 52,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=D81gCIhR6hlJEaFzyKCXJw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "D81gCIhR6hlJEaFzyKCXJw_1.jpg"
+            ]
+        },
+        "reasoning": "Similar to the desks, the value is tied to the unknown quantity. Assuming 'many' is around 30 chairs, the lot has significant value as they are new and from a top brand. Stackable chairs are easier to store and sell than desks. Reseller advice: Get a precise count. These are great for churches, community centers, and event rental companies. Sell in sets of 4, 6, or 10. Highlight their new condition and stackability. Estimated manufacturing year: 2010s. Analyzed 1 image.",
+        "lot_number": 52,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Virco+Student+Chairs&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Acer 27-inch Monitors Lot",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 9,
+        "total_market_value": 700,
+        "items": [
+            {
+                "item_name": "Lot of ~10 Acer 27\" Monitors",
+                "estimated_value": 700
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=PhBtpsNz6c5tKRqpFufZfg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Acer | Various BIG 27\" Monitors",
+            "lot_number": 54,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=PhBtpsNz6c5tKRqpFufZfg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "PhBtpsNz6c5tKRqpFufZfg_1.jpg"
+            ]
+        },
+        "reasoning": "This is an excellent lot. 27-inch monitors are in high demand for both work-from-home and gaming setups. A bulk lot of a known brand like Acer is a quick and profitable flip. Based on the photo, there appear to be at least 10 units. Reseller advice: Test every single monitor. Get the specific model number from the back of each, as some might be more valuable (e.g., higher resolution, faster refresh rate). Include power and video cables to maximize price. Sell individually for the highest return. Estimated manufacturing year: 2015-2020. Analyzed 1 image.",
+        "lot_number": 54,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Acer+27-inch+Monitors+Lot&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Acer 24-inch Monitors Lot",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": true,
+        "sell_rating": 8,
+        "total_market_value": 400,
+        "items": [
+            {
+                "item_name": "Lot of ~8 Acer 24\" Monitors",
+                "estimated_value": 400
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=LtQWu3sx9H387CBN4Lkcqg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Acer | Various BIG 24\" Monitors",
+            "lot_number": 55,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=LtQWu3sx9H387CBN4Lkcqg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "LtQWu3sx9H387CBN4Lkcqg_1.jpg"
+            ]
+        },
+        "reasoning": "Another high-quality electronics lot. 24-inch monitors are a staple for office and home use, making them easy to sell. While slightly less valuable than their 27-inch counterparts, they will still sell quickly. The image suggests a quantity of around 8. Reseller advice: Test all monitors. Try selling them in pairs for a slight discount, as many people look for dual-monitor setups for productivity. Local sales on Facebook Marketplace are ideal to avoid shipping hassles and fees. Estimated manufacturing year: 2015-2020. Analyzed 1 image.",
+        "lot_number": 55,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Acer+24-inch+Monitors+Lot&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Yamaha Upright Piano",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 1,
+        "total_market_value": 0,
+        "items": [
+            {
+                "item_name": "Yamaha Upright Piano",
+                "estimated_value": 0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=%2fPMJPF4ocUSSA07rtwAUFA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Yamaha | Piano and Bench",
+            "lot_number": 56,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=%2fPMJPF4ocUSSA07rtwAUFA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "PMJPF4ocUSSA07rtwAUFA_1.jpg"
+            ]
+        },
+        "reasoning": "While Yamaha is a quality brand, the market for used upright pianos is extremely limited. This one, appearing to be from an institution, likely has significant wear. The primary barrier to sale is the high cost of professional moving ($300+), which typically exceeds the piano's value. Many are given away for free. Reseller advice: Unless you can offer affordable, professional delivery yourself, avoid this item. It's more of a liability than an asset. Estimated manufacturing year: 1980s. I analyzed 1 image.",
+        "lot_number": 56,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Yamaha+Upright+Piano&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Haskell 4-Drawer File Cabinet",
+        "category": "Large Furniture",
+        "is_shippable": false,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 2,
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Haskell 4-Drawer File Cabinets (x2)",
+                "estimated_value": 40
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=RXNAPgQoa5HxOtBANteIzA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Haskell | 4 Drawer Metal File Cabinets",
+            "lot_number": 59,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=pf6Q%2bhJtdeleDd9FfYpy9w%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=RXNAPgQoa5HxOtBANteIzA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "RXNAPgQoa5HxOtBANteIzA_1.jpg"
+            ]
+        },
+        "reasoning": "These are standard, used metal lateral file cabinets. The market is saturated with used office furniture, making these low-value and slow to sell. They are heavy and require a truck for transport, limiting the buyer pool to local pickup only. Reseller advice: Check if they come with keys. A working lock adds a small amount of value. Selling these for $20-$25 each on a local marketplace like Facebook is the most likely sales route. Estimated manufacturing year: 2000s. I analyzed 1 image.",
+        "lot_number": 59,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Haskell+4-Drawer+File+Cabinet&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Sanitaire Commercial Vacuum",
+        "category": "Tools/Equipment",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 6,
+        "total_market_value": 40,
+        "items": [
+            {
+                "item_name": "Sanitaire Commercial Vacuum",
+                "estimated_value": 40
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=lJcZNvWR1ahMAdw4fXV00Q%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=o5zI7%2fX%2fgkkC6yjyQqw5%2fg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Sanitaire | Commercial Vac",
+            "lot_number": 86,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=lJcZNvWR1ahMAdw4fXV00Q%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=o5zI7%2fX%2fgkkC6yjyQqw5%2fg%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "o5zI7XgkkC6yjyQqw5g_1.jpg"
+            ]
+        },
+        "reasoning": "Sanitaire commercial vacuums are known for their durability and power, making them a desirable used item for cleaning professionals and homeowners seeking a robust machine. Assuming it is in working condition, it has a decent resale value. Reseller advice: Always test the vacuum. A quick wipe-down, a new bag, and checking the belt for wear can significantly increase its appeal and value. Mentioning 'Tested and Working' in the title is key. Estimated manufacturing year: 2010s. I analyzed 1 image.",
+        "lot_number": 86,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Sanitaire+Commercial+Vacuum&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Fellowes Paper Shredder",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 4,
+        "total_market_value": 15,
+        "items": [
+            {
+                "item_name": "Fellowes Paper Shredder",
+                "estimated_value": 15
+            },
+            {
+                "item_name": "Plastic Recycle Bins (x12)",
+                "estimated_value": 0
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=lJcZNvWR1ahMAdw4fXV00Q%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=436qbg3Pq%2fafpm60q0srIA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Fellowes | Paper Shredder + 12 Recycle Cans",
+            "lot_number": 107,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=lJcZNvWR1ahMAdw4fXV00Q%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=436qbg3Pq%2fafpm60q0srIA%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "436qbg3Pqafpm60q0srIA_1.jpg"
+            ]
+        },
+        "reasoning": "The value in this lot is solely the paper shredder, which appears to be a small personal model. The twelve recycle bins have negligible resale value. Used shredders are a slow sell unless they are high-capacity, cross-cut models. Reseller advice: Test the shredder to ensure it works without overheating. The recycle bins are best offered for free or sold as a single lot for a few dollars locally. Don't bother trying to ship the bins. Estimated manufacturing year: 2010s. I analyzed 1 image.",
+        "lot_number": 107,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Fellowes+Paper+Shredder&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Utilitech 0749795 Heater",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 5,
+        "total_market_value": 20,
+        "items": [
+            {
+                "item_name": "Utilitech 0749795 Heaters (x2)",
+                "estimated_value": 20
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=lJcZNvWR1ahMAdw4fXV00Q%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=l52z2x46IR1vOCUZTK1Nhw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Utilitech | 1500/750W Heaters",
+            "lot_number": 109,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=lJcZNvWR1ahMAdw4fXV00Q%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=l52z2x46IR1vOCUZTK1Nhw%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "l52z2x46IR1vOCUZTK1Nhw_1.jpg"
+            ]
+        },
+        "reasoning": "This lot consists of two budget-friendly Utilitech (a Lowe's house brand) space heaters. Although they are in their boxes, the boxes show wear, indicating they are likely used. The resale value for this type of heater is low. Reseller advice: These are highly seasonal items. For the best return, list them in the fall or early winter. Test both heaters to ensure all functions work correctly. Selling them as a pair is efficient for a local sale. Estimated manufacturing year: late 2010s. I analyzed 1 image.",
+        "lot_number": 109,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Utilitech+0749795+Heater&_sacat=0&LH_Complete=1&LH_Sold=1"
+    },
+    {
+        "ebay_search_title": "Lasko Oscillating Heater",
+        "category": "Electronics",
+        "is_shippable": true,
+        "has_brand_model": true,
+        "is_gold_star": false,
+        "sell_rating": 5,
+        "total_market_value": 15,
+        "items": [
+            {
+                "item_name": "Lasko Oscillating Heater",
+                "estimated_value": 15
+            }
+        ],
+        "original_listing": {
+            "post_id": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=lJcZNvWR1ahMAdw4fXV00Q%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=PEtcAwLCNu8xlaZskrrZiQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "title": "Lasko | Osculating Heater",
+            "lot_number": 110,
+            "url": "https://bid.fasttrackauction.net/Public/Auction/AuctionItemDetail?AuctionId=Dwjg7%2fL7rJOMjuKSRYsbqg%3d%3d&pageNumber=lJcZNvWR1ahMAdw4fXV00Q%3d%3d&pageSize=rMS8glZbjUPmYsI0NyKOdg%3d%3d&showFilter=iBcS%2b4ptjknZQtCojbueqQ%3d%3d&sortColumn=C9SY4KX74WJIILYqur0bmw%3d%3d&AuctionItemId=PEtcAwLCNu8xlaZskrrZiQ%3d%3d&Filter=ajBmiK%2b33KkMkTDWtuuLmg%3d%3d",
+            "pics": [
+                "PEtcAwLCNu8xlaZskrrZiQ_1.jpg"
+            ]
+        },
+        "reasoning": "This is a standard Lasko brand oscillating space heater. Lasko is a common mass-market brand, and used heaters like this have a modest resale value. The condition is untested. Reseller advice: Clean the unit thoroughly, especially the air intake and output grills, as dust is a fire hazard and a turn-off for buyers. Test all functions (heat levels, oscillation) and market it as a seasonal item in the colder months for a faster sale. Estimated manufacturing year: late 2010s. I analyzed 1 image.",
+        "lot_number": 110,
+        "ebay_avg_price": 0,
+        "ebay_confidence_score": 0,
+        "ebay_search_url": "https://www.ebay.com/sch/i.html?_from=R40&_nkw=Lasko+Oscillating+Heater&_sacat=0&LH_Complete=1&LH_Sold=1"
+    }
+]
+</script>
+
+<script>
+    const fullJsonData = JSON.parse(document.getElementById('auctionData').textContent);
+    let currentFilteredData = [...fullJsonData];
+    
+    const tableBody = document.getElementById('data-table-body');
+    const headers = document.querySelectorAll('thead th[data-column]');
+    const hideFurnitureCheckbox = document.getElementById('hideFurniture');
+    const hideMedicalCheckbox = document.getElementById('hideMedical');
+
+    let currentSort = { column: 'ebay_price', isAscending: false };
+
+    function applyFiltersAndRepopulate() {
+        const hideFurniture = hideFurnitureCheckbox.checked;
+        const hideMedical = hideMedicalCheckbox.checked;
+
+        currentFilteredData = fullJsonData.filter(lot => {
+            const category = (lot.category || '').toLowerCase();
+            if (hideFurniture && category === 'large furniture') {
+                return false;
+            }
+            if (hideMedical && category === 'medical devices') {
+                return false;
+            }
+            return true;
+        });
+
+        sortData(currentSort.column, true);
+    }
+
+    function populateTable() {
+        tableBody.innerHTML = '';
+        const formatCurrency = (value) => (value || 0).toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 0 });
+        const sanitizeText = (text) => (text || 'No reasoning provided.');
+
+        currentFilteredData.forEach(lot => {
+            const hasReasoning = lot.reasoning && lot.reasoning.trim() !== '';
+            
+            const mainRow = document.createElement('tr');
+            mainRow.className = 'lot-main' + (hasReasoning ? ' expandable' : '');
+            
+            const encodedSearch = encodeURIComponent(lot.ebay_search_title || '');
+            const goldStar = lot.is_gold_star ? '⭐ ' : '';
+            
+            mainRow.innerHTML = `
+                <td>${lot.lot_number > 0 ? lot.lot_number : ''}</td>
+                <td>${goldStar}<a href="${lot.original_listing.url}" target="_blank" title="${lot.original_listing.title}">${lot.ebay_search_title || 'N/A'}</a></td>
+                <td>${lot.category || 'Miscellaneous'}</td>
+                <td style="text-align: right;">${formatCurrency(lot.total_market_value)}</td>
+                <td style="text-align: right;">${lot.ebay_avg_price > 0 ? formatCurrency(lot.ebay_avg_price) : 'N/A'}</td>
+                <td style="text-align: right;">${lot.ebay_confidence_score > 0 ? lot.ebay_confidence_score + '%' : 'N/A'}</td>
+                <td style="text-align: right;">${lot.sell_rating || 'N/A'}</td>
+                <td style="text-align: center;"><a href="${lot.ebay_search_url || '#'}" target="_blank">eBay</a></td>
+                <td style="text-align: center;"><a href="https://www.google.com/search?q=${encodedSearch}" target="_blank">Google</a></td>
+            `;
+            
+            tableBody.appendChild(mainRow);
+            
+            if (hasReasoning) {
+                const reasoningRow = document.createElement('tr');
+                reasoningRow.className = 'reasoning-row';
+                reasoningRow.innerHTML = `<td colspan="9">${sanitizeText(lot.reasoning)}</td>`;
+                tableBody.appendChild(reasoningRow);
+
+                mainRow.addEventListener('click', () => {
+                    reasoningRow.classList.toggle('visible');
+                });
+            }
+
+            if (lot.items && lot.items.length > 1) {
+                lot.items.forEach(subItem => {
+                    const subRow = document.createElement('tr');
+                    subRow.className = 'lot-sub-item';
+                    
+                    const subAvgPrice = subItem.ebay_avg_price || 0;
+                    const subEncodedSearch = encodeURIComponent(subItem.item_name || '');
+                    const subEbayUrl = `https://www.ebay.com/sch/i.html?_from=R40&_nkw=${subEncodedSearch}&_sacat=0&LH_Complete=1&LH_Sold=1`;
+                    const subGoogleUrl = `https://www.google.com/search?q=${subEncodedSearch}`;
+
+                    subRow.innerHTML = `
+                        <td></td>
+                        <td style="padding-left: 35px;">${subItem.item_name || 'N/A'}</td>
+                        <td></td>
+                        <td style="text-align: right;">${formatCurrency(subItem.estimated_value)}</td>
+                        <td style="text-align: right;">${subAvgPrice > 0 ? formatCurrency(subAvgPrice) : 'N/A'}</td>
+                        <td></td>
+                        <td></td>
+                        <td style="text-align: center;"><a href="${subEbayUrl}" target="_blank">eBay</a></td>
+                        <td style="text-align: center;"><a href="${subGoogleUrl}" target="_blank">Google</a></td>
+                    `;
+                    tableBody.appendChild(subRow);
+                });
+            }
+        });
+    }
+
+    function sortData(column, keepDirection = false) {
+        const isNumeric = ['price', 'ebay_price', 'lot_number', 'confidence', 'sell_rating'].includes(column);
+
+        if (!keepDirection) {
+            if (currentSort.column === column) {
+                currentSort.isAscending = !currentSort.isAscending;
+            } else {
+                currentSort.column = column;
+                currentSort.isAscending = !isNumeric;
+            }
+        } else if (currentSort.column !== column) {
+             currentSort.column = column;
+             currentSort.isAscending = !isNumeric;
+        }
+
+        currentFilteredData.sort((a, b) => {
+            let valA, valB;
+            switch (column) {
+                case 'price': valA = a.total_market_value || 0; valB = b.total_market_value || 0; break;
+                case 'ebay_price': valA = a.ebay_avg_price || 0; valB = b.ebay_avg_price || 0; break;
+                case 'confidence': valA = a.ebay_confidence_score || 0; valB = b.ebay_confidence_score || 0; break;
+                case 'sell_rating': valA = a.sell_rating || 0; valB = b.sell_rating || 0; break;
+                case 'lot_number': valA = a.lot_number || 0; valB = b.lot_number || 0; break;
+                case 'name': valA = (a.ebay_search_title || '').toLowerCase(); valB = (b.ebay_search_title || '').toLowerCase(); break;
+                case 'category': valA = (a.category || '').toLowerCase(); valB = (b.category || '').toLowerCase(); break;
+                default: return 0;
+            }
+            let comparison = 0;
+            if (valA > valB) { comparison = 1; }
+            else if (valA < valB) { comparison = -1; }
+            return currentSort.isAscending ? comparison : comparison * -1;
+        });
+        updateSortIndicators();
+        populateTable();
+    }
+
+    function updateSortIndicators() {
+        headers.forEach(header => {
+            const indicator = header.querySelector('.sort-indicator');
+            if (header.dataset.column === currentSort.column) {
+                indicator.textContent = currentSort.isAscending ? ' ▲' : ' ▼';
+            } else { indicator.textContent = ''; }
+        });
+    }
+
+    headers.forEach(header => { header.addEventListener('click', () => { sortData(header.dataset.column); }); });
+    hideFurnitureCheckbox.addEventListener('change', applyFiltersAndRepopulate);
+    hideMedicalCheckbox.addEventListener('change', applyFiltersAndRepopulate);
+
+    sortData('ebay_price');
+</script>
+
+    <div style="text-align: center; margin-top: 2rem; font-size: 0.8em; color: #888;">
+        <p>Analysis powered by:</p>
+        <p><strong>Auction Analysis Model:</strong> gemini-2.5-pro (Gemini)</p>
+        <p><strong>eBay Cleaning Model(s):</strong> N/A</p>
+    </div>
+
+</body>
+</html>
